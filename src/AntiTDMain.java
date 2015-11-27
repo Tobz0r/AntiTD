@@ -3,8 +3,8 @@
  */
 public class AntiTDMain {
     public static void main(String[] args){
-        GUI gui=new GUI();
-        gui.start();
+        System.out.println("Hello w1orld!");
+        new GUI();
     }
 
 }
