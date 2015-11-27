@@ -1,7 +1,7 @@
 package AntiTD;
 
 import javax.swing.*;
-
+import AntiTD.*;
 /**
  * Created by dv13tes on 2015-11-27.
  */
