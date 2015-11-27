@@ -7,4 +7,9 @@ public class AntiTDMain {
         new GUI();
     }
 
+    /**
+     * Created by mattias on 2015-11-27.
+     */
+    public static interface GameObject {
+    }
 }
