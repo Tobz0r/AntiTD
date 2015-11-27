@@ -5,7 +5,7 @@ public class Position {
     private int x;
     private int y;
 
-    Position(){
+    Position(int x, int y){
         this.x=x;
         this.y=y;
     }
@@ -16,8 +16,5 @@ public class Position {
 
     public int getY() {
         return y;
-    }
-    public int getPos(){
-
     }
 }
