@@ -6,10 +6,4 @@ public class AntiTDMain {
         System.out.println("Hello w1orld!");
         new GUI();
     }
-
-    /**
-     * Created by mattias on 2015-11-27.
-     */
-    public static interface GameObject {
-    }
 }
