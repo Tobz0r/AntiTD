@@ -3,4 +3,6 @@
  */
 public abstract class Troop implements GameObject {
 
+
+
 }
