@@ -1,5 +1,6 @@
-package towers;
+package AntiTD.towers;
 
+import AntiTD.*;
 /**
  * Created by dv13tes on 2015-11-27.
  */

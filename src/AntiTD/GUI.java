@@ -1,3 +1,5 @@
+package AntiTD;
+
 import javax.swing.*;
 
 /**
@@ -33,6 +35,7 @@ public class GUI {
 
                 frame.pack();
                 frame.setVisible(true);
+                startGame();
             }
         });
     }
