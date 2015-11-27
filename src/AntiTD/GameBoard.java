@@ -12,8 +12,9 @@ public class GameBoard extends JComponent {
 
     public void paintComponent(Graphics g){
         g.setColor(Color.green);
-        g.drawRect(0,0,800,600);
-        g.fillRect(0,0,800,600);
+        g.drawRect(0,0,getWidth(),getHeight());
+
+        g.fillRect(0,0,getWidth(),getHeight());
     }
 
 }
