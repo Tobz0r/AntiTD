@@ -2,6 +2,9 @@ package AntiTD;
 
 import javax.swing.*;
 import AntiTD.*;
+
+import java.awt.*;
+
 /**
  * Created by dv13tes on 2015-11-27.
  */
@@ -33,9 +36,11 @@ public class GUI {
                 menu = new Menu();
                 frame.add(menu);
 
-                frame.pack();
                 frame.setVisible(true);
+                frame.pack();
                 startGame();
+
+
             }
         });
     }
@@ -43,6 +48,6 @@ public class GUI {
     public void startGame() {
         gameBoard = new GameBoard();
         frame.remove(menu);
-        frame.add(gameBoard);
-    }
+        frame.add(gameBoard, BorderLayout.CENTER);
+        }
 }
