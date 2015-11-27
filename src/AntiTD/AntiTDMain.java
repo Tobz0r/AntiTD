@@ -1,5 +1,3 @@
-package AntiTD;
-
 /**
  * Created by dv13tes on 2015-11-27.
  */
@@ -12,5 +10,6 @@ public class AntiTDMain {
     /**
      * Created by mattias on 2015-11-27.
      */
-
+    public static interface GameObject {
+    }
 }
