@@ -28,7 +28,7 @@ public abstract class Troop implements GameObject {
     @Override
     public abstract void tick();
 
-    public void move() {
+    private void move() {
         if (hasReacedGoal == false && this.isAlive()) {
             ArrayList<Tile> neigbors = history.peek().getNeighbors();
             Tile nextTile = null;
