@@ -1,8 +1,10 @@
 package AntiTD;
 
+import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by mattias on 2015-11-27.
@@ -15,14 +17,7 @@ public class Environment implements Runnable{
     public void run() {
         try {
             ReadXML xmlReader = new ReadXML();
-            String[][] map = xmlReader.getMap();
-
-            for(int y = 0; y < map.length; y++) {
-                for(int x = 0; x < map[0].length; x++) {
-                    System.out.print(map[y][x]);
-                }
-                System.out.println("");
-            }
+            ArrayList<Level> levels=xmlReader.getLevels();
 
         } catch (IOException e) {
             System.out.println("det funkar icke");

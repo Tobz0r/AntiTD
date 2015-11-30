@@ -1,11 +1,10 @@
 package AntiTD.tiles;
 
-import AntiTD.tiles.*;
-
 /**
- * Created by mattias on 2015-11-27.
+ * Created by dv13tes on 2015-11-30.
  */
-public class TeleporterTile implements Tile {
+public class BasicTile implements Tile {
+
     @Override
     public boolean isMoveable() {
         return false;
