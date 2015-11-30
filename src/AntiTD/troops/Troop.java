@@ -63,9 +63,14 @@ public abstract class Troop implements GameObject {
         }
     }
 
+    /**
+     * Attacks this troop
+     * @param damage amount of damage to take
+     * @return true if this troop died else false
+     */
     public boolean attackThis(int damage) {
         health = health - damage;
-        return health < 0;
+        return health <= 0;
     }
 
     @Override
