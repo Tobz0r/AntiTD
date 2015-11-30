@@ -6,20 +6,10 @@ package AntiTD.tiles;
 import AntiTD.Position;
 public abstract class Tile {
 
-    public boolean isMoveable() {
-        return moveable;
-    }
 
     private boolean moveable;
-
-
-    public boolean isBuildable() {
-        return buildable;
-    }
-
     private boolean buildable;
-
-
+    
 
     public void setBuildable(boolean buildable) {
         this.buildable = buildable;
@@ -27,4 +17,11 @@ public abstract class Tile {
     public void setMoveable(boolean moveable){
         this.moveable=moveable;
     }
+    public boolean isMoveable() {
+        return moveable;
+    }
+    public boolean isBuildable() {
+        return buildable;
+    }
+
 }
