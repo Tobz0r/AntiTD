@@ -16,4 +16,9 @@ public class BasicTower extends Tower {
     public void tick(){
 
     }
+
+    @Override
+    public void render(Graphics g) {
+
+    }
 }

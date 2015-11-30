@@ -19,6 +19,7 @@ public abstract class Tower implements GameObject {
         this.pos = pos;
     }
 
+
     @Override
     public abstract void tick();
 

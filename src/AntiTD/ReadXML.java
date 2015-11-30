@@ -97,6 +97,8 @@ public class ReadXML {
             String element = new String(ch, start, length);
             if (isTile) {
                 try {
+                    element="AntiTD.tiles."+element;
+
                     Class<?> classFile = Class.forName(element);
                     Object tile = classFile.newInstance();
                     map[row][column]=(Tile) tile;
@@ -105,8 +107,10 @@ public class ReadXML {
                     JOptionPane.showMessageDialog(null, e.getMessage());
                 } catch (ClassNotFoundException e) {
                     JOptionPane.showMessageDialog(null, e.getMessage());
+
                 } catch (IllegalAccessException e) {
                     JOptionPane.showMessageDialog(null, e.getMessage());
+
                 }
 
             }
@@ -119,6 +123,7 @@ public class ReadXML {
                 level.addMap(map);
                 levels.add(level);
             }
+            isTile=false;
         }
     }
 }
