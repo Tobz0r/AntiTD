@@ -4,6 +4,7 @@ import AntiTD.*;
 import AntiTD.tiles.Tile;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -17,7 +18,7 @@ public abstract class Troop implements GameObject {
     private Stack<Tile> history;
     private boolean hasReacedGoal;
 
-    public Troop(Image img, Tile pos) {
+    protected Troop(Image img, Tile pos) {
         this.img = img;
         this.score = 0;
         this.history = new Stack<Tile>();
@@ -27,9 +28,9 @@ public abstract class Troop implements GameObject {
     @Override
     public abstract void tick();
 
-    public void move() {
-        if (hasReacedGoal == false && health > 0) {
-            Tile[] neigbors = history.peek().getNeighbors();
+    protected void move() {
+        if (hasReacedGoal == false && this.isAlive()) {
+            ArrayList<Tile> neigbors = history.peek().getNeighbors();
             Tile nextTile = null;
 
             for (Tile tile : neigbors) {
@@ -56,16 +57,29 @@ public abstract class Troop implements GameObject {
 
     @Override
     public int getCurrentScore() {
-        if (hasReacedGoal && health > 0) {
+        if (hasReacedGoal && this.isAlive()) {
             return score;
         } else {
             return 0;
         }
     }
 
+    /**
+     * Attacks this troop
+     * @param damage amount of damage to take
+     * @return true if this troop died else false
+     */
     public boolean attackThis(int damage) {
         health = health - damage;
-        return health < 0;
+        return !this.isAlive();
+    }
+
+    /**
+     * Checks troops life status
+     * @return true if alive else false
+     */
+    public boolean isAlive() {
+        return health > 0;
     }
 
     @Override
