@@ -34,6 +34,8 @@ public abstract class Troop implements GameObject {
                 nextTile = tile;
             }
         }
+
+        history.push(nextTile);
     }
 
     @Override
