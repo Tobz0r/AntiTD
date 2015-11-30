@@ -12,11 +12,16 @@ import java.util.ArrayList;
  */
 public class Environment implements Runnable{
 
-    Tile[][] level;
+    private ArrayList<Level> levels;
+    private Handler handler;
+    public Environment(){
+        handler=new Handler();
+        ReadXML xmlReader = new ReadXML(new File("levels.xml"));
+        levels=xmlReader.getLevels();
+    }
 
     @Override
     public void run() {
-            ReadXML xmlReader = new ReadXML(new File("levels.xml"));
-            ArrayList<Level> levels=xmlReader.getLevels();
+
     }
 }

@@ -21,7 +21,6 @@ public abstract class Tile {
     public void setBuildable(boolean buildable) {
         this.buildable = buildable;
     }
-
     public void setMoveable(boolean moveable){
         this.moveable=moveable;
     }

@@ -1,5 +1,6 @@
 package AntiTD;
 
+import java.awt.*;
 import java.util.LinkedList;
 
 /**
@@ -20,6 +21,11 @@ public class Handler {
     public void tick(){
         for(int i=0; i < objects.size(); i++){
             objects.get(i).tick();
+        }
+    }
+    public void render(Graphics g){
+        for(int i=0; i < objects.size(); i++){
+            objects.get(i).render(g);
         }
     }
 
