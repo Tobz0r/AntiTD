@@ -18,8 +18,20 @@ public class BasicTower extends Tower {
     public BasicTower(Image img, Tile pos) {
         super(img, pos);
     }
+    public void init(){
+        damage = 5;
+        range = 5;
+    }
+
+    public int getDamage(){
+        return damage;
+    }
+    public int getRange(){
+        return range;
+    }
 
     public void tick(){
+
 
     }
 }

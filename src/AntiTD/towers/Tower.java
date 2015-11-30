@@ -5,6 +5,8 @@ import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Created by dv13tes on 2015-11-27.
@@ -13,36 +15,69 @@ public abstract class Tower implements GameObject {
     private Tile pos;
     private int score;
     private Image img;
-    Troop players;
+    private int damage;
+    ArrayList<Troop> troops;
+    private Troop target;
+    Stack<Troop> inRange;
+    int range;
 
     public Tower(Image img, Tile pos) {
         this.img = img;
         this.score = 0;
         this.pos = pos;
+        range = 5;
+
+    }
+
+    public void init(ArrayList<Troop> troops) {
+        double distance = Integer.MAX_VALUE;
+        for(Troop troop : troops){
+
+            Troop nearUnit = null;
+            double dist = distance(troop);
+            if(dist <= range) {
+                inRange.push(troop);
+                if (dist < distance) {
+                    nearUnit = troop;
+                    distance = dist;
+
+                }
+            }
+            if(nearUnit !=null){
+                target = nearUnit;
+            }
+
+        }
+
 
     }
 
     @Override
     public abstract void tick();
 
-    protected double fireX;
-    protected double fireY;
-    public void scanPlayer(){
-
-        double dist = Integer.MAX_VALUE;
-        for(Troop t : players){
-
-
-
+    public void aggroTarget(){
+        if(target != null){
+            if(checkIfUnitIsClose(target)){
+                attack(target,damage);
+            }else{
+                target = null;
+                inRange.clear();
+            }
         }
 
+    }
+    public void attack(Troop troop, int damage){
+        troop.attackThis(damage);
 
     }
-    public boolean checkIfUnitIsClose(){
-        if(Math.hypot(players.getPosition().getPosition().getX()))
+    public boolean checkIfUnitIsClose(Troop troop){
+        if(Math.hypot(troop.getPosition().getX() -pos.getPosition().getX(), troop.getPosition().getY() - pos.getPosition().getY()) <= range){
+            return true;
+        }
+        return false;
     }
-    public double distance(){
-        return Math.hypot();
+    public double distance(Troop troop){
+        return Math.hypot(troop.getPosition().getX(), troop.getPosition().getY());
     }
 
     @Override
@@ -50,8 +85,9 @@ public abstract class Tower implements GameObject {
         return img;
     }
 
-    public void setCurrentScore(){
-        if(!players.isAlive()){
+
+    public void setCurrentScore(Troop troop){
+        if(!troop.isAlive()){
             score++;
         }
     }
@@ -61,8 +97,8 @@ public abstract class Tower implements GameObject {
     }
 
     @Override
-    public Tile getPosition() {
-        return pos;
+    public Position getPosition() {
+        return pos.getPosition();
     }
 
 }
