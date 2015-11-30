@@ -5,20 +5,10 @@ import AntiTD.tiles.*;
 /**
  * Created by mattias on 2015-11-27.
  */
-public class TeleporterTile implements Tile {
-    @Override
-    public boolean isMoveable() {
-        return false;
+public class TeleporterTile extends Tile {
+
+    public TeleporterTile(){
+        super();
     }
 
-    @Override
-    public boolean isBuildable() {
-        return false;
-    }
-
-    @Override
-    public boolean isTeleport() {
-
-        return false;
-    }
 }

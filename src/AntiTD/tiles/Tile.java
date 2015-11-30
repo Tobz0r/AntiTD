@@ -9,7 +9,7 @@ public abstract class Tile {
 
     private boolean moveable;
     private boolean buildable;
-    
+
 
     public void setBuildable(boolean buildable) {
         this.buildable = buildable;
