@@ -34,4 +34,9 @@ public class BasicTower extends Tower {
 
 
     }
+
+    @Override
+    public void render(Graphics g) {
+
+    }
 }

@@ -39,6 +39,11 @@ public class TeleportTroops extends Troop {
         this.move();
     }
 
+    @Override
+    public void render(Graphics g) {
+
+    }
+
     public void initTeleport() {
         isTeleporting = true;
     }

@@ -52,6 +52,7 @@ public abstract class Tower implements GameObject {
 
     }
 
+
     @Override
     public abstract void tick();
 

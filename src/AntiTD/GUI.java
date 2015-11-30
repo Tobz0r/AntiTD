@@ -4,50 +4,47 @@ import javax.swing.*;
 import AntiTD.*;
 
 import java.awt.*;
+import java.util.Observable;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author dv13trm
  */
-public class GUI {
-    private JFrame frame;
+public class GUI extends Observable{
     private Menu menu;
     private GameBoard gameBoard;
     private Thread gameThread;
     private Environment env;
+    private JFrame frame;
 
-    public GUI() {
+    public GUI () {
 
         env = new Environment();
         gameThread = new Thread(env);
         gameThread.start();
 
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                frame = new JFrame("AntiTTD");
 
-                frame.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                        gameThread.interrupt();
-                        System.exit(0);
-                    }
-                });
+        frame = new JFrame("AntiTTD");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                menu = new Menu();
-                frame.add(menu);
+                //menu = new Menu(frame);
+        menu = new Menu(frame, this);
+        menu.startMenu();
 
-                frame.setVisible(true);
-                frame.pack();
-                startGame();
+        frame.setVisible(true);
+        frame.pack();
 
 
-            }
-        });
+
+
     }
+
 
     public void startGame() {
         gameBoard = new GameBoard();
-        frame.remove(menu);
         frame.add(gameBoard, BorderLayout.CENTER);
         }
+    public void restartGame(){
+        frame.remove(gameBoard);
+        gameBoard.resetGame();
+    }
 }

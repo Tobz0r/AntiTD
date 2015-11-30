@@ -10,16 +10,13 @@ import java.awt.*;
 public class GameBoard extends JComponent {
 
     public GameBoard(){
+        System.out.println("DET ÄR JAG SOM ÄR ELIAS");
         setLayout(new GridLayout(1,1));
     }
+    public void resetGame(){
 
-    public void paintComponent(Graphics g){
-        g.setColor(Color.WHITE);
-        g.fillRect(0,0,800,200);
-        g.setColor(Color.blue);
-        g.fillRect(0,200,800,200);
-        g.setColor(Color.red);
-        g.fillRect(0,400,800,200);
     }
+
+
 
 }
