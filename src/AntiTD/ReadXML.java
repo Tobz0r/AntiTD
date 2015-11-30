@@ -80,9 +80,11 @@ public class ReadXML {
                 int sizeX = Integer.parseInt(attributes.getValue("sizeX"));
                 int sizeY = Integer.parseInt(attributes.getValue("sizeY"));
                 int victoryPoints = Integer.parseInt(attributes.getValue("victory"));
+
                 isTile = false;
                 map=new Tile[sizeX][sizeY];
                 level=new Level(mapName);
+                level.setVictoryPoints(victoryPoints);
                 row = -1;
                 column = -1;
 
@@ -98,13 +100,13 @@ public class ReadXML {
                 try {
                     Class<?> classFile = Class.forName(element);
                     Object tile = classFile.newInstance();
-                    map[row][column]= tile;
+                    map[row][column]=(Tile) tile;
                 } catch (InstantiationException e) {
-                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage());
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage());
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e.getMessage());
                 }
 
             }

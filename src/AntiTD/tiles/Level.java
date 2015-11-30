@@ -14,6 +14,10 @@ public class Level {
     private Tile[][] map;
     private String name;
 
+
+
+    private int victoryPoints;
+
     public Level(String name){
         this.name=name;
 
@@ -27,4 +31,8 @@ public class Level {
     public void setGoalPosition(Position goal){
         this.goalPosition=goalPosition;
     }
+    public void setVictoryPoints(int victoryPoints) {
+        this.victoryPoints = victoryPoints;
+    }
+
 }
