@@ -4,10 +4,24 @@ package AntiTD.tiles;
  * Created by dv13trm on 2015-11-27.
  */
 import AntiTD.Position;
-public interface Tile {
+public abstract class Tile {
 
-    public boolean isMoveable();
-    public boolean isBuildable();
-    public boolean isTeleport();
-    public Tile[] getNeighbors();
+
+    private boolean moveable;
+    private boolean buildable;
+    
+
+    public void setBuildable(boolean buildable) {
+        this.buildable = buildable;
+    }
+    public void setMoveable(boolean moveable){
+        this.moveable=moveable;
+    }
+    public boolean isMoveable() {
+        return moveable;
+    }
+    public boolean isBuildable() {
+        return buildable;
+    }
+
 }

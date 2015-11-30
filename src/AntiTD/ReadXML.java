@@ -28,12 +28,14 @@ public class ReadXML {
 
     private ArrayList<Level> levels;
     private Level level;
+    private Tile[][] map;
 
 
     public ReadXML(File xmlMap) {
         this.xmlMap = xmlMap;
+        levels=new ArrayList<Level>();
     }
-    public ArrayList<> getLevels(){
+    public ArrayList<Level> getLevels(){
         parseXML();
         return levels;
     }
@@ -73,11 +75,14 @@ public class ReadXML {
                 isTile = true;
             } else if (qName.equals("mapData")) {
                 level=null;
+                map=null;
                 String mapName = attributes.getValue("name");
                 int sizeX = Integer.parseInt(attributes.getValue("sizeX"));
                 int sizeY = Integer.parseInt(attributes.getValue("sizeY"));
                 int victoryPoints = Integer.parseInt(attributes.getValue("victory"));
                 isTile = false;
+                map=new Tile[sizeX][sizeY];
+                level=new Level(mapName);
                 row = -1;
                 column = -1;
 
@@ -90,7 +95,18 @@ public class ReadXML {
             String element = new String(ch, start, length);
             // för testning
             if (isTile) {
-                System.out.print(element.toString());
+                try {
+                    Class<?> classFile = Class.forName(element);
+                    Object tile = classFile.newInstance();
+                    map[row][column]= tile;
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
         //när end-tag hittas
@@ -98,7 +114,8 @@ public class ReadXML {
         public void endElement(String uri, String localName, String qName)
                 throws SAXException {
             if (qName.equals("mapData")) {
-                //Add level to arraylist?
+                level.addMap(map);
+                levels.add(level);
             }
         }
     }

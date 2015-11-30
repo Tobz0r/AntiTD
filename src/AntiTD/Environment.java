@@ -3,6 +3,7 @@ package AntiTD;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -15,13 +16,8 @@ public class Environment implements Runnable{
 
     @Override
     public void run() {
-        try {
-            ReadXML xmlReader = new ReadXML();
+            ReadXML xmlReader = new ReadXML(new File("levels.xml"));
             ArrayList<Level> levels=xmlReader.getLevels();
-
-        } catch (IOException e) {
-            System.out.println("det funkar icke");
-        }
 
     }
 }
