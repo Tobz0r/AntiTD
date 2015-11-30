@@ -42,9 +42,9 @@ public abstract class Troop implements GameObject {
                 }
             }
 
-            if (nextTile.isGoal()) {
+            /*if (nextTile.isGoal()) {
                 hasReacedGoal = true;
-            }
+            }*/
 
             history.push(nextTile);
         }

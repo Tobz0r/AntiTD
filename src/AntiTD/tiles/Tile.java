@@ -15,10 +15,10 @@ public abstract class Tile {
     private Position position;
 
 
-    public boolean setBuildable(boolean buildable) {
+    public void setBuildable(boolean buildable) {
         this.buildable = buildable;
     }
-    public boolean setMoveable(boolean moveable){
+    public void setMoveable(boolean moveable){
         this.moveable=moveable;
     }
     public boolean isMoveable() {
@@ -33,15 +33,15 @@ public abstract class Tile {
     public Position getPosition(){
         return position;
     }
-    public ArrayList<Tile> getNeighbors(Tile node){
+    public ArrayList<Tile> getNeighbors(){
         ArrayList<Tile> neighbours=new ArrayList<Tile>();
         Tile[][] map=Level.getCurrentMap();
-        int row=node.getPosition().getX();
-        int column=node.getPosition().getY();
+        int row=getPosition().getX();
+        int column=getPosition().getY();
         for(int i = -1; i < 2; i++) {
-            if (!(row+i <0 || row+i >= map.length) {
+            if (!(row+i <0 || row+i >= map.length)) {
                 for (int j = -1; j < 2; j++) {
-                    if (!(column+j < 0 || column+j >= map[i].length) {
+                    if (!(column+j < 0 || column+j >= map[i].length)) {
                         if(i != 0 || j != 0) {
                             neighbours.add(map[i][j]);
                         }

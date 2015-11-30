@@ -5,16 +5,16 @@ import java.util.LinkedList;
 /**
  * Created by dv13tes on 2015-11-27.
  */
-public class Handler {
+public class Handler extends Thread {
     private LinkedList<GameObject> objects;
 
     public Handler(){
 
     }
-    public void addObject(GameObject object){
+    public synchronized void addObject(GameObject object){
         objects.add(object);
     }
-    public void removeObject(GameObject object){
+    public synchronized void removeObject(GameObject object){
         objects.remove(object);
     }
     public void tick(){
