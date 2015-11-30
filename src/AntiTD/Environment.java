@@ -16,14 +16,25 @@ public class Environment implements Runnable, Observer {
 
     private ArrayList<Level> levels;
     private Handler handler;
+    private int level;
+
     public Environment(){
         handler=new Handler();
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
+
+    }
+    public void incrementLevel(){
+        level++;
+        if(level>levels.size()){
+            level=1;
+        }
     }
 
     @Override
     public void run() {
+        Level level=levels.get(this.level);
+        GameBoard grid=new GameBoard();
 
     }
 
