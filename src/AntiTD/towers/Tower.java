@@ -5,6 +5,7 @@ import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
 import java.awt.*;
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -13,23 +14,39 @@ import java.util.Stack;
  */
 public abstract class Tower implements GameObject {
     private Tile pos;
-    private int score;
+    private int money;
     private Image img;
-    private int damage;
+
     ArrayList<Troop> troops;
     private Troop target;
     Stack<Troop> inRange;
-    int range;
+    private int range;
+    private int damage;
+    private int price;
 
     public Tower(Image img, Tile pos) {
         this.img = img;
-        this.score = 0;
+        this.money = 0;
         this.pos = pos;
-        range = 5;
-
     }
+    public Tower(ArrayList<Troop> troops){
+        this.troops = troops;
+        initScan();
+    }
+    /*Border vara i underklassen*/
+    public void initFrostTower(){
 
-    public void init(ArrayList<Troop> troops) {
+        damage = 10;
+        range = 10;
+        price = 5;
+    }
+    /*Border vara i underklassen*/
+    public void initBasicTower(){
+        damage = 5;
+        range = 5;
+        price = 1;
+    }
+    public void initScan() {
         double distance = Integer.MAX_VALUE;
         for(Troop troop : troops){
 
@@ -46,13 +63,8 @@ public abstract class Tower implements GameObject {
             if(nearUnit !=null){
                 target = nearUnit;
             }
-
         }
-
-
     }
-
-
     @Override
     public abstract void tick();
 
@@ -62,12 +74,28 @@ public abstract class Tower implements GameObject {
                 attack(target,damage);
             }else{
                 target = null;
-                inRange.clear();
+                initScan();
             }
         }
+    }
+    /*Ska vara i environment*/
+    public void buildTower(){
+        int tempMoney = getCurrentScore();
+        if(pos.isBuildable()) {
+            if (tempMoney >= 5) {
+                initFrostTower();
+                tempMoney = tempMoney-price;
+                setMoney(tempMoney);
 
+            }else{
+                tempMoney = tempMoney-price;
+                initBasicTower();
+                setMoney(tempMoney);
+            }
+        }
     }
     public void attack(Troop troop, int damage){
+
         troop.attackThis(damage);
 
     }
@@ -89,12 +117,15 @@ public abstract class Tower implements GameObject {
 
     public void setCurrentScore(Troop troop){
         if(!troop.isAlive()){
-            score++;
+            money++;
         }
+    }
+    public void setMoney(int money){
+        this.money = money;
     }
     @Override
     public int getCurrentScore() {
-        return score;
+        return money;
     }
 
     @Override
