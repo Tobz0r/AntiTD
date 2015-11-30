@@ -14,7 +14,16 @@ public class Environment implements Runnable{
     @Override
     public void run() {
         try {
-            new ReadXML();
+            ReadXML xmlReader = new ReadXML();
+            String[][] map = xmlReader.getMap();
+
+            for(int y = 0; y < map.length; y++) {
+                for(int x = 0; x < map[0].length; x++) {
+                    System.out.print(map[y][x]);
+                }
+                System.out.println("");
+            }
+
         } catch (IOException e) {
             System.out.println("det funkar icke");
         }

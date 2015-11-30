@@ -19,6 +19,8 @@ import java.io.IOException;
  */
 public class ReadXML {
 
+    private String[][] map;
+
     public ReadXML() throws IOException {
         try {
             File fXmlFile = new File("levels.xml");
@@ -30,10 +32,10 @@ public class ReadXML {
             //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
             doc.getDocumentElement().normalize();
 
-            System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+            //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
             NodeList nList = doc.getElementsByTagName("row");
-            String[] level = new String[nList.getLength()];
+            map = new String[nList.getLength()][];
             for (int i = 0; i < nList.getLength(); i++) {
 
                 Node nNode = nList.item(i);
@@ -42,9 +44,10 @@ public class ReadXML {
 
                     Element eElement = (Element) nNode;
 
-                    System.out.println("row number : " + eElement.getAttribute("number"));
-                    System.out.println("tiles : " + eElement.getElementsByTagName("tiles").item(0).getTextContent());
-
+                    //System.out.println("row number : " + eElement.getAttribute("number"));
+                    //System.out.println("tiles : " + eElement.getElementsByTagName("tiles").item(0).getTextContent());
+                    String[] tiles = eElement.getElementsByTagName("tiles").item(0).getTextContent().split(" ");
+                    map[i] = tiles;
                 }
             }
         } catch (ParserConfigurationException e) {
@@ -53,6 +56,9 @@ public class ReadXML {
             e.printStackTrace();
         }
 
+    }
 
+    public String[][] getMap() {
+        return map;
     }
 }
