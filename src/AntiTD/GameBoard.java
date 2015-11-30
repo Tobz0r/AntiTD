@@ -36,7 +36,7 @@ public class GameBoard extends JComponent {
                     case "AntiTD.tiles.CrossroadTile":
                         g.setColor(Color.red);
                         break;
-                    case "AntiTD.tiles.GoalTile":
+                    case "AntiTD.tiles.GoalTile": 
                         g.setColor(Color.yellow);
                         break;
                     case "AntiTD.tiles.PathTile":
