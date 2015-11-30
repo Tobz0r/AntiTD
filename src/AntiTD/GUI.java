@@ -4,11 +4,12 @@ import javax.swing.*;
 import AntiTD.*;
 
 import java.awt.*;
+import java.util.Observable;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author dv13trm
  */
-public class GUI extends JFrame{
+public class GUI extends Observable{
     private Menu menu;
     private GameBoard gameBoard;
     private Thread gameThread;
@@ -17,7 +18,7 @@ public class GUI extends JFrame{
 
     public GUI () {
 
-        env = new Environment();
+        env = new Environment(this);
         gameThread = new Thread(env);
         gameThread.start();
 
@@ -26,6 +27,8 @@ public class GUI extends JFrame{
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 //menu = new Menu(frame);
+        menu = new Menu(frame, this);
+        menu.startMenu();
 
                 menu = new Menu(frame, this);
                 menu.startMenu();
@@ -42,9 +45,15 @@ public class GUI extends JFrame{
     public void startGame() {
         gameBoard = new GameBoard();
         frame.add(gameBoard, BorderLayout.CENTER);
-        }
+        gameBoard.repaint();
+    }
     public void restartGame(){
         frame.remove(gameBoard);
         gameBoard.resetGame();
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        gameBoard=(GameBoard) o;
     }
 }

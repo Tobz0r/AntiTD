@@ -12,14 +12,15 @@ import java.util.Observer;
 /**
  * Created by mattias on 2015-11-27.
  */
-public class Environment implements Runnable, Observer {
+public class Environment extends Observable implements Runnable {
 
     private ArrayList<Level> levels;
     private Handler handler;
     private int level;
 
-    public Environment(){
+    public Environment(GUI gui){
         handler=new Handler();
+        addObserver(gui);
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
 
@@ -34,8 +35,13 @@ public class Environment implements Runnable, Observer {
     @Override
     public void run() {
         Level level=levels.get(this.level);
-        //GameBoard grid=new GameBoard();
+        GameBoard grid=new GameBoard(level);
+        update(grid);
 
+    }
+    private void update(GameBoard gameBoard){
+        setChanged();
+        notifyObservers(gameBoard);
     }
 
     @Override

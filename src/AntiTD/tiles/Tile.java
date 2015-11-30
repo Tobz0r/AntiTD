@@ -70,4 +70,7 @@ public abstract class Tile {
     public void setNeighbors(Tile[] neighbors) {
         this.neighbors = neighbors;
     }
+    public String toString(){
+        return getClass().getName();
+    }
 }
