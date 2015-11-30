@@ -6,4 +6,9 @@ package AntiTD.tiles;
 import AntiTD.Position;
 public interface Tile {
 
+    public boolean isWalkable();
+    public boolean isBUildable(String str);
+    public boolean isTeleportTile();
+
+
 }
