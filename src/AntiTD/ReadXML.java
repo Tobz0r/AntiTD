@@ -1,64 +1,125 @@
 package AntiTD;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
+/**
+ * Created by dv13tes on 2015-11-30.
+ */
+import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import AntiTD.tiles.*;
+
+import javax.swing.JOptionPane;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
-/**
- * Created by dv13tes on 2015-11-27.
- */
 public class ReadXML {
 
-    private String[][] map;
+    private File xmlMap;
 
-    public ReadXML() throws IOException {
-        try {
-            File fXmlFile = new File("levels.xml");
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(fXmlFile);
+    private int row;
+    private int column;
 
-            //optional, but recommended
-            //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
-            doc.getDocumentElement().normalize();
+    private ArrayList<Level> levels;
+    private Level level;
+    private Tile[][] map;
 
-            //System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
-            NodeList nList = doc.getElementsByTagName("row");
-            map = new String[nList.getLength()][];
-            for (int i = 0; i < nList.getLength(); i++) {
-
-                Node nNode = nList.item(i);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-
-                    Element eElement = (Element) nNode;
-
-                    //System.out.println("row number : " + eElement.getAttribute("number"));
-                    //System.out.println("tiles : " + eElement.getElementsByTagName("tiles").item(0).getTextContent());
-                    String[] tiles = eElement.getElementsByTagName("tiles").item(0).getTextContent().split(" ");
-                    map[i] = tiles;
-                }
-            }
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        }
-
+    public ReadXML(File xmlMap) {
+        this.xmlMap = xmlMap;
+        levels=new ArrayList<Level>();
+    }
+    public ArrayList<Level> getLevels(){
+        parseXML();
+        return levels;
     }
 
-    public String[][] getMap() {
-        return map;
+    private void parseXML() {
+
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        try {
+            SAXParser saxParser = factory.newSAXParser();
+            xmlHandler handler = new xmlHandler();
+            saxParser.parse(xmlMap, handler);
+        } catch (ParserConfigurationException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        } catch (SAXException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    private class xmlHandler extends DefaultHandler {
+
+        private boolean isTile;
+
+        //gör stuff för varje element
+        @Override
+        public void startElement(String uri, String localName,
+                                 String qName, Attributes attributes) throws SAXException {
+            if (qName.equals("row")) {
+                //count rows?
+                column = -1;
+                row++;
+                isTile = false;
+            } else if (qName.equals("tile")) {
+                //count col?
+                column++;
+                isTile = true;
+            } else if (qName.equals("mapData")) {
+                level=null;
+                map=null;
+                String mapName = attributes.getValue("name");
+                int sizeX = Integer.parseInt(attributes.getValue("sizeX"));
+                int sizeY = Integer.parseInt(attributes.getValue("sizeY"));
+                int victoryPoints = Integer.parseInt(attributes.getValue("victory"));
+
+                isTile = false;
+                map=new Tile[sizeX][sizeY];
+                level=new Level(mapName);
+                level.setVictoryPoints(victoryPoints);
+                row = -1;
+                column = -1;
+
+            }
+        }
+        //gör stuff med varje element
+        @Override
+        public void characters(char ch[], int start, int length)
+                throws SAXException {
+            String element = new String(ch, start, length);
+            if (isTile) {
+                try {
+                    Class<?> classFile = Class.forName(element);
+                    Object tile = classFile.newInstance();
+                    map[row][column]=(Tile) tile;
+                    map[row][column].setPosition(new Position(row,column));
+                } catch (InstantiationException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                } catch (IllegalAccessException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
+
+            }
+        }
+        //när end-tag hittas
+        @Override
+        public void endElement(String uri, String localName, String qName)
+                throws SAXException {
+            if (qName.equals("mapData")) {
+                level.addMap(map);
+                levels.add(level);
+            }
+        }
     }
 }
+
