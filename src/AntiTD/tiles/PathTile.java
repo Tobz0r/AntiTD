@@ -8,5 +8,7 @@ import AntiTD.tiles.*;
 public class PathTile extends Tile {
     public PathTile(){
         super();
+        setMoveable(true);
+        setBuildable(false);
     }
 }
