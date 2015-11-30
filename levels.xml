@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<level>
+    <row number="0">
+        <tiles>0 0 0 0 0 G 0 0 0 0 0</tiles>
+    </row>
+    <row number="1">
+        <tiles>0 0 0 0 0 1 0 0 0 0 0</tiles>
+    </row>
+    <row number="2">
+        <tiles>0 0 0 0 0 1 0 0 0 0 0</tiles>
+    </row>
+    <row number="3">
+        <tiles>0 0 0 0 0 1 0 0 0 0 0</tiles>
+    </row>
+    <row number="4">
+        <tiles>0 0 0 0 0 1 0 0 0 0 0</tiles>
+    </row>
+    <row number="5">
+        <tiles>0 0 0 0 0 1 0 0 0 0 0</tiles>
+    </row>
+    <row number="6">
+        <tiles>0 0 0 0 0 S 0 0 0 0 0</tiles>
+    </row>
+</level>
