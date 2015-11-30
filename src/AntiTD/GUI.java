@@ -5,11 +5,12 @@ import AntiTD.*;
 
 import java.awt.*;
 import java.util.Observable;
+import java.util.Observer;
 
 /**
  * @author dv13trm
  */
-public class GUI extends Observable{
+public class GUI implements Observer{
     private Menu menu;
     private GameBoard gameBoard;
     private Thread gameThread;
