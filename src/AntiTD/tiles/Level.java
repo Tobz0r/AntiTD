@@ -12,8 +12,10 @@ public class Level {
     private Position startPosition;
     private Tile[][] map;
     private LinkedList<Position> goals;
+    private String name;
 
-    public Level(){
+    public Level(String name){
+        this.name=name;
 
     }
     public void addMap(Tile[][] map){
