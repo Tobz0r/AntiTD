@@ -4,11 +4,12 @@ import javax.swing.*;
 import AntiTD.*;
 
 import java.awt.*;
+import java.util.Observable;
 
 /**
  * @author dv13trm
  */
-public class GUI extends JFrame{
+public class GUI extends Observable{
     private Menu menu;
     private GameBoard gameBoard;
     private Thread gameThread;

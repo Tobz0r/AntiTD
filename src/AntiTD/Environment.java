@@ -6,11 +6,13 @@ import AntiTD.tiles.Tile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by mattias on 2015-11-27.
  */
-public class Environment implements Runnable{
+public class Environment implements Runnable, Observer {
 
     private ArrayList<Level> levels;
     private Handler handler;
@@ -22,6 +24,11 @@ public class Environment implements Runnable{
 
     @Override
     public void run() {
+
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
 
     }
 }
