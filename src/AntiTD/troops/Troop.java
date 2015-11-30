@@ -65,7 +65,7 @@ public abstract class Troop implements GameObject {
 
     public boolean attackThis(int damage) {
         health = health - damage;
-        return health < 0 ?;
+        return health < 0;
     }
 
     @Override
