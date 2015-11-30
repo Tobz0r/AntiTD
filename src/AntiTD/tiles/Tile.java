@@ -33,7 +33,7 @@ public abstract class Tile {
     public Position getPosition(){
         return position;
     }
-    public ArrayList<Tile> getNeighbours(Tile node){
+    public ArrayList<Tile> getNeighbors(Tile node){
         ArrayList<Tile> neighbours=new ArrayList<Tile>();
         Tile[][] map=Level.getCurrentMap();
         int row=node.getPosition().getX();
