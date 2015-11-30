@@ -12,12 +12,21 @@ public abstract class Tile {
 
     private boolean moveable;
     private boolean buildable;
+    private boolean isTeleportStart;
+
+
+
+    private boolean isTeleportEnd;
     private Position position;
 
 
     public void setBuildable(boolean buildable) {
         this.buildable = buildable;
     }
+    public void setTeleportEnd(boolean isTeleportEnd) {
+        this.isTeleportEnd = isTeleportEnd;
+    }
+
     public void setMoveable(boolean moveable){
         this.moveable=moveable;
     }
@@ -50,5 +59,8 @@ public abstract class Tile {
             }
         }
         return neighbours;
+    }
+    public void setTeleportTo(Tile tile){
+        tile.setTeleportEnd(true);
     }
 }
