@@ -6,4 +6,7 @@ package AntiTD.tiles;
 import AntiTD.Position;
 public interface Tile {
 
+    public boolean isMoveable();
+    public boolean isBuildable();
+    public boolean isTeleport();
 }
