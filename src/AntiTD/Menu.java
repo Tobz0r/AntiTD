@@ -34,6 +34,7 @@ public class Menu extends JMenu {
 
 
 
+
     public void startMenu(){
         frame.setJMenuBar(startMenuBar);
         startMenuBar.add(this);
