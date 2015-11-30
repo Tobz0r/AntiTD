@@ -41,7 +41,6 @@ public abstract class Troop implements GameObject {
                     }
                 }
             }
-
             if (nextTile.isTeleporter()) {
                 nextTile = nextTile.getTeleportTo();
             }
