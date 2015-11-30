@@ -34,9 +34,9 @@ public class ReadXML {
 
             NodeList nList = doc.getElementsByTagName("row");
             String[] level = new String[nList.getLength()];
-            for (int temp = 0; temp < nList.getLength(); temp++) {
+            for (int i = 0; i < nList.getLength(); i++) {
 
-                Node nNode = nList.item(temp);
+                Node nNode = nList.item(i);
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
