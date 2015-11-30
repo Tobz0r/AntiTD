@@ -30,6 +30,7 @@ public class Menu extends JMenu {
         this.gui = gui;
         this.frame = frame;
     }
+    
 
 
 
