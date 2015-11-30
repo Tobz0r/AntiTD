@@ -28,7 +28,7 @@ public class GUI extends JFrame{
                 //menu = new Menu(frame);
                 menu = new Menu(frame, this);
                 menu.startMenu();
-
+                menu.statMenu();
                 frame.setVisible(true);
                 frame.pack();
 
