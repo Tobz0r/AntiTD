@@ -1,6 +1,7 @@
 package AntiTD.troops;
 
 import AntiTD.*;
+import AntiTD.tiles.GoalTile;
 import AntiTD.tiles.Tile;
 
 import java.awt.*;
@@ -45,7 +46,7 @@ public abstract class Troop implements GameObject {
                 nextTile = nextTile.getTeleportTo();
             }
 
-            if (nextTile.isGoal()) {
+            if (nextTile instanceof GoalTile) {
                 hasReacedGoal = true;
             }
 
