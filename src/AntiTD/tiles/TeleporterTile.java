@@ -18,6 +18,7 @@ public class TeleporterTile implements Tile {
 
     @Override
     public boolean isTeleport() {
+
         return false;
     }
 }

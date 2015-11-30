@@ -10,8 +10,8 @@ import java.util.LinkedList;
 public class Level {
 
     private Position startPosition;
+    private Position goalPosition;
     private Tile[][] map;
-    private LinkedList<Position> goals;
     private String name;
 
     public Level(String name){
@@ -24,7 +24,7 @@ public class Level {
     public void setStartPosition(Position startPosition){
         this.startPosition=startPosition;
     }
-    public void addGoalPosition(Position goal){
-        goals.add(goal);
+    public void setGoalPosition(Position goal){
+        this.goalPosition=goalPosition;
     }
 }
