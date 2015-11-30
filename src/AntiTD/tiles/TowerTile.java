@@ -5,5 +5,9 @@ package AntiTD.tiles;
  */
 public class TowerTile extends Tile {
 
-
+    public TowerTile(){
+        super();
+        setBuildable(true);
+        setMoveable(false);
+    }
 }

@@ -6,6 +6,8 @@ package AntiTD.tiles;
 public class BasicTile extends Tile {
     public BasicTile(){
         super();
+        setBuildable(false);
+        setMoveable(false);
     }
 
 

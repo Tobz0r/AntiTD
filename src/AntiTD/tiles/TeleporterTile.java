@@ -9,6 +9,8 @@ public class TeleporterTile extends Tile {
 
     public TeleporterTile(){
         super();
+        setBuildable(false);
+        setMoveable(true);
     }
 
 }

@@ -9,12 +9,13 @@ public abstract class Tile {
 
     private boolean moveable;
     private boolean buildable;
+    private Position position;
 
 
-    public void setBuildable(boolean buildable) {
+    public boolean setBuildable(boolean buildable) {
         this.buildable = buildable;
     }
-    public void setMoveable(boolean moveable){
+    public boolean setMoveable(boolean moveable){
         this.moveable=moveable;
     }
     public boolean isMoveable() {
@@ -22,6 +23,9 @@ public abstract class Tile {
     }
     public boolean isBuildable() {
         return buildable;
+    }
+    public void setPosition(Position position){
+        this.position=position;
     }
 
 }

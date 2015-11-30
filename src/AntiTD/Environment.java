@@ -18,6 +18,5 @@ public class Environment implements Runnable{
     public void run() {
             ReadXML xmlReader = new ReadXML(new File("levels.xml"));
             ArrayList<Level> levels=xmlReader.getLevels();
-
     }
 }

@@ -28,7 +28,7 @@ public class Level {
     public void setStartPosition(Position startPosition){
         this.startPosition=startPosition;
     }
-    public void setGoalPosition(Position goal){
+    public void setGoalPosition(Position goalPosition){
         this.goalPosition=goalPosition;
     }
     public void setVictoryPoints(int victoryPoints) {
