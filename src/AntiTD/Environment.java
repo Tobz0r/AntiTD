@@ -34,7 +34,7 @@ public class Environment implements Runnable, Observer {
     @Override
     public void run() {
         Level level=levels.get(this.level);
-        GameBoard grid=new GameBoard();
+        //GameBoard grid=new GameBoard();
 
     }
 
