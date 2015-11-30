@@ -6,22 +6,40 @@ import AntiTD.tiles.Tile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by mattias on 2015-11-27.
  */
-public class Environment implements Runnable{
+public class Environment implements Runnable, Observer {
 
     private ArrayList<Level> levels;
     private Handler handler;
+    private int level;
+
     public Environment(){
         handler=new Handler();
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
+
+    }
+    public void incrementLevel(){
+        level++;
+        if(level>levels.size()){
+            level=1;
+        }
     }
 
     @Override
     public void run() {
+        Level level=levels.get(this.level);
+        //GameBoard grid=new GameBoard();
+
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
 
     }
 }

@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 /**
- * Created by mattias on 2015-11-27.
+ * @author dv13trm
  */
 public class Menu extends JMenu {
     //startmenu

@@ -9,8 +9,8 @@ import java.awt.*;
  */
 public class BasicTroop extends Troop {
 
-    public BasicTroop(Image img, Tile pos) {
-        super(img, pos);
+    public BasicTroop(Tile pos) {
+        super(null, pos);
     }
 
     @Override
