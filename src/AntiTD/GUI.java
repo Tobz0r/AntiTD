@@ -6,7 +6,7 @@ import AntiTD.*;
 import java.awt.*;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author dv13trm
  */
 public class GUI extends JFrame{
     private Menu menu;
@@ -22,15 +22,15 @@ public class GUI extends JFrame{
         gameThread.start();
 
 
-                frame = new JFrame("AntiTTD");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame = new JFrame("AntiTTD");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 //menu = new Menu(frame);
-                menu = new Menu(frame, this);
-                menu.startMenu();
+        menu = new Menu(frame, this);
+        menu.startMenu();
 
-                frame.setVisible(true);
-                frame.pack();
+        frame.setVisible(true);
+        frame.pack();
 
 
 
