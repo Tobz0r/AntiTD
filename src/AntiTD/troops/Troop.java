@@ -11,9 +11,11 @@ import java.util.Stack;
  */
 public abstract class Troop implements GameObject {
 
+    private int health;
     private int score;
     private Image img;
     private Stack<Tile> history;
+    private boolean hasReacedGoal;
 
     public Troop(Image img, Tile pos) {
         this.img = img;
@@ -26,13 +28,24 @@ public abstract class Troop implements GameObject {
     public abstract void tick();
 
     public void move() {
-        Tile[] neigbors = history.peek().getNeighbors();
-        Tile nextTile = null;
+        if (hasReacedGoal == false && health > 0) {
+            Tile[] neigbors = history.peek().getNeighbors();
+            Tile nextTile = null;
 
-        for (Tile tile : neigbors) {
-            if (history.search(tile) != -1) {
-                nextTile = tile;
+            for (Tile tile : neigbors) {
+                if (tile.isMoveable()) {
+                    if (history.search(tile) != -1) {
+                        nextTile = tile;
+                        break;
+                    }
+                }
             }
+
+            if (nextTile.isGoal()) {
+                hasReacedGoal = true;
+            }
+
+            history.push(nextTile);
         }
     }
 
@@ -43,7 +56,16 @@ public abstract class Troop implements GameObject {
 
     @Override
     public int getCurrentScore() {
-        return score;
+        if (hasReacedGoal && health > 0) {
+            return score;
+        } else {
+            return 0;
+        }
+    }
+
+    public boolean attackThis(int damage) {
+        health = health - damage;
+        return health < 0;
     }
 
     @Override
