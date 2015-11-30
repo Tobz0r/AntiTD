@@ -1,21 +1,20 @@
 package AntiTD.troops;
 
 import AntiTD.tiles.Tile;
-import AntiTD.troops.*;
 
 import java.awt.*;
 
 /**
- * Created by dv13trm on 2015-11-27.
+ * Created by mattias on 2015-11-30.
  */
-public class TeleportTroops extends Troop {
+public class BasicTroop extends Troop {
 
-    public TeleportTroops(Image img, Tile pos) {
+    public BasicTroop(Image img, Tile pos) {
         super(img, pos);
     }
 
     @Override
     public void tick() {
-
+        this.move();
     }
 }

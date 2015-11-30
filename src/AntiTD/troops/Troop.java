@@ -18,7 +18,7 @@ public abstract class Troop implements GameObject {
     private Stack<Tile> history;
     private boolean hasReacedGoal;
 
-    public Troop(Image img, Tile pos) {
+    protected Troop(Image img, Tile pos) {
         this.img = img;
         this.score = 0;
         this.history = new Stack<Tile>();
@@ -28,7 +28,7 @@ public abstract class Troop implements GameObject {
     @Override
     public abstract void tick();
 
-    private void move() {
+    protected void move() {
         if (hasReacedGoal == false && this.isAlive()) {
             ArrayList<Tile> neigbors = history.peek().getNeighbors();
             Tile nextTile = null;
