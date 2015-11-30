@@ -17,7 +17,7 @@ public class GUI extends Observable{
     private JFrame frame;
 
     public GUI () {
-
+        int i=1;
         env = new Environment(this);
         gameThread = new Thread(env);
         gameThread.start();
