@@ -28,12 +28,14 @@ public class ReadXML {
 
     private ArrayList<Level> levels;
     private Level level;
+    private Tile[][] map;
 
 
     public ReadXML(File xmlMap) {
         this.xmlMap = xmlMap;
+        levels=new ArrayList<Level>();
     }
-    public ArrayList<> getLevels(){
+    public ArrayList<Level> getLevels(){
         parseXML();
         return levels;
     }
@@ -73,11 +75,16 @@ public class ReadXML {
                 isTile = true;
             } else if (qName.equals("mapData")) {
                 level=null;
+                map=null;
                 String mapName = attributes.getValue("name");
                 int sizeX = Integer.parseInt(attributes.getValue("sizeX"));
                 int sizeY = Integer.parseInt(attributes.getValue("sizeY"));
                 int victoryPoints = Integer.parseInt(attributes.getValue("victory"));
+
                 isTile = false;
+                map=new Tile[sizeX][sizeY];
+                level=new Level(mapName);
+                level.setVictoryPoints(victoryPoints);
                 row = -1;
                 column = -1;
 
@@ -88,9 +95,20 @@ public class ReadXML {
         public void characters(char ch[], int start, int length)
                 throws SAXException {
             String element = new String(ch, start, length);
-            // för testning
             if (isTile) {
-                System.out.print(element.toString());
+                try {
+                    Class<?> classFile = Class.forName(element);
+                    Object tile = classFile.newInstance();
+                    map[row][column]=(Tile) tile;
+                    map[row][column].setPosition(new Position(row,column));
+                } catch (InstantiationException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                } catch (IllegalAccessException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
+
             }
         }
         //när end-tag hittas
@@ -98,7 +116,8 @@ public class ReadXML {
         public void endElement(String uri, String localName, String qName)
                 throws SAXException {
             if (qName.equals("mapData")) {
-                //Add level to arraylist?
+                level.addMap(map);
+                levels.add(level);
             }
         }
     }

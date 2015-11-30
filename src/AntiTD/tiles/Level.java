@@ -2,6 +2,7 @@ package AntiTD.tiles;
 
 import AntiTD.Position;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -10,19 +11,40 @@ import java.util.LinkedList;
 public class Level {
 
     private Position startPosition;
+    private Position goalPosition;
+    private static Tile[][] currentMap;
     private Tile[][] map;
-    private LinkedList<Position> goals;
+    private String name;
 
-    public Level(){
 
+
+    private int victoryPoints;
+
+    public Level(String name){
+        this.name=name;
     }
-    public void addMap(Tile[][] map){
+    public  void addMap(Tile[][] map){
         this.map=map;
     }
+    public  Tile[][] getMap(){
+        return map;
+    }
     public void setStartPosition(Position startPosition){
+
         this.startPosition=startPosition;
     }
-    public void addGoalPosition(Position goal){
-        goals.add(goal);
+    public void setGoalPosition(Position goalPosition){
+
+        this.goalPosition=goalPosition;
+    }
+    public void setVictoryPoints(int victoryPoints) {
+
+        this.victoryPoints = victoryPoints;
+    }
+    public static void setCurrentMap(Tile[][] map){
+        Level.currentMap=map;
+    }
+    public static Tile[][] getCurrentMap(){
+        return currentMap;
     }
 }

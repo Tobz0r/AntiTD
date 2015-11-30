@@ -4,27 +4,50 @@ import AntiTD.*;
 import AntiTD.tiles.Tile;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Created by dv13trm on 2015-11-27.
  */
 public abstract class Troop implements GameObject {
 
-    private Tile pos;
+    private int health;
     private int score;
     private Image img;
+    private Stack<Tile> history;
+    private boolean hasReacedGoal;
 
-    public Troop(Image img, Tile pos) {
+    protected Troop(Image img, Tile pos) {
         this.img = img;
         this.score = 0;
-        this.pos = pos;
+        this.history = new Stack<Tile>();
+        this.history.push(pos);
     }
 
     @Override
     public abstract void tick();
 
-    public void move() {
-        Tile[] neigbors = pos.getNeighbors();
+    protected void move() {
+        if (hasReacedGoal == false && this.isAlive()) {
+            ArrayList<Tile> neigbors = history.peek().getNeighbors();
+            Tile nextTile = null;
+
+            for (Tile tile : neigbors) {
+                if (tile.isMoveable()) {
+                    if (history.search(tile) != -1) {
+                        nextTile = tile;
+                        break;
+                    }
+                }
+            }
+
+            if (nextTile.isGoal()) {
+                hasReacedGoal = true;
+            }
+
+            history.push(nextTile);
+        }
     }
 
     @Override
@@ -34,11 +57,33 @@ public abstract class Troop implements GameObject {
 
     @Override
     public int getCurrentScore() {
-        return score;
+        if (hasReacedGoal && this.isAlive()) {
+            return score;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Attacks this troop
+     * @param damage amount of damage to take
+     * @return true if this troop died else false
+     */
+    public boolean attackThis(int damage) {
+        health = health - damage;
+        return !this.isAlive();
+    }
+
+    /**
+     * Checks troops life status
+     * @return true if alive else false
+     */
+    public boolean isAlive() {
+        return health > 0;
     }
 
     @Override
     public Tile getPosition() {
-        return pos;
+        return history.peek();
     }
 }
