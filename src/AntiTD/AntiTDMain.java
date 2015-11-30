@@ -11,11 +11,7 @@ public class AntiTDMain {
     public static void main(String[] args){
         System.out.println("Hello w1orld!");
         new GUI();
-        try {
-            new ReadXML();
-        } catch (IOException e) {
-            System.out.println("det funkar icke");
-        }
+
     }
 
 }
