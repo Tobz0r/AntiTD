@@ -9,4 +9,5 @@ public interface Tile {
     public boolean isMoveable();
     public boolean isBuildable();
     public boolean isTeleport();
+    public Tile[] getNeighbors();
 }

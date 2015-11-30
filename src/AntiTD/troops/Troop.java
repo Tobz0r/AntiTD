@@ -23,6 +23,10 @@ public abstract class Troop implements GameObject {
     @Override
     public abstract void tick();
 
+    public void move() {
+        Tile[] neigbors = pos.getNeighbors();
+    }
+
     @Override
     public Image getImage() {
         return img;
