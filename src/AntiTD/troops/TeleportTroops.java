@@ -16,8 +16,8 @@ public class TeleportTroops extends Troop {
     private int tpMoves;
     private boolean isTeleporting;
 
-    public TeleportTroops(Image img, Tile pos) {
-        super(img, pos);
+    public TeleportTroops(Tile pos) {
+        super(null, pos);
         tpMoves = 0;
         isTeleporting = false;
     }

@@ -16,6 +16,7 @@ public abstract class Tile {
     private Tile teleportEnd;
 
     private Position position;
+    private Tile[] neighbors;
 
 
     public void setBuildable(boolean buildable) {
@@ -62,5 +63,9 @@ public abstract class Tile {
     }
     public boolean isTeleporter(){
         return isTeleportStart;
+    }
+
+    public void setNeighbors(Tile[] neighbors) {
+        this.neighbors = neighbors;
     }
 }

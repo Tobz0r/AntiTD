@@ -19,6 +19,10 @@ public abstract class Troop implements GameObject {
     private Stack<Tile> history;
     private boolean hasReacedGoal;
 
+    protected Troop(Tile pos) {
+        this(null, pos);
+    }
+
     protected Troop(Image img, Tile pos) {
         this.img = img;
         this.score = 0;
