@@ -9,6 +9,12 @@ import java.awt.*;
  * Created by dv13tes on 2015-11-27.
  */
 public class BasicTower extends Tower {
+    private int damage;
+    private int range;
+
+
+
+
     public BasicTower(Image img, Tile pos) {
         super(img, pos);
     }

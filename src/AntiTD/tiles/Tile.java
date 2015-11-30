@@ -4,6 +4,7 @@ package AntiTD.tiles;
  * Created by dv13trm on 2015-11-27.
  */
 import AntiTD.Position;
+import AntiTD.troops.Troop;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ public abstract class Tile {
     private boolean moveable;
     private boolean buildable;
     private Position position;
+    Troop player;
 
 
     public boolean setBuildable(boolean buildable) {
