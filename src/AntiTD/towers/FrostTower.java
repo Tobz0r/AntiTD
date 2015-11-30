@@ -21,4 +21,14 @@ public class FrostTower extends Tower{
 
 
     }
+
+    @Override
+    public void render(Graphics g) {
+
+    }
+
+    @Override
+    public Tile getTilePosition() {
+        return null;
+    }
 }

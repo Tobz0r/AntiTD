@@ -4,12 +4,11 @@ import javax.swing.*;
 import AntiTD.*;
 
 import java.awt.*;
-import java.util.Observable;
 
 /**
- * @author dv13trm
+ * Created by dv13tes on 2015-11-27.
  */
-public class GUI extends Observable{
+public class GUI extends JFrame{
     private Menu menu;
     private GameBoard gameBoard;
     private Thread gameThread;
@@ -23,15 +22,16 @@ public class GUI extends Observable{
         gameThread.start();
 
 
-        frame = new JFrame("AntiTTD");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame = new JFrame("AntiTTD");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 //menu = new Menu(frame);
-        menu = new Menu(frame, this);
-        menu.startMenu();
 
-        frame.setVisible(true);
-        frame.pack();
+                menu = new Menu(frame, this);
+                menu.startMenu();
+                menu.statMenu();
+                frame.setVisible(true);
+                frame.pack();
 
 
 

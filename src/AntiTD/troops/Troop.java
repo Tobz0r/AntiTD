@@ -19,6 +19,10 @@ public abstract class Troop implements GameObject {
     private Stack<Tile> history;
     private boolean hasReacedGoal;
 
+    protected Troop(Tile pos) {
+        this(null, pos);
+    }
+
     protected Troop(Image img, Tile pos) {
         this.img = img;
         this.score = 0;
@@ -89,5 +93,10 @@ public abstract class Troop implements GameObject {
     @Override
     public Position getPosition() {
         return history.peek().getPosition();
+    }
+
+    @Override
+    public Tile getTilePosition() {
+        return history.peek();
     }
 }

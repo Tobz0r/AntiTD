@@ -17,6 +17,7 @@ public abstract class Tile {
     private Tile teleportEnd;
 
     private Position position;
+    private Tile[] neighbors;
     Troop player;
 
 
@@ -64,5 +65,9 @@ public abstract class Tile {
     }
     public boolean isTeleporter(){
         return isTeleportStart;
+    }
+
+    public void setNeighbors(Tile[] neighbors) {
+        this.neighbors = neighbors;
     }
 }

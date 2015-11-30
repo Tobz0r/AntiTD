@@ -16,8 +16,8 @@ public class TeleportTroops extends Troop {
     private int tpMoves;
     private boolean isTeleporting;
 
-    public TeleportTroops(Image img, Tile pos) {
-        super(img, pos);
+    public TeleportTroops(Tile pos) {
+        super(null, pos);
         tpMoves = 0;
         isTeleporting = false;
     }
@@ -26,13 +26,13 @@ public class TeleportTroops extends Troop {
     public void tick() {
         if (isTeleporting) {
             if (tpMoves == 0) {
-                teleportStartTile = this.getPosition();
+                teleportStartTile = this.getTilePosition();
             } else if (tpMoves < TP_LENGTH) {
                 tpMoves++;
             } else {
                 isTeleporting = false;
                 tpMoves = 0;
-                teleportEndTile = this.getPosition();
+                teleportEndTile = this.getTilePosition();
                 teleportStartTile.setTeleportTo(teleportEndTile);
             }
         }

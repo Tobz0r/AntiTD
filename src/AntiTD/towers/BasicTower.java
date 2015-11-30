@@ -39,4 +39,9 @@ public class BasicTower extends Tower {
     public void render(Graphics g) {
 
     }
+
+    @Override
+    public Tile getTilePosition() {
+        return null;
+    }
 }
