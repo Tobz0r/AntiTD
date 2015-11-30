@@ -94,4 +94,9 @@ public abstract class Troop implements GameObject {
     public Position getPosition() {
         return history.peek().getPosition();
     }
+
+    @Override
+    public Tile getTilePosition() {
+        return history.peek();
+    }
 }

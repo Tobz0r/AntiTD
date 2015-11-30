@@ -57,20 +57,21 @@ public class BasicTroopTest {
     @Test
     public void testGetCurrentScore() throws Exception {
         Troop t = new BasicTroop(start);
+        //TODO: testGetCurrentScore
     }
 
     @Test
     public void testAttackThis() throws Exception {
-
+        //TODO: testAttackThis
     }
 
     @Test
     public void testIsAlive() throws Exception {
-
+        //TODO: testIsAlive
     }
 
     @Test
     public void testGetPosition() throws Exception {
-
+        //TODO: testGetPosition
     }
 }
