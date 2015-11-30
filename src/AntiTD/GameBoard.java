@@ -5,6 +5,7 @@ import AntiTD.tiles.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.SampleModel;
 
 
 /**
@@ -29,22 +30,22 @@ public class GameBoard extends JComponent {
             y=0;
             for(int j=0; j < map[i].length;j++){
                 switch(map[i][j].toString()) {
-                    case BasicTile:
+                    case "AntiTD.tiles.BasicTile":
                         g.setColor(Color.black);
                         break;
-                    case CrossroadTile:
+                    case "AntiTD.tiles.CrossroadTile":
                         g.setColor(Color.red);
                         break;
-                    case GoalTile:
+                    case "AntiTD.tiles.GoalTile":
                         g.setColor(Color.yellow);
                         break;
-                    case PathTile:
+                    case "AntiTD.tiles.PathTile":
                         g.setColor(Color.orange);
                         break;
-                    case TowerTile:
+                    case "AntiTD.tiles.TowerTile":
                         g.setColor(Color.green);
                         break;
-                    case StartTile:
+                    case "AntiTD.tiles.StartTile":
                         g.setColor(Color.pink);
                         break;
                     default:

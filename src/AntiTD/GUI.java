@@ -45,7 +45,6 @@ public class GUI extends Observable{
     public void startGame() {
         gameBoard = new GameBoard();
         frame.add(gameBoard, BorderLayout.CENTER);
-        gameBoard.repaint();
     }
     public void restartGame(){
         frame.remove(gameBoard);
