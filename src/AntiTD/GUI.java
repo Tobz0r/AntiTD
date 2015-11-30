@@ -26,7 +26,7 @@ public class GUI extends JFrame{
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 //menu = new Menu(frame);
-        
+
                 menu = new Menu(frame, this);
                 menu.startMenu();
                 menu.statMenu();
