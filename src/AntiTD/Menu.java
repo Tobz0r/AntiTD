@@ -1,5 +1,6 @@
 package AntiTD;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,7 +8,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * @author dv13trm
@@ -26,6 +29,7 @@ public class Menu extends JMenu {
     private JScrollPane helpScroll;
     private JButton helpButton;
     private JPanel helpPanel;
+
 
     //statmenu
     private JMenu statmenu = new JMenu("Help");
@@ -142,6 +146,7 @@ public class Menu extends JMenu {
 
     private void callHelpFrame(){
         helpPanel = new JPanel();
+        helpPanel.setBackground(Color.blue);
         //textfältet
         helpText = new JTextArea(15,15);
         helpText.setEditable(false);
@@ -163,15 +168,13 @@ public class Menu extends JMenu {
         helpFrame.add(helpText);
         helpScroll = new JScrollPane(helpText);
         helpFrame.add(helpScroll, BorderLayout.CENTER);
+
         helpFrame.add(new JLabel(new ImageIcon("tobiashej.jpg")),BorderLayout.NORTH);
         helpFrame.getContentPane().setBackground(Color.yellow);
         helpFrame.add(helpPanel,BorderLayout.SOUTH);
         helpFrame.setVisible(true);
     }
-    private BufferedImage resizeImage(BufferedImage originalImage, int width, int height, int type) throws IOException {
-        BufferedImage resizedImage = new BufferedImage(width, height, type);
-        return resizedImage;
-    }
+
 
 }
 
