@@ -8,18 +8,20 @@ import java.awt.*;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.LinkedList;
 
 /**
  * Created by dv13tes on 2015-11-27.
  */
 public abstract class Tower implements GameObject {
     private Tile pos;
-    private int money;
+    protected int money;
     private Image img;
 
-    ArrayList<Troop> troops;
+    protected ArrayList<Troop> troops;
     private Troop target;
-    Stack<Troop> inRange;
+    protected Stack<Troop> inRange;
+    protected ArrayList<Tower> towers;
     private int range;
     private int damage;
     private int price;
@@ -29,84 +31,36 @@ public abstract class Tower implements GameObject {
         this.money = 0;
         this.pos = pos;
     }
-    public Tower(ArrayList<Troop> troops){
+    /*public Tower(ArrayList<Troop> troops){
         this.troops = troops;
         initScan();
-    }
-    /*Border vara i underklassen*/
-    public void initFrostTower(){
+    }*/
+    public void init(ArrayList<Troop> troops, ArrayList<Tower> towers, Tile pos){
+      this.pos = pos;
+      this.troops = troops;
+      this.towers = towers;
 
-        damage = 10;
-        range = 10;
-        price = 5;
-    }
-    /*Border vara i underklassen*/
-    public void initBasicTower(){
-        damage = 5;
-        range = 5;
-        price = 1;
-    }
-    public void initScan() {
-        double distance = Integer.MAX_VALUE;
-        for(Troop troop : troops){
-
-            Troop nearUnit = null;
-            double dist = distance(troop);
-            if(dist <= range) {
-                inRange.push(troop);
-                if (dist < distance) {
-                    nearUnit = troop;
-                    distance = dist;
-
-                }
-            }
-            if(nearUnit !=null){
-                target = nearUnit;
-            }
-        }
     }
     @Override
     public abstract void tick();
 
-    public void aggroTarget(){
-        if(target != null){
-            if(checkIfUnitIsClose(target)){
-                attack(target,damage);
-            }else{
-                target = null;
-                initScan();
-            }
-        }
-    }
-    /*Ska vara i environment*/
+    /*Ska vara i environment???*/
     public void buildTower(){
         int tempMoney = getCurrentScore();
         if(pos.isBuildable()) {
             if (tempMoney >= 5) {
-                initFrostTower();
-                tempMoney = tempMoney-price;
+                Tower temp = new FrostTower(img,pos);
+                temp.createTower(img,pos);
+                tempMoney = tempMoney-temp.getPrice();
                 setMoney(tempMoney);
 
-            }else{
-                tempMoney = tempMoney-price;
-                initBasicTower();
+            }else if(tempMoney >=1){
+                Tower temp = new BasicTower(img,pos);
+                temp.createTower(img,pos);
+                tempMoney = tempMoney-temp.getPrice();
                 setMoney(tempMoney);
             }
         }
-    }
-    public void attack(Troop troop, int damage){
-
-        troop.attackThis(damage);
-
-    }
-    public boolean checkIfUnitIsClose(Troop troop){
-        if(Math.hypot(troop.getPosition().getX() -pos.getPosition().getX(), troop.getPosition().getY() - pos.getPosition().getY()) <= range){
-            return true;
-        }
-        return false;
-    }
-    public double distance(Troop troop){
-        return Math.hypot(troop.getPosition().getX(), troop.getPosition().getY());
     }
 
     @Override
@@ -120,6 +74,19 @@ public abstract class Tower implements GameObject {
             money++;
         }
     }
+    public abstract void aggroTarget();
+    public abstract void initScan();
+    public abstract double distance(Troop troop);
+    public abstract void attack(Troop troop, int damage);
+    public abstract boolean checkIfUnitIsClose(Troop troop);
+    public abstract void createTower(Image img, Tile pos);
+    public abstract void setDamage(int damage);
+    public abstract int getDamage();
+    public abstract void setPrice(int price);
+    public abstract int getPrice();
+    public abstract void setRange(int range);
+    public abstract int getRange();
+
     public void setMoney(int money){
         this.money = money;
     }
@@ -129,8 +96,6 @@ public abstract class Tower implements GameObject {
     }
 
     @Override
-    public Position getPosition() {
-        return pos.getPosition();
-    }
-
+    public abstract Position getPosition();
+    public abstract void setPosition(Position pos);
 }
