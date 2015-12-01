@@ -27,6 +27,9 @@ public class Environment extends JComponent implements Runnable {
     private Level level;
 
     public Environment(){
+        super();
+        setLayout(new GridLayout(1,1));
+        setBorder(BorderFactory.createLineBorder(Color.black));
         handler=new Handler();
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
