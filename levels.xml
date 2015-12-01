@@ -49,7 +49,7 @@
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
         </row>
 
         <row>
@@ -57,12 +57,12 @@
             <tile>PathTile</tile>
             <tile>PathTile</tile>
             <tile>CrossroadTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>BasicTile</tile>
+            <tile>BasicTile</tile>
             <tile>PathTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
         </row>
 
         <row>
@@ -75,7 +75,7 @@
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
         </row>
 
         <row>
