@@ -68,37 +68,9 @@ public class Environment extends JComponent implements Runnable {
     }
     public void paintComponent(Graphics g){
         g.clearRect(0,0,map.length*48,map[0].length*48);
-        int x,y;
-        x=-48;
         for(int i=0; i < map.length;i++){
-            x+=48;
-            y=0;
             for(int j=0; j < map[i].length;j++){
-                switch(map[i][j].toString()) {
-                    case "AntiTD.tiles.BasicTile":
-                        g.setColor(Color.black);
-                        break;
-                    case "AntiTD.tiles.CrossroadTile":
-                        g.setColor(Color.red);
-                        break;
-                    case "AntiTD.tiles.GoalTile":
-                        g.setColor(Color.yellow);
-                        break;
-                    case "AntiTD.tiles.PathTile":
-                        g.setColor(Color.orange);
-                        break;
-                    case "AntiTD.tiles.TowerTile":
-                        g.setColor(Color.green);
-                        break;
-                    case "AntiTD.tiles.StartTile":
-                        g.setColor(Color.pink);
-                        break;
-                    default:
-                        System.out.println("eliashej");
-                        break;
-                }
-                g.fillRect(x,y,48,48);
-                y+=48;
+                map[i][j].landOn(g);
             }
         }
         handler.render(g);

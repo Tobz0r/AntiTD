@@ -30,7 +30,7 @@ public class GUI  {
         menu.startMenu();
         menu.statMenu();
         frame.setVisible(true);
-        frame.add(env);
+        frame.add(env,BorderLayout.CENTER);
 
         frame.pack();
 
