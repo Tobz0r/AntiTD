@@ -30,9 +30,10 @@ public class GUI  {
     private JScrollPane playerScroll;
 
     public GUI () {
-        env = new Environment();
-        env.start();
+
         frame = new JFrame("AntiTTD");
+        env = new Environment(frame);
+        env.start();
         JScrollPane scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
