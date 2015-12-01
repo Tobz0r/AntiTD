@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 
 /**
  * @author dv13trm
@@ -21,6 +23,9 @@ public class Menu extends JMenu {
     private JTextArea helpText;
     private JFrame helpFrame = new JFrame();
     private JScrollPane helpScroll;
+    private JButton helpButton;
+    private JPanel helpPanel;
+
     //statmenu
     private JMenu statmenu = new JMenu("Help");
     private JMenuItem  nameChange, about, help;
@@ -135,19 +140,35 @@ public class Menu extends JMenu {
     }
 
     private void callHelpFrame(){
+        helpPanel = new JPanel();
+        //textfältet
         helpText = new JTextArea(15,15);
         helpText.setEditable(false);
         helpText.setWrapStyleWord(true);
         helpText.setLineWrap(true);
         helpText.setBackground(Color.yellow);
         helpText.append("Här ska det stå hjälp texten");
+        //knappen
+        helpButton = new JButton("Close");
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                helpFrame.dispatchEvent(new WindowEvent(helpFrame, WindowEvent.WINDOW_CLOSING));
+            }
+        });
+        helpPanel.add(helpButton);
+
+        helpFrame.setSize(1000, 1000);
         helpFrame.add(helpText);
         helpScroll = new JScrollPane(helpText);
-        helpFrame.add(helpScroll, BorderLayout.SOUTH);
-        helpFrame.add(new JLabel(new ImageIcon("tobiashej.jpg")));
+        helpFrame.add(helpScroll, BorderLayout.CENTER);
+        helpFrame.add(new JLabel(new ImageIcon("tobiashej.jpg")),BorderLayout.NORTH);
         helpFrame.getContentPane().setBackground(Color.yellow);
+        helpFrame.add(helpPanel,BorderLayout.SOUTH);
         helpFrame.setVisible(true);
-        helpFrame.pack();
+    }
+    private BufferedImage resizeImage(BufferedImage originalImage, int width, int height, int type) throws IOException {
+        BufferedImage resizedImage = new BufferedImage(width, height, type);
     }
 
 }
