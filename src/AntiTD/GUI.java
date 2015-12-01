@@ -28,14 +28,17 @@ public class GUI  {
     private JButton enterName;
     private JPanel startPanel;
     private JScrollPane playerScroll;
+    private JScrollPane scrollPane;
 
     public GUI () {
         env = new Environment();
         env.start();
         frame = new JFrame("AntiTTD");
-        JScrollPane scrollPane = new JScrollPane(env);
+         scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        scrollPane.setBounds(0,0,env.getWidth()+32,env.getHeight()+32);
 
         startScreen();
         //menu = new Menu(frame);
@@ -51,9 +54,13 @@ public class GUI  {
     }
 
     public void startGame() {
+        frame.remove(startPanel);
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(scrollPane, BorderLayout.CENTER);
         env.startGame();
         env.repaint();
-        frame.setVisible(true);
+        buildBuyPanel();
         frame.pack();
     }
     public void restartGame(){
@@ -104,12 +111,7 @@ public class GUI  {
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                frame.remove(startPanel);
-                frame.setSize(800, 600);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.add(env, BorderLayout.CENTER);
                 startGame();
-                buildBuyPanel();
             }
         });
 
