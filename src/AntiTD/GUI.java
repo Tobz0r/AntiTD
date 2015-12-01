@@ -88,6 +88,7 @@ public class GUI  {
     private void startScreen(){
         player = new JTextArea(10,20);
         player.setEditable(true);
+        
         player.setBorder(BorderFactory.createLineBorder(Color.black));
 
         startPanel = new JPanel();
