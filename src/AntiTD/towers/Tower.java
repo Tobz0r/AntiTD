@@ -4,6 +4,7 @@ import AntiTD.*;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
@@ -16,17 +17,18 @@ import java.util.LinkedList;
 public abstract class Tower implements GameObject {
     private Tile pos;
     protected int money;
-    private Image img;
+    private ImageIcon img;
+    private Image imge;
 
     protected ArrayList<Troop> troops;
     private Troop target;
-    protected Stack<Troop> inRange;
-    protected ArrayList<Tower> towers;
+    protected LinkedList<Troop> inRange;
+    protected ArrayList<Tower> towers = new ArrayList();
     private int range;
     private int damage;
     private int price;
 
-    public Tower(Image img, Tile pos) {
+    public Tower(ImageIcon img, Tile pos) {
         this.img = img;
         this.money = 0;
         this.pos = pos;
@@ -44,7 +46,9 @@ public abstract class Tower implements GameObject {
     @Override
     public abstract void tick();
 
-    /*Ska vara i environment???*/
+    /*Ska vara i environment???*
+    *
+     */
     public void buildTower(){
         int tempMoney = getCurrentScore();
         if(pos.isBuildable()) {
@@ -65,7 +69,8 @@ public abstract class Tower implements GameObject {
 
     @Override
     public Image getImage() {
-        return img;
+
+        return imge;
     }
 
 
@@ -74,12 +79,13 @@ public abstract class Tower implements GameObject {
             money++;
         }
     }
+    public abstract void startShooting();
     public abstract void aggroTarget();
     public abstract void initScan();
     public abstract double distance(Troop troop);
     public abstract void attack(Troop troop, int damage);
     public abstract boolean checkIfUnitIsClose(Troop troop);
-    public abstract void createTower(Image img, Tile pos);
+    public abstract void createTower(ImageIcon img, Tile pos);
     public abstract void setDamage(int damage);
     public abstract int getDamage();
     public abstract void setPrice(int price);
@@ -98,4 +104,10 @@ public abstract class Tower implements GameObject {
     @Override
     public abstract Position getPosition();
     public abstract void setPosition(Position pos);
+    /*
+    * Method for test
+    * */
+   public boolean getTowers(){
+     return towers.isEmpty();
+    }
 }

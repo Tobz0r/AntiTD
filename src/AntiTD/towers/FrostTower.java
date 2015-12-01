@@ -5,6 +5,7 @@ import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 import javafx.geometry.Pos;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -16,7 +17,8 @@ public class FrostTower extends Tower{
     private int price;
     private Troop target;
     private Position pos;
-    public FrostTower(Image img, Tile pos) {
+    ImageIcon img;
+    public FrostTower(ImageIcon img, Tile pos) {
 
       super(img, pos);
       setDamage(10);
@@ -35,7 +37,6 @@ public class FrostTower extends Tower{
           if (dist < distance) {
             nearUnit = troop;
             distance = dist;
-
         }
       }
       if(nearUnit !=null){
@@ -45,19 +46,25 @@ public class FrostTower extends Tower{
     }
     public void aggroTarget(){
       if(target != null){
-       if(checkIfUnitIsClose(target)){
+       if(checkIfUnitIsClose(target) && target.isAlive()){
           attack(target,getDamage());
         } else{
           target = null;
-          initScan();
+          inRange.clear();
         }
      }
     }
-    public void createTower(Image img, Tile pos){
-
+    public void createTower(ImageIcon img, Tile pos){
       Tower temp = new FrostTower(img,pos);
       temp.init(troops, towers, pos);
       towers.add(temp);
+    }
+    public void startShooting(){
+      if(target != null){
+        aggroTarget();
+      }else{
+        initScan();
+      }
     }
     public void attack(Troop troop, int damage){
      troop.attackThis(damage);
@@ -65,12 +72,11 @@ public class FrostTower extends Tower{
     public double distance(Troop troop) {
       return Math.hypot(troop.getPosition().getX(), troop.getPosition().getY());
     }
-
-   public boolean checkIfUnitIsClose(Troop troop){
-    if(Math.hypot(troop.getPosition().getX() -getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()){
-      return true;
-    }
-    return false;
+    public boolean checkIfUnitIsClose(Troop troop){
+      if(Math.hypot(troop.getPosition().getX() -getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()){
+        return true;
+      }
+      return false;
     }
     public void setDamage(int damage){
       this.damage = damage;
