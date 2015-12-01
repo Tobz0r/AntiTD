@@ -21,6 +21,8 @@ public class Menu extends JMenu {
     private JTextArea helpText;
     private JFrame helpFrame = new JFrame();
     private JScrollPane helpScroll;
+    private JButton helpButton;
+    private JPanel helpPanel;
     //statmenu
     private JMenu statmenu = new JMenu("Help");
     private JMenuItem  nameChange, about, help;
@@ -135,19 +137,25 @@ public class Menu extends JMenu {
     }
 
     private void callHelpFrame(){
+        helpPanel = new JPanel();
         helpText = new JTextArea(15,15);
         helpText.setEditable(false);
         helpText.setWrapStyleWord(true);
         helpText.setLineWrap(true);
         helpText.setBackground(Color.yellow);
         helpText.append("Här ska det stå hjälp texten");
+
+        helpButton = new JButton("Close");
+        helpPanel.add(helpButton);
+
+        helpFrame.setSize(1000, 1000);
         helpFrame.add(helpText);
         helpScroll = new JScrollPane(helpText);
-        helpFrame.add(helpScroll, BorderLayout.SOUTH);
-        helpFrame.add(new JLabel(new ImageIcon("tobiashej.jpg")));
+        helpFrame.add(helpScroll, BorderLayout.CENTER);
+        helpFrame.add(new JLabel(new ImageIcon("tobiashej.jpg")),BorderLayout.NORTH);
         helpFrame.getContentPane().setBackground(Color.yellow);
+        helpFrame.add(helpPanel,BorderLayout.SOUTH);
         helpFrame.setVisible(true);
-        helpFrame.pack();
     }
 
 }
