@@ -67,6 +67,7 @@ public class GUI  {
         });
         //teleport troop button
         buyTeleport = new JButton("Teleport Troop");
+        buyTeleport.setBackground(Color.white);
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
