@@ -10,7 +10,7 @@ import java.util.Observer;
 /**
  * @author dv13trm
  */
-public class GUI implements Observer{
+public class GUI  {
     private Menu menu;
     private GameBoard gameBoard;
     private Thread gameThread;
@@ -18,41 +18,40 @@ public class GUI implements Observer{
     private JFrame frame;
 
     public GUI () {
-        int i=1;
         env = new Environment(this);
+        gameBoard=env.getGrid();
         gameThread = new Thread(env);
         gameThread.start();
 
 
                 frame = new JFrame("AntiTTD");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800,600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 //menu = new Menu(frame);
         menu = new Menu(frame, this);
         menu.startMenu();
 
-                menu = new Menu(frame, this);
-                menu.startMenu();
-                menu.statMenu();
-                frame.setVisible(true);
-                frame.pack();
+        menu = new Menu(frame, this);
+        menu.startMenu();
+        menu.statMenu();
+        frame.setVisible(true);
 
 
 
 
     }
-
 
     public void startGame() {
         frame.add(gameBoard, BorderLayout.CENTER);
+        frame.setVisible(true);
+        gameBoard.repaint();
     }
     public void restartGame(){
         frame.remove(gameBoard);
+        frame.setVisible(true);
         gameBoard.resetGame();
     }
 
-    @Override
-    public void update(Observable observable, Object o) {
-        gameBoard=(GameBoard) o;
-    }
+
 }

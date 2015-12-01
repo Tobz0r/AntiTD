@@ -15,6 +15,7 @@ public class GameBoard extends JComponent {
 
     private Level level;
     private Tile[][] map;
+    private Graphics g;
 
     public GameBoard(Level level){
         setLayout(new GridLayout(1,1));
@@ -22,6 +23,7 @@ public class GameBoard extends JComponent {
         map=level.getMap();
     }
     public void paintComponent(Graphics g){
+        this.g=g;
         int x,y;
         x=-48;
 
@@ -62,7 +64,7 @@ public class GameBoard extends JComponent {
     }
 
     public void resetGame(){
-
+        g.clearRect(0,0,getWidth(),getHeight());
     }
 
 

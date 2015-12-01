@@ -16,14 +16,15 @@ public class Environment extends Observable implements Runnable {
 
     private ArrayList<Level> levels;
     private Handler handler;
-    private int level;
+    private GameBoard grid;
+    private int level=0;
 
     public Environment(GUI gui){
         handler=new Handler();
-        addObserver(gui);
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
-
+        Level level=levels.get(this.level);
+        grid=new GameBoard(level);
     }
     public void incrementLevel(){
         level++;
@@ -31,17 +32,16 @@ public class Environment extends Observable implements Runnable {
             level=1;
         }
     }
+    public GameBoard getGrid(){
+        return grid;
+    }
 
     @Override
     public void run() {
-        Level level=levels.get(this.level);
-        GameBoard grid=new GameBoard(level);
-        update(grid);
+
 
     }
-    private void update(GameBoard gameBoard){
-        setChanged();
-        notifyObservers(gameBoard);
-    }
+
+
 
 }
