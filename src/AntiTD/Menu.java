@@ -1,6 +1,7 @@
 package AntiTD;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,7 +17,10 @@ public class Menu extends JMenu {
     private GUI gui;
     private boolean pause = true;
     private boolean mutesound = true;
+    //helpframe
+    private JTextArea helpText;
     private JFrame helpFrame = new JFrame();
+    private JScrollPane helpScroll;
     //statmenu
     private JMenu statmenu = new JMenu("Help");
     private JMenuItem  nameChange, about, help;
@@ -131,7 +135,17 @@ public class Menu extends JMenu {
     }
 
     private void callHelpFrame(){
+        helpText = new JTextArea(15,15);
+        helpText.setEditable(false);
+        helpText.setWrapStyleWord(true);
+        helpText.setLineWrap(true);
+        helpText.setBackground(Color.yellow);
+        helpText.append("Här ska det stå hjälp texten");
+        helpFrame.add(helpText);
+        helpScroll = new JScrollPane(helpText);
+        helpFrame.add(helpScroll, BorderLayout.SOUTH);
         helpFrame.add(new JLabel(new ImageIcon("tobiashej.jpg")));
+        helpFrame.getContentPane().setBackground(Color.yellow);
         helpFrame.setVisible(true);
         helpFrame.pack();
     }
