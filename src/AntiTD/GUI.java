@@ -30,11 +30,13 @@ public class GUI  {
         menu.startMenu();
         menu.statMenu();
         frame.setVisible(true);
+        frame.add(env);
+
+        frame.pack();
 
     }
 
     public void startGame() {
-        frame.add(env);
         frame.setVisible(true);
 
     }

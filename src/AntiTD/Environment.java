@@ -103,6 +103,12 @@ public class Environment extends JComponent implements Runnable {
     public void addTroops(Troop troop){
         handler.addObject(troop);
     }
+    public void pauseGame(){
+        isPaused=true;
+    }
+    public void resumeGame(){
+        isPaused=false;
+    }
     private void incrementLevel(){
         mapNr++;
         if(mapNr>levels.size()){
