@@ -24,21 +24,26 @@ public class GUI  {
     private JButton buyTeleport;
 
     public GUI () {
-        env = new Environment();
-        env.start();
- 
+
+
         frame = new JFrame("AntiTTD");
+        env = new Environment(frame);
+        env.start();
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //menu = new Menu(frame);
         menu = new Menu(frame, this);
         menu.startMenu();
- 
+
+        JScrollPane scrollPane = new JScrollPane(env);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
         menu = new Menu(frame, this);
         menu.startMenu();
         menu.statMenu();
         buildBuyPanel();
-        frame.add(env, BorderLayout.CENTER);
+        frame.add(scrollPane, BorderLayout.CENTER);
         frame.setVisible(true);
 
 
