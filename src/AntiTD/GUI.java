@@ -44,7 +44,6 @@ public class GUI implements Observer{
 
 
     public void startGame() {
-        gameBoard = new GameBoard();
         frame.add(gameBoard, BorderLayout.CENTER);
     }
     public void restartGame(){

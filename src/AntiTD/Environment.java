@@ -44,8 +44,4 @@ public class Environment extends Observable implements Runnable {
         notifyObservers(gameBoard);
     }
 
-    @Override
-    public void update(Observable observable, Object o) {
-
-    }
 }
