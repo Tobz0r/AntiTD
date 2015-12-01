@@ -16,11 +16,6 @@ public class FrostTower extends Tower{
     private int price;
     private Troop target;
     private Position pos;
-
-
-
-
-
     public FrostTower(Image img, Tile pos) {
 
       super(img, pos);

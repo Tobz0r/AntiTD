@@ -74,7 +74,7 @@ public abstract class Tower implements GameObject {
             money++;
         }
     }
-  public abstract void aggroTarget();
+    public abstract void aggroTarget();
     public abstract void initScan();
     public abstract double distance(Troop troop);
     public abstract void attack(Troop troop, int damage);
