@@ -16,6 +16,7 @@ public class Menu extends JMenu {
     private GUI gui;
     private boolean pause = true;
     private boolean mutesound = true;
+    private JFrame helpFrame = new JFrame();
     //statmenu
     private JMenu statmenu = new JMenu("Help");
     private JMenuItem  nameChange, about, help;
@@ -110,7 +111,7 @@ public class Menu extends JMenu {
         help.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // kalla på en funktion som ger en ruta som visar hur man gör
+                callHelpFrame();
             }
         });
         about.addActionListener(new ActionListener() {
@@ -129,5 +130,11 @@ public class Menu extends JMenu {
         statMenuBar.add(statmenu);
     }
 
+    private void callHelpFrame(){
+        helpFrame.add(new JLabel(new ImageIcon("tobiashej.jpg")));
+        helpFrame.setVisible(true);
+        helpFrame.pack();
+    }
 
 }
+
