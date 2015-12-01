@@ -26,7 +26,7 @@ public class GUI  {
     public GUI () {
         env = new Environment();
         env.start();
-
+ 
         frame = new JFrame("AntiTTD");
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
