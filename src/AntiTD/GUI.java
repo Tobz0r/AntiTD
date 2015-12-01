@@ -26,6 +26,7 @@ public class GUI  {
     public GUI () {
         env = new Environment();
         env.start();
+
         frame = new JFrame("AntiTTD");
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,16 +38,19 @@ public class GUI  {
         menu.startMenu();
         menu.statMenu();
         buildBuyPanel();
+        frame.add(env, BorderLayout.CENTER);
         frame.setVisible(true);
-        frame.add(env,BorderLayout.CENTER);
+
 
         frame.pack();
 
     }
 
     public void startGame() {
+        env.startGame();
+        env.repaint();
         frame.setVisible(true);
-
+        frame.pack();
     }
     public void restartGame(){
         //restart

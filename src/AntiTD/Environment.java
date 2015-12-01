@@ -15,7 +15,7 @@ import java.util.Observer;
 /**
  * Created by mattias on 2015-11-27.
  */
-public class Environment extends JComponent implements Runnable {
+public class Environment extends JPanel implements Runnable {
 
     private ArrayList<Level> levels;
     private Handler handler;
@@ -27,20 +27,22 @@ public class Environment extends JComponent implements Runnable {
     private Level level;
 
     public Environment(){
-        super();
+        super(new BorderLayout());
         setLayout(new GridLayout(1,1));
-        setBorder(BorderFactory.createLineBorder(Color.black));
         handler=new Handler();
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
         Level level=levels.get(mapNr);
         map=level.getMap();
+        setSize(map.length*48,map[0].length*48);
     }
 
     public synchronized void start(){
         thread=new Thread(this);
-        gameRunning=true;
         isPaused=false;
+    }
+    public void startGame(){
+        gameRunning=true;
     }
 
     @Override
@@ -67,13 +69,22 @@ public class Environment extends JComponent implements Runnable {
         }
     }
     public void paintComponent(Graphics g){
-        g.clearRect(0,0,map.length*48,map[0].length*48);
-        for(int i=0; i < map.length;i++){
-            for(int j=0; j < map[i].length;j++){
-                map[i][j].landOn(g);
+        if(gameRunning) {
+            g.clearRect(0, 0, getWidth(), getHeight());
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[i].length; j++) {
+                    map[i][j].landOn(g);
+                }
             }
+            handler.render(g);
         }
-        handler.render(g);
+        else{
+            paintStart(g);
+        }
+    }
+    private void paintStart(Graphics g){
+        g.setFont(new Font("TimesRoman", Font.BOLD,24));
+        g.drawString("Welcome to AntiTD",getWidth()/4,getHeight()/2);
     }
     public void addTroops(Troop troop){
         handler.addObject(troop);
