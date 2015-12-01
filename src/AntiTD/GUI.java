@@ -38,11 +38,13 @@ public class GUI  {
         menu.statMenu();
         buildBuyPanel();
         frame.setVisible(true);
+        frame.add(env);
+
+        frame.pack();
 
     }
 
     public void startGame() {
-        frame.add(env);
         frame.setVisible(true);
 
     }

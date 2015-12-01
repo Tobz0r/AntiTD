@@ -2,6 +2,7 @@ package AntiTD;
 
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
+import AntiTD.troops.Troop;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +27,9 @@ public class Environment extends JComponent implements Runnable {
     private Level level;
 
     public Environment(){
+        super();
+        setLayout(new GridLayout(1,1));
+        setBorder(BorderFactory.createLineBorder(Color.black));
         handler=new Handler();
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
@@ -98,6 +102,15 @@ public class Environment extends JComponent implements Runnable {
             }
         }
         handler.render(g);
+    }
+    public void addTroops(Troop troop){
+        handler.addObject(troop);
+    }
+    public void pauseGame(){
+        isPaused=true;
+    }
+    public void resumeGame(){
+        isPaused=false;
     }
     private void incrementLevel(){
         mapNr++;
