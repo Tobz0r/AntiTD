@@ -2,6 +2,7 @@ package AntiTD;
 
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
+import AntiTD.troops.Troop;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,6 +99,9 @@ public class Environment extends JComponent implements Runnable {
             }
         }
         handler.render(g);
+    }
+    public void addTroops(Troop troop){
+        handler.addObject(troop);
     }
     private void incrementLevel(){
         mapNr++;
