@@ -15,7 +15,7 @@ import java.util.Observer;
 /**
  * Created by mattias on 2015-11-27.
  */
-public class Environment extends JComponent implements Runnable {
+public class Environment extends JPanel implements Runnable {
 
     private ArrayList<Level> levels;
     private Handler handler;
@@ -27,17 +27,22 @@ public class Environment extends JComponent implements Runnable {
     private Level level;
 
     public Environment(){
+        super(new BorderLayout());
+        setLayout(new GridLayout(1,1));
         handler=new Handler();
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
         Level level=levels.get(mapNr);
         map=level.getMap();
+        setSize(map.length*48,map[0].length*48);
     }
 
     public synchronized void start(){
         thread=new Thread(this);
-        gameRunning=true;
         isPaused=false;
+    }
+    public void startGame(){
+        gameRunning=true;
     }
 
     @Override
@@ -64,44 +69,31 @@ public class Environment extends JComponent implements Runnable {
         }
     }
     public void paintComponent(Graphics g){
-        g.clearRect(0,0,map.length*48,map[0].length*48);
-        int x,y;
-        x=-48;
-        for(int i=0; i < map.length;i++){
-            x+=48;
-            y=0;
-            for(int j=0; j < map[i].length;j++){
-                switch(map[i][j].toString()) {
-                    case "AntiTD.tiles.BasicTile":
-                        g.setColor(Color.black);
-                        break;
-                    case "AntiTD.tiles.CrossroadTile":
-                        g.setColor(Color.red);
-                        break;
-                    case "AntiTD.tiles.GoalTile":
-                        g.setColor(Color.yellow);
-                        break;
-                    case "AntiTD.tiles.PathTile":
-                        g.setColor(Color.orange);
-                        break;
-                    case "AntiTD.tiles.TowerTile":
-                        g.setColor(Color.green);
-                        break;
-                    case "AntiTD.tiles.StartTile":
-                        g.setColor(Color.pink);
-                        break;
-                    default:
-                        System.out.println("eliashej");
-                        break;
+        if(gameRunning) {
+            g.clearRect(0, 0, getWidth(), getHeight());
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[i].length; j++) {
+                    map[i][j].landOn(g);
                 }
-                g.fillRect(x,y,48,48);
-                y+=48;
             }
+            handler.render(g);
         }
-        handler.render(g);
+        else{
+            paintStart(g);
+        }
+    }
+    private void paintStart(Graphics g){
+        g.setFont(new Font("TimesRoman", Font.BOLD,24));
+        g.drawString("Welcome to AntiTD",getWidth()/4,getHeight()/2);
     }
     public void addTroops(Troop troop){
         handler.addObject(troop);
+    }
+    public void pauseGame(){
+        isPaused=true;
+    }
+    public void resumeGame(){
+        isPaused=false;
     }
     private void incrementLevel(){
         mapNr++;
