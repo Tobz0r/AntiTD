@@ -25,11 +25,9 @@ public class Environment extends JPanel implements Runnable {
     private Thread thread;
     private int mapNr=0;
     private Level level;
-    private JFrame frame;
 
-    public Environment(JFrame frame){
+    public Environment(){
         super(new BorderLayout());
-        this.frame=frame;
         handler=new Handler();
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();

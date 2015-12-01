@@ -3,7 +3,6 @@ package AntiTD.towers;
 import AntiTD.Position;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
-import javafx.geometry.Pos;
 
 import javax.swing.*;
 import java.awt.*;

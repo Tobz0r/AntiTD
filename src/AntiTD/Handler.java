@@ -7,15 +7,15 @@ import java.util.LinkedList;
  * Created by dv13tes on 2015-11-27.
  */
 public class Handler extends Thread {
-    private LinkedList<GameObject> objects;
+    private static LinkedList<GameObject> objects;
 
     public Handler(){
         objects=new LinkedList<>();
     }
-    public synchronized void addObject(GameObject object){
+    public static synchronized void addObject(GameObject object){
         objects.add(object);
     }
-    public synchronized void removeObject(GameObject object){
+    public static synchronized void removeObject(GameObject object){
         objects.remove(object);
     }
     public void tick(){

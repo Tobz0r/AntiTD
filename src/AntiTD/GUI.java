@@ -22,28 +22,30 @@ public class GUI  {
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
+    //startscreen
+    private String PlayerName;
+    private JTextArea player;
+    private JButton enterName;
+    private JPanel startPanel;
+    private JScrollPane playerScroll;
+    private JScrollPane scrollPane;
 
     public GUI () {
-
-
-        frame = new JFrame("AntiTTD");
-        env = new Environment(frame);
+        env = new Environment();
         env.start();
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //menu = new Menu(frame);
-        menu = new Menu(frame, this);
-        menu.startMenu();
-
-        JScrollPane scrollPane = new JScrollPane(env);
+        frame = new JFrame("AntiTTD");
+         scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
+        scrollPane.setBounds(0,0,env.getWidth()+32,env.getHeight()+32);
+
+        startScreen();
+        //menu = new Menu(frame);
         menu = new Menu(frame, this);
         menu.startMenu();
         menu.statMenu();
-        buildBuyPanel();
-        frame.add(scrollPane, BorderLayout.CENTER);
+
         frame.setVisible(true);
 
 
@@ -52,9 +54,13 @@ public class GUI  {
     }
 
     public void startGame() {
+        frame.remove(startPanel);
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(scrollPane, BorderLayout.CENTER);
         env.startGame();
         env.repaint();
-        frame.setVisible(true);
+        buildBuyPanel();
         frame.pack();
     }
     public void restartGame(){
@@ -83,9 +89,32 @@ public class GUI  {
                 System.out.println("TELEPORTELIAS");
             }
         });
+
         buyPanel.add(buyTeleport);
         buyPanel.add(buyButton, FlowLayout.LEFT);
         frame.add(buyPanel, BorderLayout.SOUTH);
+    }
+
+    private void startScreen(){
+        player = new JTextArea(10, 20);
+        player.setEditable(true);
+        
+        player.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        startPanel = new JPanel();
+        startPanel.setBackground(Color.white);
+        startPanel.add(player, BorderLayout.CENTER);
+        enterName = new JButton("Submit name");
+        enterName.setBackground(Color.pink);
+        startPanel.add(enterName, FlowLayout.LEFT);
+        frame.add(startPanel);
+        enterName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                startGame();
+            }
+        });
+
     }
 
 }
