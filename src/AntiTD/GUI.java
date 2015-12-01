@@ -30,10 +30,13 @@ public class GUI  {
     private JScrollPane playerScroll;
 
     public GUI () {
-
-        frame = new JFrame("AntiTTD");
-        env = new Environment(frame);
+        env = new Environment();
         env.start();
+        frame = new JFrame("AntiTTD");
+        JScrollPane scrollPane = new JScrollPane(env);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
         startScreen();
         //menu = new Menu(frame);
         menu = new Menu(frame, this);
@@ -86,9 +89,9 @@ public class GUI  {
     }
 
     private void startScreen(){
-        player = new JTextArea(10,20);
+        player = new JTextArea(10, 20);
         player.setEditable(true);
-
+        
         player.setBorder(BorderFactory.createLineBorder(Color.black));
 
         startPanel = new JPanel();
