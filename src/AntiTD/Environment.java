@@ -23,18 +23,20 @@ public class Environment extends JPanel implements Runnable {
     private boolean isPaused;
     private Tile[][] map;
     private Thread thread;
-    private int mapNr=1;
+    private int mapNr=0;
     private Level level;
+    private JFrame frame;
 
-    public Environment(){
+    public Environment(JFrame frame){
         super(new BorderLayout());
-        setLayout(new GridLayout(1,1));
+        this.frame=frame;
         handler=new Handler();
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
         Level level=levels.get(mapNr);
         map=level.getMap();
-        setSize(map.length*48,map[0].length*48);
+        setLayout(new GridLayout(1,1));
+        setPreferredSize(new Dimension(map.length*48,map[0].length*48));
     }
 
     public synchronized void start(){
