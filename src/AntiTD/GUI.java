@@ -22,23 +22,24 @@ public class GUI  {
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
+    //startscreen
+    private String PlayerName;
+    private JTextArea player;
+    private JButton enterName;
+    private JPanel startPanel;
+    private JScrollPane playerScroll;
 
     public GUI () {
         env = new Environment();
         env.start();
- 
         frame = new JFrame("AntiTTD");
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        startScreen();
         //menu = new Menu(frame);
         menu = new Menu(frame, this);
         menu.startMenu();
- 
-        menu = new Menu(frame, this);
-        menu.startMenu();
         menu.statMenu();
-        buildBuyPanel();
-        frame.add(env, BorderLayout.CENTER);
+
         frame.setVisible(true);
 
 
@@ -78,9 +79,36 @@ public class GUI  {
                 System.out.println("TELEPORTELIAS");
             }
         });
+
         buyPanel.add(buyTeleport);
         buyPanel.add(buyButton, FlowLayout.LEFT);
         frame.add(buyPanel, BorderLayout.SOUTH);
+    }
+
+    private void startScreen(){
+        player = new JTextArea(10,20);
+        player.setEditable(true);
+        player.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        startPanel = new JPanel();
+        startPanel.setBackground(Color.white);
+        startPanel.add(player, BorderLayout.CENTER);
+        enterName = new JButton("Submit name");
+        enterName.setBackground(Color.pink);
+        startPanel.add(enterName, FlowLayout.LEFT);
+        frame.add(startPanel);
+        enterName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                frame.remove(startPanel);
+                frame.setSize(800, 600);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.add(env, BorderLayout.CENTER);
+                startGame();
+                buildBuyPanel();
+            }
+        });
+
     }
 
 }

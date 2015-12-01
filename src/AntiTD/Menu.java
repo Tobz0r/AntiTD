@@ -131,7 +131,7 @@ public class Menu extends JMenu {
         about.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //Öppnar en ruta med en text om vem som skapat
+                JOptionPane.showMessageDialog(null, "SPELET ÄR SKAPAT AV ELIAS");
             }
         });
         nameChange.addActionListener(new ActionListener() {
