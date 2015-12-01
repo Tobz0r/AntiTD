@@ -49,6 +49,7 @@ public class GUI  {
     }
     public void restartGame(){
         frame.remove(gameBoard);
+        frame.setVisible(true);
         gameBoard.resetGame();
     }
 
