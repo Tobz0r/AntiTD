@@ -25,7 +25,7 @@ public class GUI  {
         //menu = new Menu(frame);
         menu = new Menu(frame, this);
         menu.startMenu();
-
+ 
         menu = new Menu(frame, this);
         menu.startMenu();
         menu.statMenu();
