@@ -18,35 +18,56 @@ import java.util.Observer;
 public class Environment extends JPanel implements Runnable {
 
     private ArrayList<Level> levels;
-    private Handler handler;
+    private Handler tickHandler;
+    private Handler renderHandler;
+
     private boolean gameRunning;
     private boolean isPaused;
+
     private Tile[][] map;
-    private Thread thread;
+    private Thread[] threads;
+    private Thread mainThread;
+
     private int mapNr=0;
+    private final int nrthr=2;
     private Level level;
 
     public Environment(){
         super(new BorderLayout());
-        handler=new Handler();
+        renderHandler=new Handler();
+        tickHandler=new Handler();
+        threads=new Thread[nrthr];
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
         Level level=levels.get(mapNr);
         map=level.getMap();
         setLayout(new GridLayout(1,1));
         setPreferredSize(new Dimension(map.length*48,map[0].length*48));
+        threads[0]=new Thread(tickHandler);
+        threads[1]=new Thread(renderHandler);
+        threads[0].start();
+        threads[1].start();
     }
 
     public synchronized void start(){
-        thread=new Thread(this);
-        thread.start();
+        mainThread=new Thread(this);
+        mainThread.start();
         isPaused=false;
     }
     public void startGame(){
         gameRunning=true;
     }
 
-    @Override
+
+    public void paintComponent(Graphics g){
+        g.clearRect(0, 0, getWidth(), getHeight());
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                map[i][j].landOn(g);
+            }
+        }
+        renderHandler.render(g);
+    }
     public void run() {
         long lastLoopTime = System.nanoTime();
         final int TARGET_FPS = 60;
@@ -58,7 +79,7 @@ public class Environment extends JPanel implements Runnable {
             double delta = updateLength / ((double)OPTIMAL_TIME);
             if(!isPaused) {
                 System.out.println("elias");
-                handler.tick();
+                tickHandler.tick();
                 repaint();
             }
             try {
@@ -69,26 +90,8 @@ public class Environment extends JPanel implements Runnable {
 
         }
     }
-    public void paintComponent(Graphics g){
-        if(gameRunning) {
-            g.clearRect(0, 0, getWidth(), getHeight());
-            for (int i = 0; i < map.length; i++) {
-                for (int j = 0; j < map[i].length; j++) {
-                    map[i][j].landOn(g);
-                }
-            }
-            handler.render(g);
-        }
-        else{
-            paintStart(g);
-        }
-    }
-    private void paintStart(Graphics g){
-        g.setFont(new Font("TimesRoman", Font.BOLD,24));
-        g.drawString("Welcome to AntiTD",getWidth()/4,getHeight()/2);
-    }
     public void addTroops(Troop troop){
-        handler.addObject(troop);
+        Handler.addObject(troop);
     }
     public void pauseGame(){
         isPaused=true;
