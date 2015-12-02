@@ -15,30 +15,28 @@ import java.util.Observer;
 /**
  * @author dv13tes
  */
-public class Environment extends JPanel implements Runnable {
+public class Environment extends JPanel {
 
     private ArrayList<Level> levels;
-    private Handler tickHandler;
-    private Handler renderHandler;
+    private Handler handler;
+    private Handler handler2;
 
-    private boolean gameRunning;
-    private boolean isPaused;
+    private static boolean gameRunning;
+    private static boolean paused;
 
     private Tile[][] map;
     private Thread[] threads;
-    private Thread mainThread;
 
-    private int mapNr=0;
+    private int mapNr=1;
     private final int nrthr=2;
     private Level level;
-    private Graphics g;
 
     private Object lock=new Object();
 
     public Environment(){
         super(new BorderLayout());
-        renderHandler=new Handler();
-        tickHandler=new Handler();
+        handler=new Handler();
+        handler2=new Handler();
         threads=new Thread[nrthr];
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
@@ -46,24 +44,31 @@ public class Environment extends JPanel implements Runnable {
         map=level.getMap();
         setLayout(new GridLayout(1,1));
         setPreferredSize(new Dimension(map.length*48,map[0].length*48));
-        threads[0]=new Thread(tickHandler);
-        threads[1]=new Thread(renderHandler);
+
+    }
+
+    public void start(){
+        paused=false;
+        threads[0]=new Thread(handler);
+        threads[1]=new Thread(handler2);
         threads[0].start();
         threads[1].start();
     }
-
-    public synchronized void start(){
-        mainThread=new Thread(this);
-        mainThread.start();
-        isPaused=false;
+    public static boolean isRunning(){
+        return gameRunning;
+    }
+    public static boolean isPaused(){
+        return paused;
     }
     public void startGame(){
         gameRunning=true;
     }
 
+    public  void clearBoard(){
+        repaint();
+    }
 
     public void paintComponent(Graphics g){
-        this.g=g;
         Handler.addGraphics(g);
         g.clearRect(0, 0, getWidth(), getHeight());
         for (int i = 0; i < map.length; i++) {
@@ -71,43 +76,19 @@ public class Environment extends JPanel implements Runnable {
                 map[i][j].landOn(g);
             }
         }
+        handler.render(g);
     }
     public void run() {
-        long lastLoopTime = System.nanoTime();
-        final int TARGET_FPS = 60;
-        final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
-        while (gameRunning){
-            long now = System.nanoTime();
-            long updateLength = now - lastLoopTime;
-            lastLoopTime = now;
-            double delta = updateLength / ((double)OPTIMAL_TIME);
-            if(!isPaused) {
-                repaint();
-                Handler.toUpdate(true);
-            }
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-            Handler.toUpdate(false);
-            try {
-                Thread.sleep( (lastLoopTime-System.nanoTime() + OPTIMAL_TIME)/1000000 );
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
     public void addTroops(Troop troop){
         Handler.addObject(troop);
     }
-    public void pauseGame(){
-        isPaused=true;
+    public static void pauseGame(){
+        paused=true;
     }
-    public void resumeGame(){
-        isPaused=false;
+    public static void resumeGame(){
+        paused=false;
     }
     private void incrementLevel(){
         mapNr++;

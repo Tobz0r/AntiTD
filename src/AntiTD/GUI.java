@@ -65,7 +65,10 @@ public class GUI  {
         frame.pack();
     }
     public void restartGame(){
-        //restart
+        //ta bort alla torn och teleportertiles
+        Handler.clearList();
+        //kör
+        startGame();
     }
 
     private void buildBuyPanel(){
@@ -96,6 +99,12 @@ public class GUI  {
         buyPanel.add(buyButton, FlowLayout.LEFT);
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
+    public void getName(){
+        PlayerName=player.getText();
+    }
+    void changeName(String name){
+        PlayerName=name;
+    }
 
     private void startScreen(){
         player = new JTextArea(10, 20);
@@ -113,6 +122,7 @@ public class GUI  {
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                getName();
                 startGame();
             }
         });

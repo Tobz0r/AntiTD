@@ -1,8 +1,10 @@
 package AntiTD;
 
+import javax.sound.midi.SysexMessage;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.concurrent.RunnableFuture;
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by dv13tes on 2015-11-27.
@@ -10,7 +12,7 @@ import java.util.concurrent.RunnableFuture;
 public class Handler implements Runnable {
     private static LinkedList<GameObject> objects;
     private static Object lockObject=new Object();
-    private static boolean update;
+    private static Object mutexeliashej=new Object();
     private static Graphics g;
 
     public Handler(){
@@ -19,6 +21,11 @@ public class Handler implements Runnable {
     public static void addGraphics(Graphics g){
         Handler.g=g;
     }
+    public static synchronized void  clearList(){
+        for (int i = 0; i < objects.size() ; i++) {
+            objects.remove(i);
+        }
+    }
     public static synchronized void addObject(GameObject object){
         objects.add(object);
     }
@@ -26,34 +33,51 @@ public class Handler implements Runnable {
         objects.remove(object);
     }
     public  void tick(){
+        for (int i = 0; i < objects.size(); i++) {
+            synchronized (lockObject) {
+                objects.get(i).tick();
+            }
+        }
 
     }
-    public static void toUpdate(boolean update){
-        Handler.update=update;
-    }
     public  void render(Graphics g){
+        for (int i = 0; i < objects.size(); i++) {
+            synchronized (lockObject) {
+                objects.get(i).render(g);
+            }
+        }
 
     }
 
 
     @Override
     public void run() {
-        while (true) {
-            if (update) {
+        long lastLoopTime = System.nanoTime();
+        final int nrOfTicks = 60;
+        final long OPTIMAL_TIME = 1000000000 / nrOfTicks;
+        while (Environment.isRunning()){
+            long now = System.nanoTime();
+            long updateLength = now - lastLoopTime;
+            lastLoopTime = now;
+            double delta = updateLength / ((double)OPTIMAL_TIME);
+            if(!Environment.isPaused()) {
                 for (int i = 0; i < objects.size(); i++) {
                     synchronized (lockObject) {
-                        System.out.println(i + " tick ");
+                        System.out.println(" tick " );
                         objects.get(i).tick();
                     }
-                }
-                for (int i = 0; i < objects.size(); i++) {
                     synchronized (lockObject) {
-                        System.out.println(i + " render ");
+                        System.out.println(" render " );
                         objects.get(i).render(g);
                     }
                 }
             }
-            notifyAll();
+            try {
+                Thread.sleep( (lastLoopTime-System.nanoTime() + OPTIMAL_TIME)/1000000 );
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }
