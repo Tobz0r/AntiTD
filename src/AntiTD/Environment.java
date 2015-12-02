@@ -20,6 +20,9 @@ public class Environment extends JPanel {
     private ArrayList<Level> levels;
     private Handler handler;
     private Handler handler2;
+    private static int velX=2;
+    private static int velY=2;
+    private static int x=0,y=0;
 
     private static boolean gameRunning;
     private static boolean paused;
@@ -44,6 +47,7 @@ public class Environment extends JPanel {
         map=level.getMap();
         setLayout(new GridLayout(1,1));
         setPreferredSize(new Dimension(map.length*48,map[0].length*48));
+        Handler.addEnv(this);
 
     }
 
@@ -76,7 +80,16 @@ public class Environment extends JPanel {
                 map[i][j].landOn(g);
             }
         }
-        handler.render(g);
+        x += velX;
+        y += velY;
+        g.setColor(Color.blue);
+        g.fillRect(x, y, 24, 24);
+        if(x>getHeight() || x < 0){
+            velX*=-1;
+        }
+        if(y>getWidth() || y < 0){
+            velY*=-1;
+        }
     }
     public void run() {
 

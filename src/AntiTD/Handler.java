@@ -15,6 +15,10 @@ public class Handler implements Runnable {
     private static Object mutexeliashej=new Object();
     private static Graphics g;
 
+    private static Environment env;
+
+
+
     public Handler(){
         objects=new LinkedList<>();
     }
@@ -25,6 +29,9 @@ public class Handler implements Runnable {
         for (int i = 0; i < objects.size() ; i++) {
             objects.remove(i);
         }
+    }
+    public static void addEnv(Environment env){
+        Handler.env=env;
     }
     public static synchronized void addObject(GameObject object){
         objects.add(object);
@@ -61,6 +68,9 @@ public class Handler implements Runnable {
             lastLoopTime = now;
             double delta = updateLength / ((double)OPTIMAL_TIME);
             if(!Environment.isPaused()) {
+                synchronized (lockObject) {
+                    env.repaint();
+                }
                 for (int i = 0; i < objects.size(); i++) {
                     synchronized (lockObject) {
                         System.out.println(" tick " );
@@ -69,6 +79,7 @@ public class Handler implements Runnable {
                     synchronized (lockObject) {
                         System.out.println(" render " );
                         objects.get(i).render(g);
+
                     }
                 }
             }
