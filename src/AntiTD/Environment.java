@@ -31,6 +31,9 @@ public class Environment extends JPanel implements Runnable {
     private int mapNr=0;
     private final int nrthr=2;
     private Level level;
+    private Graphics g;
+
+    private Object lock=new Object();
 
     public Environment(){
         super(new BorderLayout());
@@ -60,13 +63,14 @@ public class Environment extends JPanel implements Runnable {
 
 
     public void paintComponent(Graphics g){
+        this.g=g;
+        Handler.addGraphics(g);
         g.clearRect(0, 0, getWidth(), getHeight());
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 map[i][j].landOn(g);
             }
         }
-        renderHandler.render(g);
     }
     public void run() {
         long lastLoopTime = System.nanoTime();
@@ -78,10 +82,16 @@ public class Environment extends JPanel implements Runnable {
             lastLoopTime = now;
             double delta = updateLength / ((double)OPTIMAL_TIME);
             if(!isPaused) {
-                System.out.println("elias");
-                tickHandler.tick();
                 repaint();
+                Handler.toUpdate(true);
             }
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Handler.toUpdate(false);
             try {
                 Thread.sleep( (lastLoopTime-System.nanoTime() + OPTIMAL_TIME)/1000000 );
             } catch (InterruptedException e) {

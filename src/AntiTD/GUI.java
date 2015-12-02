@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import AntiTD.*;
+import AntiTD.troops.BasicTroop;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -87,6 +88,7 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
+                env.addTroops(new BasicTroop(null)); //la in en dummy för att testa trådning
             }
         });
 
