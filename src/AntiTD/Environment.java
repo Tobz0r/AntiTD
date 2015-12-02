@@ -13,7 +13,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * Created by mattias on 2015-11-27.
+ * @author dv13tes
  */
 public class Environment extends JPanel implements Runnable {
 
@@ -39,6 +39,7 @@ public class Environment extends JPanel implements Runnable {
 
     public synchronized void start(){
         thread=new Thread(this);
+        thread.start();
         isPaused=false;
     }
     public void startGame(){
@@ -51,15 +52,15 @@ public class Environment extends JPanel implements Runnable {
         final int TARGET_FPS = 60;
         final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
         while (gameRunning){
-                long now = System.nanoTime();
-                long updateLength = now - lastLoopTime;
-                lastLoopTime = now;
-                double delta = updateLength / ((double)OPTIMAL_TIME);
-                if(!isPaused) {
-                    handler.tick();
-                    repaint();
-                }
-
+            long now = System.nanoTime();
+            long updateLength = now - lastLoopTime;
+            lastLoopTime = now;
+            double delta = updateLength / ((double)OPTIMAL_TIME);
+            if(!isPaused) {
+                System.out.println("elias");
+                handler.tick();
+                repaint();
+            }
             try {
                 Thread.sleep( (lastLoopTime-System.nanoTime() + OPTIMAL_TIME)/1000000 );
             } catch (InterruptedException e) {
@@ -97,7 +98,7 @@ public class Environment extends JPanel implements Runnable {
     }
     private void incrementLevel(){
         mapNr++;
-        if(mapNr>levels.size()){
+        if(mapNr>levels.size()-1){
             mapNr=0;
         }
     }

@@ -32,7 +32,6 @@ public class GUI  {
 
     public GUI () {
         env = new Environment();
-        env.start();
         frame = new JFrame("AntiTTD");
          scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -59,6 +58,7 @@ public class GUI  {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(scrollPane, BorderLayout.CENTER);
         env.startGame();
+        env.start();
         env.repaint();
         buildBuyPanel();
         frame.pack();
