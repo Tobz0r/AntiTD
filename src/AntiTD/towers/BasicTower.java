@@ -19,6 +19,7 @@ public class BasicTower extends Tower {
     private int price;
     private Position pos;
     private Troop target;
+    private String type = "BasicTower";
     public BasicTower(ImageIcon img, Tile pos) {
 
         super(img, pos);
@@ -54,10 +55,11 @@ public class BasicTower extends Tower {
         }
       }
     }
-    public void createTower(ImageIcon img, Tile pos){
-      Tower temp = new BasicTower(img,pos);
+    public void createTower(Tower temp,Tile pos){
+      //Tower temp = new BasicTower(img,pos);
       temp.init(troops, towers, pos);
       towers.add(temp);
+
     }
     public void attack(Troop troop, int damage){
       troop.attackThis(damage);
@@ -78,7 +80,9 @@ public class BasicTower extends Tower {
         initScan();
       }
     }
-
+    public String getTowerType(){
+      return type;
+    }
     public void setDamage(int damage){
      this.damage = damage;
     }

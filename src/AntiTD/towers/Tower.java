@@ -27,6 +27,7 @@ public abstract class Tower implements GameObject {
     private int range;
     private int damage;
     private int price;
+    private Tower iniTower;
 
     public Tower(ImageIcon img, Tile pos) {
         this.img = img;
@@ -54,26 +55,26 @@ public abstract class Tower implements GameObject {
         if(pos.isBuildable()) {
             if (tempMoney >= 5) {
                 Tower temp = new FrostTower(img,pos);
-                temp.createTower(img,pos);
+                temp.createTower(temp,pos);
+                addTowerToList(temp);
                 tempMoney = tempMoney-temp.getPrice();
                 setMoney(tempMoney);
 
             }else if(tempMoney >=1){
                 Tower temp = new BasicTower(img,pos);
-                temp.createTower(img,pos);
+                temp.createTower(temp,pos);
                 tempMoney = tempMoney-temp.getPrice();
+                addTowerToList(temp);
+
                 setMoney(tempMoney);
             }
         }
     }
-
     @Override
     public Image getImage() {
 
         return imge;
     }
-
-
     public void setCurrentScore(Troop troop){
         if(!troop.isAlive()){
             money++;
@@ -85,13 +86,17 @@ public abstract class Tower implements GameObject {
     public abstract double distance(Troop troop);
     public abstract void attack(Troop troop, int damage);
     public abstract boolean checkIfUnitIsClose(Troop troop);
-    public abstract void createTower(ImageIcon img, Tile pos);
+    public abstract String getTowerType();
+    public abstract void createTower(Tower tower, Tile pos);
     public abstract void setDamage(int damage);
     public abstract int getDamage();
     public abstract void setPrice(int price);
     public abstract int getPrice();
     public abstract void setRange(int range);
     public abstract int getRange();
+    public void addTowerToList(Tower towers){
+      this.towers.add(towers);
+    }
 
     public void setMoney(int money){
         this.money = money;
@@ -104,10 +109,34 @@ public abstract class Tower implements GameObject {
     @Override
     public abstract Position getPosition();
     public abstract void setPosition(Position pos);
+
     /*
     * Method for test
     * */
-   public boolean getTowers(){
+    public int countFrostTowerTypes(){
+      int frostTower = 0;
+      for(Tower tower : towers){
+
+        if(tower.getTowerType().equals("FrostTower")){
+          frostTower++;
+        }
+      }
+      return frostTower;
+    }
+   public int countBasicTowerTypes(){
+      int BasicTower = 0;
+      for(Tower tower : towers){
+
+        if(tower.getTowerType().equals("BasicTower")){
+          BasicTower++;
+      }
+      }
+      return BasicTower;
+   }
+    public boolean getTowers(){
      return towers.isEmpty();
     }
+    public int getTowersLength(){
+    return towers.size();
+  }
 }

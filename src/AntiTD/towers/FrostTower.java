@@ -16,6 +16,7 @@ public class FrostTower extends Tower{
     private int price;
     private Troop target;
     private Position pos;
+    private String type = "FrostTower";
     ImageIcon img;
     public FrostTower(ImageIcon img, Tile pos) {
 
@@ -53,10 +54,10 @@ public class FrostTower extends Tower{
         }
      }
     }
-    public void createTower(ImageIcon img, Tile pos){
-      Tower temp = new FrostTower(img,pos);
-      temp.init(troops, towers, pos);
-      towers.add(temp);
+    public void createTower(Tower tower, Tile pos){
+      //Tower temp = new FrostTower(img,pos);
+      tower.init(troops, towers, pos);
+      towers.add(tower);
     }
     public void startShooting(){
       if(target != null){
@@ -76,6 +77,9 @@ public class FrostTower extends Tower{
         return true;
       }
       return false;
+    }
+    public String getTowerType(){
+      return type;
     }
     public void setDamage(int damage){
       this.damage = damage;

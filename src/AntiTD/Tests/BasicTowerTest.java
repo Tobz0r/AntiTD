@@ -3,6 +3,7 @@ package AntiTD.Tests;
 import AntiTD.tiles.Tile;
 import AntiTD.tiles.TowerTile;
 import AntiTD.towers.BasicTower;
+import AntiTD.towers.Tower;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class BasicTowerTest {
 
-  BasicTower tower;
+  Tower tower;
   Tile pos;
   ImageIcon img;
 
@@ -25,7 +26,7 @@ public class BasicTowerTest {
     pos.setNeighbors(new Tile[]{pos});
     img = new ImageIcon("C:/Users/Rallmo/basictower.png");
     tower = new BasicTower(img, pos);
-    tower.createTower(img,pos);
+    tower.createTower(tower,pos);
   }
 
   @Test
@@ -50,6 +51,27 @@ public class BasicTowerTest {
     tower.setMoney(50);
     tower.buildTower();
     assertEquals(tower.getCurrentScore(), 45);
+  }
+  @Test
+  public void testBuildMoreTower(){
+
+    tower.setMoney(20);
+    tower.buildTower();
+    tower.buildTower();
+    assertEquals(tower.getTowersLength(), 3);
+
+  }
+  @Test
+  public void testBuildTowerTypes(){
+
+    tower.setMoney(6);
+    tower.buildTower();
+    tower.buildTower();
+    tower.buildTower();
+    int frostTower = tower.countFrostTowerTypes();
+    int basicTower = tower.countBasicTowerTypes();
+    assertEquals(frostTower, 1);
+    assertEquals(basicTower, 2);
   }
 
 
