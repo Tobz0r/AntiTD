@@ -68,18 +68,19 @@ public class Menu extends JMenu {
                 newGame.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
-                        gui.startGame();
-                        mute.setText("Mute");
+                        if () {
+                            gui.startGame();
+                            mute.setText("Mute");
+                        }
+                        else{
+                            gui.restartGame();
+                            mute.setText("Mute");
+                            newGame.setText("Restart");
+                        }
+
                     }
 
                 });
-        restartGame.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                gui.restartGame();
-                mute.setText("Mute");
-            }
-        });
         exitGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
