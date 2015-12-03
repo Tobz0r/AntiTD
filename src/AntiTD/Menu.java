@@ -1,9 +1,16 @@
 package AntiTD;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * @author dv13trm
@@ -16,6 +23,14 @@ public class Menu extends JMenu {
     private GUI gui;
     private boolean pause = true;
     private boolean mutesound = true;
+    //helpframe
+    private JTextArea helpText;
+    private JFrame helpFrame = new JFrame();
+    private JScrollPane helpScroll;
+    private JButton helpButton;
+    private JPanel helpPanel;
+
+
     //statmenu
     private JMenu statmenu = new JMenu("Help");
     private JMenuItem  nameChange, about, help;
@@ -33,6 +48,8 @@ public class Menu extends JMenu {
 
 
 
+
+
     public void startMenu(){
         frame.setJMenuBar(startMenuBar);
         startMenuBar.add(this);
@@ -42,13 +59,19 @@ public class Menu extends JMenu {
         pauseGame = this.add("Pause");
         mute = this.add("Mute");
         exitGame = this.add("Quit");
-        newGame.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                gui.startGame();
-            }
+        newGame.setBackground(Color.white);
+        restartGame.setBackground(Color.white);
+        pauseGame.setBackground(Color.white);
+        mute.setBackground(Color.white);
+        exitGame.setBackground(Color.white);
 
-        });
+                newGame.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        gui.startGame();
+                    }
+
+                });
         restartGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -65,12 +88,12 @@ public class Menu extends JMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(pause){
-                    //sätta nån loop variabel till falsk?
+                    Environment.pauseGame();
                     pauseGame.setText("Resume");
                     pause=false;
                 }
                 else{
-                    //sätta nån loop variabel till sann?
+                    Environment.resumeGame();
                     pauseGame.setText("Pause");
                     pause=true;
                 }
@@ -99,33 +122,71 @@ public class Menu extends JMenu {
     public void statMenu(){
         frame.setJMenuBar(statMenuBar);
         statMenuBar.add(this);
-
         //lägga till menyitems
         help = statmenu.add("Help");
         about = statmenu.add("About");
         nameChange = statmenu.add("Change name");
+        help.setBackground(Color.white);
+        nameChange.setBackground(Color.white);
+        about.setBackground(Color.white);
 
         help.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // kalla på en funktion som ger en ruta som visar hur man gör
+                callHelpFrame();
             }
         });
         about.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //Öppnar en ruta med en text om vem som skapat
+                JOptionPane.showMessageDialog(null, "SPELET ÄR SKAPAT AV ELIAS","About",1);
+
             }
         });
         nameChange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                gui.changeName(JOptionPane.showInputDialog("Enter name"));
             }
         });
 
         statMenuBar.add(statmenu);
     }
 
+    private void callHelpFrame(){
+        helpPanel = new JPanel();
+        helpPanel.setBackground(Color.blue);
+        Font font = new Font("Verdana",Font.BOLD,25);
+        //textfältet
+        helpText = new JTextArea(15,15);
+        helpText.setFont(font);
+        helpText.setForeground(Color.BLACK);
+        helpText.setEditable(false);
+        helpText.setWrapStyleWord(true);
+        helpText.setLineWrap(true);
+        helpText.setBackground(Color.yellow);
+        helpText.append("Click the left mouse button to buy troops");
+        //knappen
+        helpButton = new JButton("Close");
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                helpFrame.dispatchEvent(new WindowEvent(helpFrame, WindowEvent.WINDOW_CLOSING));
+            }
+        });
+        helpPanel.add(helpButton);
+
+        helpFrame.setSize(1000, 1000);
+        helpFrame.add(helpText);
+        helpScroll = new JScrollPane(helpText);
+        helpFrame.add(helpScroll, BorderLayout.CENTER);
+
+        helpFrame.add(new JLabel(new ImageIcon("tobiashej.jpg")),BorderLayout.NORTH);
+        helpFrame.getContentPane().setBackground(Color.yellow);
+        helpFrame.add(helpPanel,BorderLayout.SOUTH);
+        helpFrame.setVisible(true);
+    }
+
 
 }
+

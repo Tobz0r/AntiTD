@@ -5,17 +5,17 @@ package AntiTD.tiles;
  */
 import AntiTD.Position;
 import AntiTD.troops.Troop;
-
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public abstract class Tile {
+public abstract class Tile implements TileRender {
 
 
     private boolean moveable;
     private boolean buildable;
     private boolean isTeleportStart;
     private Tile teleportEnd;
+    private final int size=48;
 
     private Position position;
     private Tile[] neighbors;
@@ -33,6 +33,9 @@ public abstract class Tile {
     }
     public boolean isBuildable() {
         return buildable;
+    }
+    int getSize(){
+        return size;
     }
     public void setPosition(Position position){
         this.position=position;
@@ -93,5 +96,8 @@ public abstract class Tile {
         int result = position != null ? position.hashCode() : 0;
         result = 31 * result + (neighbors != null ? Arrays.hashCode(neighbors) : 0);
         return result;
+    }
+    public String toString(){
+        return getClass().getName();
     }
 }
