@@ -56,7 +56,7 @@ public class BasicTroopTest {
     }
 
     @Test
-    public void testAttackThis1DamageShouldDecrese() throws Exception {
+    public void testAttackThis1DamageShouldDecrease1() throws Exception {
         Troop t = new BasicTroop(start);
         int healthBefore = t.getHealth();
         t.attackThis(1);
@@ -64,12 +64,15 @@ public class BasicTroopTest {
     }
 
     @Test
-    public void testIsAlive() throws Exception {
-        //TODO: testIsAlive
+    public void testDeal10DamageShouldDie() throws Exception {
+        Troop t = new BasicTroop(start);
+        t.attackThis(10);
+        assertEquals(t.isAlive(), false);
     }
 
     @Test
-    public void testGetPosition() throws Exception {
-        //TODO: testGetPosition
+    public void testGetPositionShouldReturnStart() throws Exception {
+        Troop t = new BasicTroop(start);
+        assertEquals(t.getTilePosition(), start);
     }
 }

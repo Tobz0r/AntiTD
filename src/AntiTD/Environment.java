@@ -22,7 +22,7 @@ public class Environment extends JPanel implements Runnable {
     private ArrayList<Level> levels;
     private Handler handler;
     private Handler handler2;
-    private  Executor runner= Executors.newFixedThreadPool(4);;
+    private  Executor runner= Executors.newFixedThreadPool(2);;
 
     private GUI gui;
 
