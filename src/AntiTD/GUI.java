@@ -120,7 +120,6 @@ public class GUI  {
 
 
     public void startScreen()  {
-        env.stop
         frame.remove(env);
         frame.setVisible(true);
         player = new JTextArea(textCols, textRows);

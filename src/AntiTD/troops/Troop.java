@@ -20,7 +20,6 @@ public abstract class Troop implements GameObject {
     private boolean hasReacedGoal;
 
 
-
     private float velX;
     private float velY;
 
@@ -82,6 +81,7 @@ public abstract class Troop implements GameObject {
 
     /**
      * Attacks this troop
+     *
      * @param damage amount of damage to take
      * @return true if this troop died else false
      */
@@ -92,6 +92,7 @@ public abstract class Troop implements GameObject {
 
     /**
      * Checks troops life status
+     *
      * @return true if alive else false
      */
     public boolean isAlive() {
@@ -107,7 +108,7 @@ public abstract class Troop implements GameObject {
     public Tile getTilePosition() {
         return history.peek();
     }
-}
+
     public float getVelY() {
         return velY;
     }
@@ -123,3 +124,4 @@ public abstract class Troop implements GameObject {
     public void setVelX(float velX) {
         this.velX = velX;
     }
+}

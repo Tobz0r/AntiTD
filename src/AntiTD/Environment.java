@@ -25,7 +25,7 @@ public class Environment extends JPanel implements Runnable {
     private  Executor runner= Executors.newFixedThreadPool(2);;
 
 
-    private  boolean gameRunning;
+    private static boolean gameRunning;
     private static  boolean paused;
 
     private Tile[][] map;
@@ -110,6 +110,9 @@ public class Environment extends JPanel implements Runnable {
             }
 
         }
+    }
+    public static boolean isRunning(){
+        return gameRunning;
     }
     public void addTroops(Troop troop){
         handler.addObject(troop);
