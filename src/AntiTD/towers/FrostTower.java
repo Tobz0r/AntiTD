@@ -59,7 +59,6 @@ public class FrostTower extends Tower{
       //Tower temp = new FrostTower(img,pos);
       tower.init(troops, towers, pos);
       towers.add(tower);
-      Handler.addObject(tower);
     }
     public void startShooting(){
       if(target != null){
