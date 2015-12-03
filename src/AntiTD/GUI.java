@@ -148,7 +148,7 @@ public class GUI  {
             public void actionPerformed(ActionEvent actionEvent) {
 
                 getName();
-                startGame();
+                startGame(); 
             }
         });
 
