@@ -15,6 +15,7 @@ public abstract class Troop implements GameObject {
 
     protected int health;
     protected int score;
+    protected int speed;
     private Image img;
     private Stack<Tile> history;
     private boolean hasReacedGoal;
