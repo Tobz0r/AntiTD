@@ -38,6 +38,8 @@ public class GUI  {
     private static final int textCols = 1;
     //sound
     private String gameSound;
+    Clip clip = null;
+    long clipTime;
 
 
 
@@ -45,7 +47,7 @@ public class GUI  {
 
 
     public GUI () {
-        env = new Environment(this);
+        env = new Environment();
         frame = new JFrame("AntiTTD");
          scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -149,6 +151,7 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 loopMusic=true;
+                runMusic();
                 getName();
                 startGame();
             }
@@ -157,17 +160,25 @@ public class GUI  {
     }
     public void runMusic()  {
         gameSound = "cello.wav";
-        Clip clip = null;
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
             DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
             clip = (Clip)AudioSystem.getLine(info);
             clip.open(audioInputStream);
-
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
             clip.start();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
+    }
+    public void pauseMusic(){
+        clipTime = clip.getMicrosecondPosition();
+        clip.stop();
+    }
+    public void resumeMusic(){
+        clip.setMicrosecondPosition(clipTime);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        clip.start();
     }
 
 }

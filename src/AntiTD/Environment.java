@@ -24,7 +24,6 @@ public class Environment extends JPanel implements Runnable {
     private Handler handler2;
     private  Executor runner= Executors.newFixedThreadPool(2);;
 
-    private GUI gui;
 
     private static boolean gameRunning;
     private static boolean paused;
@@ -40,9 +39,8 @@ public class Environment extends JPanel implements Runnable {
 
     private Object lock=new Object();
 
-    public Environment(GUI gui){
+    public Environment(){
         super(new BorderLayout());
-        this.gui = gui;
         handler=new Handler(0);
         threads=new Thread[nrthr];
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
@@ -86,9 +84,7 @@ public class Environment extends JPanel implements Runnable {
         double delta = 0;
         int ticks=0;
         while(gameRunning){
-            if(gui.isLoopMusic()==true){
-                gui.runMusic();
-            }
+
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
