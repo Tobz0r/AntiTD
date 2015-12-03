@@ -30,6 +30,9 @@ public class GUI  {
     private JPanel startPanel;
     private JScrollPane playerScroll;
     private JScrollPane scrollPane;
+    private static final int textRows = 10;
+    private static final int textCols = 1;
+
 
     public GUI () {
         env = new Environment();
@@ -107,14 +110,18 @@ public class GUI  {
     }
 
     private void startScreen(){
-        player = new JTextArea(10, 20);
+        player = new JTextArea(textCols, textRows);
+        //behövs en bättre lösning
         player.setEditable(true);
-        
+        player.setWrapStyleWord(true);
+        player.setLineWrap(true);
+        playerScroll = new JScrollPane(player);
+
         player.setBorder(BorderFactory.createLineBorder(Color.black));
 
         startPanel = new JPanel();
         startPanel.setBackground(Color.white);
-        startPanel.add(player, BorderLayout.CENTER);
+        startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
