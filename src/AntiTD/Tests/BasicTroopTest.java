@@ -59,7 +59,6 @@ public class BasicTroopTest {
     public void testAttackThis1DamageShouldDie() throws Exception {
         Troop t = new BasicTroop(start);
         t.attackThis(1);
-        t.get
         assertEquals(t.isAlive(), false);
     }
 
