@@ -7,6 +7,7 @@ import AntiTD.Position;
 import AntiTD.troops.Troop;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class Tile implements TileRender {
 
@@ -21,7 +22,9 @@ public abstract class Tile implements TileRender {
     private Tile[] neighbors;
     Troop player;
 
-
+    public Tile(Position pos) {
+        this.position = pos;
+    }
     public void setBuildable(boolean buildable) {
         this.buildable = buildable;
     }
@@ -78,6 +81,11 @@ public abstract class Tile implements TileRender {
         this.neighbors = neighbors;
     }
 
+    public String toString(){
+        return "Tile X: "+getPosition().getX()+" Y: "+getPosition().getY();
+        //return getClass().getName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -97,7 +105,5 @@ public abstract class Tile implements TileRender {
         result = 31 * result + (neighbors != null ? Arrays.hashCode(neighbors) : 0);
         return result;
     }
-    public String toString(){
-        return getClass().getName();
-    }
+
 }

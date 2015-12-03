@@ -1,13 +1,19 @@
 package AntiTD.tiles;
 
+import AntiTD.Position;
+
 import java.awt.*;
 
 /**
  * Created by dv13tes on 2015-11-30.
  */
 public class BasicTile extends Tile {
+
     public BasicTile(){
-        super();
+        this(null);
+    }
+    public BasicTile(Position pos){
+        super(pos);
         setBuildable(false);
         setMoveable(false);
     }

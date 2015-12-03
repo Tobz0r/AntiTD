@@ -14,7 +14,7 @@ import java.util.Stack;
 public abstract class Troop implements GameObject {
 
     protected int health;
-    private int score;
+    protected int score;
     private Image img;
     private Stack<Tile> history;
     private boolean hasReacedGoal;
@@ -25,7 +25,6 @@ public abstract class Troop implements GameObject {
 
     protected Troop(Image img, Tile pos) {
         this.img = img;
-        this.score = 0;
         this.history = new Stack<Tile>();
         this.history.push(pos);
     }
@@ -40,7 +39,7 @@ public abstract class Troop implements GameObject {
 
             for (Tile tile : neigbors) {
                 if (tile.isMoveable()) {
-                    if (history.search(tile) != -1) {
+                    if (history.search(tile) == -1) {
                         nextTile = tile;
                         break;
                     }
