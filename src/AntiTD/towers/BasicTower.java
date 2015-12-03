@@ -5,7 +5,10 @@ import AntiTD.tiles.Tile;
 import AntiTD.towers.*;
 import AntiTD.troops.Troop;
 
+import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by dv13tes on 2015-11-27.
@@ -16,7 +19,8 @@ public class BasicTower extends Tower {
     private int price;
     private Position pos;
     private Troop target;
-    public BasicTower(Image img, Tile pos) {
+    private String type = "BasicTower";
+    public BasicTower(ImageIcon img, Tile pos) {
 
         super(img, pos);
         setDamage(5);
@@ -27,7 +31,6 @@ public class BasicTower extends Tower {
     public void initScan() {
       double distance = Integer.MAX_VALUE;
       for(Troop troop : troops){
-
       Troop nearUnit = null;
       double dist = distance(troop);
       if(dist <= getRange()) {
@@ -35,7 +38,6 @@ public class BasicTower extends Tower {
           if (dist < distance) {
            nearUnit = troop;
             distance = dist;
-
           }
         }
         if(nearUnit !=null){
@@ -45,19 +47,19 @@ public class BasicTower extends Tower {
     }
     public void aggroTarget(){
       if(target != null){
-        if(checkIfUnitIsClose(target)){
+        if(checkIfUnitIsClose(target) && target.isAlive()){
           attack(target,getDamage());
         }else{
           target = null;
-          initScan();
+          inRange.clear();
         }
       }
     }
-
-    public void createTower(Image img, Tile pos){
-      Tower temp = new BasicTower(img,pos);
+    public void createTower(Tower temp,Tile pos){
+      //Tower temp = new BasicTower(img,pos);
       temp.init(troops, towers, pos);
       towers.add(temp);
+
     }
     public void attack(Troop troop, int damage){
       troop.attackThis(damage);
@@ -71,7 +73,16 @@ public class BasicTower extends Tower {
       }
       return false;
     }
-
+    public void startShooting(){
+      if(target != null){
+        aggroTarget();
+      }else{
+        initScan();
+      }
+    }
+    public String getTowerType(){
+      return type;
+    }
     public void setDamage(int damage){
      this.damage = damage;
     }

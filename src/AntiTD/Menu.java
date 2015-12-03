@@ -82,12 +82,12 @@ public class Menu extends JMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(pause){
-                    //sätta nån loop variabel till falsk?
+                    Environment.pauseGame();
                     pauseGame.setText("Resume");
                     pause=false;
                 }
                 else{
-                    //sätta nån loop variabel till sann?
+                    Environment.resumeGame();
                     pauseGame.setText("Pause");
                     pause=true;
                 }
@@ -131,13 +131,14 @@ public class Menu extends JMenu {
         about.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JOptionPane.showMessageDialog(null, "SPELET ÄR SKAPAT AV ELIAS");
+                JOptionPane.showMessageDialog(null, "SPELET ÄR SKAPAT AV ELIAS","About",1);
+
             }
         });
         nameChange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                gui.changeName(JOptionPane.showInputDialog("Enter name"));
             }
         });
 

@@ -13,91 +13,99 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * Created by mattias on 2015-11-27.
+ * @author dv13tes
  */
-public class Environment extends JPanel implements Runnable {
+public class Environment extends JPanel {
 
     private ArrayList<Level> levels;
     private Handler handler;
-    private boolean gameRunning;
-    private boolean isPaused;
+    private Handler handler2;
+    private static int velX=2;
+    private static int velY=2;
+    private static int x=0,y=0;
+
+    private static boolean gameRunning;
+    private static boolean paused;
+
     private Tile[][] map;
-    private Thread thread;
-    private int mapNr=0;
+    private Thread[] threads;
+
+    private int mapNr=1;
+    private final int nrthr=2;
     private Level level;
+
+    private Object lock=new Object();
 
     public Environment(){
         super(new BorderLayout());
         handler=new Handler();
+        handler2=new Handler();
+        threads=new Thread[nrthr];
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
         Level level=levels.get(mapNr);
         map=level.getMap();
         setLayout(new GridLayout(1,1));
         setPreferredSize(new Dimension(map.length*48,map[0].length*48));
+        Handler.addEnv(this);
+
     }
 
-    public synchronized void start(){
-        thread=new Thread(this);
-        isPaused=false;
+    public void start(){
+        paused=false;
+        threads[0]=new Thread(handler);
+        threads[1]=new Thread(handler2);
+        threads[0].start();
+        threads[1].start();
+    }
+    public static boolean isRunning(){
+        return gameRunning;
+    }
+    public static boolean isPaused(){
+        return paused;
     }
     public void startGame(){
         gameRunning=true;
     }
 
-    @Override
-    public void run() {
-        long lastLoopTime = System.nanoTime();
-        final int TARGET_FPS = 60;
-        final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
-        while (gameRunning){
-                long now = System.nanoTime();
-                long updateLength = now - lastLoopTime;
-                lastLoopTime = now;
-                double delta = updateLength / ((double)OPTIMAL_TIME);
-                if(!isPaused) {
-                    handler.tick();
-                    repaint();
-                }
-
-            try {
-                Thread.sleep( (lastLoopTime-System.nanoTime() + OPTIMAL_TIME)/1000000 );
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
+    public  void clearBoard(){
+        repaint();
     }
+
     public void paintComponent(Graphics g){
-        if(gameRunning) {
-            g.clearRect(0, 0, getWidth(), getHeight());
-            for (int i = 0; i < map.length; i++) {
-                for (int j = 0; j < map[i].length; j++) {
-                    map[i][j].landOn(g);
-                }
+        Handler.addGraphics(g);
+        g.clearRect(0, 0, getWidth(), getHeight());
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                map[i][j].landOn(g);
             }
-            handler.render(g);
         }
-        else{
-            paintStart(g);
+        x += velX;
+        y += velY;
+        g.setColor(Color.blue);
+        g.fillRect(x, y, 24, 24);
+        if(x>getHeight() || x < 0){
+            velX*=-1;
+        }
+        if(y>getWidth() || y < 0){
+            velY*=-1;
         }
     }
-    private void paintStart(Graphics g){
-        g.setFont(new Font("TimesRoman", Font.BOLD,24));
-        g.drawString("Welcome to AntiTD",getWidth()/4,getHeight()/2);
+    public void run() {
+
     }
     public void addTroops(Troop troop){
-        handler.addObject(troop);
+        Handler.addObject(troop);
     }
-    public void pauseGame(){
-        isPaused=true;
+    public static void pauseGame(){
+        paused=true;
     }
-    public void resumeGame(){
-        isPaused=false;
+    public static void resumeGame(){
+        paused=false;
     }
     private void incrementLevel(){
         mapNr++;
-        if(mapNr>levels.size()){
+        if(mapNr>levels.size()-1){
             mapNr=0;
         }
     }

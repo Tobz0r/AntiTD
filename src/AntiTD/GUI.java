@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import AntiTD.*;
+import AntiTD.troops.BasicTroop;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -32,7 +33,6 @@ public class GUI  {
 
     public GUI () {
         env = new Environment();
-        env.start();
         frame = new JFrame("AntiTTD");
          scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -59,12 +59,16 @@ public class GUI  {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(scrollPane, BorderLayout.CENTER);
         env.startGame();
+        env.start();
         env.repaint();
         buildBuyPanel();
         frame.pack();
     }
     public void restartGame(){
-        //restart
+        //ta bort alla torn och teleportertiles
+        Handler.clearList();
+        //kör
+        startGame();
     }
 
     private void buildBuyPanel(){
@@ -87,12 +91,19 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
+                env.addTroops(new BasicTroop(null)); //la in en dummy för att testa trådning
             }
         });
 
         buyPanel.add(buyTeleport);
         buyPanel.add(buyButton, FlowLayout.LEFT);
         frame.add(buyPanel, BorderLayout.SOUTH);
+    }
+    public void getName(){
+        PlayerName=player.getText();
+    }
+    void changeName(String name){
+        PlayerName=name;
     }
 
     private void startScreen(){
@@ -111,6 +122,7 @@ public class GUI  {
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                getName();
                 startGame();
             }
         });

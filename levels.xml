@@ -36,7 +36,7 @@
             <tile>PathTile</tile>
             <tile>PathTile</tile>
             <tile>PathTile</tile>
-            <tile>GoalTile</tile>
+            <tile>PathTile</tile>
         </row>
 
         <row>
@@ -62,7 +62,7 @@
             <tile>TowerTile</tile>
             <tile>BasicTile</tile>
             <tile>BasicTile</tile>
-            <tile>PathTile</tile>
+            <tile>GoalTile</tile>
         </row>
 
         <row>
