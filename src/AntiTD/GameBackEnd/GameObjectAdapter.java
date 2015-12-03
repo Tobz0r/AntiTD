@@ -11,9 +11,9 @@ public class GameObjectAdapter implements GUIMovableElement {
     private boolean isMoving;
     private int moveProgres;
 
-    public GameObjectAdapter(int x, int y, int moveProgres) {
-        this.x = x;
-        this.y = y;
+    public GameObjectAdapter(GameObject go) {
+        this.x = go.getTilePosition().getPosition().getX();
+        this.y = go.getTilePosition().getPosition().getY();
         if (moveProgres > 0) {
             isMoving = true;
         }
