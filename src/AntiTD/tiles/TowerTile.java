@@ -1,14 +1,18 @@
 package AntiTD.tiles;
 
+import AntiTD.Position;
+
 import java.awt.*;
 
 /**
  * Created by mattias on 2015-11-27.
  */
 public class TowerTile extends Tile {
-
-    public TowerTile(){
-        super();
+    public TowerTile() {
+        this(null);
+    }
+    public TowerTile(Position pos){
+        super(pos);
         setBuildable(true);
         setMoveable(false);
     }

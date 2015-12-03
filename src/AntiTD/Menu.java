@@ -59,13 +59,19 @@ public class Menu extends JMenu {
         pauseGame = this.add("Pause");
         mute = this.add("Mute");
         exitGame = this.add("Quit");
-        newGame.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                gui.startGame();
-            }
+        newGame.setBackground(Color.white);
+        restartGame.setBackground(Color.white);
+        pauseGame.setBackground(Color.white);
+        mute.setBackground(Color.white);
+        exitGame.setBackground(Color.white);
 
-        });
+                newGame.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        gui.startGame();
+                    }
+
+                });
         restartGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -116,11 +122,13 @@ public class Menu extends JMenu {
     public void statMenu(){
         frame.setJMenuBar(statMenuBar);
         statMenuBar.add(this);
-
         //lägga till menyitems
         help = statmenu.add("Help");
         about = statmenu.add("About");
         nameChange = statmenu.add("Change name");
+        help.setBackground(Color.white);
+        nameChange.setBackground(Color.white);
+        about.setBackground(Color.white);
 
         help.addActionListener(new ActionListener() {
             @Override
@@ -148,13 +156,16 @@ public class Menu extends JMenu {
     private void callHelpFrame(){
         helpPanel = new JPanel();
         helpPanel.setBackground(Color.blue);
+        Font font = new Font("Verdana",Font.BOLD,25);
         //textfältet
         helpText = new JTextArea(15,15);
+        helpText.setFont(font);
+        helpText.setForeground(Color.BLACK);
         helpText.setEditable(false);
         helpText.setWrapStyleWord(true);
         helpText.setLineWrap(true);
         helpText.setBackground(Color.yellow);
-        helpText.append("Här ska det stå hjälp texten");
+        helpText.append("Click the left mouse button to buy troops");
         //knappen
         helpButton = new JButton("Close");
         helpButton.addActionListener(new ActionListener() {

@@ -17,52 +17,50 @@ import static org.junit.Assert.*;
  * Created by mattias on 2015-11-30.
  */
 public class BasicTroopTest {
-
-    BasicTroop t;
     Tile start;
     Tile middle;
     Tile end;
 
     @Before
     public void setUp() throws Exception {
-        start = new StartTile();
-        middle = new PathTile();
-        end = new GoalTile();
+        start = new StartTile(new Position(0, 0));
+        middle = new PathTile(new Position(0, 1));
+        end = new GoalTile(new Position(0, 2));
 
         start.setNeighbors(new Tile[]{middle});
-        middle.setNeighbors(new Tile[]{start,end});
+        middle.setNeighbors(new Tile[]{start, end});
         end.setNeighbors(new Tile[]{middle});
     }
 
     @Test
-    public void testTick() throws Exception {
+    public void testTickOnceShouldReturnMiddle() throws Exception {
         Troop t = new BasicTroop(start);
         t.tick();
-        assertEquals(t.getPosition(), middle);
+        assertEquals(t.getTilePosition(), middle);
     }
 
     @Test
-    public void testTick1() throws Exception {
+    public void testTickTwiceShouldReturnEnd() throws Exception {
         Troop t = new BasicTroop(start);
         t.tick();
         t.tick();
-        assertEquals(t.getPosition(), end);
+        assertEquals(t.getTilePosition(), end);
     }
 
     @Test
-    public void testGetImage() throws Exception {
-        //TODO: testGetImage
-    }
-
-    @Test
-    public void testGetCurrentScore() throws Exception {
+    public void testGetCurrentScoreShouldReturn10() throws Exception {
         Troop t = new BasicTroop(start);
-        //TODO: testGetCurrentScore
+        t.tick();
+        t.tick();
+        assertEquals(t.getCurrentScore(),10);
     }
 
     @Test
-    public void testAttackThis() throws Exception {
-        //TODO: testAttackThis
+    public void testAttackThis1DamageShouldDecrese() throws Exception {
+        Troop t = new BasicTroop(start);
+        int healthBefore = t.getHealth();
+        t.attackThis(1);
+        assertEquals(t.getHealth(), healthBefore-1);
     }
 
     @Test
