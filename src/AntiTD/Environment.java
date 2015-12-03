@@ -49,7 +49,9 @@ public class Environment extends JPanel implements Runnable {
         setPreferredSize(new Dimension(map.length * 48, map[0].length * 48));
 
     }
-
+    Level getLevel(){
+        return level;
+    }
     public synchronized void start(){
         paused=false;
         gameRunning=true;

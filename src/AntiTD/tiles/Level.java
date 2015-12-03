@@ -33,6 +33,9 @@ public class Level {
 
         this.startPosition=startPosition;
     }
+    public Position getStartPosition(){
+
+    }
     public void setGoalPosition(Position goalPosition){
 
         this.goalPosition=goalPosition;
