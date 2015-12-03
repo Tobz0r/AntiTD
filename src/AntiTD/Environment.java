@@ -43,9 +43,10 @@ public class Environment extends JPanel implements Runnable {
         handler=new Handler(0);
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
-        Level level=levels.get(mapNr);
-        Level.setCurrentMap(map);
+        level=levels.get(mapNr);
         map=level.getMap();
+
+        Level.setCurrentMap(map);
         setLayout(new GridLayout(1, 1));
         setPreferredSize(new Dimension(map.length * 48, map[0].length * 48));
 
@@ -97,7 +98,6 @@ public class Environment extends JPanel implements Runnable {
         double delta = 0;
         int ticks=0;
         while(gameRunning){
-
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
