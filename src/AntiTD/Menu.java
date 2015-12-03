@@ -47,8 +47,9 @@ public class Menu extends JMenu {
     }
 
 
-
-
+    public void setNewGame(String change) {
+        newGame.setText(change);
+    }
 
     public void startMenu(){
         frame.setJMenuBar(startMenuBar);
@@ -64,16 +65,20 @@ public class Menu extends JMenu {
         mute.setBackground(Color.white);
         exitGame.setBackground(Color.white);
         mainMenu.setBackground(Color.white);
+        if(!Environment.isRunning()){
+            newGame.setText("New Game");
+        }
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (Environment.isRunning()) {
                     gui.restartGame();
                     mute.setText("Mute");
+                    newGame.setText("Restart");
                 } else {
                     gui.startGame();
-                    mute.setText("Mute");
                     newGame.setText("Restart");
+                    mute.setText("Mute");
                 }
 
             }
@@ -82,7 +87,9 @@ public class Menu extends JMenu {
         mainMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                gui.startScreen();
+                // FUNGERAR INTE ATM
+                newGame.setText("New Game");
+                gui.startScreen();  //ksk ändra i denna
             }
         });
         exitGame.addActionListener(new ActionListener() {
