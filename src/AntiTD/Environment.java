@@ -25,13 +25,12 @@ public class Environment extends JPanel implements Runnable {
     private  Executor runner= Executors.newFixedThreadPool(2);;
 
 
-    private static boolean gameRunning;
-    private static boolean paused;
+    private  boolean gameRunning;
+    private static  boolean paused;
 
     private Tile[][] map;
-    private Thread[] threads;
-
-    private int mapNr=1;
+    private Thread thread;
+    private int mapNr=0;
     private final int nrthr=2;
     private Level level;
 
@@ -42,7 +41,6 @@ public class Environment extends JPanel implements Runnable {
     public Environment(){
         super(new BorderLayout());
         handler=new Handler(0);
-        threads=new Thread[nrthr];
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
         Level level=levels.get(mapNr);
@@ -52,13 +50,22 @@ public class Environment extends JPanel implements Runnable {
 
     }
 
-    public void start(){
+    public synchronized void start(){
         paused=false;
+        gameRunning=true;
+        thread=new Thread(this);
+        thread.start();
     }
-    public static boolean isRunning(){
-        return gameRunning;
+    public synchronized void stop(){
+        try{
+            gameRunning=false;
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
-    public static boolean isPaused(){
+
+    public static  boolean isPaused(){
         return paused;
     }
     public void startGame(){
@@ -68,12 +75,12 @@ public class Environment extends JPanel implements Runnable {
 
 
     public void paintComponent( Graphics g){
-        //g.clearRect(0, 0, getWidth(), getHeight());
-       /* for (int i = 0; i < map.length; i++) {
+        g.clearRect(0, 0, getWidth(), getHeight());
+       for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 map[i][j].landOn(g);
             }
-        }*/
+        }
         handler.render(g);
 
     }

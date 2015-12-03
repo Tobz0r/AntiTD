@@ -73,9 +73,6 @@ public class GUI  {
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(scrollPane, BorderLayout.CENTER);
-        env.startGame();
-        thread=new Thread(env);
-        thread.start();
         env.start();
         env.repaint();
         buildBuyPanel();
@@ -84,7 +81,7 @@ public class GUI  {
     public void restartGame(){
         //ta bort alla torn och teleportertiles
         Handler.clearList();
-        //kör
+        env.stop();
         startGame();
     }
 

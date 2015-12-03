@@ -28,8 +28,10 @@ public class Handler extends Thread {
 
 
     public static synchronized void  clearList(){
-        for (int i = 0; i < objects.size() ; i++) {
+        int i=objects.size()-1;
+        while(objects.size()!=0){
             objects.remove(i);
+            i--;
         }
     }
     public void addObject(GameObject object){
