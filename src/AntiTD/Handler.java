@@ -49,6 +49,11 @@ public class Handler extends Thread {
     public void render(Graphics g){
         for (int i = 0; i < objects.size(); i++) {
             objects.get(i).render(g);
+            //GameObject gameObject = objects.get(i);
+            //g.setColor(Color.blue);
+            //int x = gameObject.getTilePosition().getPosition().getX();
+            //int y = gameObject.getTilePosition().getPosition().getY();
+            //g.fillRect((int)x, (int)y, 24, 24);
         }
     }
 
