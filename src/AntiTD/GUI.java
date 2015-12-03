@@ -68,6 +68,7 @@ public class GUI  {
     }
 
     public void startGame() {
+        menu.setNewGame("Restart");
         runMusic();
         frame.remove(startPanel);
         frame.setSize(800, 600);
@@ -124,8 +125,8 @@ public class GUI  {
 
 
     public void startScreen()  {
-        frame.remove(env);
-        frame.setVisible(true);
+        env.stop();
+        frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
         //behövs en bättre lösning
         player.setEditable(true);
@@ -142,10 +143,11 @@ public class GUI  {
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
         frame.add(startPanel);
+        frame.setVisible(true);
+
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
                 getName();
                 startGame();
             }

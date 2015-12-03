@@ -66,6 +66,9 @@ public class Environment extends JPanel implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        catch (NullPointerException e ){
+            System.out.println("eliashej");
+        }
     }
 
     public static  boolean isPaused(){
