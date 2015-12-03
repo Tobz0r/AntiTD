@@ -122,8 +122,10 @@ public class GUI  {
     }
 
 
-    private void startScreen()  {
-
+    public void startScreen()  {
+        env.stop
+        frame.remove(env);
+        frame.setVisible(true);
         player = new JTextArea(textCols, textRows);
         //behövs en bättre lösning
         player.setEditable(true);
