@@ -10,58 +10,24 @@ import java.awt.*;
  */
 public class Dummy extends Troop implements GameObject {
 
-    private float velX=8;
-    private float velY=2;
-    private float x=2;
-    private float y=2;
+    private float x;
+    private float y;
 
     protected Dummy(Tile pos) {
         super(pos);
+        setVelX(2);
+        setVelY(2);
     }
-
-
-    public float getVelX() {
-        return velX;
-    }
-
-    public void setVelX(float velX) {
-        this.velX = velX;
-    }
-
-    public float getVelY() {
-        return velY;
-    }
-
-    public void setVelY(float velY) {
-        this.velY = velY;
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
 
     @Override
     public void tick() {
-        x+=velX;
-        y+=velY;
+        x+=getVelX();
+        y+=getVelY();
         if(x>400 || x < 0){
-            velX*=-1;
+            setVelX(getVelX()*-1);
         }
         if(y>400 || y < 0){
-            velY*=-1;
+            setVelY(getVelY()*-1);
         }
 
     }
