@@ -77,6 +77,7 @@ public class Menu extends JMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 gui.restartGame();
+                mute.setText("Mute");
             }
         });
         exitGame.addActionListener(new ActionListener() {

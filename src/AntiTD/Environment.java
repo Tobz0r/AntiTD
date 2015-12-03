@@ -68,12 +68,12 @@ public class Environment extends JPanel implements Runnable {
 
 
     public void paintComponent( Graphics g){
-        //g.clearRect(0, 0, getWidth(), getHeight());
-       /* for (int i = 0; i < map.length; i++) {
+        g.clearRect(0, 0, getWidth(), getHeight());
+        for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 map[i][j].landOn(g);
             }
-        }*/
+        }
         handler.render(g);
 
     }
