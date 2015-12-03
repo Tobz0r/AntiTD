@@ -7,6 +7,7 @@ import AntiTD.Position;
 import AntiTD.troops.Troop;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class Tile implements TileRender {
 
@@ -21,7 +22,9 @@ public abstract class Tile implements TileRender {
     private Tile[] neighbors;
     Troop player;
 
-
+    public Tile(Position pos) {
+        this.position = pos;
+    }
     public void setBuildable(boolean buildable) {
         this.buildable = buildable;
     }
@@ -61,6 +64,9 @@ public abstract class Tile implements TileRender {
         }
         return neighbours;
     }
+    public Tile[] getNeighbors2() {
+        return neighbors;
+    }
     public void setTeleportTo(Tile tile){
         this.teleportEnd=tile;
     }
@@ -74,7 +80,30 @@ public abstract class Tile implements TileRender {
     public void setNeighbors(Tile[] neighbors) {
         this.neighbors = neighbors;
     }
+
     public String toString(){
-        return getClass().getName();
+        return "Tile X: "+getPosition().getX()+" Y: "+getPosition().getY();
+        //return getClass().getName();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tile tile = (Tile) o;
+
+        if (position != null ? !position.equals(tile.position) : tile.position != null) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(neighbors, tile.neighbors);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = position != null ? position.hashCode() : 0;
+        result = 31 * result + (neighbors != null ? Arrays.hashCode(neighbors) : 0);
+        return result;
+    }
+
 }

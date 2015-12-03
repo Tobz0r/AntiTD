@@ -26,6 +26,7 @@ public class GUI  {
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
+    private Thread thread;
     //startscreen
     private String PlayerName;
     private JTextArea player;
@@ -68,6 +69,8 @@ public class GUI  {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(scrollPane, BorderLayout.CENTER);
         env.startGame();
+        thread=new Thread(env);
+        thread.start();
         env.start();
         env.repaint();
         buildBuyPanel();
@@ -100,7 +103,7 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
-                env.addTroops(new BasicTroop(null)); //la in en dummy för att testa trådning
+                env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
             }
         });
 

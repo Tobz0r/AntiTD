@@ -1,13 +1,19 @@
 package AntiTD.tiles;
 
+import AntiTD.Position;
+
 import java.awt.*;
 
 /**
  * Created by dv13tes on 2015-11-30.
  */
 public class CrossroadTile extends Tile {
-    public CrossroadTile(){
-        super();
+
+    public CrossroadTile() {
+        this(null);
+    }
+    public CrossroadTile(Position pos){
+        super(pos);
         setBuildable(false);
         setMoveable(true);
     }

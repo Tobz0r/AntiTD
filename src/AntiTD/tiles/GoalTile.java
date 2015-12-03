@@ -1,5 +1,7 @@
 package AntiTD.tiles;
 
+import AntiTD.Position;
+
 import java.awt.*;
 
 /**
@@ -7,8 +9,12 @@ import java.awt.*;
  */
 public class GoalTile extends Tile {
 
-    public GoalTile(){
-        super();
+    public GoalTile() {
+        this(null);
+    }
+
+    public GoalTile(Position pos){
+        super(pos);
         setBuildable(false);
         setMoveable(true);
     }

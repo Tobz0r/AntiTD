@@ -11,18 +11,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * @author dv13tes
  */
-public class Environment extends JPanel {
+public class Environment extends JPanel implements Runnable {
 
     private ArrayList<Level> levels;
     private Handler handler;
     private Handler handler2;
-    private static int velX=2;
-    private static int velY=2;
-    private static int x=0,y=0;
+    private  Executor runner= Executors.newFixedThreadPool(4);;
+
+
 
     private static boolean gameRunning;
     private static boolean paused;
@@ -34,29 +36,25 @@ public class Environment extends JPanel {
     private final int nrthr=2;
     private Level level;
 
+    private double delta;
+
     private Object lock=new Object();
 
     public Environment(){
         super(new BorderLayout());
-        handler=new Handler();
-        handler2=new Handler();
+        handler=new Handler(0);
         threads=new Thread[nrthr];
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
         Level level=levels.get(mapNr);
         map=level.getMap();
-        setLayout(new GridLayout(1,1));
-        setPreferredSize(new Dimension(map.length*48,map[0].length*48));
-        Handler.addEnv(this);
+        setLayout(new GridLayout(1, 1));
+        setPreferredSize(new Dimension(map.length * 48, map[0].length * 48));
 
     }
 
     public void start(){
         paused=false;
-        threads[0]=new Thread(handler);
-        threads[1]=new Thread(handler2);
-        threads[0].start();
-        threads[1].start();
     }
     public static boolean isRunning(){
         return gameRunning;
@@ -68,34 +66,45 @@ public class Environment extends JPanel {
         gameRunning=true;
     }
 
-    public  void clearBoard(){
-        repaint();
-    }
 
-    public void paintComponent(Graphics g){
-        Handler.addGraphics(g);
+
+    public void paintComponent( Graphics g){
         g.clearRect(0, 0, getWidth(), getHeight());
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 map[i][j].landOn(g);
             }
         }
-        x += velX;
-        y += velY;
-        g.setColor(Color.blue);
-        g.fillRect(x, y, 24, 24);
-        if(x>getHeight() || x < 0){
-            velX*=-1;
-        }
-        if(y>getWidth() || y < 0){
-            velY*=-1;
-        }
-    }
-    public void run() {
+        handler.render(g);
 
     }
+    public void run() {
+        long lastTime = System.nanoTime();
+        double amountOfTicks = 30.0;
+        double ns = 1000000000 / amountOfTicks;
+        double delta = 0;
+        int ticks=0;
+        while(gameRunning){
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            lastTime = now;
+            while(delta >= 1 && !isPaused()) {
+                runner.execute(new Runnable() {
+                    public void run() {
+                        handler.tick();
+                    }
+                });
+                delta--;
+            }
+            if(!isPaused()){
+
+                repaint();
+            }
+
+        }
+    }
     public void addTroops(Troop troop){
-        Handler.addObject(troop);
+        handler.addObject(troop);
     }
     public static void pauseGame(){
         paused=true;

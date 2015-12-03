@@ -16,10 +16,15 @@ public class TeleportTroops extends Troop {
     private int tpMoves;
     private boolean isTeleporting;
 
+    private final int MAX_HEALTH = 10;
+    private final int KILL_DEATH_SCORE = 100;
+
     public TeleportTroops(Tile pos) {
         super(null, pos);
         tpMoves = 0;
         isTeleporting = false;
+        super.health = MAX_HEALTH;
+        super.score = KILL_DEATH_SCORE;
     }
 
     @Override
