@@ -13,7 +13,7 @@ import java.util.Stack;
  */
 public abstract class Troop implements GameObject {
 
-    private int health;
+    protected int health;
     private int score;
     private Image img;
     private Stack<Tile> history;
@@ -35,7 +35,7 @@ public abstract class Troop implements GameObject {
 
     protected void move() {
         if (hasReacedGoal == false && this.isAlive()) {
-            ArrayList<Tile> neigbors = history.peek().getNeighbors();
+            Tile[] neigbors = history.peek().getNeighbors2();
             Tile nextTile = null;
 
             for (Tile tile : neigbors) {

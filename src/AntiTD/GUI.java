@@ -40,7 +40,7 @@ public class GUI extends JFrame{
 
 
     public void startGame() {
-        gameBoard = new GameBoard();
+        //gameBoard = new GameBoard();
         frame.add(gameBoard, BorderLayout.CENTER);
         }
     public void restartGame(){

@@ -30,7 +30,7 @@ public class BasicTroopTest {
         end = new GoalTile();
 
         start.setNeighbors(new Tile[]{middle});
-        middle.setNeighbors(new Tile[]{start,end});
+        middle.setNeighbors(new Tile[]{start, end});
         end.setNeighbors(new Tile[]{middle});
     }
 
@@ -38,7 +38,7 @@ public class BasicTroopTest {
     public void testTick() throws Exception {
         Troop t = new BasicTroop(start);
         t.tick();
-        assertEquals(t.getPosition(), middle);
+        assertEquals(t.getTilePosition(), middle);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class BasicTroopTest {
         Troop t = new BasicTroop(start);
         t.tick();
         t.tick();
-        assertEquals(t.getPosition(), end);
+        assertEquals(t.getTilePosition(), end);
     }
 
     @Test
