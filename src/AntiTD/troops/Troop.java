@@ -15,9 +15,14 @@ public abstract class Troop implements GameObject {
 
     protected int health;
     protected int score;
+    protected int speed;
     private Image img;
     private Stack<Tile> history;
     private boolean hasReacedGoal;
+
+
+    private float velX;
+    private float velY;
 
     protected Troop(Tile pos) {
         this(null, pos);
@@ -71,8 +76,13 @@ public abstract class Troop implements GameObject {
         }
     }
 
+    public int getHealth() {
+        return this.health;
+    }
+
     /**
      * Attacks this troop
+     *
      * @param damage amount of damage to take
      * @return true if this troop died else false
      */
@@ -83,6 +93,7 @@ public abstract class Troop implements GameObject {
 
     /**
      * Checks troops life status
+     *
      * @return true if alive else false
      */
     public boolean isAlive() {
@@ -97,5 +108,21 @@ public abstract class Troop implements GameObject {
     @Override
     public Tile getTilePosition() {
         return history.peek();
+    }
+
+    public float getVelY() {
+        return velY;
+    }
+
+    public void setVelY(float velY) {
+        this.velY = velY;
+    }
+
+    public float getVelX() {
+        return velX;
+    }
+
+    public void setVelX(float velX) {
+        this.velX = velX;
     }
 }

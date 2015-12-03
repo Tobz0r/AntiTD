@@ -97,12 +97,18 @@ public class ReadXML {
             String element = new String(ch, start, length);
             if (isTile) {
                 try {
+                    if(element.equals("StartTile")){
+
+                        level.setStartPosition(new Position(row,column));
+                    }
                     element="AntiTD.tiles."+element;
 
                     Class<?> classFile = Class.forName(element);
                     Object tile = classFile.newInstance();
                     map[row][column]=(Tile) tile;
                     map[row][column].setPosition(new Position(row,column));
+
+
                 } catch (InstantiationException e) {
                     JOptionPane.showMessageDialog(null, e.getMessage());
                 } catch (ClassNotFoundException e) {

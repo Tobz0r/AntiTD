@@ -17,7 +17,7 @@ import java.net.URL;
  */
 public class Menu extends JMenu {
     //startmenu
-    private JMenuItem newGame,restartGame, exitGame, pauseGame, mute;
+    private JMenuItem newGame,mainMenu, exitGame, pauseGame, mute;
     private JMenuBar startMenuBar = new JMenuBar();
     private JFrame frame;
     private GUI gui;
@@ -47,35 +47,49 @@ public class Menu extends JMenu {
     }
 
 
-
-
+    public void setNewGame(String change) {
+        newGame.setText(change);
+    }
 
     public void startMenu(){
         frame.setJMenuBar(startMenuBar);
         startMenuBar.add(this);
         //lägga till menyitems
-        newGame = this.add("New Game");
-        restartGame = this.add("Restart");
+        newGame = this.add("Restart");
         pauseGame = this.add("Pause");
         mute = this.add("Mute");
+        mainMenu = this.add("Main Menu");
         exitGame = this.add("Quit");
         newGame.setBackground(Color.white);
-        restartGame.setBackground(Color.white);
         pauseGame.setBackground(Color.white);
         mute.setBackground(Color.white);
         exitGame.setBackground(Color.white);
-
-                newGame.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        gui.startGame();
-                    }
-
-                });
-        restartGame.addActionListener(new ActionListener() {
+        mainMenu.setBackground(Color.white);
+        if(!Environment.isRunning()){
+            newGame.setText("New Game");
+        }
+        newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                gui.restartGame();
+                if (Environment.isRunning()) {
+                    gui.restartGame();
+                    mute.setText("Mute");
+                    newGame.setText("Restart");
+                } else {
+                    gui.startGame();
+                    newGame.setText("Restart");
+                    mute.setText("Mute");
+                }
+
+            }
+
+        });
+        mainMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                // FUNGERAR INTE ATM
+                newGame.setText("New Game");
+                gui.startScreen();  //ksk ändra i denna
             }
         });
         exitGame.addActionListener(new ActionListener() {
@@ -90,11 +104,13 @@ public class Menu extends JMenu {
                 if(pause){
                     Environment.pauseGame();
                     pauseGame.setText("Resume");
+                    gui.pauseMusic();
                     pause=false;
                 }
                 else{
                     Environment.resumeGame();
                     pauseGame.setText("Pause");
+                    gui.resumeMusic();
                     pause=true;
                 }
             }
@@ -103,12 +119,12 @@ public class Menu extends JMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(mutesound){
-                    //muta ljudet
+                    gui.pauseMusic();
                     mute.setText("Unmute");
                     mutesound=false;
                 }
                 else {
-                    //unmuta ljudet
+                    gui.resumeMusic();
                     mute.setText("Mute");
                     mutesound = true;
                 }

@@ -1,14 +1,19 @@
 package AntiTD;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
 import AntiTD.*;
+import AntiTD.tiles.Level;
+import AntiTD.tiles.Tile;
 import AntiTD.troops.BasicTroop;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,6 +28,7 @@ public class GUI  {
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
+    private Thread thread;
     //startscreen
     private String PlayerName;
     private JTextArea player;
@@ -32,6 +38,11 @@ public class GUI  {
     private JScrollPane scrollPane;
     private static final int textRows = 10;
     private static final int textCols = 1;
+    //sound
+    private String gameSound;
+    Clip clip = null;
+    long clipTime;
+
 
 
     public GUI () {
@@ -57,11 +68,11 @@ public class GUI  {
     }
 
     public void startGame() {
+        runMusic();
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(scrollPane, BorderLayout.CENTER);
-        env.startGame();
         env.start();
         env.repaint();
         buildBuyPanel();
@@ -70,7 +81,7 @@ public class GUI  {
     public void restartGame(){
         //ta bort alla torn och teleportertiles
         Handler.clearList();
-        //kör
+        env.stop();
         startGame();
     }
 
@@ -85,6 +96,8 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("ELIASHEJ");
+                Tile[][] currentMap= Level.getCurrentMap();
+                env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
         //teleport troop button
@@ -94,7 +107,7 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
-                env.addTroops(new BasicTroop(null)); //la in en dummy för att testa trådning
+                env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
             }
         });
 
@@ -109,7 +122,10 @@ public class GUI  {
         PlayerName=name;
     }
 
-    private void startScreen(){
+
+    public void startScreen()  {
+        env.stop();
+        frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
         //behövs en bättre lösning
         player.setEditable(true);
@@ -119,21 +135,45 @@ public class GUI  {
 
         player.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        startPanel = new JPanel();
+        startPanel = new JPanel(); 
         startPanel.setBackground(Color.white);
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
         frame.add(startPanel);
+        frame.setVisible(true);
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
                 getName();
-                startGame();
+                startGame(); 
             }
         });
 
+    }
+    public void runMusic()  {
+        gameSound = "cello.wav";
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
+            DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
+            clip = (Clip)AudioSystem.getLine(info);
+            clip.open(audioInputStream);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clip.start();
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
+    }
+    public void pauseMusic(){
+        clipTime = clip.getMicrosecondPosition();
+        clip.stop();
+    }
+    public void resumeMusic(){
+        clip.setMicrosecondPosition(clipTime);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        clip.start();
     }
 
 }
