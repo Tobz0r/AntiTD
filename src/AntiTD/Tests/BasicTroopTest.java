@@ -56,11 +56,11 @@ public class BasicTroopTest {
     }
 
     @Test
-    public void testAttackThis1DamageShouldDie() throws Exception {
+    public void testAttackThis1DamageShouldDecrese() throws Exception {
         Troop t = new BasicTroop(start);
+        int healthBefore = t.getHealth();
         t.attackThis(1);
-        t.get
-        assertEquals(t.isAlive(), false);
+        assertEquals(t.getHealth(), healthBefore-1);
     }
 
     @Test

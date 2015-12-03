@@ -71,6 +71,10 @@ public abstract class Troop implements GameObject {
         }
     }
 
+    public int getHealth() {
+        return this.health;
+    }
+
     /**
      * Attacks this troop
      * @param damage amount of damage to take
