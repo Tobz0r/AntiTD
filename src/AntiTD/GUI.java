@@ -1,5 +1,6 @@
 package AntiTD;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -9,6 +10,8 @@ import AntiTD.troops.BasicTroop;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -23,6 +26,7 @@ public class GUI  {
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
+    private Thread thread;
     //startscreen
     private String PlayerName;
     private JTextArea player;
@@ -32,6 +36,9 @@ public class GUI  {
     private JScrollPane scrollPane;
     private static final int textRows = 10;
     private static final int textCols = 1;
+    //sound
+    private String gameSound;
+    private boolean loopMusic=false;
 
 
     public GUI () {
@@ -62,6 +69,8 @@ public class GUI  {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(scrollPane, BorderLayout.CENTER);
         env.startGame();
+        thread=new Thread(env);
+        thread.start();
         env.start();
         env.repaint();
         buildBuyPanel();
@@ -94,7 +103,7 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
-                env.addTroops(new BasicTroop(null)); //la in en dummy för att testa trådning
+                env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
             }
         });
 
@@ -109,7 +118,8 @@ public class GUI  {
         PlayerName=name;
     }
 
-    private void startScreen(){
+    private void startScreen()  {
+
         player = new JTextArea(textCols, textRows);
         //behövs en bättre lösning
         player.setEditable(true);
@@ -129,11 +139,27 @@ public class GUI  {
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                loopMusic=true;
+                //runMusic("cello.vaw");
                 getName();
                 startGame();
             }
         });
 
+    }
+    public void runMusic(String gameSound)  {
+        gameSound = "cello.wav";
+        Clip clip = null;
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
+            DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
+            clip = (Clip)AudioSystem.getLine(info);
+            clip.open(audioInputStream);
+
+            clip.start();
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
     }
 
 }
