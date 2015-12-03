@@ -43,9 +43,6 @@ public class GUI  {
 
 
 
-    private boolean loopMusic=false;
-
-
     public GUI () {
         env = new Environment();
         frame = new JFrame("AntiTTD");
@@ -69,6 +66,7 @@ public class GUI  {
     }
 
     public void startGame() {
+        runMusic();
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,12 +120,7 @@ public class GUI  {
     void changeName(String name){
         PlayerName=name;
     }
-    public boolean isLoopMusic() {
-        return loopMusic;
-    }
-    public void setLoopMusic(boolean loopMusic) {
-        this.loopMusic = loopMusic;
-    }
+
 
     private void startScreen()  {
 
@@ -150,8 +143,7 @@ public class GUI  {
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                loopMusic=true;
-                runMusic();
+
                 getName();
                 startGame();
             }
