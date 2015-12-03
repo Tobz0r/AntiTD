@@ -124,8 +124,8 @@ public class GUI  {
 
 
     public void startScreen()  {
+        env.stop();
         frame.remove(scrollPane);
-        frame.setVisible(true);
         player = new JTextArea(textCols, textRows);
         //behövs en bättre lösning
         player.setEditable(true);
@@ -142,6 +142,7 @@ public class GUI  {
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
         frame.add(startPanel);
+        frame.setVisible(true);
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

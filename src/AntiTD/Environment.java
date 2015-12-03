@@ -67,6 +67,9 @@ public class Environment extends JPanel implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        catch (NullPointerException e){
+
+        }
     }
 
     public static  boolean isPaused(){
@@ -95,6 +98,7 @@ public class Environment extends JPanel implements Runnable {
         double delta = 0;
         int ticks=0;
         while(gameRunning){
+            System.out.println("eliashej");
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
