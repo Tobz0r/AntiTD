@@ -94,7 +94,7 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("ELIASHEJ");
-                env.addTroops(new BasicTroop());
+                env.addTroops(new BasicTroop()); 
             }
         });
         //teleport troop button
