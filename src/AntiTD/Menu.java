@@ -69,6 +69,7 @@ public class Menu extends JMenu {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         gui.startGame();
+                        mute.setText("Mute");
                     }
 
                 });
@@ -90,11 +91,13 @@ public class Menu extends JMenu {
                 if(pause){
                     Environment.pauseGame();
                     pauseGame.setText("Resume");
+                    gui.pauseMusic();
                     pause=false;
                 }
                 else{
                     Environment.resumeGame();
                     pauseGame.setText("Pause");
+                    gui.resumeMusic();
                     pause=true;
                 }
             }
@@ -103,12 +106,12 @@ public class Menu extends JMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(mutesound){
-                    //muta ljudet
+                    gui.pauseMusic();
                     mute.setText("Unmute");
                     mutesound=false;
                 }
                 else {
-                    //unmuta ljudet
+                    gui.resumeMusic();
                     mute.setText("Mute");
                     mutesound = true;
                 }

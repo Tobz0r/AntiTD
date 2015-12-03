@@ -38,7 +38,9 @@ public class GUI  {
     private static final int textCols = 1;
     //sound
     private String gameSound;
-    private boolean loopMusic=false;
+    Clip clip = null;
+    long clipTime;
+
 
 
     public GUI () {
@@ -64,6 +66,7 @@ public class GUI  {
     }
 
     public void startGame() {
+        runMusic();
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -118,6 +121,7 @@ public class GUI  {
         PlayerName=name;
     }
 
+
     private void startScreen()  {
 
         player = new JTextArea(textCols, textRows);
@@ -139,27 +143,34 @@ public class GUI  {
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                loopMusic=true;
-                //runMusic("cello.vaw");
+
                 getName();
                 startGame();
             }
         });
 
     }
-    public void runMusic(String gameSound)  {
+    public void runMusic()  {
         gameSound = "cello.wav";
-        Clip clip = null;
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
             DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
             clip = (Clip)AudioSystem.getLine(info);
             clip.open(audioInputStream);
-
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
             clip.start();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
+    }
+    public void pauseMusic(){
+        clipTime = clip.getMicrosecondPosition();
+        clip.stop();
+    }
+    public void resumeMusic(){
+        clip.setMicrosecondPosition(clipTime);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        clip.start();
     }
 
 }

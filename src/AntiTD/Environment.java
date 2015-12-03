@@ -22,8 +22,7 @@ public class Environment extends JPanel implements Runnable {
     private ArrayList<Level> levels;
     private Handler handler;
     private Handler handler2;
-    private  Executor runner= Executors.newFixedThreadPool(4);;
-
+    private  Executor runner= Executors.newFixedThreadPool(2);;
 
 
     private static boolean gameRunning;
@@ -69,12 +68,12 @@ public class Environment extends JPanel implements Runnable {
 
 
     public void paintComponent( Graphics g){
-        g.clearRect(0, 0, getWidth(), getHeight());
-        for (int i = 0; i < map.length; i++) {
+        //g.clearRect(0, 0, getWidth(), getHeight());
+       /* for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 map[i][j].landOn(g);
             }
-        }
+        }*/
         handler.render(g);
 
     }
@@ -85,10 +84,12 @@ public class Environment extends JPanel implements Runnable {
         double delta = 0;
         int ticks=0;
         while(gameRunning){
+
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
             while(delta >= 1 && !isPaused()) {
+
                 runner.execute(new Runnable() {
                     public void run() {
                         handler.tick();
