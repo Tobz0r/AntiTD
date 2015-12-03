@@ -44,6 +44,7 @@ public class Environment extends JPanel implements Runnable {
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
         Level level=levels.get(mapNr);
+        Level.setCurrentMap(map);
         map=level.getMap();
         setLayout(new GridLayout(1, 1));
         setPreferredSize(new Dimension(map.length * 48, map[0].length * 48));

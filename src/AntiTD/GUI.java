@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import AntiTD.*;
+import AntiTD.tiles.Level;
+import AntiTD.tiles.Tile;
 import AntiTD.troops.BasicTroop;
 
 import java.awt.*;
@@ -94,7 +96,8 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("ELIASHEJ");
-                env.addTroops(new BasicTroop()); 
+                Tile[][] currentMap= Level.getCurrentMap();
+                env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
         //teleport troop button
