@@ -97,10 +97,10 @@ public class ReadXML {
             String element = new String(ch, start, length);
             if (isTile) {
                 try {
-                    if(element.equals("startTile")){
+                    if(element.equals("StartTile")){
+
                         level.setStartPosition(new Position(row,column));
                     }
-
                     element="AntiTD.tiles."+element;
 
                     Class<?> classFile = Class.forName(element);
