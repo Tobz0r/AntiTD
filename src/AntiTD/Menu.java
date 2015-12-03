@@ -103,12 +103,12 @@ public class Menu extends JMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(mutesound){
-                    //muta ljudet
+                    gui.setLoopMusic(false);
                     mute.setText("Unmute");
                     mutesound=false;
                 }
                 else {
-                    //unmuta ljudet
+                    gui.setLoopMusic(true);
                     mute.setText("Mute");
                     mutesound = true;
                 }

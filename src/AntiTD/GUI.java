@@ -38,11 +38,14 @@ public class GUI  {
     private static final int textCols = 1;
     //sound
     private String gameSound;
+
+
+
     private boolean loopMusic=false;
 
 
     public GUI () {
-        env = new Environment();
+        env = new Environment(this);
         frame = new JFrame("AntiTTD");
          scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -117,6 +120,12 @@ public class GUI  {
     void changeName(String name){
         PlayerName=name;
     }
+    public boolean isLoopMusic() {
+        return loopMusic;
+    }
+    public void setLoopMusic(boolean loopMusic) {
+        this.loopMusic = loopMusic;
+    }
 
     private void startScreen()  {
 
@@ -140,14 +149,13 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 loopMusic=true;
-                //runMusic("cello.vaw");
                 getName();
                 startGame();
             }
         });
 
     }
-    public void runMusic(String gameSound)  {
+    public void runMusic()  {
         gameSound = "cello.wav";
         Clip clip = null;
         try {
