@@ -17,7 +17,7 @@ import java.net.URL;
  */
 public class Menu extends JMenu {
     //startmenu
-    private JMenuItem newGame,restartGame, exitGame, pauseGame, mute;
+    private JMenuItem newGame,mainMenu, exitGame, pauseGame, mute;
     private JMenuBar startMenuBar = new JMenuBar();
     private JFrame frame;
     private GUI gui;
@@ -54,29 +54,35 @@ public class Menu extends JMenu {
         frame.setJMenuBar(startMenuBar);
         startMenuBar.add(this);
         //lägga till menyitems
-        newGame = this.add("New Game");
-        restartGame = this.add("Restart");
+        newGame = this.add("Restart");
         pauseGame = this.add("Pause");
         mute = this.add("Mute");
+        mainMenu = this.add("Main Menu");
         exitGame = this.add("Quit");
         newGame.setBackground(Color.white);
-        restartGame.setBackground(Color.white);
         pauseGame.setBackground(Color.white);
         mute.setBackground(Color.white);
         exitGame.setBackground(Color.white);
-
-                newGame.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        gui.startGame();
-                        mute.setText("Mute");
-                    }
-
-                });
-        restartGame.addActionListener(new ActionListener() {
+        mainMenu.setBackground(Color.white);
+        newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                gui.restartGame();
+                if (Environment.isRunning()) {
+                    gui.restartGame();
+                    mute.setText("Mute");
+                } else {
+                    gui.startGame();
+                    mute.setText("Mute");
+                    newGame.setText("Restart");
+                }
+
+            }
+
+        });
+        mainMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                gui.startScreen();
             }
         });
         exitGame.addActionListener(new ActionListener() {

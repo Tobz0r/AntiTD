@@ -30,8 +30,10 @@ public class Level {
         return map;
     }
     public void setStartPosition(Position startPosition){
-
         this.startPosition=startPosition;
+    }
+    public Position getStartPosition(){
+        return startPosition;
     }
     public void setGoalPosition(Position goalPosition){
 
@@ -45,6 +47,6 @@ public class Level {
         Level.currentMap=map;
     }
     public static Tile[][] getCurrentMap(){
-        return currentMap;
+        return Level.currentMap;
     }
 }

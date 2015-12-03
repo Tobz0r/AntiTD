@@ -26,12 +26,11 @@ public class Environment extends JPanel implements Runnable {
 
 
     private static boolean gameRunning;
-    private static boolean paused;
+    private static  boolean paused;
 
     private Tile[][] map;
-    private Thread[] threads;
-
-    private int mapNr=1;
+    private Thread thread;
+    private int mapNr=0;
     private final int nrthr=2;
     private Level level;
 
@@ -42,23 +41,35 @@ public class Environment extends JPanel implements Runnable {
     public Environment(){
         super(new BorderLayout());
         handler=new Handler(0);
-        threads=new Thread[nrthr];
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
-        Level level=levels.get(mapNr);
+        level=levels.get(mapNr);
         map=level.getMap();
+
+        Level.setCurrentMap(map);
         setLayout(new GridLayout(1, 1));
         setPreferredSize(new Dimension(map.length * 48, map[0].length * 48));
 
     }
-
-    public void start(){
+    Level getLevel(){
+        return level;
+    }
+    public synchronized void start(){
         paused=false;
+        gameRunning=true;
+        thread=new Thread(this);
+        thread.start();
     }
-    public static boolean isRunning(){
-        return gameRunning;
+    public synchronized void stop(){
+        try{
+            gameRunning=false;
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
-    public static boolean isPaused(){
+
+    public static  boolean isPaused(){
         return paused;
     }
     public void startGame(){
@@ -68,12 +79,12 @@ public class Environment extends JPanel implements Runnable {
 
 
     public void paintComponent( Graphics g){
-        //g.clearRect(0, 0, getWidth(), getHeight());
-       /* for (int i = 0; i < map.length; i++) {
+        g.clearRect(0, 0, getWidth(), getHeight());
+       for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 map[i][j].landOn(g);
             }
-        }*/
+        }
         handler.render(g);
 
     }
@@ -84,7 +95,6 @@ public class Environment extends JPanel implements Runnable {
         double delta = 0;
         int ticks=0;
         while(gameRunning){
-
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
@@ -103,6 +113,9 @@ public class Environment extends JPanel implements Runnable {
             }
 
         }
+    }
+    public static boolean isRunning(){
+        return gameRunning;
     }
     public void addTroops(Troop troop){
         handler.addObject(troop);

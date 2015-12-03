@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import AntiTD.*;
+import AntiTD.tiles.Level;
+import AntiTD.tiles.Tile;
 import AntiTD.troops.BasicTroop;
 
 import java.awt.*;
@@ -71,9 +73,6 @@ public class GUI  {
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(scrollPane, BorderLayout.CENTER);
-        env.startGame();
-        thread=new Thread(env);
-        thread.start();
         env.start();
         env.repaint();
         buildBuyPanel();
@@ -82,7 +81,7 @@ public class GUI  {
     public void restartGame(){
         //ta bort alla torn och teleportertiles
         Handler.clearList();
-        //kör
+        env.stop();
         startGame();
     }
 
@@ -97,6 +96,8 @@ public class GUI  {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("ELIASHEJ");
+                Tile[][] currentMap= Level.getCurrentMap();
+                env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
         //teleport troop button
@@ -122,8 +123,9 @@ public class GUI  {
     }
 
 
-    private void startScreen()  {
-
+    public void startScreen()  {
+        frame.remove(env);
+        frame.setVisible(true);
         player = new JTextArea(textCols, textRows);
         //behövs en bättre lösning
         player.setEditable(true);
