@@ -64,12 +64,11 @@ public class Handler extends Thread {
             double y_to = (moveTo.getPosition().getY()*size)*1.0;
 
             Double progress = (gameObject.getMoveProgres()*1.0) / 100.0;
-            System.out.println("progress: "+progress);
-            double x_global = Math.abs(x_start - x_to);
-            double y_global = Math.abs(y_start - y_to);
+            double x_global = x_start - x_to;
+            double y_global = y_start - y_to;
 
-            Long x_current = Math.round((x_global * progress.doubleValue()) + x_start);
-            Long y_current = Math.round((y_global * progress.doubleValue()) + y_start);
+            Long x_current = Math.round(x_start - (x_global * progress.doubleValue()) );
+            Long y_current = Math.round(y_start - (y_global * progress.doubleValue()) );
 
             //int x = Math.round(position.getX()*size+(size*progress));
             //int y = Math.round(position.getY()*size+(size*progress));
