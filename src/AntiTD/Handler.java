@@ -55,13 +55,25 @@ public class Handler extends Thread {
             g.setColor(Color.blue);
             int size = gameObject.getTilePosition().getSize();
 
-            Tile position = gameObject.getTilePosition();
-            Tile moveTo = gameObject.getMoveToPosition();
-            float progress = gameObject.getMoveProgres() / 100;
+            Position position = gameObject.getTilePosition().getPosition();
+            double x_start = (position.getX()*size)*1.0;
+            double y_start = (position.getY()*size)*1.0;
 
-            int x = Math.round(position.getPosition().getX()*size+(size*progress));
-            int y = Math.round(position.getPosition().getY()*size+(size*progress));
-            g.fillRect((int)x, (int)y, 24, 24);
+            Tile moveTo = gameObject.getMoveToPosition();
+            double x_to = (moveTo.getPosition().getX()*size)*1.0;
+            double y_to = (moveTo.getPosition().getY()*size)*1.0;
+
+            Double progress = (gameObject.getMoveProgres()*1.0) / 100.0;
+            System.out.println("progress: "+progress);
+            double x_global = Math.abs(x_start - x_to);
+            double y_global = Math.abs(y_start - y_to);
+
+            Long x_current = Math.round((x_global * progress.doubleValue()) + x_start);
+            Long y_current = Math.round((y_global * progress.doubleValue()) + y_start);
+
+            //int x = Math.round(position.getX()*size+(size*progress));
+            //int y = Math.round(position.getY()*size+(size*progress));
+            g.fillRect(x_current.intValue(), y_current.intValue(), 24, 24);
         }
     }
 
