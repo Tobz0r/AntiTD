@@ -9,6 +9,7 @@ import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
 import AntiTD.troops.BasicTroop;
+import AntiTD.troops.SpeedTroop;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -98,7 +99,6 @@ public class GUI  {
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("ELIASHEJ");
                 Tile[][] currentMap= Level.getCurrentMap();
                 env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }

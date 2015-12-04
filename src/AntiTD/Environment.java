@@ -137,7 +137,11 @@ public class Environment extends JPanel implements Runnable {
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
-                    handler.tick();
+                    runner.execute(new Runnable() {
+                        public void run() {
+                            handler.tick();
+                        }
+                    });
                     repaint();
                 }
 
