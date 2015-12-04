@@ -156,4 +156,8 @@ public abstract class Troop implements GameObject {
     public void setVelX(float velX) {
         this.velX = velX;
     }
+
+    public String type(){
+        return "Troop";
+    }
 }

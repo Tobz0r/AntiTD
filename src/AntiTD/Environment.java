@@ -2,6 +2,7 @@ package AntiTD;
 
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
+import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ public class Environment extends JPanel implements Runnable {
     private Handler handler;
     private Handler handler2;
     private  Executor runner= Executors.newFixedThreadPool(2);;
+    private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
 
 
     private static boolean gameRunning;
@@ -46,6 +48,7 @@ public class Environment extends JPanel implements Runnable {
         level=levels.get(mapNr);
         map=level.getMap();
         setUpNeighbors();
+
         Level.setCurrentMap(map);
         level.setUpCrossroad();
 
@@ -62,10 +65,6 @@ public class Environment extends JPanel implements Runnable {
                     for (int col = -1; col <= 1; col++) {
                         if ( row+col == -1 || row+col == 1 ) {
                             try {
-                                //neighbors.add(map[y-1][x-0]);
-                                //neighbors.add(map[y-0][x-1]);
-                                //neighbors.add(map[y-0][x+1]);
-                                //neighbors.add(map[y+1][x-0]);
                                 neighbors.add(map[y-row][x-col]);
                             } catch (IndexOutOfBoundsException e) {
 
@@ -184,7 +183,10 @@ public class Environment extends JPanel implements Runnable {
 //            /*
 //            while(delta >= 1 && !isPaused()) {
 //
-//
+//                runner.execute(new Runnable() {
+//                    public void run() {
+//                        handler.tick();
+//                    }
 //                });
 //                delta--;
 //            }
@@ -200,6 +202,22 @@ public class Environment extends JPanel implements Runnable {
     }
     public void addTroops(Troop troop){
         handler.addObject(troop);
+    }
+    public void addTower(Tower tower){ handler.addObject(tower);}
+    public void saveBuildableTilese(){
+        Tile pos;
+        for(int i = 0; i < map.length; i++){
+            for(int j = 0; j <map[i].length; j++){
+                if(map[i][j].isBuildable()){
+                    pos = map[i][j];
+                    buildableTiles.add(pos);
+                }
+
+            }
+        }
+    }
+    public Tile getBuildAbleTile(int i){
+        return buildableTiles.get(i);
     }
     public static void pauseGame(){
         paused=true;

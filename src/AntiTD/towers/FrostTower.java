@@ -18,6 +18,8 @@ public class FrostTower extends Tower{
     private Troop tr;
     private Troop target;
     private Position pos;
+
+    private Tile posTile;
     private String type = "FrostTower";
     ImageIcon img;
     public FrostTower(ImageIcon img, Tile pos) {
@@ -27,6 +29,9 @@ public class FrostTower extends Tower{
       setRange(10);
       setPrice(5);
       setPosition(pos.getPosition());
+        this.posTile = pos;
+
+
     }
     public void initScan() {
       int distance = Integer.MAX_VALUE;
@@ -137,7 +142,7 @@ public class FrostTower extends Tower{
 
     @Override
     public Tile getTilePosition() {
-        return this.getTilePosition();
+        return posTile;
     }
 
     @Override

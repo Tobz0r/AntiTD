@@ -17,6 +17,7 @@ public interface GameObject{
     public abstract int getCurrentScore();
 
     public abstract Position getPosition();
+    public abstract String type();
 
     public abstract Tile getTilePosition();
     public abstract Tile getMoveToPosition();
