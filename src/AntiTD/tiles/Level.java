@@ -4,6 +4,7 @@ import AntiTD.Position;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * Created by dv13tes on 2015-11-30.
@@ -31,7 +32,11 @@ public class Level {
         for(int i=0;i < map.length; i++){
             for(int j=0; j < map[i].length;j++){
                 if(map[i][j] instanceof CrossroadTile){
-                    ((CrossroadTile)map[i][j]).findNextWay();
+                    Tile[] map2=map[i][j].getNeighbors2();
+                    Tile[] map3=new Tile[map2.length];
+                    Random r=new Random();
+                    map3[0]=map2[r.nextInt(map2.length)];
+                    map[i][j].setNeighbors(map3);
                 }
             }
         }

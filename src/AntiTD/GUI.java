@@ -8,6 +8,7 @@ import AntiTD.*;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.BasicTroop;
+import AntiTD.troops.SpeedTroop;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -95,7 +96,6 @@ public class GUI  {
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("ELIASHEJ");
                 Tile[][] currentMap= Level.getCurrentMap();
                 env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
@@ -106,9 +106,8 @@ public class GUI  {
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("TELEPORTELIAS");
-                env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
-            }
+                Tile[][] currentMap= Level.getCurrentMap();
+                env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));            }
         });
 
         buyPanel.add(buyTeleport);
