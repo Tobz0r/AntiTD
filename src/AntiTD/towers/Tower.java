@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.LinkedList;
 
@@ -30,11 +31,13 @@ public abstract class Tower implements GameObject {
     private Tower iniTower;
     private Tile posTile;
 
-    public Tower(ImageIcon img, Tile pos) {
+    public Tower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
         this.img = img;
         this.money = 0;
         this.pos = pos;
         this.posTile = pos;
+        this.troops = troops;
+
     }
     /*public Tower(ArrayList<Troop> troops){
         this.troops = troops;
@@ -56,14 +59,14 @@ public abstract class Tower implements GameObject {
         int tempMoney = getCurrentScore();
         if(pos.isBuildable()) {
             if (tempMoney >= 5) {
-                Tower temp = new FrostTower(img,pos);
+                Tower temp = new FrostTower(img,pos,troops);
                 temp.createTower(temp,pos);
                 addTowerToList(temp);
                 tempMoney = tempMoney-temp.getPrice();
                 setMoney(tempMoney);
 
             }else if(tempMoney >=1){
-                Tower temp = new BasicTower(img,pos);
+                Tower temp = new BasicTower(img,pos,troops);
                 temp.createTower(temp,pos);
                 tempMoney = tempMoney-temp.getPrice();
                 addTowerToList(temp);
@@ -112,6 +115,7 @@ public abstract class Tower implements GameObject {
     public abstract Position getPosition();
     public abstract void setPosition(Position pos);
 
+
     /*
     * Method for test
     * */
@@ -159,6 +163,10 @@ public abstract class Tower implements GameObject {
             }
         }
         return false;
+
+    }
+    public void setTroopsToList(ArrayList<Troop> troops){
+        this.troops = troops;
 
     }
     public boolean getTowers(){

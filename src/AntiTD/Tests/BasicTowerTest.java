@@ -37,7 +37,7 @@ public class BasicTowerTest {
     troopPos.setNeighbors(new Tile[]{troopPos});
 
     img = new ImageIcon(skolan);
-    tower = new BasicTower(img, pos);
+    tower = new BasicTower(img, pos,null);
     tower.createTower(tower,pos);
   }
 
@@ -157,7 +157,7 @@ public class BasicTowerTest {
     pos.setNeighbors(new Tile[]{pos});
 
     img = new ImageIcon(skolan);
-    tower = new BasicTower(img, pos);
+    tower = new BasicTower(img, pos,null);
     tower.createTower(tower,pos);
 
     Tile newPos = new PathTile(new Position(0,1));

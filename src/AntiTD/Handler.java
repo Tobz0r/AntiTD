@@ -1,10 +1,13 @@
 package AntiTD;
 
 import AntiTD.tiles.Tile;
+import AntiTD.towers.Tower;
+import AntiTD.troops.Troop;
 
 import javax.print.attribute.standard.ReferenceUriSchemesSupported;
 import javax.sound.midi.SysexMessage;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.Semaphore;
@@ -16,6 +19,7 @@ public class Handler extends Thread {
     private static LinkedList<GameObject> objects;
     private int tid;
     private Thread thread;
+    private ArrayList<Troop> troops = new ArrayList<Troop>();
 
 
     public Handler(int tid){
@@ -39,10 +43,31 @@ public class Handler extends Thread {
     public static void removeObject(GameObject object){
         objects.remove(object);
     }
+    public void addTroop(ArrayList<Troop> troops){
+        this.troops = troops;
+        for(int i = 0; i< objects.size(); i++){
+            GameObject gameObject = objects.get(i);
+            if(gameObject.type().equals("Tower")){
+                System.out.println("inserting troops");
+                ((Tower)gameObject).setTroopsToList(troops);
+
+            }
+        }
+    }
+
 
     public void tick(){
         for (int i = 0; i < objects.size(); i++) {
+            GameObject gameObject = objects.get(i);
+            if(gameObject.type().equals("Troop")) {
                 objects.get(i).tick();
+            }else if(gameObject.type().equals("Tower")){
+                if(troops!=null) {
+                    objects.get(i).tick();
+
+                }
+
+            }
         }
     }
     public void render(Graphics g){

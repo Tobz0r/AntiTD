@@ -7,6 +7,7 @@ import AntiTD.troops.Troop;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by id12rdt on 2015-11-30.
@@ -22,9 +23,9 @@ public class FrostTower extends Tower{
     private Tile posTile;
     private String type = "FrostTower";
     ImageIcon img;
-    public FrostTower(ImageIcon img, Tile pos) {
+    public FrostTower(ImageIcon img, Tile pos,ArrayList<Troop> troops) {
 
-      super(img, pos);
+      super(img, pos, troops);
       setDamage(10);
       setRange(10);
       setPrice(5);
@@ -119,8 +120,9 @@ public class FrostTower extends Tower{
     public Position getPosition(){
       return pos;
     }
+    @Override
     public void tick(){
-
+        this.startShooting();
     }
     /*test method*/
     public Troop getTarget(){
