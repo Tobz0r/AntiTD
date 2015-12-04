@@ -37,7 +37,7 @@ public abstract class Tile implements TileRender {
     public boolean isBuildable() {
         return buildable;
     }
-    int getSize(){
+    public int getSize(){
         return size;
     }
     public void setPosition(Position position){
@@ -64,6 +64,8 @@ public abstract class Tile implements TileRender {
         }
         return neighbours;
     }
+
+
     public Tile[] getNeighbors2() {
         return neighbors;
     }

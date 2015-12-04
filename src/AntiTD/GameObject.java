@@ -19,4 +19,6 @@ public interface GameObject{
     public abstract Position getPosition();
 
     public abstract Tile getTilePosition();
+    public abstract Tile getMoveToPosition();
+    public abstract int getMoveProgres();
 }

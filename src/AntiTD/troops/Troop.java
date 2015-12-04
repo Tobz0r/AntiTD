@@ -18,7 +18,10 @@ public abstract class Troop implements GameObject {
     protected int speed;
     private Image img;
     private Stack<Tile> history;
+    private Tile nextTile;
+    private int moveProgres;
     private boolean hasReacedGoal;
+    private boolean isMoving;
 
 
     private float velX;
@@ -39,27 +42,52 @@ public abstract class Troop implements GameObject {
 
     protected void move() {
         if (hasReacedGoal == false && this.isAlive()) {
-            Tile[] neigbors = history.peek().getNeighbors2();
-            Tile nextTile = null;
-
-            for (Tile tile : neigbors) {
-                if (tile.isMoveable()) {
-                    if (history.search(tile) == -1) {
-                        nextTile = tile;
-                        break;
-                    }
+            if (!this.isMoving) {
+                this.isMoving = true;
+                this.moveProgres = speed;
+                this.nextTile = getNextTile();
+            } else if (this.moveProgres < 100) {
+                this.moveProgres += speed;
+                if (this.moveProgres > 100) {
+                    this.moveProgres = 100;
+                }
+            } else {
+                this.isMoving = false;
+                this.moveProgres = 0;
+                history.push(nextTile);
+                if (nextTile instanceof GoalTile) {
+                    hasReacedGoal = true;
                 }
             }
-            if (nextTile.isTeleporter()) {
-                nextTile = nextTile.getTeleportTo();
-            }
-
-            if (nextTile instanceof GoalTile) {
-                hasReacedGoal = true;
-            }
-
-            history.push(nextTile);
         }
+    }
+
+    @Override
+    public Tile getMoveToPosition() {
+        return nextTile;
+    }
+
+    @Override
+    public int getMoveProgres() {
+        return this.moveProgres;
+    }
+
+    private Tile getNextTile() {
+        Tile[] neigbors = history.peek().getNeighbors2();
+        Tile nextTile = null;
+
+        for (Tile tile : neigbors) {
+            if (tile.isMoveable()) {
+                if (history.search(tile) == -1) {
+                    nextTile = tile;
+                    break;
+                }
+            }
+        }
+        if (nextTile.isTeleporter()) {
+            nextTile = nextTile.getTeleportTo();
+        }
+        return nextTile;
     }
 
     @Override
