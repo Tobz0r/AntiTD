@@ -51,29 +51,33 @@ public class Handler extends Thread {
     public void render(Graphics g){
         for (int i = 0; i < objects.size(); i++) {
             //objects.get(i).render(g);
-            GameObject gameObject = objects.get(i);
-            g.setColor(Color.blue);
-            int sizeX = (int) gameObject.getTilePosition().getSize().getWidth();
-            int sizeY = (int) gameObject.getTilePosition().getSize().getHeight();
+            try {
+                GameObject gameObject = objects.get(i);
+                g.setColor(Color.blue);
+                int sizeX = (int) gameObject.getTilePosition().getSize().getWidth();
+                int sizeY = (int) gameObject.getTilePosition().getSize().getHeight();
 
-            Position position = gameObject.getTilePosition().getPosition();
-            double x_start = (position.getX()*sizeX)*1.0;
-            double y_start = (position.getY()*sizeY)*1.0;
+                Position position = gameObject.getTilePosition().getPosition();
+                double x_start = (position.getX() * sizeX) * 1.0;
+                double y_start = (position.getY() * sizeY) * 1.0;
 
-            Tile moveTo = gameObject.getMoveToPosition();
-            double x_to = (moveTo.getPosition().getX()*sizeX)*1.0;
-            double y_to = (moveTo.getPosition().getY()*sizeY)*1.0;
+                Tile moveTo = gameObject.getMoveToPosition();
+                double x_to = (moveTo.getPosition().getX() * sizeX) * 1.0;
+                double y_to = (moveTo.getPosition().getY() * sizeY) * 1.0;
 
-            Double progress = (gameObject.getMoveProgres()*1.0) / 100.0;
-            double x_global = x_start - x_to;
-            double y_global = y_start - y_to;
+                Double progress = (gameObject.getMoveProgres() * 1.0) / 100.0;
+                double x_global = x_start - x_to;
+                double y_global = y_start - y_to;
 
-            Long x_current = Math.round(x_start - (x_global * progress.doubleValue()) );
-            Long y_current = Math.round(y_start - (y_global * progress.doubleValue()) );
+                Long x_current = Math.round(x_start - (x_global * progress.doubleValue()));
+                Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
 
-            //int x = Math.round(position.getX()*size+(size*progress));
-            //int y = Math.round(position.getY()*size+(size*progress));
-            g.fillRect(x_current.intValue(), y_current.intValue(), 24, 24);
+                //int x = Math.round(position.getX()*size+(size*progress));
+                //int y = Math.round(position.getY()*size+(size*progress));
+                g.fillRect(x_current.intValue(), y_current.intValue(), 24, 24);
+            }catch (NullPointerException e){
+                System.out.println("2fast4me");
+            }
         }
     }
 
