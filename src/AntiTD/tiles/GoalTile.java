@@ -22,6 +22,6 @@ public class GoalTile extends Tile {
     @Override
     public void landOn(Graphics g) {
         g.setColor(Color.yellow);
-        g.fillRect(getPosition().getX()*48,getPosition().getY()*48,getSize(),getSize());
+        g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),(int)(getPosition().getY()*(getSize().getHeight())),(int)getSize().getWidth(),(int)getSize().getHeight());
     }
 }

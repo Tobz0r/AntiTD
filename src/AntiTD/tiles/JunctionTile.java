@@ -12,6 +12,7 @@ public class JunctionTile extends Tile {
     public JunctionTile() {
         this(null);
     }
+
     public JunctionTile(Position pos){
         super(pos);
         setBuildable(false);
@@ -20,6 +21,5 @@ public class JunctionTile extends Tile {
     @Override
     public void landOn(Graphics g) {
         g.setColor(Color.red);
-        g.fillRect(getPosition().getX()*48,getPosition().getY()*48,getSize(),getSize());
     }
 }

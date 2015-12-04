@@ -53,15 +53,16 @@ public class Handler extends Thread {
             //objects.get(i).render(g);
             GameObject gameObject = objects.get(i);
             g.setColor(Color.blue);
-            int size = gameObject.getTilePosition().getSize();
+            int sizeX = (int) gameObject.getTilePosition().getSize().getWidth();
+            int sizeY = (int) gameObject.getTilePosition().getSize().getHeight();
 
             Position position = gameObject.getTilePosition().getPosition();
-            double x_start = (position.getX()*size)*1.0;
-            double y_start = (position.getY()*size)*1.0;
+            double x_start = (position.getX()*sizeX)*1.0;
+            double y_start = (position.getY()*sizeY)*1.0;
 
             Tile moveTo = gameObject.getMoveToPosition();
-            double x_to = (moveTo.getPosition().getX()*size)*1.0;
-            double y_to = (moveTo.getPosition().getY()*size)*1.0;
+            double x_to = (moveTo.getPosition().getX()*sizeX)*1.0;
+            double y_to = (moveTo.getPosition().getY()*sizeY)*1.0;
 
             Double progress = (gameObject.getMoveProgres()*1.0) / 100.0;
             double x_global = x_start - x_to;

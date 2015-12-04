@@ -122,6 +122,14 @@ public class Environment extends JPanel implements Runnable {
         handler.render(g);
 
     }
+    private void setSize(){
+        Tile[][] map=Level.getCurrentMap();
+        for(int i=0; i < map.length;i++){
+            for(int j=0; j < map[i].length;j++){
+                map[i][j].setSize(new Dimension(getWidth()/map.length,getHeight()/map[i].length));
+            }
+        }
+    }
     public void run() {
         long lastTime = System.currentTimeMillis();
         double amountOfTicksPerSecond = 60.0;
@@ -130,6 +138,7 @@ public class Environment extends JPanel implements Runnable {
         int ticks=0;
 
         while(gameRunning){
+            setSize();
             long now = System.currentTimeMillis();
             long wait = ns - (now - lastTime);
             lastTime = now;

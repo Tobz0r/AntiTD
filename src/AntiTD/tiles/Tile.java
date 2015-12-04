@@ -16,7 +16,7 @@ public abstract class Tile implements TileRender {
     private boolean buildable;
     private boolean isTeleportStart;
     private Tile teleportEnd;
-    private final int size=48;
+    private Dimension size=new Dimension(48,48);
 
     private Position position;
     private Tile[] neighbors;
@@ -37,7 +37,7 @@ public abstract class Tile implements TileRender {
     public boolean isBuildable() {
         return buildable;
     }
-    public int getSize(){
+    public Dimension getSize(){
         return size;
     }
     public void setPosition(Position position){
@@ -74,7 +74,9 @@ public abstract class Tile implements TileRender {
          */
     }
 
-
+    public void setSize(Dimension size){
+        this.size=size;
+    }
     public Tile[] getNeighbors2() {
         return neighbors;
     }
