@@ -135,7 +135,7 @@ public class GUI  {
 
         player.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        startPanel = new JPanel(); 
+        startPanel = new JPanel();
         startPanel.setBackground(Color.white);
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
