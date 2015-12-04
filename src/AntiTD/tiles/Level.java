@@ -29,7 +29,7 @@ public class Level {
         this.map=map;
     }
     public void setUpCrossroad(){
-        for(int i=0;i < map.length; i++){
+      /*  for(int i=0;i < map.length; i++){
             for(int j=0; j < map[i].length;j++){
                 if(map[i][j] instanceof CrossroadTile){
                     Tile[] map2=map[i][j].getNeighbors2();
@@ -39,7 +39,7 @@ public class Level {
                     map[i][j].setNeighbors(map3);
                 }
             }
-        }
+        }*/
     }
     public  Tile[][] getMap(){
         return map;

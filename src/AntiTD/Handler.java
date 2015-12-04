@@ -71,10 +71,11 @@ public class Handler extends Thread {
 
                 Long x_current = Math.round(x_start - (x_global * progress.doubleValue()));
                 Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
-
+                int troopSizeX= (int) gameObject.getTilePosition().getSize().getWidth()/3;
+                int troopSizeY=(int)gameObject.getTilePosition().getSize().getHeight()/3;
                 //int x = Math.round(position.getX()*size+(size*progress));
                 //int y = Math.round(position.getY()*size+(size*progress));
-                g.fillRect(x_current.intValue(), y_current.intValue(), 24, 24);
+                g.fillRect(x_current.intValue(), y_current.intValue(), troopSizeX, troopSizeY);
             }catch (NullPointerException e){
                 System.out.println("2fast4me");
             }
