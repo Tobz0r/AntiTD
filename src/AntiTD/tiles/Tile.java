@@ -57,7 +57,7 @@ public abstract class Tile implements TileRender {
             if (!(row+i <0 || row+i >= rows)) {
                 for (int j = -1; j < 2; j++) {
                     if (!(column+j < 0 || column+j >= columns)) {
-                        if(i != 0 || j != 0) {
+                        if(i != 0 && j != 0) {
                             neighbours.add(map[i+row][j+column]);
                         }
                     }
@@ -65,6 +65,13 @@ public abstract class Tile implements TileRender {
             }
         }
         return neighbours;
+        /*
+        rad -1 col 0
+        rad 1 col 0
+         rad 0 col -1
+         rad 0 col 1
+
+         */
     }
 
 
