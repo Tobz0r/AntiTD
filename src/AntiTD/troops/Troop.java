@@ -43,7 +43,7 @@ public abstract class Troop implements GameObject {
     public abstract void tick();
 
     protected void move() {
-        if (hasReacedGoal == false && this.isAlive()) {
+        if (!hasReacedGoal && isAlive()) {
             if (!this.isMoving) {
                 this.isMoving = true;
                 this.moveProgres = speed;
@@ -61,6 +61,9 @@ public abstract class Troop implements GameObject {
                     hasReacedGoal = true;
                 }
             }
+        }
+        if(hasReacedGoal || !isAlive()){
+            Handler.removeObject(this);
         }
     }
 
