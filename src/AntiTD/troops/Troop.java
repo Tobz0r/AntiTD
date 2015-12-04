@@ -61,7 +61,7 @@ public abstract class Troop implements GameObject {
                     hasReacedGoal = true;
                 }
             }
-        }
+        } 
         if(hasReacedGoal || !isAlive()){
             Handler.removeObject(this);
         }
