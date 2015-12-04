@@ -18,6 +18,7 @@ public class BasicTower extends Tower {
     private int range;
     private int price;
     private Position pos;
+    private Troop tr;
     private Troop target;
     private String type = "BasicTower";
     public BasicTower(ImageIcon img, Tile pos) {
@@ -29,14 +30,15 @@ public class BasicTower extends Tower {
         setPosition(pos.getPosition());
     }
     public void initScan() {
-      double distance = Integer.MAX_VALUE;
+      int distance = Integer.MAX_VALUE;
       for(Troop troop : troops){
       Troop nearUnit = null;
-      double dist = distance(troop);
+      int dist = distance(troop);
       if(dist <= getRange()) {
         inRange.push(troop);
           if (dist < distance) {
            nearUnit = troop;
+              setNearUnit(troop);
             distance = dist;
           }
         }
@@ -55,17 +57,22 @@ public class BasicTower extends Tower {
         }
       }
     }
-    public void createTower(Tower temp,Tile pos){
+    public void createTower(Tower tower,Tile pos){
       //Tower temp = new BasicTower(img,pos);
-      temp.init(troops, towers, pos);
-      towers.add(temp);
+      tower.init(troops, towers, pos);
+      towers.add(tower);
 
     }
     public void attack(Troop troop, int damage){
-      troop.attackThis(damage);
+        if(troop.isAlive()) {
+            troop.attackThis(damage);
+            if(!troop.isAlive()){
+                money++;
+            }
+        }
     }
-    public double distance(Troop troop) {
-      return Math.hypot(troop.getPosition().getX(), troop.getPosition().getY());
+    public int distance(Troop troop) {
+      return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
     }
     public boolean checkIfUnitIsClose(Troop troop){
     if(Math.hypot(troop.getPosition().getX() -getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()){
@@ -107,6 +114,17 @@ public class BasicTower extends Tower {
     public Position getPosition(){
       return pos;
     }
+
+    /*Test methods*/
+    public Troop getTarget(){
+        return target;
+    }
+    public void setNearUnit(Troop tr){
+        this.tr = tr;
+    }
+    public Troop getNearUnit(){
+        return tr;
+    }
     public void tick(){
 
 
@@ -119,6 +137,18 @@ public class BasicTower extends Tower {
 
     @Override
     public Tile getTilePosition() {
-        return null;
+        return this.getTilePosition();
     }
+
+    @Override
+    public Tile getMoveToPosition() {
+        return this.getTilePosition();
+    }
+
+    @Override
+    public int getMoveProgres() {
+        return 0;
+    }
+
+
 }

@@ -1,5 +1,7 @@
 package AntiTD;
 
+import AntiTD.tiles.Tile;
+
 import javax.print.attribute.standard.ReferenceUriSchemesSupported;
 import javax.sound.midi.SysexMessage;
 import java.awt.*;
@@ -48,11 +50,17 @@ public class Handler extends Thread {
     }
     public void render(Graphics g){
         for (int i = 0; i < objects.size(); i++) {
-            objects.get(i).render(g);
+            //objects.get(i).render(g);
             GameObject gameObject = objects.get(i);
             g.setColor(Color.blue);
-            int x = gameObject.getTilePosition().getPosition().getX();
-            int y = gameObject.getTilePosition().getPosition().getY();
+            int size = gameObject.getTilePosition().getSize();
+
+            Tile position = gameObject.getTilePosition();
+            Tile moveTo = gameObject.getMoveToPosition();
+            float progress = gameObject.getMoveProgres() / 100;
+
+            int x = Math.round(position.getPosition().getX()*size+(size*progress));
+            int y = Math.round(position.getPosition().getY()*size+(size*progress));
             g.fillRect((int)x, (int)y, 24, 24);
         }
     }
