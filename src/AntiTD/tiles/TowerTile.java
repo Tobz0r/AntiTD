@@ -12,7 +12,7 @@ public class TowerTile extends Tile {
         this(null);
     }
     public TowerTile(Position pos){
-        super(pos);
+        super(pos); 
         setBuildable(true);
         setMoveable(false);
     }
