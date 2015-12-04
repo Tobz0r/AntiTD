@@ -25,6 +25,7 @@ public class Environment extends JPanel implements Runnable {
     private Handler handler2;
     private  Executor runner= Executors.newFixedThreadPool(2);;
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
+    private ArrayList<Troop> troops = new ArrayList<>();
 
 
     private static boolean gameRunning;
@@ -201,6 +202,7 @@ public class Environment extends JPanel implements Runnable {
         return gameRunning;
     }
     public void addTroops(Troop troop){
+        troops.add(troop);
         handler.addObject(troop);
     }
     public void addTower(Tower tower){ handler.addObject(tower);}
@@ -215,6 +217,9 @@ public class Environment extends JPanel implements Runnable {
 
             }
         }
+    }
+    public ArrayList<Troop> getTroops(){
+        return troops;
     }
     public Tile getBuildAbleTile(int i){
         return buildableTiles.get(i);

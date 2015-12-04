@@ -22,9 +22,9 @@ public class BasicTower extends Tower {
     private Troop tr;
     private Troop target;
     private String type = "BasicTower";
-    public BasicTower(ImageIcon img, Tile pos) {
+    public BasicTower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
 
-        super(img, pos);
+        super(img, pos, troops);
         setDamage(5);
         setRange(5);
         setPrice(1);
@@ -51,9 +51,12 @@ public class BasicTower extends Tower {
     }
     public void aggroTarget(){
       if(target != null){
-        if(checkIfUnitIsClose(target) && target.isAlive()){
+          //System.out.println("jao");
+        if(checkIfUnitIsClose(target) && target.isAlive() == true){
+
           attack(target,getDamage());
         }else{
+            //System.out.println("else");
           target = null;
           inRange.clear();
         }
@@ -84,8 +87,11 @@ public class BasicTower extends Tower {
     }
     public void startShooting(){
       if(target != null){
+          //System.out.println(target.isAlive());
+          //System.out.println(target.type());
         aggroTarget();
       }else{
+          //System.out.println("target null");
         initScan();
       }
     }
@@ -127,9 +133,9 @@ public class BasicTower extends Tower {
     public Troop getNearUnit(){
         return tr;
     }
+    @Override
     public void tick(){
-
-
+        this.startShooting();
     }
 
     @Override
