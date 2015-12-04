@@ -51,12 +51,14 @@ public abstract class Tile implements TileRender {
         Tile[][] map=Level.getCurrentMap();
         int row=getPosition().getX();
         int column=getPosition().getY();
+        int rows=map.length;
+        int columns=map[0].length;
         for(int i = -1; i < 2; i++) {
-            if (!(row+i <0 || row+i >= map.length)) {
+            if (!(row+i <0 || row+i >= rows)) {
                 for (int j = -1; j < 2; j++) {
-                    if (!(column+j < 0 || column+j >= map[i].length)) {
+                    if (!(column+j < 0 || column+j >= columns)) {
                         if(i != 0 || j != 0) {
-                            neighbours.add(map[i][j]);
+                            neighbours.add(map[i+row][j+column]);
                         }
                     }
                 }
