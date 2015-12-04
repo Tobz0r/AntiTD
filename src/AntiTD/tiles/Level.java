@@ -24,7 +24,17 @@ public class Level {
         this.name=name;
     }
     public  void addMap(Tile[][] map){
+        //First setUp crossroads
         this.map=map;
+    }
+    public void setUpCrossroad(){
+        for(int i=0;i < map.length; i++){
+            for(int j=0; j < map[i].length;j++){
+                if(map[i][j] instanceof CrossroadTile){
+                    ((CrossroadTile)map[i][j]).findNextWay();
+                }
+            }
+        }
     }
     public  Tile[][] getMap(){
         return map;

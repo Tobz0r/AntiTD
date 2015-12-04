@@ -15,17 +15,18 @@ public abstract class Troop implements GameObject {
 
     protected int health;
     protected int score;
-    protected int speed;
+    protected double speed;
     private Image img;
     private Stack<Tile> history;
     private Tile nextTile;
-    private int moveProgres;
+    private double moveProgres;
     private boolean hasReacedGoal;
     private boolean isMoving;
 
 
     private float velX;
     private float velY;
+
 
     protected Troop(Tile pos) {
         this(null, pos);
@@ -35,6 +36,7 @@ public abstract class Troop implements GameObject {
         this.img = img;
         this.history = new Stack<Tile>();
         this.history.push(pos);
+
     }
 
     @Override
@@ -69,7 +71,8 @@ public abstract class Troop implements GameObject {
 
     @Override
     public int getMoveProgres() {
-        return this.moveProgres;
+        Long p = Math.round(this.moveProgres);
+        return p.intValue();
     }
 
     private Tile getNextTile() {

@@ -50,6 +50,8 @@ public class Environment extends JPanel implements Runnable {
         setUpNeighbors();
 
         Level.setCurrentMap(map);
+        level.setUpCrossroad();
+
         setLayout(new GridLayout(1, 1));
         setPreferredSize(new Dimension(map.length * 48, map[0].length * 48));
 
@@ -61,7 +63,7 @@ public class Environment extends JPanel implements Runnable {
                 ArrayList<Tile> neighbors = new ArrayList<Tile>(8);
                 for (int row = -1; row <= 1; row++) {
                     for (int col = -1; col <= 1; col++) {
-                        if ( ! ((row == 0) && (col == 0)) ) {
+                        if ( row+col == -1 || row+col == 1 ) {
                             try {
                                 neighbors.add(map[y-row][x-col]);
                             } catch (IndexOutOfBoundsException e) {
@@ -135,7 +137,6 @@ public class Environment extends JPanel implements Runnable {
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
-                    //System.out.println("tick");
                     handler.tick();
                     repaint();
                 }

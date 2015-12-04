@@ -53,19 +53,29 @@ public class Handler extends Thread {
             //objects.get(i).render(g);
             GameObject gameObject = objects.get(i);
             if(gameObject.type().equals("Troop")) {
-                System.out.println("I troops");
                 g.setColor(Color.blue);
                 int size = gameObject.getTilePosition().getSize();
-
-                Tile position = gameObject.getTilePosition();
+    
+                Position position = gameObject.getTilePosition().getPosition();
+                double x_start = (position.getX()*size)*1.0;
+                double y_start = (position.getY()*size)*1.0;
+    
                 Tile moveTo = gameObject.getMoveToPosition();
-                float progress = gameObject.getMoveProgres() / 100;
-
-                int x = Math.round(position.getPosition().getX() * size + (size * progress));
-                int y = Math.round(position.getPosition().getY() * size + (size * progress));
-                g.fillRect((int) x, (int) y, 24, 24);
-            }
-            if(gameObject.type().equals("Tower")){
+                double x_to = (moveTo.getPosition().getX()*size)*1.0;
+                double y_to = (moveTo.getPosition().getY()*size)*1.0;
+    
+                Double progress = (gameObject.getMoveProgres()*1.0) / 100.0;
+                double x_global = x_start - x_to;
+                double y_global = y_start - y_to;
+    
+                Long x_current = Math.round(x_start - (x_global * progress.doubleValue()) );
+                Long y_current = Math.round(y_start - (y_global * progress.doubleValue()) );
+    
+                //int x = Math.round(position.getX()*size+(size*progress));
+                //int y = Math.round(position.getY()*size+(size*progress));
+                g.fillRect(x_current.intValue(), y_current.intValue(), 24, 24);
+        
+            } else if(gameObject.type().equals("Tower")){
                 g.setColor(Color.red);
                 int size = gameObject.getTilePosition().getSize();
 
@@ -75,5 +85,6 @@ public class Handler extends Thread {
             }
         }
     }
+   
 
 }
