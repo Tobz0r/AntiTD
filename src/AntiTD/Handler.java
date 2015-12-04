@@ -14,18 +14,15 @@ import java.util.concurrent.Semaphore;
  */
 public class Handler extends Thread {
     private static LinkedList<GameObject> objects;
-    private final static Object lockObject=new Object();
-    final static Object notifier=new Object();
     private int tid;
     private Thread thread;
-
-    private static Environment env;
-
 
 
     public Handler(int tid){
         this.tid=tid;
         objects=new LinkedList<>();
+        thread=new Thread(this);
+        thread.start();
     }
 
 
@@ -50,7 +47,6 @@ public class Handler extends Thread {
     }
     public void render(Graphics g){
         for (int i = 0; i < objects.size(); i++) {
-            //objects.get(i).render(g);
             try {
                 GameObject gameObject = objects.get(i);
                 g.setColor(Color.blue);
@@ -77,7 +73,7 @@ public class Handler extends Thread {
                 //int y = Math.round(position.getY()*size+(size*progress));
                 g.fillRect(x_current.intValue(), y_current.intValue(), troopSizeX, troopSizeY);
             }catch (NullPointerException e){
-                System.out.println("plz slow down..");
+               System.out.println("plz slow down..");
             }
         }
     }

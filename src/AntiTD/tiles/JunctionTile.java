@@ -20,6 +20,6 @@ public class JunctionTile extends Tile {
     }
     @Override
     public void landOn(Graphics g) {
-        g.setColor(Color.red);
+        g.setColor(Color.orange);
     }
 }

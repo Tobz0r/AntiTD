@@ -61,7 +61,7 @@ public abstract class Troop implements GameObject {
                     hasReacedGoal = true;
                 }
             }
-        } 
+        }
         if(hasReacedGoal || !isAlive()){
             Handler.removeObject(this);
         }
@@ -90,9 +90,9 @@ public abstract class Troop implements GameObject {
                 }
             }
         }
-        if (nextTile.isTeleporter()) {
+      /*  if (nextTile.isTeleporter()) {
             nextTile = nextTile.getTeleportTo();
-        }
+        }*/
         return nextTile;
     }
 

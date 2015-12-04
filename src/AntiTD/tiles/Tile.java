@@ -24,6 +24,7 @@ public abstract class Tile implements TileRender {
 
     public Tile(Position pos) {
         this.position = pos;
+        isTeleportStart=false;
     }
     public void setBuildable(boolean buildable) {
         this.buildable = buildable;

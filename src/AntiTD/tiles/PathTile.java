@@ -23,6 +23,8 @@ public class PathTile extends Tile {
     @Override
     public void landOn(Graphics g) {
         g.setColor(Color.orange);
-        g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),(int)(getPosition().getY()*(getSize().getHeight())),(int)getSize().getWidth(),(int)getSize().getHeight());
-    }
+        g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),
+                (int)(getPosition().getY()*(getSize().getHeight())),
+                (int)getSize().getWidth(),
+                (int)getSize().getHeight());    }
 }

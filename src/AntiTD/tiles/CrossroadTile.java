@@ -25,14 +25,18 @@ public class CrossroadTile extends Tile {
     @Override
     public void landOn(Graphics g) {
         g.setColor(Color.red);
-        g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),(int)(getPosition().getY()*(getSize().getHeight())),(int)getSize().getWidth(),(int)getSize().getHeight());
-    }
-    public void findNextWay(){
-        ArrayList<Tile>neighbors=getNeighbors();
+        g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),
+                (int)(getPosition().getY()*(getSize().getHeight())),
+                (int)getSize().getWidth(),
+                (int)getSize().getHeight());    }
+    public Tile[] findNextWay(){
+        Tile[] neighbors = getNeighbors2();
         for(Tile tile: neighbors){
-            if((tile.isMoveable()) && !(tile instanceof JunctionTile)){
+            if(!(tile instanceof JunctionTile)){
                 nextTiles.add(tile);
+                System.out.println("Jaoja");
             }
         }
+        return neighbors;
     }
 }
