@@ -46,8 +46,9 @@ public class Environment extends JPanel implements Runnable {
         level=levels.get(mapNr);
         map=level.getMap();
         setUpNeighbors();
-
         Level.setCurrentMap(map);
+        level.setUpCrossroad();
+
         setLayout(new GridLayout(1, 1));
         setPreferredSize(new Dimension(map.length * 48, map[0].length * 48));
 
@@ -167,10 +168,7 @@ public class Environment extends JPanel implements Runnable {
 //            /*
 //            while(delta >= 1 && !isPaused()) {
 //
-//                runner.execute(new Runnable() {
-//                    public void run() {
-//                        handler.tick();
-//                    }
+//
 //                });
 //                delta--;
 //            }

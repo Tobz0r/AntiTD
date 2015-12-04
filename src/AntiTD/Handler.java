@@ -61,6 +61,7 @@ public class Handler extends Thread {
 
             int x = Math.round(position.getPosition().getX()*size+(size*progress));
             int y = Math.round(position.getPosition().getY()*size+(size*progress));
+            System.out.println(x+" "+y);
             g.fillRect((int)x, (int)y, 24, 24);
         }
     }

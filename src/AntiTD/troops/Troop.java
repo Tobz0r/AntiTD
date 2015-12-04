@@ -27,6 +27,7 @@ public abstract class Troop implements GameObject {
     private float velX;
     private float velY;
 
+
     protected Troop(Tile pos) {
         this(null, pos);
     }
@@ -35,6 +36,7 @@ public abstract class Troop implements GameObject {
         this.img = img;
         this.history = new Stack<Tile>();
         this.history.push(pos);
+
     }
 
     @Override

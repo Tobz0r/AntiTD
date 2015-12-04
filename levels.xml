@@ -55,7 +55,7 @@
         <row>
             <tile>StartTile</tile>
             <tile>PathTile</tile>
-            <tile>PathTile</tile>
+            <tile>JunctionTile</tile>
             <tile>CrossroadTile</tile>
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
