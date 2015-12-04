@@ -60,8 +60,12 @@ public class Environment extends JPanel implements Runnable {
                 ArrayList<Tile> neighbors = new ArrayList<Tile>(8);
                 for (int row = -1; row <= 1; row++) {
                     for (int col = -1; col <= 1; col++) {
-                        if ( ! ((row == 0) && (col == 0)) ) {
+                        if ( row+col == -1 || row+col == 1 ) {
                             try {
+                                //neighbors.add(map[y-1][x-0]);
+                                //neighbors.add(map[y-0][x-1]);
+                                //neighbors.add(map[y-0][x+1]);
+                                //neighbors.add(map[y+1][x-0]);
                                 neighbors.add(map[y-row][x-col]);
                             } catch (IndexOutOfBoundsException e) {
 
