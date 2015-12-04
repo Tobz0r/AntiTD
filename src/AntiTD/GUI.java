@@ -7,6 +7,7 @@ import javax.swing.border.Border;
 import AntiTD.*;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
+import AntiTD.towers.BasicTower;
 import AntiTD.troops.BasicTroop;
 
 import java.awt.*;
@@ -21,6 +22,8 @@ import java.util.Observer;
  * @author dv13trm
  */
 public class GUI  {
+
+    ImageIcon img = new ImageIcon("/home/id12/id12rdt/basictower.png");
     private Menu menu;
     private Thread gameThread;
     private Environment env;
@@ -100,14 +103,30 @@ public class GUI  {
                 env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-        //teleport troop button
+        //Testar torn
         buyTeleport = new JButton("Teleport Troop");
         buyTeleport.setBackground(Color.white);
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
-                env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
+                Tile pos;
+                Tile[][] currentMap= Level.getCurrentMap();
+                for(int i = 0; i < currentMap.length; i++){
+                    for(int j = 0; j <currentMap[i].length; j++){
+                        if(currentMap[i][j].isBuildable()){
+                            //pos = currentMap[i][j];
+                            env.addTower(new BasicTower(img, currentMap[i][j]));
+                            System.out.println("Hola");
+                            currentMap[i][j].setBuildable(false);
+                        }
+
+                    }
+                }
+                /*env.saveBuildableTilese();
+                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
+                //env.addTower(new BasicTower(currentMap[env.getLevel().]);
+                //env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
             }
         });
 

@@ -18,6 +18,7 @@ public class BasicTower extends Tower {
     private int range;
     private int price;
     private Position pos;
+    private Tile posTile;
     private Troop tr;
     private Troop target;
     private String type = "BasicTower";
@@ -28,6 +29,7 @@ public class BasicTower extends Tower {
         setRange(5);
         setPrice(1);
         setPosition(pos.getPosition());
+        this.posTile = pos;
     }
     public void initScan() {
       int distance = Integer.MAX_VALUE;
@@ -135,14 +137,11 @@ public class BasicTower extends Tower {
 
     }
 
-    @Override
-    public Tile getTilePosition() {
-        return this.getTilePosition();
-    }
+
 
     @Override
     public Tile getMoveToPosition() {
-        return this.getTilePosition();
+        return this.posTile;
     }
 
     @Override

@@ -2,6 +2,7 @@ package AntiTD;
 
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
+import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ public class Environment extends JPanel implements Runnable {
     private Handler handler;
     private Handler handler2;
     private  Executor runner= Executors.newFixedThreadPool(2);;
+    private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
 
 
     private static boolean gameRunning;
@@ -133,7 +135,7 @@ public class Environment extends JPanel implements Runnable {
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
-                    System.out.println("tick");
+                    //System.out.println("tick");
                     handler.tick();
                     repaint();
                 }
@@ -186,6 +188,22 @@ public class Environment extends JPanel implements Runnable {
     }
     public void addTroops(Troop troop){
         handler.addObject(troop);
+    }
+    public void addTower(Tower tower){ handler.addObject(tower);}
+    public void saveBuildableTilese(){
+        Tile pos;
+        for(int i = 0; i < map.length; i++){
+            for(int j = 0; j <map[i].length; j++){
+                if(map[i][j].isBuildable()){
+                    pos = map[i][j];
+                    buildableTiles.add(pos);
+                }
+
+            }
+        }
+    }
+    public Tile getBuildAbleTile(int i){
+        return buildableTiles.get(i);
     }
     public static void pauseGame(){
         paused=true;

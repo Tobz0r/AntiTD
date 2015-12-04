@@ -52,16 +52,27 @@ public class Handler extends Thread {
         for (int i = 0; i < objects.size(); i++) {
             //objects.get(i).render(g);
             GameObject gameObject = objects.get(i);
-            g.setColor(Color.blue);
-            int size = gameObject.getTilePosition().getSize();
+            if(gameObject.type().equals("Troop")) {
+                System.out.println("I troops");
+                g.setColor(Color.blue);
+                int size = gameObject.getTilePosition().getSize();
 
-            Tile position = gameObject.getTilePosition();
-            Tile moveTo = gameObject.getMoveToPosition();
-            float progress = gameObject.getMoveProgres() / 100;
+                Tile position = gameObject.getTilePosition();
+                Tile moveTo = gameObject.getMoveToPosition();
+                float progress = gameObject.getMoveProgres() / 100;
 
-            int x = Math.round(position.getPosition().getX()*size+(size*progress));
-            int y = Math.round(position.getPosition().getY()*size+(size*progress));
-            g.fillRect((int)x, (int)y, 24, 24);
+                int x = Math.round(position.getPosition().getX() * size + (size * progress));
+                int y = Math.round(position.getPosition().getY() * size + (size * progress));
+                g.fillRect((int) x, (int) y, 24, 24);
+            }
+            if(gameObject.type().equals("Tower")){
+                g.setColor(Color.red);
+                int size = gameObject.getTilePosition().getSize();
+
+                int x = gameObject.getPosition().getX()*size;
+                int y = gameObject.getPosition().getY()*size;
+                g.fillRect((int) x, (int) y, 24,24);
+            }
         }
     }
 

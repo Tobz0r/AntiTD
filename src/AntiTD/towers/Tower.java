@@ -28,11 +28,13 @@ public abstract class Tower implements GameObject {
     private int damage;
     private int price;
     private Tower iniTower;
+    private Tile posTile;
 
     public Tower(ImageIcon img, Tile pos) {
         this.img = img;
         this.money = 0;
         this.pos = pos;
+        this.posTile = pos;
     }
     /*public Tower(ArrayList<Troop> troops){
         this.troops = troops;
@@ -165,4 +167,11 @@ public abstract class Tower implements GameObject {
     public int getTowersLength(){
     return towers.size();
   }
+    public String type(){
+        return "Tower";
+    }
+    @Override
+    public Tile getTilePosition() {
+        return this.posTile;
+    }
 }
