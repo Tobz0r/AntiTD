@@ -203,6 +203,7 @@ public class Environment extends JPanel implements Runnable {
     }
     public void addTroops(Troop troop){
         troops.add(troop);
+        handler.addTroop(troops);
         handler.addObject(troop);
     }
     public void addTower(Tower tower){ handler.addObject(tower);}

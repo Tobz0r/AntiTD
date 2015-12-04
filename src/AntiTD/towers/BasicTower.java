@@ -7,8 +7,8 @@ import AntiTD.troops.Troop;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.*;
+import java.util.Timer;
 
 /**
  * Created by dv13tes on 2015-11-27.
@@ -22,10 +22,17 @@ public class BasicTower extends Tower {
     private Troop tr;
     private Troop target;
     private String type = "BasicTower";
+    private int result;
+    int bullets;
     public BasicTower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
 
+
         super(img, pos, troops);
-        setDamage(5);
+      Random r = new Random();
+      int low = 0;
+      int High = 5;
+      result = r.nextInt(High-low)+low;
+        setDamage(1);
         setRange(5);
         setPrice(1);
         setPosition(pos.getPosition());
@@ -33,30 +40,35 @@ public class BasicTower extends Tower {
     }
     public void initScan() {
       int distance = Integer.MAX_VALUE;
+      //System.out.println("initscan");
       for(Troop troop : troops){
       Troop nearUnit = null;
       int dist = distance(troop);
       if(dist <= getRange()) {
         inRange.push(troop);
+
           if (dist < distance) {
            nearUnit = troop;
-              setNearUnit(troop);
+            setNearUnit(troop);
             distance = dist;
+            //removeTroopFromList(troop);
           }
         }
         if(nearUnit !=null){
          target = nearUnit;
+         // System.out.println("target gets value");
         }
       }
     }
     public void aggroTarget(){
       if(target != null){
-          //System.out.println("jao");
-        if(checkIfUnitIsClose(target) && target.isAlive() == true){
 
+        if(checkIfUnitIsClose(target) && target.isAlive() == true){
+          //System.out.println("jao");
           attack(target,getDamage());
         }else{
             //System.out.println("else");
+          removeTroopFromList(target);
           target = null;
           inRange.clear();
         }
@@ -71,7 +83,7 @@ public class BasicTower extends Tower {
     public void attack(Troop troop, int damage){
         if(troop.isAlive()) {
             troop.attackThis(damage);
-            if(!troop.isAlive()){
+           if(!troop.isAlive()){
                 money++;
             }
         }
@@ -86,14 +98,19 @@ public class BasicTower extends Tower {
       return false;
     }
     public void startShooting(){
-      if(target != null){
+      int bullets = 5;
+
+        if (target != null) {
           //System.out.println(target.isAlive());
           //System.out.println(target.type());
-        aggroTarget();
-      }else{
+          aggroTarget();
+        } else {
           //System.out.println("target null");
-        initScan();
-      }
+          initScan();
+        }
+
+
+
     }
     public String getTowerType(){
       return type;
@@ -134,8 +151,20 @@ public class BasicTower extends Tower {
         return tr;
     }
     @Override
-    public void tick(){
-        this.startShooting();
+    public void tick() {
+
+      if (this.getTroopFromList()){
+          if (target != null) {
+            //System.out.println("Target not null");
+            this.aggroTarget();
+          } else {
+       //   System.out.println("Target null");
+            this.initScan();
+          }
+
+      }
+     //System.out.println(result);
+
     }
 
     @Override

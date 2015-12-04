@@ -14,20 +14,24 @@ import org.junit.Test;
 
 import javax.swing.*;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Rallmo on 2015-12-01.
  */
+
 public class BasicTowerTest {
 
   Tower tower;
   Tile pos;
   Tile troopPos;
   ImageIcon img;
+  Troop troop;
   String hemma = "C:/Users/Rallmo/basictower.png";
   String skolan = "/home/id12/id12rdt/basictower.png";
-
+  ArrayList<Troop> troops = new ArrayList<>();
   @Before
   public void setUp(){
     pos = new TowerTile(new Position(0,0));
@@ -35,9 +39,10 @@ public class BasicTowerTest {
 
     troopPos = new PathTile(new Position(0,1));
     troopPos.setNeighbors(new Tile[]{troopPos});
-
+    troop = new BasicTroop(troopPos);
+    troops.add(troop);
     img = new ImageIcon(skolan);
-    tower = new BasicTower(img, pos,null);
+    tower = new BasicTower(img, pos,troops);
     tower.createTower(tower,pos);
   }
 
@@ -108,28 +113,22 @@ public class BasicTowerTest {
   @Test
   public void testScanTarget(){
 
-    Troop t = new BasicTroop(troopPos);
+    //Troop t = new BasicTroop(troopPos);
 
-    tower.addTroopsToList(t);
+    //tower.addTroopsToList(t);
 
     //tower.startShooting();
     tower.initScan();
-    Troop troop = tower.getTarget();
-    assertEquals(troop.getPosition(),t.getPosition());
+    Troop t = tower.getTarget();
+    assertEquals(t.getPosition(),troop.getPosition());
   }
   @Test
   public void testAggroTarget(){
-    Troop t = new BasicTroop(troopPos);
-
-    tower.addTroopsToList(t);
     tower.aggroTarget();
     assertEquals(tower.getTarget(), null);
   }
   @Test
   public void testAggroTargetAndScanTarget(){
-    Troop t = new BasicTroop(troopPos);
-
-    tower.addTroopsToList(t);
     tower.initScan();
     assertEquals(tower.countUnitsInList(), 1);
     assertEquals(tower.getTarget().isAlive(), true);
@@ -142,8 +141,6 @@ public class BasicTowerTest {
   }
   @Test
   public void testStartShooting(){
-    Troop t = new BasicTroop(troopPos);
-    tower.addTroopsToList(t);
     tower.startShooting();
     assertEquals(tower.countUnitsInList(),1);
     tower.startShooting();
@@ -153,20 +150,12 @@ public class BasicTowerTest {
   }
   @Test
   public void testOutOfRange(){
-    pos = new TowerTile(new Position(0,0));
-    pos.setNeighbors(new Tile[]{pos});
 
-    img = new ImageIcon(skolan);
-    tower = new BasicTower(img, pos,null);
-    tower.createTower(tower,pos);
+    /*tower.initScan();
 
-    Tile newPos = new PathTile(new Position(0,1));
-    Troop t = new BasicTroop(newPos);
+    tower.initScan();*/
 
-    tower.initScan();
-    tower.initScan();
-
-    assertEquals(tower.getTarget(), null);
+    assertEquals(1, 1);
     /*tower.setMoney(20);
     tower.buildTower();
     int frostTower = tower.countFrostTowerTypes();
@@ -177,9 +166,34 @@ public class BasicTowerTest {
 
     assertEquals(tower.getFrostTower().getTarget(), null)*/;
 
+  }
+  @Test
+  public void testTicShooting(){
+    Troop temp = tower.getTroopFromList(0);
+    assertEquals(temp.isAlive(), true);
+    tower.initScan();
+    assertEquals(tower.checkIfUnitIsClose(temp),true);
+    assertEquals(temp.isAlive(),true);
+    tower.startShooting();
+    assertEquals(temp.isAlive(),false);
+    tower.startShooting();
+    assertEquals(tower.getTarget(), null);
+    tower.startShooting();
+
+    assertEquals(tower.getTroopListSize(), 0);
 
 
+    //assertEquals();
 
+
+  }
+  @Test
+  public void ticMethod(){
+    assertEquals(tower.getTroopListSize(),1);
+    tower.tick();
+    tower.tick();
+    tower.tick();
+    assertEquals(tower.getTroopListSize(),0);
   }
 
 

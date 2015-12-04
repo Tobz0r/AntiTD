@@ -6,10 +6,7 @@ import AntiTD.troops.Troop;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Stack;
 import java.util.LinkedList;
 
 /**
@@ -102,6 +99,9 @@ public abstract class Tower implements GameObject {
     public void addTowerToList(Tower towers){
       this.towers.add(towers);
     }
+    public void removeTroopFromList(Troop troop){
+      troops.remove(troop);
+    }
 
     public void setMoney(int money){
         this.money = money;
@@ -153,9 +153,9 @@ public abstract class Tower implements GameObject {
       }
       return BasicTower;
    }
-    public void addTroopsToList(Troop troop){
+   /* public void addTroopsToList(Troop troop){
         troops.add(troop);
-    }
+    }*/
     public boolean getHpFromtroop(){
         for(Troop t : troops){
             if(checkIfUnitIsClose(t)){
@@ -167,8 +167,31 @@ public abstract class Tower implements GameObject {
     }
     public void setTroopsToList(ArrayList<Troop> troops){
         this.troops = troops;
-
     }
+  public int getTroopListSize(){
+    return troops.size();
+  }
+  public Troop getTroopFromList(int i){
+    return troops.get(i);
+  }
+  public boolean getTroopFromList(){
+    if(troops != null) {
+      try {
+        if(!troops.isEmpty()) {
+          for (Troop troop : troops) {
+
+            return checkIfUnitIsClose(troop);
+          }
+        }
+
+      }catch (java.util.NoSuchElementException e){
+          System.out.println(e.getMessage());
+
+      }
+    }
+    return false;
+  }
+
     public boolean getTowers(){
      return towers.isEmpty();
     }

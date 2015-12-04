@@ -73,7 +73,7 @@ public class GUI  {
     }
 
     public void startGame() {
-        runMusic();
+        //runMusic();
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -176,12 +176,12 @@ public class GUI  {
             public void actionPerformed(ActionEvent actionEvent) {
 
                 getName();
-                startGame(); 
+                startGame();
             }
         });
 
     }
-    public void runMusic()  {
+    /*public void runMusic()  {
         gameSound = "cello.wav";
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
@@ -193,7 +193,7 @@ public class GUI  {
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
-    }
+    }*/
     public void pauseMusic(){
         clipTime = clip.getMicrosecondPosition();
         clip.stop();
