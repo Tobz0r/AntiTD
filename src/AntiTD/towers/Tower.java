@@ -20,9 +20,9 @@ public abstract class Tower implements GameObject {
     private ImageIcon img;
     private Image imge;
 
-    protected ArrayList<Troop> troops;
+    protected ArrayList<Troop> troops = new ArrayList();
     private Troop target;
-    protected LinkedList<Troop> inRange;
+    protected LinkedList<Troop> inRange = new LinkedList();
     protected ArrayList<Tower> towers = new ArrayList();
     private int range;
     private int damage;
@@ -83,7 +83,7 @@ public abstract class Tower implements GameObject {
     public abstract void startShooting();
     public abstract void aggroTarget();
     public abstract void initScan();
-    public abstract double distance(Troop troop);
+    public abstract int distance(Troop troop);
     public abstract void attack(Troop troop, int damage);
     public abstract boolean checkIfUnitIsClose(Troop troop);
     public abstract String getTowerType();
@@ -113,7 +113,21 @@ public abstract class Tower implements GameObject {
     /*
     * Method for test
     * */
-    public int countFrostTowerTypes(){
+    public abstract Troop getTarget();
+    public Tower getFrostTower(){
+        for(Tower tower: towers){
+            if(tower.getTowerType().equals("FrostTower")){
+                return tower;
+            }
+        }
+        return null;
+    }
+    public abstract Troop getNearUnit();
+    public int countUnitsInList(){
+        return inRange.size();
+    }
+
+     public int countFrostTowerTypes(){
       int frostTower = 0;
       for(Tower tower : towers){
 
@@ -133,6 +147,18 @@ public abstract class Tower implements GameObject {
       }
       return BasicTower;
    }
+    public void addTroopsToList(Troop troop){
+        troops.add(troop);
+    }
+    public boolean getHpFromtroop(){
+        for(Troop t : troops){
+            if(checkIfUnitIsClose(t)){
+                return t.isAlive();
+            }
+        }
+        return false;
+
+    }
     public boolean getTowers(){
      return towers.isEmpty();
     }

@@ -15,6 +15,7 @@ public class FrostTower extends Tower{
     private int damage;
     private int range;
     private int price;
+    private Troop tr;
     private Troop target;
     private Position pos;
     private String type = "FrostTower";
@@ -28,15 +29,16 @@ public class FrostTower extends Tower{
       setPosition(pos.getPosition());
     }
     public void initScan() {
-      double distance = Integer.MAX_VALUE;
+      int distance = Integer.MAX_VALUE;
       for(Troop troop : troops){
 
         Troop nearUnit = null;
-        double dist = distance(troop);
+        int dist = distance(troop);
         if(dist <= getRange()) {
           inRange.push(troop);
           if (dist < distance) {
             nearUnit = troop;
+              setNearUnit(troop);
             distance = dist;
         }
       }
@@ -59,6 +61,7 @@ public class FrostTower extends Tower{
       //Tower temp = new FrostTower(img,pos);
       tower.init(troops, towers, pos);
       towers.add(tower);
+
     }
     public void startShooting(){
       if(target != null){
@@ -68,10 +71,15 @@ public class FrostTower extends Tower{
       }
     }
     public void attack(Troop troop, int damage){
-     troop.attackThis(damage);
+        if(troop.isAlive()) {
+            troop.attackThis(damage);
+            if(!troop.isAlive()){
+                money++;
+            }
+        }
    }
-    public double distance(Troop troop) {
-      return Math.hypot(troop.getPosition().getX(), troop.getPosition().getY());
+    public int distance(Troop troop) {
+      return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
     }
     public boolean checkIfUnitIsClose(Troop troop){
       if(Math.hypot(troop.getPosition().getX() -getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()){
@@ -108,6 +116,16 @@ public class FrostTower extends Tower{
     }
     public void tick(){
 
+    }
+    /*test method*/
+    public Troop getTarget(){
+        return target;
+    }
+    public void setNearUnit(Troop tr){
+        this.tr = tr;
+    }
+    public Troop getNearUnit(){
+        return tr;
     }
 
 

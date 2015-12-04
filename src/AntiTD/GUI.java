@@ -68,7 +68,6 @@ public class GUI  {
     }
 
     public void startGame() {
-        menu.setNewGame("Restart");
         runMusic();
         frame.remove(startPanel);
         frame.setSize(800, 600);
@@ -136,7 +135,7 @@ public class GUI  {
 
         player.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        startPanel = new JPanel();
+        startPanel = new JPanel(); 
         startPanel.setBackground(Color.white);
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
@@ -144,12 +143,12 @@ public class GUI  {
         startPanel.add(enterName, FlowLayout.LEFT);
         frame.add(startPanel);
         frame.setVisible(true);
-
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
                 getName();
-                startGame();
+                startGame(); 
             }
         });
 
