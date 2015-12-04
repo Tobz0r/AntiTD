@@ -57,10 +57,10 @@ public class BasicTower extends Tower {
         }
       }
     }
-    public void createTower(Tower temp,Tile pos){
+    public void createTower(Tower tower,Tile pos){
       //Tower temp = new BasicTower(img,pos);
-      temp.init(troops, towers, pos);
-      towers.add(temp);
+      tower.init(troops, towers, pos);
+      towers.add(tower);
 
     }
     public void attack(Troop troop, int damage){

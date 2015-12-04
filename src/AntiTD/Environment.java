@@ -4,9 +4,12 @@ import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -23,7 +26,6 @@ public class Environment extends JPanel implements Runnable {
     private Handler handler;
     private Handler handler2;
     private  Executor runner= Executors.newFixedThreadPool(2);;
-
 
     private static boolean gameRunning;
     private static  boolean paused;
@@ -91,6 +93,7 @@ public class Environment extends JPanel implements Runnable {
         handler.render(g);
 
     }
+
     public void run() {
         long lastTime = System.nanoTime();
         double amountOfTicks = 30.0;
