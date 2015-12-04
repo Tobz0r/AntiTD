@@ -9,7 +9,7 @@ import java.awt.*;
  */
 public class BasicTroop extends Troop {
 
-    private final int SPEED = 1;
+    private final double SPEED = 1;
     private final int MAX_HEALTH = 1;
     private final int KILL_DEATH_SCORE = 10;
 
