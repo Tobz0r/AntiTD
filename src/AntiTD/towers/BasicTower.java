@@ -63,12 +63,14 @@ public class BasicTower extends Tower {
     public void aggroTarget(){
       if(target != null){
 
-        if(checkIfUnitIsClose(target) && target.isAlive() == true){
+        if(checkIfUnitIsClose(target) &&  target.isAlive() == true){
           //System.out.println("jao");
           attack(target,getDamage());
         }else{
             //System.out.println("else");
-          removeTroopFromList(target);
+            if(!target.isAlive()) {
+                removeTroopFromList(target);
+            }
           target = null;
           inRange.clear();
         }
@@ -104,7 +106,7 @@ public class BasicTower extends Tower {
           //System.out.println(target.isAlive());
           //System.out.println(target.type());
           aggroTarget();
-        } else {
+        } else if(target == null){
           //System.out.println("target null");
           initScan();
         }
@@ -155,7 +157,7 @@ public class BasicTower extends Tower {
 
       if (this.getTroopFromList()){
           if (target != null) {
-            //System.out.println("Target not null");
+            System.out.println("Target not null");
             this.aggroTarget();
           } else {
        //   System.out.println("Target null");

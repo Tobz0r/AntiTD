@@ -1,0 +1,25 @@
+<map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="32" tileheight="32">
+    <tileset firstgid="1" name="grass-tiles-2-small" tilewidth="32" tileheight="32">
+        <image source="grass-tiles-2-small.png" width="384" height="192"/>
+    </tileset>
+    <tileset firstgid="73" name="tree2-final" tilewidth="32" tileheight="32">
+        <image source="tree2-final.png" width="256" height="256"/>
+    </tileset>
+    <layer name="Background" width="20" height="20">
+        <data>
+            <tile gid="13"/>
+            <tile gid="2"/>
+            <tile gid="1"/>
+            ...
+        </data>
+    </layer>
+    <layer name="Top" width="20" height="20">
+        <data>
+            <tile gid="0"/>
+            ...
+        </data>
+    </layer>
+    <objectgroup name="Collision" width="20" height="20">
+        <object x="287" y="354" width="127" height="60"/>
+    </objectgroup>
+</map>
