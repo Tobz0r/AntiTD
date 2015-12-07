@@ -84,12 +84,13 @@ public abstract class Tile implements TileRender {
     }
     public void setTeleportTo(Tile tile){
         this.teleportEnd=tile;
+        isTeleportStart = true;
     }
     public Tile getTeleportTo(){
         return teleportEnd;
     }
     public boolean isTeleporter(){
-        return isTeleportStart;
+        return this.isTeleportStart;
     }
 
     public void setNeighbors(Tile[] neighbors) {

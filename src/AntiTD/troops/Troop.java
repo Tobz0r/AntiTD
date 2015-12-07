@@ -24,8 +24,8 @@ public abstract class Troop implements GameObject {
     private boolean isMoving;
 
 
-    private float velX;
-    private float velY;
+    //private float velX;
+    //private float velY;
 
 
     protected Troop(Tile pos) {
@@ -33,22 +33,40 @@ public abstract class Troop implements GameObject {
     }
 
     protected Troop(Image img, Tile pos) {
+        this(pos, 1, 1, 1);
+    }
+    protected Troop(Tile pos, int health, int score, double speed) {
+        this(null, pos, health, score, speed);
+    }
+
+    protected Troop(Image img, Tile pos, int health, int score, double speed) {
         this.img = img;
+        this.health = health;
+        this.score = score;
+        this.speed = speed;
         this.history = new Stack<Tile>();
         this.history.push(pos);
-
     }
 
     @Override
     public abstract void tick();
 
+    /**
+     * ** CAUTION **
+     * Should be used in implemented tick method and no where else.
+     *
+     * Moves the troop to next tile according to speed when accumulated
+     * speed reaches the value of 100 the position will be updated.
+     */
     protected void move() {
         if (!hasReacedGoal && isAlive()) {
             if (!this.isMoving) {
                 this.isMoving = true;
                 this.moveProgres = speed;
                 this.nextTile = getNextTile();
-            } else if (this.moveProgres < 100) {
+            }
+
+            if (this.moveProgres < 100) {
                 this.moveProgres += speed;
                 if (this.moveProgres > 100) {
                     this.moveProgres = 100;
@@ -60,12 +78,16 @@ public abstract class Troop implements GameObject {
                 history.push(nextTile);
                 if (nextTile instanceof GoalTile) {
                     hasReacedGoal = true;
+                } else if (nextTile.isTeleporter()) {
+                    history.push(nextTile.getTeleportTo());
                 }
             }
         }
+        /*
         if(hasReacedGoal || !isAlive()){
             Handler.removeObject(this);
         }
+        */
     }
 
     @Override
