@@ -59,7 +59,7 @@ public class Environment extends JPanel implements Runnable, Observable {
             addMouseListener(cSwitch);
         }
         setLayout(new GridLayout(1, 1));
-        setPreferredSize(new Dimension(map.length * 48, map[0].length * 48));
+        setPreferredSize(new Dimension(map.length * 70, map[0].length * 70));
 
     }
 
