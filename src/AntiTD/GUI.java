@@ -142,9 +142,9 @@ public class GUI  {
                 env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-        buyPanel.add(buySpeed);
-        buyPanel.add(buyTeleport);
-        buyPanel.add(buyButton, FlowLayout.LEFT);
+        buyPanel.add(buySpeed,BorderLayout.EAST);
+        buyPanel.add(buyTeleport,BorderLayout.CENTER);
+        buyPanel.add(buyButton, BorderLayout.CENTER);
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
     public void getName(){
@@ -210,11 +210,13 @@ public class GUI  {
         clip.start();
     }
     public void printScore(){
-        score = new JTextField("hej");
+        String hej = new String("hej");
+        score = new JTextField();
         score.setEditable(false);
         score.setBackground(Color.white);
         score.setBorder(null);
-        buyPanel.add(score);
+        score.setText(hej);
+        buyPanel.add(score,BorderLayout.WEST);
     }
 
 }
