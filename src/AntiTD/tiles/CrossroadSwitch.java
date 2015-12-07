@@ -28,12 +28,13 @@ public class CrossroadSwitch extends MouseAdapter {
 
     }
     private boolean mouseOver(int mx,int my,int x, int y, int width, int height){
-        if(mx > x && mx < x + width){
+        return (((mx > x) && (mx < x + width))&&((my > y) && (my < y + height)));
+        /*if(mx > x && mx < x + width){
             if(my > y && my < y + height){
                 return true;
             }
             else return false;
-        }else return false;
+        }else return false;*/
     }
 
     @Override
