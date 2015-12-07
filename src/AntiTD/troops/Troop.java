@@ -84,6 +84,7 @@ public abstract class Troop implements GameObject {
                 }
             }
         }
+        /*
         if(hasReacedGoal ){
             victoryScore++;
             Handler.removeObject(this);
@@ -91,6 +92,7 @@ public abstract class Troop implements GameObject {
         else if(!isAlive()){
             Handler.removeObject(this);
         }
+        */
     }
     public static int getVictoryScore(){
         return victoryScore;
@@ -138,7 +140,7 @@ public abstract class Troop implements GameObject {
 
     @Override
     public int getCurrentScore() {
-        if (hasReacedGoal && this.isAlive()) {
+        if (hasReacedGoal) {
             return score;
         } else {
             return 0;
@@ -160,8 +162,12 @@ public abstract class Troop implements GameObject {
      * @return true if this troop died else false
      */
     public boolean attackThis(int damage) {
-        health = health - damage;
-        return !this.isAlive();
+        if ( ! hasReacedGoal ) {
+            health = health - damage;
+            return !this.isAlive();
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -170,7 +176,14 @@ public abstract class Troop implements GameObject {
      * @return true if alive else false
      */
     public boolean isAlive() {
-        return health > 0;
+        boolean isAlive = true;
+        if (health <= 0) {
+            isAlive = false;
+        }
+        if (hasReacedGoal) {
+            isAlive = false;
+        }
+        return isAlive;
     }
 
     @Override

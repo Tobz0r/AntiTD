@@ -91,8 +91,10 @@ public class GUI {
     }
     public void restartGame(){
         //ta bort alla torn och teleportertiles
-        Handler.clearList();
+        //Handler.clearList();
         env.stop();
+        env.isGameOver();
+        env = new Environment(this);
         startGame();
     }
 
@@ -108,7 +110,8 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap= Level.getCurrentMap();
-                env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.addTroop(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
         printScore();
@@ -120,19 +123,20 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
                 Tile pos;
-                Tile[][] currentMap= Level.getCurrentMap();
-                for(int i = 0; i < currentMap.length; i++){
-                    for(int j = 0; j <currentMap[i].length; j++){
-                        if(currentMap[i][j].isBuildable()){
+                Tile[][] currentMap = Level.getCurrentMap();
+                for (int i = 0; i < currentMap.length; i++) {
+                    for (int j = 0; j < currentMap[i].length; j++) {
+                        if (currentMap[i][j].isBuildable()) {
                             //pos = currentMap[i][j];
-                            env.addTower(new BasicTower(img, currentMap[i][j],env.getTroops()));
+                            env.addTower(new BasicTower(img, currentMap[i][j], env.getTroops()));
                             currentMap[i][j].setBuildable(false);
                         }
 
                     }
                 }
                 /*env.saveBuildableTilese();
-                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
+                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/
+                ;
                 //env.addTower(new BasicTower(currentMap[env.getLevel().]);
                 //env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
             }
@@ -143,11 +147,12 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.addTroop(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-        buyPanel.add(buySpeed,BorderLayout.EAST);
-        buyPanel.add(buyTeleport,BorderLayout.CENTER);
+        buyPanel.add(buySpeed, BorderLayout.EAST);
+        buyPanel.add(buyTeleport, BorderLayout.CENTER);
         buyPanel.add(buyButton, BorderLayout.CENTER);
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
@@ -231,8 +236,9 @@ public class GUI {
     }
 
     public void updateScore(){
-        String scoreValue=String.valueOf(Troop.getVictoryScore());
-        score.setText(scoreValue);
+        int value = env.getScore();
+        //String scoreValue=String.valueOf(Troop.getVictoryScore());
+        score.setText(""+value);
         score.setColumns(5);
     }
 }
