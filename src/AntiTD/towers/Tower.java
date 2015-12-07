@@ -5,9 +5,12 @@ import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
 import javax.swing.*;
+import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.TimerTask;
 
 /**
  * Created by dv13tes on 2015-11-27.
@@ -17,6 +20,8 @@ public abstract class Tower implements GameObject {
     protected int money;
     private ImageIcon img;
     private Image imge;
+    protected boolean isCooledDown;
+    protected Thread cooldownTimer;
 
     protected ArrayList<Troop> troops = new ArrayList();
     private Troop target;
@@ -34,6 +39,7 @@ public abstract class Tower implements GameObject {
         this.pos = pos;
         this.posTile = pos;
         this.troops = troops;
+        isCooledDown = false;
 
     }
     /*public Tower(ArrayList<Troop> troops){
@@ -191,6 +197,20 @@ public abstract class Tower implements GameObject {
     }
     return false;
   }
+    public void checkIfReachGoal(){
+        if(!troops.isEmpty()) {
+            Iterator<Troop> itTroop = troops.iterator();
+            while(itTroop.hasNext()){
+                Troop troop = itTroop.next();
+                if(troop.hasReacedGoal()){
+                    itTroop.remove();
+                   // removeTroopFromList(troop);
+                }
+
+            }
+        }
+
+    }
 
     public boolean getTowers(){
      return towers.isEmpty();
@@ -205,4 +225,38 @@ public abstract class Tower implements GameObject {
     public Tile getTilePosition() {
         return this.posTile;
     }
+
+    /*public class coolDowntimer implements Runnable{
+        //long coolDown = 0;
+        boolean finished;
+        boolean running;
+        public coolDowntimer(){
+            //this.coolDown = coolDown;
+            finished = false;
+            running = true;
+        }
+        public void run(){
+            while (running) {
+                try {
+                    finished = false;
+                    Thread.currentThread().sleep(1000);
+                    System.out.println("I thread");
+                    finished = true;
+                    Thread.currentThread().wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+
+        public void restart() {
+        }
+
+        public boolean getIsFinish(){
+            return finished;
+        }
+
+    }*/
 }

@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by dv13tes on 2015-11-27.
@@ -77,7 +78,6 @@ public class Handler extends Thread {
             }
           }catch (java.util.ConcurrentModificationException e){
             Throwable cause = e.getCause();
-           // e.printStackTrace();
             System.out.println(cause.getMessage());
           }
         }
