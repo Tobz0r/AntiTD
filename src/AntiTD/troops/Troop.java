@@ -85,18 +85,19 @@ public abstract class Troop implements GameObject {
             }
         }
         if(hasReacedGoal ){
-            victoryScore++;
-            Handler.removeObject(this);
+            //victoryScore++;
+            //Handler.removeObject(this);
         }
         else if(!isAlive()){
-            Handler.removeObject(this);
+            //Handler.removeObject(this);
         }
     }
     public static int getVictoryScore(){
-        return victoryScore;
+        //return victoryScore;
+        return 0;
     }
     public static void resetScore(){
-        victoryScore=0;
+        //victoryScore=0;
     }
     @Override
     public Tile getMoveToPosition() {

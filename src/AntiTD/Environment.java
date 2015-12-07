@@ -5,8 +5,6 @@ import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 
 import javax.swing.*;
 import java.awt.*;
