@@ -10,6 +10,7 @@ import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
 import AntiTD.troops.BasicTroop;
 import AntiTD.troops.SpeedTroop;
+import AntiTD.troops.Troop;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,7 +23,7 @@ import java.util.Observer;
 /**
  * @author dv13trm
  */
-public class GUI  {
+public class GUI {
 
     ImageIcon img = new ImageIcon("/home/id12/id12rdt/basictower.png");
     private Menu menu;
@@ -47,12 +48,17 @@ public class GUI  {
     private String gameSound;
     Clip clip = null;
     long clipTime;
+    //score
+    private JTextField score;
+    private JTextField money;
 
 
 
     public GUI () {
-        env = new Environment();
-        frame = new JFrame("AntiTTD");
+
+        env = new Environment(this);
+
+        frame = new JFrame("AntiTD");
          scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -68,7 +74,7 @@ public class GUI  {
         frame.setVisible(true);
 
 
-        frame.pack();
+
 
     }
 
@@ -94,6 +100,7 @@ public class GUI  {
         buyPanel = new JPanel();
         buyPanel.setBorder(BorderFactory.createLineBorder(Color.green));
         buyPanel.setBackground(Color.magenta);
+        buyPanel.setPreferredSize(new Dimension(50,75));
         //basictropp button
         buyButton = new JButton("Basic troops");
         buyButton.setBackground(Color.white);
@@ -104,6 +111,7 @@ public class GUI  {
                 env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
+        printScore();
         //Testar torn
         buyTeleport = new JButton("Teleport Troop");
         buyTeleport.setBackground(Color.white);
@@ -138,9 +146,9 @@ public class GUI  {
                 env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-        buyPanel.add(buySpeed);
-        buyPanel.add(buyTeleport);
-        buyPanel.add(buyButton, FlowLayout.LEFT);
+        buyPanel.add(buySpeed,BorderLayout.EAST);
+        buyPanel.add(buyTeleport,BorderLayout.CENTER);
+        buyPanel.add(buyButton, BorderLayout.CENTER);
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
     public void getName(){
@@ -159,6 +167,7 @@ public class GUI  {
         player.setEditable(true);
         player.setWrapStyleWord(true);
         player.setLineWrap(true);
+
         playerScroll = new JScrollPane(player);
 
         player.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -169,6 +178,7 @@ public class GUI  {
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
+        frame.setSize(300, 200);
         frame.add(startPanel);
         frame.setVisible(true);
         enterName.addActionListener(new ActionListener() {
@@ -181,7 +191,7 @@ public class GUI  {
         });
 
     }
-    /*public void runMusic()  {
+    public void runMusic()  {
         gameSound = "cello.wav";
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
@@ -193,7 +203,7 @@ public class GUI  {
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
-    }*/
+    }
     public void pauseMusic(){
         clipTime = clip.getMicrosecondPosition();
         clip.stop();
@@ -203,5 +213,26 @@ public class GUI  {
         clip.loop(Clip.LOOP_CONTINUOUSLY);
         clip.start();
     }
+    public void printScore(){
+        String currentScore;
+        String currentMoney;
+        currentMoney=String.valueOf(0);
+        currentScore=String.valueOf(0);
+        money = new JTextField();
+        money.setColumns(3);
+        money.setEditable(false);
+        score = new JTextField();
+        score.setEditable(false);
+        score.setBackground(Color.white);
+        score.setBorder(null);
+        score.setText(currentScore);
+        buyPanel.add(score,BorderLayout.WEST);
+        buyPanel.add(money, BorderLayout.WEST);
+    }
 
+    public void updateScore(){
+        String scoreValue=String.valueOf(Troop.getVictoryScore());
+        score.setText(scoreValue);
+        score.setColumns(5);
+    }
 }

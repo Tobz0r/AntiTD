@@ -24,8 +24,8 @@ public abstract class Troop implements GameObject {
     private boolean isMoving;
 
 
-    //private float velX;
-    //private float velY;
+    private float velX;
+    private float velY;
 
 
     protected Troop(Tile pos) {
@@ -46,6 +46,7 @@ public abstract class Troop implements GameObject {
         this.speed = speed;
         this.history = new Stack<Tile>();
         this.history.push(pos);
+
     }
 
     @Override
@@ -83,13 +84,20 @@ public abstract class Troop implements GameObject {
                 }
             }
         }
-        /*
-        if(hasReacedGoal || !isAlive()){
+        if(hasReacedGoal ){
+            victoryScore++;
             Handler.removeObject(this);
         }
-        */
+        else if(!isAlive()){
+            Handler.removeObject(this);
+        }
     }
-
+    public static int getVictoryScore(){
+        return victoryScore;
+    }
+    public static void resetScore(){
+        victoryScore=0;
+    }
     @Override
     public Tile getMoveToPosition() {
         return nextTile;

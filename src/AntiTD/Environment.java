@@ -5,6 +5,8 @@ import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +26,7 @@ public class Environment extends JPanel implements Runnable {
     private  Executor runner= Executors.newFixedThreadPool(2);;
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
     private ArrayList<Troop> troops = new ArrayList<>();
-
+    private ArrayList<CrossroadSwitch> switches;
 
     private static boolean gameRunning;
     private static  boolean paused;
@@ -36,11 +38,14 @@ public class Environment extends JPanel implements Runnable {
     private Level level;
 
     private double delta;
-
+    private boolean gameOver;
+    private GUI gui;
     private Object lock=new Object();
 
-    public Environment(){
+    public Environment(GUI gui){
         super(new BorderLayout());
+        this.gui=gui;
+        gameOver=false;
         handler=new Handler(0);
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
@@ -49,12 +54,12 @@ public class Environment extends JPanel implements Runnable {
         setUpNeighbors();
 
         Level.setCurrentMap(map);
-        ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
+        switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
         setLayout(new GridLayout(1, 1));
-        setPreferredSize(new Dimension(map.length * 48, map[0].length * 48));
+        setPreferredSize(new Dimension(map.length * 70, map[0].length * 70));
 
     }
 
@@ -110,7 +115,9 @@ public class Environment extends JPanel implements Runnable {
     public void startGame(){
         gameRunning=true;
     }
-
+    public boolean isGameOver(){
+        return gameOver;
+    }
 
 
     public void paintComponent( Graphics g){
@@ -140,6 +147,7 @@ public class Environment extends JPanel implements Runnable {
         int ticks=0;
 
         while(gameRunning){
+            finishedLevel();
             long now = System.currentTimeMillis();
             long wait = ns - (now - lastTime);
             lastTime = now;
@@ -148,6 +156,7 @@ public class Environment extends JPanel implements Runnable {
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
+                    gui.updateScore();
                     runner.execute(new Runnable() {
                         public void run() {
                             handler.tick();
@@ -236,6 +245,25 @@ public class Environment extends JPanel implements Runnable {
         mapNr++;
         if(mapNr>levels.size()-1){
             mapNr=0;
+        }
+        for(CrossroadSwitch switc: switches){
+            removeMouseListener(switc);
+        }
+        Handler.clearList();
+        level=levels.get(mapNr);
+        map=level.getMap();
+        Level.setCurrentMap(level.getMap());
+        Troop.resetScore();
+        setUpNeighbors();
+        ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
+        for(CrossroadSwitch cSwitch:switches){
+            addMouseListener(cSwitch);
+        }
+    }
+
+    private void finishedLevel(){
+        if(Troop.getVictoryScore() >= level.getVictoryPoints()){
+            incrementLevel();
         }
     }
 }
