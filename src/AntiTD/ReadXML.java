@@ -80,11 +80,12 @@ public class ReadXML {
                 int sizeX = Integer.parseInt(attributes.getValue("sizeX"));
                 int sizeY = Integer.parseInt(attributes.getValue("sizeY"));
                 int victoryPoints = Integer.parseInt(attributes.getValue("victory"));
-
+                int startingCredits = Integer.parseInt(attributes.getValue("startingCredits"));
                 isTile = false;
                 map=new Tile[sizeX][sizeY];
                 level=new Level(mapName);
                 level.setVictoryPoints(victoryPoints);
+                level.setStartingCredits(startingCredits);
                 row = -1;
                 column = -1;
 

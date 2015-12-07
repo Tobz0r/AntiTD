@@ -5,8 +5,6 @@ import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +20,7 @@ public class Environment extends JPanel implements Runnable {
 
     private ArrayList<Level> levels;
     private Handler handler;
+    private int finalScore=10000000;
     private Handler handler2;
     private  Executor runner= Executors.newFixedThreadPool(2);;
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
@@ -106,6 +105,7 @@ public class Environment extends JPanel implements Runnable {
         }
         catch (NullPointerException e ){
             System.out.println("eliashej");
+
         }
     }
 
@@ -147,15 +147,16 @@ public class Environment extends JPanel implements Runnable {
         int ticks=0;
 
         while(gameRunning){
-            finishedLevel();
             long now = System.currentTimeMillis();
             long wait = ns - (now - lastTime);
             lastTime = now;
             wait = wait < 0 ? 0 : wait;
+            finishedLevel(wait);
             //System.out.println(wait);
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
+                    finalScore--;
                     gui.updateScore();
                     runner.execute(new Runnable() {
                         public void run() {
@@ -168,44 +169,6 @@ public class Environment extends JPanel implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//            long now = System.currentTimeMillis();
-//            //delta += (now - lastTime) / ns;
-//            lastTime = now;
-//            long wait = 1000 - lastTime;
-//            try {
-//                thread.sleep(wait < 0 ? 0 : wait);
-//
-//            } catch (InterruptedException e) {
-//                //
-//            }
-//            if (!isPaused()) {
-//                handler.tick();
-//                /*
-//                runner.execute(new Runnable() {
-//                    public void run() {
-//                        handler.tick();
-//                    }
-//                });
-//                */
-//                repaint();
-//            }
-//
-//
-//            /*
-//            while(delta >= 1 && !isPaused()) {
-//
-//                runner.execute(new Runnable() {
-//                    public void run() {
-//                        handler.tick();
-//                    }
-//                });
-//                delta--;
-//            }
-//            if(!isPaused()){
-//
-//                repaint();
-//            }
-//            */
         }
     }
     public static boolean isRunning(){
@@ -216,7 +179,7 @@ public class Environment extends JPanel implements Runnable {
         handler.addTroop(troops);
         handler.addObject(troop);
     }
-    public void addTower(Tower tower){ handler.addObject(tower);}
+    public void addTower(Tower tower){ Handler.addObject(tower);}
     public void saveBuildableTilese(){
         Tile pos;
         for(int i = 0; i < map.length; i++){
@@ -242,9 +205,17 @@ public class Environment extends JPanel implements Runnable {
         paused=false;
     }
     private void incrementLevel(){
+        pauseGame();
         mapNr++;
         if(mapNr>levels.size()-1){
-            mapNr=0;
+            int reply = JOptionPane.showConfirmDialog(null, "EZ GAEM, You're score : " + finalScore + "Would you laeik to play again?", "GG EZ!", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                mapNr=0;
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "GOODBYE");
+                System.exit(0);
+            }
         }
         for(CrossroadSwitch switc: switches){
             removeMouseListener(switc);
@@ -259,11 +230,19 @@ public class Environment extends JPanel implements Runnable {
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
+        resumeGame();
     }
 
-    private void finishedLevel(){
+    private void finishedLevel(long wait){
         if(Troop.getVictoryScore() >= level.getVictoryPoints()){
             incrementLevel();
+            try {
+                Thread.sleep(wait);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
+
     }
 }

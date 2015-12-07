@@ -29,7 +29,16 @@ public class Handler extends Thread {
         thread=new Thread(this);
         thread.start();
     }
-
+    public boolean hasAliveTroops(){
+        for(GameObject temp: objects){
+            if(temp instanceof Troop){
+                if (((Troop)temp).isAlive()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public static synchronized void  clearList(){
         int i=objects.size()-1;
@@ -38,7 +47,7 @@ public class Handler extends Thread {
             i--;
         }
     }
-    public synchronized void addObject(GameObject object){
+    public static synchronized void addObject(GameObject object){
         objects.add(object);
     }
     public static void removeObject(GameObject object){
@@ -54,8 +63,6 @@ public class Handler extends Thread {
               j++;
                 System.out.println("inserting troops: " + j);
                 ((Tower)gameObject).setTroopsToList(troops);
-
-
             }
         }
     }
@@ -68,10 +75,9 @@ public class Handler extends Thread {
             if (gameObject.type().equals("Troop")) {
               objects.get(i).tick();
             } else if (gameObject.type().equals("Tower")) {
-              if (troops != null) {
-
-                objects.get(i).tick();
-
+              if (!troops.isEmpty()) {
+                  System.out.println("ELIASHEJ");
+                  objects.get(i).tick();
               }
 
             }
