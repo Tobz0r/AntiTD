@@ -69,8 +69,11 @@ public abstract class Troop implements GameObject {
             victoryScore++;
             Handler.removeObject(this);
         }
+        else if(!isAlive()){
+            Handler.removeObject(this);
+        }
     }
-    public int getVictoryScore(){
+    public static int getVictoryScore(){
         return victoryScore;
     }
     @Override

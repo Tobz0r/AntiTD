@@ -155,6 +155,7 @@ public class Environment extends JPanel implements Runnable, Observable {
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
+                    gui.updateScore();
                     runner.execute(new Runnable() {
                         public void run() {
                             handler.tick();

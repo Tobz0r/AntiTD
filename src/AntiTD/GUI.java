@@ -10,6 +10,7 @@ import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
 import AntiTD.troops.BasicTroop;
 import AntiTD.troops.SpeedTroop;
+import AntiTD.troops.Troop;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,7 +23,7 @@ import java.util.Observer;
 /**
  * @author dv13trm
  */
-public class GUI implements Observer {
+public class GUI {
 
     ImageIcon img = new ImageIcon("/home/id12/id12rdt/basictower.png");
     private Menu menu;
@@ -213,6 +214,7 @@ public class GUI implements Observer {
     }
     public void printScore(){
         String hej = new String("hej");
+        hej=String.valueOf(0);
         score = new JTextField();
         score.setEditable(false);
         score.setBackground(Color.white);
@@ -221,8 +223,8 @@ public class GUI implements Observer {
         buyPanel.add(score,BorderLayout.WEST);
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-
+    public void updateScore(){
+        String scoreValue=String.valueOf(Troop.getVictoryScore());
+        score.setText(scoreValue);
     }
 }
