@@ -22,7 +22,7 @@ import java.util.Observer;
 /**
  * @author dv13trm
  */
-public class GUI  {
+public class GUI implements Observer {
 
     ImageIcon img = new ImageIcon("/home/id12/id12rdt/basictower.png");
     private Menu menu;
@@ -51,7 +51,9 @@ public class GUI  {
 
 
     public GUI () {
-        env = new Environment();
+
+        env = new Environment(this);
+
         frame = new JFrame("AntiTTD");
          scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -204,4 +206,8 @@ public class GUI  {
         clip.start();
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+
+    }
 }

@@ -5,6 +5,8 @@ import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +18,7 @@ import java.util.concurrent.Executors;
 /**
  * @author dv13tes
  */
-public class Environment extends JPanel implements Runnable {
+public class Environment extends JPanel implements Runnable, Observable {
 
     private ArrayList<Level> levels;
     private Handler handler;
@@ -37,11 +39,12 @@ public class Environment extends JPanel implements Runnable {
 
     private double delta;
     private boolean gameOver;
-
+    private GUI gui;
     private Object lock=new Object();
 
-    public Environment(){
+    public Environment(GUI gui){
         super(new BorderLayout());
+        this.gui=gui;
         gameOver=false;
         handler=new Handler(0);
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
@@ -241,5 +244,15 @@ public class Environment extends JPanel implements Runnable {
         if(mapNr>levels.size()-1){
             mapNr=0;
         }
+    }
+
+    @Override
+    public void addListener(InvalidationListener listener) {
+
+    }
+
+    @Override
+    public void removeListener(InvalidationListener listener) {
+
     }
 }
