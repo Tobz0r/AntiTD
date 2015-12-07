@@ -106,18 +106,6 @@ public class Handler {
 
     public synchronized void removeObject(GameObject object) {
         objectsToRemove.add(object);
-        /*
-        objects.remove(object);
-        if (object instanceof Troop) {
-            aliveTroops.remove(object);
-            for (GameObject go : towers) {
-                Tower t = (Tower) go;
-                t.removeTroopFromList((Troop)object);
-            }
-        } else if (object instanceof Tower) {
-            towers.remove(object);
-        }
-        */
     }
 
 
