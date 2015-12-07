@@ -61,9 +61,6 @@ public class CrossroadTile extends Tile {
         if(newPath[0]==null){
             newPath[0]=newPath[1];
         }
-        for(Tile tile: newPath){
-            System.out.println(tile);
-        }
         setNeighbors(newPath);
     }
     public String toString(){
