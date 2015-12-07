@@ -128,7 +128,7 @@ public class GUI  {
         env.stop();
         frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
-        //behövs en bättre lösning
+        //behövs en bättre lösning <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         player.setEditable(true);
         player.setWrapStyleWord(true);
         player.setLineWrap(true);
