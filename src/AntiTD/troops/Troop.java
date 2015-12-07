@@ -56,6 +56,7 @@ public abstract class Troop implements GameObject {
             } else {
                 this.isMoving = false;
                 this.moveProgres = 0;
+
                 history.push(nextTile);
                 if (nextTile instanceof GoalTile) {
                     hasReacedGoal = true;
@@ -92,7 +93,8 @@ public abstract class Troop implements GameObject {
                 }
             }
         }
-      /*  if (nextTile.isTeleporter()) {
+        /*
+        if (nextTile.isTeleporter()) {
             nextTile = nextTile.getTeleportTo();
         }*/
         return nextTile;
@@ -110,6 +112,10 @@ public abstract class Troop implements GameObject {
         } else {
             return 0;
         }
+    }
+
+    public boolean hasReacedGoal() {
+        return hasReacedGoal;
     }
 
     public int getHealth() {
@@ -145,23 +151,6 @@ public abstract class Troop implements GameObject {
     public Tile getTilePosition() {
         return history.peek();
     }
-
-    public float getVelY() {
-        return velY;
-    }
-
-    public void setVelY(float velY) {
-        this.velY = velY;
-    }
-
-    public float getVelX() {
-        return velX;
-    }
-
-    public void setVelX(float velX) {
-        this.velX = velX;
-    }
-
     public String type(){
         return "Troop";
     }

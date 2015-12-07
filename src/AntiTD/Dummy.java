@@ -15,13 +15,13 @@ public class Dummy extends Troop implements GameObject {
 
     protected Dummy(Tile pos) {
         super(pos);
-        setVelX(2);
-        setVelY(2);
+        //setVelX(2);
+        //setVelY(2);
     }
 
     @Override
     public void tick() {
-        x+=getVelX();
+        /*x+=getVelX();
         y+=getVelY();
         if(x>400 || x < 0){
             setVelX(getVelX()*-1);
@@ -29,7 +29,7 @@ public class Dummy extends Troop implements GameObject {
         if(y>400 || y < 0){
             setVelY(getVelY()*-1);
         }
-
+        */
     }
 
     @Override
