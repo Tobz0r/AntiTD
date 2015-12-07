@@ -58,7 +58,7 @@ public class GUI {
 
         env = new Environment(this);
 
-        frame = new JFrame("AntiTTD");
+        frame = new JFrame("AntiTD");
          scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);

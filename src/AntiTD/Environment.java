@@ -5,7 +5,8 @@ import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
-
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +26,7 @@ public class Environment extends JPanel implements Runnable {
     private  Executor runner= Executors.newFixedThreadPool(2);;
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
     private ArrayList<Troop> troops = new ArrayList<>();
-
+    private ArrayList<CrossroadSwitch> switches;
 
     private static boolean gameRunning;
     private static  boolean paused;
@@ -53,7 +54,7 @@ public class Environment extends JPanel implements Runnable {
         setUpNeighbors();
 
         Level.setCurrentMap(map);
-        ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
+        switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
@@ -146,6 +147,7 @@ public class Environment extends JPanel implements Runnable {
         int ticks=0;
 
         while(gameRunning){
+            finishedLevel();
             long now = System.currentTimeMillis();
             long wait = ns - (now - lastTime);
             lastTime = now;
@@ -244,7 +246,24 @@ public class Environment extends JPanel implements Runnable {
         if(mapNr>levels.size()-1){
             mapNr=0;
         }
+        for(CrossroadSwitch switc: switches){
+            removeMouseListener(switc);
+        }
+        Handler.clearList();
+        level=levels.get(mapNr);
+        map=level.getMap();
+        Level.setCurrentMap(level.getMap());
+        Troop.resetScore();
+        setUpNeighbors();
+        ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
+        for(CrossroadSwitch cSwitch:switches){
+            addMouseListener(cSwitch);
+        }
     }
 
-
+    private void finishedLevel(){
+        if(Troop.getVictoryScore() >= level.getVictoryPoints()){
+            incrementLevel();
+        }
+    }
 }

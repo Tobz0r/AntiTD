@@ -76,6 +76,9 @@ public abstract class Troop implements GameObject {
     public static int getVictoryScore(){
         return victoryScore;
     }
+    public static void resetScore(){
+        victoryScore=0;
+    }
     @Override
     public Tile getMoveToPosition() {
         return nextTile;
