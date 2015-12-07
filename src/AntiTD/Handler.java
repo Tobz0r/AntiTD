@@ -25,12 +25,19 @@ public class Handler {
     private LinkedList<GameObject> aliveTroops;
     private LinkedList<GameObject> towers;
 
+    private LinkedList<GameObject> objectsToAdd;
+    private LinkedList<GameObject> objectsToRemove;
+
+
 
     public Handler(int tid) {
         this.tid = tid;
         objects = new LinkedList<GameObject>();
         aliveTroops = new LinkedList<GameObject>();
         towers = new LinkedList<GameObject>();
+
+        objectsToAdd = new LinkedList<GameObject>();
+        objectsToRemove = new LinkedList<GameObject>();
 
         //thread = new Thread(this);
         //thread.start();
@@ -61,21 +68,45 @@ public class Handler {
         */
     }
 
-    public synchronized void addObject(GameObject object) {
-        objects.add(object);
-        if (object instanceof Troop) {
-            aliveTroops.add(object);
-            for (GameObject go : towers) {
-                Tower t = (Tower) go;
-                t.addTroopToList((Troop)object);
+    private void addObjectsToGame() {
+        for (GameObject object : objectsToAdd) {
+            objects.add(object);
+            if (object instanceof Troop) {
+                aliveTroops.add(object);
+                for (GameObject go : towers) {
+                    Tower t = (Tower) go;
+                    t.addTroopToList((Troop)object);
+                }
+            } else if (object instanceof Tower) {
+                towers.add(object);
             }
-        } else if (object instanceof Tower) {
-            towers.add(object);
         }
+        objectsToAdd.clear();
     }
 
+    public synchronized void addObject(GameObject object) {
+        objectsToAdd.add(object);
+    }
+
+    private void removeObjectsFromGame() {
+        for (GameObject object : objectsToRemove) {
+            objects.remove(object);
+            if (object instanceof Troop) {
+                aliveTroops.remove(object);
+                for (GameObject go : towers) {
+                    Tower t = (Tower) go;
+                    t.removeTroopFromList((Troop)object);
+                }
+            } else if (object instanceof Tower) {
+                towers.remove(object);
+            }
+        }
+        objectsToRemove.clear();
+    }
 
     public synchronized void removeObject(GameObject object) {
+        objectsToRemove.add(object);
+        /*
         objects.remove(object);
         if (object instanceof Troop) {
             aliveTroops.remove(object);
@@ -86,6 +117,7 @@ public class Handler {
         } else if (object instanceof Tower) {
             towers.remove(object);
         }
+        */
     }
 
 
@@ -133,14 +165,9 @@ public class Handler {
 
                     Troop t = (Troop) gameObject;
                     if (!t.isAlive()) {
-                        gameObjectsToRemove.add(objects.get(i));
+                        removeObject(objects.get(i));
+                        //gameObjectsToRemove.add();
                     }
-
-                } else if (gameObject.type().equals("Tower")) {
-                    //objects.get(i).tick();
-                    /*if (!troops.isEmpty()) {
-                        objects.get(i).tick();
-                    }*/
                 }
 
             } catch (java.util.ConcurrentModificationException e) {
@@ -149,10 +176,14 @@ public class Handler {
                 System.out.println(cause.getMessage());
             }
         }
+        removeObjectsFromGame();
+        addObjectsToGame();
+        /*
         for (GameObject go : gameObjectsToRemove) {
             removeObject(go);
             //objects.remove(go);
         }
+        */
         //System.out.println("Score: "+score);
     }
 
