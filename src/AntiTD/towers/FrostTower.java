@@ -19,7 +19,7 @@ public class FrostTower extends Tower{
     private Troop tr;
     private Troop target;
     private Position pos;
-
+    private int count = 0;
     private Tile posTile;
     private String type = "FrostTower";
     ImageIcon img;
@@ -54,14 +54,20 @@ public class FrostTower extends Tower{
      }
     }
     public void aggroTarget(){
-      if(target != null){
-       if(checkIfUnitIsClose(target) && target.isAlive()){
-          attack(target,getDamage());
-        } else{
-          target = null;
-          inRange.clear();
+        if(target != null) {
+
+            if (checkIfUnitIsClose(target) && target.isAlive() == true) {
+                //System.out.println("jao");
+                attack(target, getDamage());
+            } else {
+                //System.out.println("else");
+                if (!target.isAlive()) {
+                    removeTroopFromList(target);
+                }
+                target = null;
+                inRange.clear();
+            }
         }
-     }
     }
     public void createTower(Tower tower, Tile pos){
       //Tower temp = new FrostTower(img,pos);
@@ -70,11 +76,14 @@ public class FrostTower extends Tower{
 
     }
     public void startShooting(){
-      if(target != null){
-        aggroTarget();
-      }else{
-        initScan();
-      }
+        checkIfTroopReachedGoal();
+        if (target != null) {
+            System.out.println("Target not null");
+            this.aggroTarget();
+        } else {
+            //   System.out.println("Target null");
+            this.initScan();
+        }
     }
     public void attack(Troop troop, int damage){
         if(troop.isAlive()) {
@@ -122,7 +131,16 @@ public class FrostTower extends Tower{
     }
     @Override
     public void tick(){
-        this.startShooting();
+
+        count ++;
+        if(count >= 60) {
+            if (this.getTroopFromList()) {
+                startShooting();
+
+            }
+            //System.out.println(result);
+            count = 0;
+        }
     }
     /*test method*/
     public Troop getTarget(){

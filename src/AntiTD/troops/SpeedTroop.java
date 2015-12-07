@@ -29,4 +29,5 @@ public class SpeedTroop extends Troop {
     public void render(Graphics g) {
 
     }
+
 }

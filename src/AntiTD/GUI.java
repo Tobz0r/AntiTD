@@ -80,7 +80,7 @@ public class GUI {
     }
 
     public void startGame() {
-        runMusic();
+        //runMusic();
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
