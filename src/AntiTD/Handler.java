@@ -154,7 +154,6 @@ public class Handler {
 
 
     public synchronized void tick() {
-        LinkedList<GameObject> gameObjectsToRemove = new LinkedList<GameObject>();
         for (int i = 0; i < objects.size(); i++) {
             try {
                 GameObject gameObject = objects.get(i);
@@ -166,25 +165,16 @@ public class Handler {
                     Troop t = (Troop) gameObject;
                     if (!t.isAlive()) {
                         removeObject(objects.get(i));
-                        //gameObjectsToRemove.add();
                     }
                 }
 
             } catch (java.util.ConcurrentModificationException e) {
                 Throwable cause = e.getCause();
-                // e.printStackTrace();
                 System.out.println(cause.getMessage());
             }
         }
         removeObjectsFromGame();
         addObjectsToGame();
-        /*
-        for (GameObject go : gameObjectsToRemove) {
-            removeObject(go);
-            //objects.remove(go);
-        }
-        */
-        //System.out.println("Score: "+score);
     }
 
     public void render(Graphics g) {
@@ -217,11 +207,20 @@ public class Handler {
 
                     Long x_current = Math.round(x_start - (x_global * progress.doubleValue()));
                     Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
-                    int troopSizeX = (int) gameObject.getTilePosition().getSize().getWidth() / 3;
-                    int troopSizeY = (int) gameObject.getTilePosition().getSize().getHeight() / 3;
+
+                    double scale = 0.3;
+
+                    double width = gameObject.getTilePosition().getSize().getWidth();
+                    double height = gameObject.getTilePosition().getSize().getHeight();
+
+                    Long troopSizeX = new Long(Math.round(width * scale));
+                    Long troopSizeY = new Long(Math.round(height * scale));
                     //int x = Math.round(position.getX()*size+(size*progress));
                     //int y = Math.round(position.getY()*size+(size*progress));
-                    g.fillRect(x_current.intValue(), y_current.intValue(), troopSizeX, troopSizeY);
+
+                    int xOffset = (new Long(Math.round((width/2)-(troopSizeY/2)))).intValue();
+                    int yOffset = (new Long(Math.round((height/2)-(troopSizeX/2)))).intValue();
+                    g.fillRect(x_current.intValue()+xOffset, y_current.intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue());
                 }
 
             } catch (NullPointerException e) {
