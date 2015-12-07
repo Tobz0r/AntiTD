@@ -31,7 +31,7 @@ public class BasicTroop extends Troop {
     }
 
     /**
-     * Constructor for basic troop, used for overriding health score speed
+     * Constructor for basic troop, used for overriding default health, score and speed values
      *
      * ** CAUTION **
      * Use this constructor for test purposes only.

@@ -157,7 +157,7 @@ public class BasicTower extends Tower {
 
       if (this.getTroopFromList()){
           if (target != null) {
-            System.out.println("Target not null");
+            //System.out.println("Target not null");
             this.aggroTarget();
           } else {
        //   System.out.println("Target null");
