@@ -47,6 +47,8 @@ public class GUI  {
     private String gameSound;
     Clip clip = null;
     long clipTime;
+    //score
+    private JTextField score;
 
 
 
@@ -68,7 +70,7 @@ public class GUI  {
         frame.setVisible(true);
 
 
-        frame.pack();
+
 
     }
 
@@ -94,6 +96,7 @@ public class GUI  {
         buyPanel = new JPanel();
         buyPanel.setBorder(BorderFactory.createLineBorder(Color.green));
         buyPanel.setBackground(Color.magenta);
+
         //basictropp button
         buyButton = new JButton("Basic troops");
         buyButton.setBackground(Color.white);
@@ -104,6 +107,7 @@ public class GUI  {
                 env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
+        printScore();
         //Testar torn
         buyTeleport = new JButton("Teleport Troop");
         buyTeleport.setBackground(Color.white);
@@ -159,6 +163,7 @@ public class GUI  {
         player.setEditable(true);
         player.setWrapStyleWord(true);
         player.setLineWrap(true);
+
         playerScroll = new JScrollPane(player);
 
         player.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -169,6 +174,7 @@ public class GUI  {
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
+        frame.setSize(300, 200);
         frame.add(startPanel);
         frame.setVisible(true);
         enterName.addActionListener(new ActionListener() {
@@ -181,7 +187,7 @@ public class GUI  {
         });
 
     }
-    /*public void runMusic()  {
+    public void runMusic()  {
         gameSound = "cello.wav";
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
@@ -193,7 +199,7 @@ public class GUI  {
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
-    }*/
+    }
     public void pauseMusic(){
         clipTime = clip.getMicrosecondPosition();
         clip.stop();
@@ -202,6 +208,13 @@ public class GUI  {
         clip.setMicrosecondPosition(clipTime);
         clip.loop(Clip.LOOP_CONTINUOUSLY);
         clip.start();
+    }
+    public void printScore(){
+        score = new JTextField("hej");
+        score.setEditable(false);
+        score.setBackground(Color.white);
+        score.setBorder(null);
+        buyPanel.add(score);
     }
 
 }
