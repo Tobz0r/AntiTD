@@ -50,6 +50,7 @@ public class GUI {
     long clipTime;
     //score
     private JTextField score;
+    private JTextField money;
 
 
 
@@ -99,7 +100,7 @@ public class GUI {
         buyPanel = new JPanel();
         buyPanel.setBorder(BorderFactory.createLineBorder(Color.green));
         buyPanel.setBackground(Color.magenta);
-
+        buyPanel.setPreferredSize(new Dimension(50,75));
         //basictropp button
         buyButton = new JButton("Basic troops");
         buyButton.setBackground(Color.white);
@@ -213,18 +214,26 @@ public class GUI {
         clip.start();
     }
     public void printScore(){
-        String hej = new String("hej");
-        hej=String.valueOf(0);
+        String currentScore;
+        String currentMoney;
+        currentMoney=String.valueOf(0);
+        currentScore=String.valueOf(0);
+        money = new JTextField();
+        money.setColumns(3);
+        money.setEditable(false);
+        
         score = new JTextField();
         score.setEditable(false);
         score.setBackground(Color.white);
         score.setBorder(null);
-        score.setText(hej);
+        score.setText(currentScore);
         buyPanel.add(score,BorderLayout.WEST);
+        buyPanel.add(money, BorderLayout.WEST);
     }
 
     public void updateScore(){
         String scoreValue=String.valueOf(Troop.getVictoryScore());
         score.setText(scoreValue);
+        score.setColumns(5);
     }
 }
