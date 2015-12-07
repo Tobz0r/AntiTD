@@ -24,15 +24,14 @@ public class BasicTower extends Tower {
     private String type = "BasicTower";
     private int result;
     int bullets;
-
     public BasicTower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
 
 
         super(img, pos, troops);
-        Random r = new Random();
-        int low = 0;
-        int High = 5;
-        result = r.nextInt(High - low) + low;
+      Random r = new Random();
+      int low = 0;
+      int High = 5;
+      result = r.nextInt(High-low)+low;
         setDamage(1);
         setRange(5);
         setPrice(1);
@@ -176,17 +175,15 @@ public class BasicTower extends Tower {
     @Override
     public void tick() {
 
-        if (this.getTroopFromList()) {
-            if (target != null) {
-                //System.out.println("Target not null");
-                this.aggroTarget();
-            } else {
-                //   System.out.println("Target null");
-                this.initScan();
-            }
+        count ++;
+        if(count >= 60) {
+            if (this.getTroopFromList()) {
+                startShooting();
 
+            }
+            //System.out.println(result);
+            count = 0;
         }
-        //System.out.println(result);
 
     }
 
@@ -194,6 +191,7 @@ public class BasicTower extends Tower {
     public void render(Graphics g) {
 
     }
+
 
 
     @Override

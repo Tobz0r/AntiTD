@@ -79,7 +79,7 @@ public class GUI {
     }
 
     public void startGame() {
-        runMusic();
+        //runMusic();
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,6 +100,7 @@ public class GUI {
 
     private void buildBuyPanel(){
         buyPanel = new JPanel();
+        printScore();
         buyPanel.setBorder(BorderFactory.createLineBorder(Color.green));
         buyPanel.setBackground(Color.magenta);
         buyPanel.setPreferredSize(new Dimension(50,75));
@@ -135,8 +136,7 @@ public class GUI {
                     }
                 }
                 /*env.saveBuildableTilese();
-                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/
-                ;
+                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
                 //env.addTower(new BasicTower(currentMap[env.getLevel().]);
                 //env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
             }
@@ -151,8 +151,11 @@ public class GUI {
                 //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-        buyPanel.add(buySpeed, BorderLayout.EAST);
-        buyPanel.add(buyTeleport, BorderLayout.CENTER);
+
+
+
+        buyPanel.add(buySpeed,BorderLayout.EAST);
+        buyPanel.add(buyTeleport,BorderLayout.CENTER);
         buyPanel.add(buyButton, BorderLayout.CENTER);
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
@@ -224,15 +227,16 @@ public class GUI {
         currentMoney=String.valueOf(0);
         currentScore=String.valueOf(0);
         money = new JTextField();
-        money.setColumns(3);
         money.setEditable(false);
+        money.setBackground(Color.white);
+        money.setBorder(null);
         score = new JTextField();
         score.setEditable(false);
         score.setBackground(Color.white);
         score.setBorder(null);
         score.setText(currentScore);
-        buyPanel.add(score,BorderLayout.WEST);
-        buyPanel.add(money, BorderLayout.WEST);
+        buyPanel.add(score);
+        buyPanel.add(money);
     }
 
     public void updateScore(){
