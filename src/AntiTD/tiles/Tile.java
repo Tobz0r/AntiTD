@@ -16,7 +16,7 @@ public abstract class Tile implements TileRender {
     private boolean buildable;
     private boolean isTeleportStart;
     private Tile teleportEnd;
-    private final int size=48;
+    private Dimension size=new Dimension(48,48);
 
     private Position position;
     private Tile[] neighbors;
@@ -24,6 +24,7 @@ public abstract class Tile implements TileRender {
 
     public Tile(Position pos) {
         this.position = pos;
+        isTeleportStart=false;
     }
     public void setBuildable(boolean buildable) {
         this.buildable = buildable;
@@ -37,7 +38,7 @@ public abstract class Tile implements TileRender {
     public boolean isBuildable() {
         return buildable;
     }
-    int getSize(){
+    public Dimension getSize(){
         return size;
     }
     public void setPosition(Position position){
@@ -51,18 +52,32 @@ public abstract class Tile implements TileRender {
         Tile[][] map=Level.getCurrentMap();
         int row=getPosition().getX();
         int column=getPosition().getY();
+        int rows=map.length;
+        int columns=map[0].length;
         for(int i = -1; i < 2; i++) {
-            if (!(row+i <0 || row+i >= map.length)) {
+            if (!(row+i <0 || row+i >= rows)) {
                 for (int j = -1; j < 2; j++) {
-                    if (!(column+j < 0 || column+j >= map[i].length)) {
-                        if(i != 0 || j != 0) {
-                            neighbours.add(map[i][j]);
+                    if (!(column+j < 0 || column+j >= columns)) {
+                        if(i != 0 && j != 0) {
+                            neighbours.add(map[i+row][j+column]);
+                            System.out.println("("+row+":"+column+")");
                         }
                     }
                 }
             }
         }
         return neighbours;
+        /*
+        rad -1 col 0
+        rad 1 col 0
+         rad 0 col -1
+         rad 0 col 1
+
+         */
+    }
+
+    public void setSize(Dimension size){
+        this.size=size;
     }
     public Tile[] getNeighbors2() {
         return neighbors;
@@ -83,7 +98,6 @@ public abstract class Tile implements TileRender {
 
     public String toString(){
         return "Tile X: "+getPosition().getX()+" Y: "+getPosition().getY();
-        //return getClass().getName();
     }
 
     @Override

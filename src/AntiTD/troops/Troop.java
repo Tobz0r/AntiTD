@@ -15,13 +15,18 @@ public abstract class Troop implements GameObject {
 
     protected int health;
     protected int score;
+    protected double speed;
     private Image img;
     private Stack<Tile> history;
+    private Tile nextTile;
+    private double moveProgres;
     private boolean hasReacedGoal;
+    private boolean isMoving;
 
 
     private float velX;
     private float velY;
+
 
     protected Troop(Tile pos) {
         this(null, pos);
@@ -31,34 +36,66 @@ public abstract class Troop implements GameObject {
         this.img = img;
         this.history = new Stack<Tile>();
         this.history.push(pos);
+
     }
 
     @Override
     public abstract void tick();
 
     protected void move() {
-        if (hasReacedGoal == false && this.isAlive()) {
-            Tile[] neigbors = history.peek().getNeighbors2();
-            Tile nextTile = null;
-
-            for (Tile tile : neigbors) {
-                if (tile.isMoveable()) {
-                    if (history.search(tile) == -1) {
-                        nextTile = tile;
-                        break;
-                    }
+        if (!hasReacedGoal && isAlive()) {
+            if (!this.isMoving) {
+                this.isMoving = true;
+                this.moveProgres = speed;
+                this.nextTile = getNextTile();
+            } else if (this.moveProgres < 100) {
+                this.moveProgres += speed;
+                if (this.moveProgres > 100) {
+                    this.moveProgres = 100;
+                }
+            } else {
+                this.isMoving = false;
+                this.moveProgres = 0;
+                history.push(nextTile);
+                if (nextTile instanceof GoalTile) {
+                    hasReacedGoal = true;
                 }
             }
-            if (nextTile.isTeleporter()) {
-                nextTile = nextTile.getTeleportTo();
-            }
-
-            if (nextTile instanceof GoalTile) {
-                hasReacedGoal = true;
-            }
-
-            history.push(nextTile);
         }
+        if(hasReacedGoal || !isAlive()){
+            Handler.removeObject(this);
+        }
+    }
+
+    @Override
+    public Tile getMoveToPosition() {
+        return nextTile;
+    }
+
+    @Override
+    public int getMoveProgres() {
+        Long p = Math.round(this.moveProgres);
+        return p.intValue();
+    }
+
+    private Tile getNextTile() {
+        Tile[] neigbors;
+        neigbors = history.peek().getNeighbors2();
+
+        Tile nextTile = null;
+
+        for (Tile tile : neigbors) {
+            if (tile.isMoveable()) {
+                if (history.search(tile) == -1) {
+                    nextTile = tile;
+                    break;
+                }
+            }
+        }
+      /*  if (nextTile.isTeleporter()) {
+            nextTile = nextTile.getTeleportTo();
+        }*/
+        return nextTile;
     }
 
     @Override
@@ -123,5 +160,9 @@ public abstract class Troop implements GameObject {
 
     public void setVelX(float velX) {
         this.velX = velX;
+    }
+
+    public String type(){
+        return "Troop";
     }
 }

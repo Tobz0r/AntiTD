@@ -5,15 +5,15 @@ import AntiTD.tiles.Tile;
 import java.awt.*;
 
 /**
- * Created by mattias on 2015-11-30.
+ * Created by dv13tes on 2015-12-04.
  */
-public class BasicTroop extends Troop {
+public class SpeedTroop extends Troop {
 
-    private final double SPEED = 1;
+    private final double SPEED = 3;
     private final int MAX_HEALTH = 2000;
     private final int KILL_DEATH_SCORE = 10;
 
-    public BasicTroop(Tile pos) {
+    public SpeedTroop(Tile pos) {
         super(null, pos);
         super.health = MAX_HEALTH;
         super.score = KILL_DEATH_SCORE;

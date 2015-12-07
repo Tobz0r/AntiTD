@@ -7,7 +7,9 @@ import javax.swing.border.Border;
 import AntiTD.*;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
+import AntiTD.towers.BasicTower;
 import AntiTD.troops.BasicTroop;
+import AntiTD.troops.SpeedTroop;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,6 +23,8 @@ import java.util.Observer;
  * @author dv13trm
  */
 public class GUI  {
+
+    ImageIcon img = new ImageIcon("/home/id12/id12rdt/basictower.png");
     private Menu menu;
     private Thread gameThread;
     private Environment env;
@@ -28,6 +32,7 @@ public class GUI  {
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
+    private JButton buySpeed;
     private Thread thread;
     //startscreen
     private String PlayerName;
@@ -68,8 +73,7 @@ public class GUI  {
     }
 
     public void startGame() {
-        menu.setNewGame("Restart");
-        runMusic();
+        //runMusic();
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,22 +100,45 @@ public class GUI  {
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("ELIASHEJ");
                 Tile[][] currentMap= Level.getCurrentMap();
                 env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-        //teleport troop button
+        //Testar torn
         buyTeleport = new JButton("Teleport Troop");
         buyTeleport.setBackground(Color.white);
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
-                env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
+                Tile pos;
+                Tile[][] currentMap= Level.getCurrentMap();
+                for(int i = 0; i < currentMap.length; i++){
+                    for(int j = 0; j <currentMap[i].length; j++){
+                        if(currentMap[i][j].isBuildable()){
+                            //pos = currentMap[i][j];
+                            env.addTower(new BasicTower(img, currentMap[i][j],env.getTroops()));
+                            currentMap[i][j].setBuildable(false);
+                        }
+
+                    }
+                }
+                /*env.saveBuildableTilese();
+                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
+                //env.addTower(new BasicTower(currentMap[env.getLevel().]);
+                //env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
             }
         });
-
+        buySpeed = new JButton("Speed Troop");
+        buySpeed.setBackground(Color.white);
+        buySpeed.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Tile[][] currentMap = Level.getCurrentMap();
+                env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+            }
+        });
+        buyPanel.add(buySpeed);
         buyPanel.add(buyTeleport);
         buyPanel.add(buyButton, FlowLayout.LEFT);
         frame.add(buyPanel, BorderLayout.SOUTH);
@@ -144,17 +171,17 @@ public class GUI  {
         startPanel.add(enterName, FlowLayout.LEFT);
         frame.add(startPanel);
         frame.setVisible(true);
-
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
                 getName();
                 startGame();
             }
         });
 
     }
-    public void runMusic()  {
+    /*public void runMusic()  {
         gameSound = "cello.wav";
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
@@ -166,7 +193,7 @@ public class GUI  {
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
-    }
+    }*/
     public void pauseMusic(){
         clipTime = clip.getMicrosecondPosition();
         clip.stop();

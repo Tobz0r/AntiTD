@@ -1,5 +1,6 @@
 package AntiTD;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -9,9 +10,7 @@ import java.io.IOException;
 public class AntiTDMain {
 
     public static void main(String[] args){
-
         new GUI();
-
     }
 
 }

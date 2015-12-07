@@ -52,4 +52,9 @@ public class TeleportTroops extends Troop {
     public void initTeleport() {
         isTeleporting = true;
     }
+
+    @Override
+    public int getCurrentScore() {
+        return 0;
+    }
 }

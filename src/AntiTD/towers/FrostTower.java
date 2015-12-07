@@ -7,6 +7,7 @@ import AntiTD.troops.Troop;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by id12rdt on 2015-11-30.
@@ -15,28 +16,35 @@ public class FrostTower extends Tower{
     private int damage;
     private int range;
     private int price;
+    private Troop tr;
     private Troop target;
     private Position pos;
+
+    private Tile posTile;
     private String type = "FrostTower";
     ImageIcon img;
-    public FrostTower(ImageIcon img, Tile pos) {
+    public FrostTower(ImageIcon img, Tile pos,ArrayList<Troop> troops) {
 
-      super(img, pos);
+      super(img, pos, troops);
       setDamage(10);
       setRange(10);
       setPrice(5);
       setPosition(pos.getPosition());
+        this.posTile = pos;
+
+
     }
     public void initScan() {
-      double distance = Integer.MAX_VALUE;
+      int distance = Integer.MAX_VALUE;
       for(Troop troop : troops){
 
         Troop nearUnit = null;
-        double dist = distance(troop);
+        int dist = distance(troop);
         if(dist <= getRange()) {
           inRange.push(troop);
           if (dist < distance) {
             nearUnit = troop;
+              setNearUnit(troop);
             distance = dist;
         }
       }
@@ -59,6 +67,7 @@ public class FrostTower extends Tower{
       //Tower temp = new FrostTower(img,pos);
       tower.init(troops, towers, pos);
       towers.add(tower);
+
     }
     public void startShooting(){
       if(target != null){
@@ -68,10 +77,15 @@ public class FrostTower extends Tower{
       }
     }
     public void attack(Troop troop, int damage){
-     troop.attackThis(damage);
+        if(troop.isAlive()) {
+            troop.attackThis(damage);
+            if(!troop.isAlive()){
+                money++;
+            }
+        }
    }
-    public double distance(Troop troop) {
-      return Math.hypot(troop.getPosition().getX(), troop.getPosition().getY());
+    public int distance(Troop troop) {
+      return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
     }
     public boolean checkIfUnitIsClose(Troop troop){
       if(Math.hypot(troop.getPosition().getX() -getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()){
@@ -106,8 +120,19 @@ public class FrostTower extends Tower{
     public Position getPosition(){
       return pos;
     }
+    @Override
     public void tick(){
-
+        this.startShooting();
+    }
+    /*test method*/
+    public Troop getTarget(){
+        return target;
+    }
+    public void setNearUnit(Troop tr){
+        this.tr = tr;
+    }
+    public Troop getNearUnit(){
+        return tr;
     }
 
 
@@ -119,6 +144,16 @@ public class FrostTower extends Tower{
 
     @Override
     public Tile getTilePosition() {
-        return null;
+        return posTile;
+    }
+
+    @Override
+    public Tile getMoveToPosition() {
+        return this.getTilePosition();
+    }
+
+    @Override
+    public int getMoveProgres() {
+        return 0;
     }
 }
