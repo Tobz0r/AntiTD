@@ -4,6 +4,8 @@ import AntiTD.Position;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by dv13tes on 2015-11-30.
@@ -28,15 +30,44 @@ public class CrossroadTile extends Tile {
         g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),
                 (int)(getPosition().getY()*(getSize().getHeight())),
                 (int)getSize().getWidth(),
-                (int)getSize().getHeight());    }
+                (int)getSize().getHeight());
+    }
+
     public Tile[] findNextWay(){
         Tile[] neighbors = getNeighbors2();
+        Tile[] arrNeighbors=new Tile[neighbors.length];
         for(Tile tile: neighbors){
-            if(!(tile instanceof JunctionTile)){
+            if(!(tile instanceof JunctionTile && !(tile instanceof CrossroadTile))){
                 nextTiles.add(tile);
-                System.out.println("Jaoja");
             }
         }
-        return neighbors;
+        for(int i=0; i < nextTiles.size();i++){
+            arrNeighbors[i]=nextTiles.get(i);
+        }
+        return arrNeighbors;
     }
+    private Tile[] reverseArray(Tile[] tiles){
+        Tile[] copy = tiles.clone();
+        Collections.reverse(Arrays.asList(copy));
+        return copy;
+    }
+    void changeWay(){
+        Tile[] current=getNeighbors2();
+        Tile[] newPath=new Tile[current.length];
+        for(int i=0; i < current.length;i++){
+            newPath[i]=current[i];
+        }
+        newPath=reverseArray(newPath);
+        if(newPath[0]==null){
+            newPath[0]=newPath[1];
+        }
+        for(Tile tile: newPath){
+            System.out.println(tile);
+        }
+        setNeighbors(newPath);
+    }
+    public String toString(){
+        return "Tile X: "+getPosition().getX()+" Y: "+getPosition().getY();
+    }
+
 }

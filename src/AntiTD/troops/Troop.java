@@ -79,7 +79,9 @@ public abstract class Troop implements GameObject {
     }
 
     private Tile getNextTile() {
-        Tile[] neigbors = history.peek().getNeighbors2();
+        Tile[] neigbors;
+        neigbors = history.peek().getNeighbors2();
+
         Tile nextTile = null;
 
         for (Tile tile : neigbors) {

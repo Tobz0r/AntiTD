@@ -60,6 +60,7 @@ public abstract class Tile implements TileRender {
                     if (!(column+j < 0 || column+j >= columns)) {
                         if(i != 0 && j != 0) {
                             neighbours.add(map[i+row][j+column]);
+                            System.out.println("("+row+":"+column+")");
                         }
                     }
                 }
@@ -97,7 +98,6 @@ public abstract class Tile implements TileRender {
 
     public String toString(){
         return "Tile X: "+getPosition().getX()+" Y: "+getPosition().getY();
-        //return getClass().getName();
     }
 
     @Override

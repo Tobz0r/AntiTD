@@ -28,22 +28,19 @@ public class Level {
         //First setUp crossroads
         this.map=map;
     }
-    public void setUpCrossroad(){
+    public ArrayList setUpCrossroad(){
+        ArrayList<CrossroadSwitch> tiles=new ArrayList<>();
         for(int i=0;i < map.length; i++) {
            for (int j = 0; j < map[i].length; j++) {
                if (map[i][j] instanceof CrossroadTile) {
                    Tile[] tileMap=((CrossroadTile) map[i][j]).findNextWay();
                    map[i][j].setNeighbors(tileMap);
+                   CrossroadSwitch cSwitch=new CrossroadSwitch((CrossroadTile) map[i][j]);
+                   tiles.add(cSwitch);
                }
            }
        }
-
-
-       /* Tile[] map2=map[i][j].getNeighbors2();
-        Tile[] map3=new Tile[map2.length];
-        Random r=new Random();
-        map3[0]=map2[r.nextInt(map2.length)];
-        map[i][j].setNeighbors(map3);*/
+        return tiles;
     }
     public  Tile[][] getMap(){
         return map;

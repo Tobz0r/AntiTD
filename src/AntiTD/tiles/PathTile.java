@@ -19,6 +19,10 @@ public class PathTile extends Tile {
         setBuildable(false);
     }
 
+    @Override
+    public String toString(){
+        return "Tile X: "+getPosition().getX()+" Y: "+getPosition().getY();
+    }
 
     @Override
     public void landOn(Graphics g) {
