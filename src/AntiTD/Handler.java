@@ -59,9 +59,9 @@ public class Handler {
 
     /**
      * Clears object list for new game round.
-     * <br>
-     * **Deprecated**
-     * use reset instead
+     * <br /> <br />
+     * **Deprecated** <br />
+     * use reset() instead.
      */
     public synchronized void clearList() {
         this.reset();
@@ -101,6 +101,14 @@ public class Handler {
         objectsToAdd.clear();
     }
 
+    /**
+     * Add object to the game.
+     * <br /> <br />
+     * **Note**<br />
+     * The object will not be added until tick method finishes
+     * for thread safety reasons.
+     * @param object object to add.
+     */
     public synchronized void addObject(GameObject object) {
         objectsToAdd.add(object);
     }
@@ -127,6 +135,14 @@ public class Handler {
         objectsToRemove.clear();
     }
 
+    /**
+     * Remove object from the game.
+     * <br /> <br />
+     * **Note**<br />
+     * The object will not be removed until tick method finishes
+     * for thread safety reasons.
+     * @param object object to remove.
+     */
     public synchronized void removeObject(GameObject object) {
         objectsToRemove.add(object);
     }
@@ -139,6 +155,7 @@ public class Handler {
         }
         return list;
     }
+    /*
     public void addTroop(Troop troop) {
         objects.add(troop);
         aliveTroops.add(troop);
@@ -147,7 +164,7 @@ public class Handler {
             t.addTroopToList(troop);
 
         }
-        /*
+
         int j = 0;
 
         this.troops = troops;
@@ -159,8 +176,8 @@ public class Handler {
                 ((Tower) gameObject).setTroopsToList(troops);
             }
         }
-        */
-    }
+
+    }*/
 
 
 
@@ -244,6 +261,12 @@ public class Handler {
         }
     }
 
+    /**
+     * Resets the game world.
+     * <br /> <br />
+     * **Caution** <br />
+     * Should only be called in run method for thread safety
+     */
     private void resetGame() {
         objects.clear();
         aliveTroops.clear();
@@ -251,6 +274,9 @@ public class Handler {
         score = 0;
     }
 
+    /**
+     * Invoke game reset on next tick.
+     */
     public synchronized void reset() {
         resetFlag = true;
 
