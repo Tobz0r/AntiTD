@@ -21,7 +21,6 @@ public class Environment extends JPanel implements Runnable {
     private ArrayList<Level> levels;
     private Handler handler;
     private int finalScore=10000000;
-    private Handler handler2;
     private  Executor runner= Executors.newFixedThreadPool(2);;
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
     private ArrayList<Troop> troops = new ArrayList<>();
@@ -30,6 +29,8 @@ public class Environment extends JPanel implements Runnable {
     private static boolean gameRunning;
     private static  boolean paused;
 
+    private int credits;
+    private final int minimumCredits=20;
     private Tile[][] map;
     private Thread thread;
     private int mapNr=0;
@@ -44,6 +45,7 @@ public class Environment extends JPanel implements Runnable {
     public Environment(GUI gui){
         super(new BorderLayout());
         this.gui=gui;
+        Troop.resetScore();
         gameOver=false;
         handler=new Handler(0);
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
@@ -51,6 +53,7 @@ public class Environment extends JPanel implements Runnable {
         level=levels.get(mapNr);
         map=level.getMap();
         setUpNeighbors();
+        credits=level.getStartingCredits();
 
         Level.setCurrentMap(map);
         switches=level.setUpCrossroad();
@@ -208,7 +211,9 @@ public class Environment extends JPanel implements Runnable {
         pauseGame();
         mapNr++;
         if(mapNr>levels.size()-1){
-            int reply = JOptionPane.showConfirmDialog(null, "EZ GAEM, You're score : " + finalScore + "Would you laeik to play again?", "GG EZ!", JOptionPane.YES_NO_OPTION);
+            int reply = JOptionPane.showConfirmDialog(null, "EZ GAEM, You're score : " +
+                    finalScore + "Would you laeik to play again?",
+                    "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 mapNr=0;
             }
@@ -242,7 +247,9 @@ public class Environment extends JPanel implements Runnable {
                 e.printStackTrace();
             }
         }
-
-
+        
+        else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
+            System.out.println("ELIASHEJ");
+        }
     }
 }

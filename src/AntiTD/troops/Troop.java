@@ -12,7 +12,7 @@ import java.util.Stack;
  * Created by dv13trm on 2015-11-27.
  */
 public abstract class Troop implements GameObject {
-
+    private static int victoryScore;
     protected int health;
     protected int score;
     protected double speed;
@@ -85,19 +85,19 @@ public abstract class Troop implements GameObject {
             }
         }
         if(hasReacedGoal ){
-            //victoryScore++;
-            //Handler.removeObject(this);
+            victoryScore++;
+            Handler.removeObject(this);
         }
         else if(!isAlive()){
-            //Handler.removeObject(this);
+            Handler.removeObject(this);
         }
     }
     public static int getVictoryScore(){
-        //return victoryScore;
-        return 0;
+        return victoryScore;
+
     }
     public static void resetScore(){
-        //victoryScore=0;
+        victoryScore=0;
     }
     @Override
     public Tile getMoveToPosition() {

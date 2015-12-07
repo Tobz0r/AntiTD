@@ -76,10 +76,8 @@ public class Handler extends Thread {
               objects.get(i).tick();
             } else if (gameObject.type().equals("Tower")) {
               if (!troops.isEmpty()) {
-                  System.out.println("ELIASHEJ");
                   objects.get(i).tick();
               }
-
             }
           }catch (java.util.ConcurrentModificationException e){
             Throwable cause = e.getCause();
