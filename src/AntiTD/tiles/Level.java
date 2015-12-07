@@ -42,6 +42,9 @@ public class Level {
        }
         return tiles;
     }
+    public int getVictoryPoints(){
+        return victoryPoints;
+    }
     public  Tile[][] getMap(){
         return map;
     }
