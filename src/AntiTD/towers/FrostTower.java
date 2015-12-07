@@ -76,7 +76,7 @@ public class FrostTower extends Tower{
 
     }
     public void startShooting(){
-        checkIfTroopReachedGoal();
+        //checkIfTroopReachedGoal();
         if (target != null) {
             System.out.println("Target not null");
             this.aggroTarget();
