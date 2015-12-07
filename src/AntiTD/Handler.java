@@ -279,9 +279,15 @@ public class Handler {
      */
     public synchronized void reset() {
         resetFlag = true;
-
     }
 
+    /**
+     * Get accumulated score.
+     * <br /><br />
+     * **Note**<br />
+     * The score is restored when reset() method is called.
+     * @return
+     */
     public int getVictoryScore() {
         return score;
     }
