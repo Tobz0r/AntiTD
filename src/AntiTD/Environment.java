@@ -247,9 +247,11 @@ public class Environment extends JPanel implements Runnable {
                 e.printStackTrace();
             }
         }
-        
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
             System.out.println("ELIASHEJ");
+            JOptionPane.showMessageDialog(null, "Game over!! xD");
+            System.exit(0);
+
         }
     }
 }
