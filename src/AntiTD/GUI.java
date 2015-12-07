@@ -3,6 +3,7 @@ package AntiTD;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.SpringLayout;
 
 import AntiTD.*;
 import AntiTD.tiles.Level;
@@ -88,6 +89,7 @@ public class GUI {
         env.repaint();
         buildBuyPanel();
         frame.pack();
+
     }
     public void restartGame(){
         //ta bort alla torn och teleportertiles
@@ -97,10 +99,15 @@ public class GUI {
     }
 
     private void buildBuyPanel(){
+
         buyPanel = new JPanel();
+        printScore();
         buyPanel.setBorder(BorderFactory.createLineBorder(Color.green));
         buyPanel.setBackground(Color.magenta);
         buyPanel.setPreferredSize(new Dimension(50,75));
+
+
+
         //basictropp button
         buyButton = new JButton("Basic troops");
         buyButton.setBackground(Color.white);
@@ -111,7 +118,7 @@ public class GUI {
                 env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-        printScore();
+
         //Testar torn
         buyTeleport = new JButton("Teleport Troop");
         buyTeleport.setBackground(Color.white);
@@ -120,19 +127,20 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
                 Tile pos;
-                Tile[][] currentMap= Level.getCurrentMap();
-                for(int i = 0; i < currentMap.length; i++){
-                    for(int j = 0; j <currentMap[i].length; j++){
-                        if(currentMap[i][j].isBuildable()){
+                Tile[][] currentMap = Level.getCurrentMap();
+                for (int i = 0; i < currentMap.length; i++) {
+                    for (int j = 0; j < currentMap[i].length; j++) {
+                        if (currentMap[i][j].isBuildable()) {
                             //pos = currentMap[i][j];
-                            env.addTower(new BasicTower(img, currentMap[i][j],env.getTroops()));
+                            env.addTower(new BasicTower(img, currentMap[i][j], env.getTroops()));
                             currentMap[i][j].setBuildable(false);
                         }
 
                     }
                 }
                 /*env.saveBuildableTilese();
-                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
+                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/
+                ;
                 //env.addTower(new BasicTower(currentMap[env.getLevel().]);
                 //env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
             }
@@ -146,6 +154,9 @@ public class GUI {
                 env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
+
+
+
         buyPanel.add(buySpeed,BorderLayout.EAST);
         buyPanel.add(buyTeleport,BorderLayout.CENTER);
         buyPanel.add(buyButton, BorderLayout.CENTER);
@@ -219,20 +230,24 @@ public class GUI {
         currentMoney=String.valueOf(0);
         currentScore=String.valueOf(0);
         money = new JTextField();
-        money.setColumns(3);
         money.setEditable(false);
+        money.setBackground(Color.white);
+        money.setBorder(null);
         score = new JTextField();
         score.setEditable(false);
         score.setBackground(Color.white);
         score.setBorder(null);
         score.setText(currentScore);
-        buyPanel.add(score,BorderLayout.WEST);
-        buyPanel.add(money, BorderLayout.WEST);
+        buyPanel.add(score);
+        buyPanel.add(money);
     }
 
     public void updateScore(){
         String scoreValue=String.valueOf(Troop.getVictoryScore());
         score.setText(scoreValue);
-        score.setColumns(5);
+        score.setColumns(scoreValue.length() + 1);
+        money.setText(scoreValue);
+        money.setColumns(scoreValue.length()+1);
     }
+
 }
