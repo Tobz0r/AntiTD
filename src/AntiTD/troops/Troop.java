@@ -22,8 +22,10 @@ public abstract class Troop implements GameObject {
     private double moveProgres;
     private boolean hasReacedGoal;
     private boolean isMoving;
+    private static int victoryScore;
 
 
+    /*kan tas bort*/
     private float velX;
     private float velY;
 
@@ -63,11 +65,14 @@ public abstract class Troop implements GameObject {
                 }
             }
         }
-        if(hasReacedGoal || !isAlive()){
+        if(hasReacedGoal ){
+            victoryScore++;
             Handler.removeObject(this);
         }
     }
-
+    public int getVictoryScore(){
+        return victoryScore;
+    }
     @Override
     public Tile getMoveToPosition() {
         return nextTile;

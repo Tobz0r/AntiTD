@@ -36,11 +36,13 @@ public class Environment extends JPanel implements Runnable {
     private Level level;
 
     private double delta;
+    private boolean gameOver;
 
     private Object lock=new Object();
 
     public Environment(){
         super(new BorderLayout());
+        gameOver=false;
         handler=new Handler(0);
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
@@ -110,7 +112,9 @@ public class Environment extends JPanel implements Runnable {
     public void startGame(){
         gameRunning=true;
     }
-
+    public boolean isGameOver(){
+        return gameOver;
+    }
 
 
     public void paintComponent( Graphics g){

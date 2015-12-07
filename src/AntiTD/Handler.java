@@ -38,7 +38,7 @@ public class Handler extends Thread {
             i--;
         }
     }
-    public void addObject(GameObject object){
+    public synchronized void addObject(GameObject object){
         objects.add(object);
     }
     public static void removeObject(GameObject object){
@@ -61,7 +61,7 @@ public class Handler extends Thread {
     }
 
 
-    public void tick(){
+    public synchronized void tick(){
         for (int i = 0; i < objects.size(); i++) {
           try {
             GameObject gameObject = objects.get(i);
