@@ -12,7 +12,7 @@ import java.util.Stack;
  * Created by dv13trm on 2015-11-27.
  */
 public abstract class Troop implements GameObject {
-    private static int victoryScore;
+    //private static int victoryScore;
     protected int health;
     protected int score;
     protected double speed;
@@ -94,6 +94,7 @@ public abstract class Troop implements GameObject {
         }
         */
     }
+    /*
     public static int getVictoryScore(){
         return victoryScore;
 
@@ -101,6 +102,8 @@ public abstract class Troop implements GameObject {
     public static void resetScore(){
         victoryScore=0;
     }
+    */
+
     @Override
     public Tile getMoveToPosition() {
         return nextTile;

@@ -20,6 +20,7 @@ public class Handler {
     private LinkedList<GameObject> objects;
     private int tid;
     private int score;
+    private boolean resetFlag;
     //private Thread thread;
     //private ArrayList<Troop> troops = new ArrayList();
     private LinkedList<GameObject> aliveTroops;
@@ -42,6 +43,7 @@ public class Handler {
         //thread = new Thread(this);
         //thread.start();
         score = 0;
+        resetFlag = false;
     }
 
     public boolean hasAliveTroops() {
@@ -55,10 +57,19 @@ public class Handler {
         return false;
     }
 
+    /**
+     * Clears object list for new game round.
+     * <br>
+     * **Deprecated**
+     * use reset instead
+     */
     public synchronized void clearList() {
+        this.reset();
+        /*
         objects.clear();
         towers.clear();
         aliveTroops.clear();
+        */
         /*
         int i = objects.size() - 1;
         while (objects.size() != 0) {
@@ -68,6 +79,12 @@ public class Handler {
         */
     }
 
+    /**
+     * Adds all objects to the game world that has been
+     * added by addObject method. <br /> <br />
+     * **Caution** <br />
+     * Should only be called in run method for thread safety
+     */
     private void addObjectsToGame() {
         for (GameObject object : objectsToAdd) {
             objects.add(object);
@@ -88,6 +105,12 @@ public class Handler {
         objectsToAdd.add(object);
     }
 
+    /**
+     * Removes all objects to the game world that has been
+     * added by removeObject method. <br /> <br />
+     * **Caution** <br />
+     * Should only be called in run method for thread safety
+     */
     private void removeObjectsFromGame() {
         for (GameObject object : objectsToRemove) {
             objects.remove(object);
@@ -163,6 +186,10 @@ public class Handler {
         }
         removeObjectsFromGame();
         addObjectsToGame();
+        if(resetFlag) {
+            resetGame();
+            resetFlag = false;
+        }
     }
 
     public void render(Graphics g) {
@@ -217,11 +244,16 @@ public class Handler {
         }
     }
 
-    public void reset() {
+    private void resetGame() {
         objects.clear();
         aliveTroops.clear();
         towers.clear();
         score = 0;
+    }
+
+    public synchronized void reset() {
+        resetFlag = true;
+
     }
 
     public int getVictoryScore() {

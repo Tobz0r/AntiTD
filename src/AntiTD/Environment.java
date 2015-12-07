@@ -240,7 +240,8 @@ public class Environment extends JPanel implements Runnable {
         level=levels.get(mapNr);
         map=level.getMap();
         Level.setCurrentMap(level.getMap());
-        Troop.resetScore();
+        handler.reset();
+        //Troop.resetScore();
         setUpNeighbors();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
