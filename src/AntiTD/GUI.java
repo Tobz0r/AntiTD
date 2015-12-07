@@ -221,7 +221,6 @@ public class GUI {
         money = new JTextField();
         money.setColumns(3);
         money.setEditable(false);
-        
         score = new JTextField();
         score.setEditable(false);
         score.setBackground(Color.white);
