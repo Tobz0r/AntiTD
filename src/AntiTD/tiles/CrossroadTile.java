@@ -34,10 +34,11 @@ public class CrossroadTile extends Tile {
     }
 
     public Tile[] findNextWay(){
+        nextTiles.clear();
         Tile[] neighbors = getNeighbors2();
         Tile[] arrNeighbors=new Tile[neighbors.length];
         for(Tile tile: neighbors){
-            if(!(tile instanceof JunctionTile && !(tile instanceof CrossroadTile))){
+            if(!(tile instanceof JunctionTile )){
                 nextTiles.add(tile);
             }
         }

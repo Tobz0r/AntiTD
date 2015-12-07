@@ -12,6 +12,7 @@ import java.util.Random;
 public class Level {
 
     private Position startPosition;
+    private int startingCredits;
     private Position goalPosition;
     private static Tile[][] currentMap;
     private Tile[][] map;
@@ -27,6 +28,12 @@ public class Level {
     public  void addMap(Tile[][] map){
         //First setUp crossroads
         this.map=map;
+    }
+    public void setStartingCredits(int startingCredits){
+        this.startingCredits=startingCredits;
+    }
+    public int getStartingCredits(){
+        return startingCredits;
     }
     public ArrayList setUpCrossroad(){
         ArrayList<CrossroadSwitch> tiles=new ArrayList<>();

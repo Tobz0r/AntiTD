@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by dv13tes on 2015-11-27.
@@ -23,12 +22,8 @@ public class BasicTower extends Tower {
     private Troop tr;
     private Troop target;
     private String type = "BasicTower";
-    private int result, emptyLoad;
+    private int result;
     int bullets;
-    TimerTask reloadTimer;
-    private int ticCounter = 0;
-
-
     public BasicTower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
 
 
@@ -37,15 +32,11 @@ public class BasicTower extends Tower {
       int low = 0;
       int High = 5;
       result = r.nextInt(High-low)+low;
-        setDamage(70);
+        setDamage(1);
         setRange(5);
         setPrice(1);
         setPosition(pos.getPosition());
-        bullets = 10;
-        emptyLoad = 0;
         this.posTile = pos;
-
-
     }
     public void initScan() {
       int distance = Integer.MAX_VALUE;
@@ -71,7 +62,6 @@ public class BasicTower extends Tower {
     }
     public void aggroTarget(){
       if(target != null){
-
 
         if(checkIfUnitIsClose(target) &&  target.isAlive() == true){
           //System.out.println("jao");
@@ -110,25 +100,16 @@ public class BasicTower extends Tower {
       return false;
     }
     public void startShooting(){
-       /* if (target != null) {
+      int bullets = 5;
+
+        if (target != null) {
+          //System.out.println(target.isAlive());
+          //System.out.println(target.type());
           aggroTarget();
         } else if(target == null){
+          //System.out.println("target null");
           initScan();
-        }*/
-
-
-                checkIfReachGoal();
-                if (target != null) {
-                    System.out.println("Target not null");
-                    this.aggroTarget();
-                } else {
-                    this.initScan();
-                }
-
-
-
-
-
+        }
 
 
 
@@ -174,54 +155,16 @@ public class BasicTower extends Tower {
     @Override
     public void tick() {
 
-       ticCounter++;
+      if (this.getTroopFromList()){
+          if (target != null) {
+            System.out.println("Target not null");
+            this.aggroTarget();
+          } else {
+       //   System.out.println("Target null");
+            this.initScan();
+          }
 
-
-        /*TimerTask timerTask;
-        reloadTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    if (getTroopFromList()) {
-                        checkIfReachGoal();
-                        if (target != null) {
-                            System.out.println("Target not null");
-                            aggroTarget();
-
-                            ;
-                        } else {
-                            initScan();
-
-                        }
-
-                    }
-                }catch (Exception ex){
-                    ex.printStackTrace();
-                }
-
-            }
-        },100,100);*/
-       try {
-           if(ticCounter >= 60) {
-               if (this.getTroopFromList()) {
-                /*checkIfReachGoal();
-                if (target != null) {
-                    System.out.println("Target not null");
-                    this.aggroTarget();
-
-                    ;
-                } else {
-                    this.initScan();
-                }*/
-                   startShooting();
-
-               }
-               ticCounter = 0;
-
-           }
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
+      }
      //System.out.println(result);
 
     }
