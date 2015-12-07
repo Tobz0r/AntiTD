@@ -60,8 +60,8 @@ public class Handler {
     /**
      * Clears object list for new game round.
      * <br /> <br />
-     * **Deprecated** <br />
-     * use reset() instead.
+     * <b>**Deprecated**</b> <br />
+     * use <b>reset()</b> instead.
      */
     public synchronized void clearList() {
         this.reset();
@@ -81,8 +81,8 @@ public class Handler {
 
     /**
      * Adds all objects to the game world that has been
-     * added by addObject method. <br /> <br />
-     * **Caution** <br />
+     * added by <b>addObject()</b> method. <br /> <br />
+     * <b>**Caution**</b> <br />
      * Should only be called in run method for thread safety
      */
     private void addObjectsToGame() {
@@ -104,8 +104,8 @@ public class Handler {
     /**
      * Add object to the game.
      * <br /> <br />
-     * **Note**<br />
-     * The object will not be added until tick method finishes
+     * <br>**Note**</b><br />
+     * The object will not be added until <b>tick()</b> method finishes
      * for thread safety reasons.
      * @param object object to add.
      */
@@ -114,10 +114,10 @@ public class Handler {
     }
 
     /**
-     * Removes all objects to the game world that has been
-     * added by removeObject method. <br /> <br />
-     * **Caution** <br />
-     * Should only be called in run method for thread safety
+     * Removes all objects from the game world that has been
+     * added by <b>removeObject()</b> method. <br /> <br />
+     * <b>**Caution**</b> <br />
+     * Should only be called in <b>tick()</b> method for thread safety
      */
     private void removeObjectsFromGame() {
         for (GameObject object : objectsToRemove) {
@@ -138,8 +138,8 @@ public class Handler {
     /**
      * Remove object from the game.
      * <br /> <br />
-     * **Note**<br />
-     * The object will not be removed until tick method finishes
+     * <b>**Note**</b><br />
+     * The object will not be removed until <b>tick()</b> method finishes
      * for thread safety reasons.
      * @param object object to remove.
      */
@@ -264,8 +264,8 @@ public class Handler {
     /**
      * Resets the game world.
      * <br /> <br />
-     * **Caution** <br />
-     * Should only be called in run method for thread safety
+     * <b>**Caution**</b> <br />
+     * Should only be called in <b>tick()</b> method for thread safety
      */
     private void resetGame() {
         objects.clear();
@@ -284,8 +284,8 @@ public class Handler {
     /**
      * Get accumulated score.
      * <br /><br />
-     * **Note**<br />
-     * The score is restored when reset() method is called.
+     * <b>**Note**</b><br />
+     * The score is restored when <b>reset()</b> method is called.
      * @return
      */
     public int getVictoryScore() {
