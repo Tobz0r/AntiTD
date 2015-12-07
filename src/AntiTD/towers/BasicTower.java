@@ -24,6 +24,7 @@ public class BasicTower extends Tower {
     private String type = "BasicTower";
     private int result;
     int bullets;
+    int ticCount = 0;
     public BasicTower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
 
 
@@ -32,7 +33,7 @@ public class BasicTower extends Tower {
       int low = 0;
       int High = 5;
       result = r.nextInt(High-low)+low;
-        setDamage(1);
+        setDamage(70);
         setRange(5);
         setPrice(1);
         setPosition(pos.getPosition());
@@ -100,15 +101,13 @@ public class BasicTower extends Tower {
       return false;
     }
     public void startShooting(){
-      int bullets = 5;
 
         if (target != null) {
-          //System.out.println(target.isAlive());
-          //System.out.println(target.type());
-          aggroTarget();
-        } else if(target == null){
-          //System.out.println("target null");
-          initScan();
+            System.out.println("Target not null");
+            this.aggroTarget();
+        } else {
+            //   System.out.println("Target null");
+            this.initScan();
         }
 
 
@@ -155,16 +154,20 @@ public class BasicTower extends Tower {
     @Override
     public void tick() {
 
-      if (this.getTroopFromList()){
-          if (target != null) {
+        ticCount++;
+        if(ticCount>=60) {
+            if (this.getTroopFromList()) {
+          /*if (target != null) {
             System.out.println("Target not null");
             this.aggroTarget();
           } else {
-       //   System.out.println("Target null");
             this.initScan();
-          }
+          }*/
+                startShooting();
 
-      }
+            }
+            ticCount = 0;
+        }
      //System.out.println(result);
 
     }
