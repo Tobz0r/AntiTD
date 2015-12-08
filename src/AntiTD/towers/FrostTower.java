@@ -35,27 +35,26 @@ public class FrostTower extends Tower{
 
     }
     public void initScan() {
-      int distance = Integer.MAX_VALUE;
-      for(Troop troop : troops){
-
-        Troop nearUnit = null;
-        int dist = distance(troop);
-        if(dist <= getRange()) {
-          inRange.push(troop);
-          if (dist < distance) {
-            nearUnit = troop;
-              setNearUnit(troop);
-            distance = dist;
+        int distance = Integer.MAX_VALUE;
+        ArrayList<Troop> troops=getTroopsList();
+        for(Troop troop : troops){
+            Troop nearUnit = null;
+            int dist = distance(troop);
+            if(dist <= getRange()) {
+                pushInRange(troop);
+                if (dist < distance) {
+                    nearUnit = troop;
+                    setNearUnit(troop);
+                    distance = dist;
+                }
+            }
+            if(nearUnit !=null){
+                target = nearUnit;
+            }
         }
-      }
-      if(nearUnit !=null){
-        target = nearUnit;
-      }
-     }
     }
     public void aggroTarget(){
         if(target != null) {
-
             if (checkIfUnitIsClose(target) && target.isAlive() == true) {
                 //System.out.println("jao");
                 attack(target, getDamage());
@@ -65,14 +64,14 @@ public class FrostTower extends Tower{
                     removeTroopFromList(target);
                 }
                 target = null;
-                inRange.clear();
+                getInRange().clear();
             }
         }
     }
     public void createTower(Tower tower, Tile pos){
       //Tower temp = new FrostTower(img,pos);
-      tower.init(troops, towers, pos);
-      towers.add(tower);
+      tower.init(getTroopsList(), getTowerList(), pos);
+      getTowerList().add(tower);
 
     }
     public void startShooting(){
@@ -89,7 +88,7 @@ public class FrostTower extends Tower{
         if(troop.isAlive()) {
             troop.attackThis(damage);
             if(!troop.isAlive()){
-                money++;
+                incrementMoney();
             }
         }
    }
@@ -131,14 +130,11 @@ public class FrostTower extends Tower{
     }
     @Override
     public void tick(){
-
         count ++;
         if(count >= 60) {
             if (this.getTroopFromList()) {
                 startShooting();
-
             }
-            //System.out.println(result);
             count = 0;
         }
     }
@@ -152,8 +148,6 @@ public class FrostTower extends Tower{
     public Troop getNearUnit(){
         return tr;
     }
-
-
 
     @Override
     public void render(Graphics g) {

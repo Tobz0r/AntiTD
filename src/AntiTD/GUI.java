@@ -112,7 +112,6 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap= Level.getCurrentMap();
                 env.addTroop(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
-                //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
         printScore();
@@ -123,18 +122,6 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
-                Tile pos;
-                Tile[][] currentMap = Level.getCurrentMap();
-                for (int i = 0; i < currentMap.length; i++) {
-                    for (int j = 0; j < currentMap[i].length; j++) {
-                        if (currentMap[i][j].isBuildable()) {
-                            //pos = currentMap[i][j];
-                            env.addTower(new BasicTower(img, currentMap[i][j], env.getTroops()));
-                            currentMap[i][j].setBuildable(false);
-                        }
-
-                    }
-                }
                 /*env.saveBuildableTilese();
                 env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
                 //env.addTower(new BasicTower(currentMap[env.getLevel().]);
@@ -148,7 +135,6 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
                 env.addTroop(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
-                //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
 
@@ -240,9 +226,7 @@ public class GUI {
     }
 
     public void updateScore(){
-        int value = env.getScore();
-        //String scoreValue=String.valueOf(Troop.getVictoryScore());
-        score.setText(""+value);
+        score.setText(String.valueOf(env.getScore()));
         score.setColumns(5);
     }
 }

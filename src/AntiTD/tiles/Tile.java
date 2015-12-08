@@ -17,7 +17,7 @@ public abstract class Tile implements TileRender {
     private boolean isTeleportStart;
     private Tile teleportEnd;
     private Dimension size=new Dimension(48,48);
-
+    private Image image;
     private Position position;
     private Tile[] neighbors;
     Troop player;
@@ -76,6 +76,9 @@ public abstract class Tile implements TileRender {
          */
     }
 
+    public void setImage(Image image){
+        this.image=image;
+    }
     public void setSize(Dimension size){
         this.size=size;
     }

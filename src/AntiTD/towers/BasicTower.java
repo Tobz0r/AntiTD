@@ -27,8 +27,6 @@ public class BasicTower extends Tower {
     int count;
 
     public BasicTower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
-
-
         super(img, pos, troops);
         Random r = new Random();
         int low = 0;
@@ -44,13 +42,13 @@ public class BasicTower extends Tower {
 
     public void initScan() {
         int distance = Integer.MAX_VALUE;
-        //System.out.println("initscan");
+        ArrayList<Troop>troops=getTroopsList();
         for (Troop troop : troops) {
             Troop nearUnit = null;
             if (troop.isAlive()) {
                 int dist = distance(troop);
                 if (dist <= getRange()) {
-                    inRange.push(troop);
+                    pushInRange(troop);
 
                     if (dist < distance) {
                         nearUnit = troop;
@@ -79,23 +77,24 @@ public class BasicTower extends Tower {
                     removeTroopFromList(target);
                 }
                 target = null;
-                inRange.clear();
+                getInRange().clear();
             }
         }
     }
 
     public void createTower(Tower tower, Tile pos) {
         //Tower temp = new BasicTower(img,pos);
-        tower.init(troops, towers, pos);
-        towers.add(tower);
+        tower.init(getTroopsList(), getTowerList(), pos);
+        getTowerList().add(tower);
 
     }
+
 
     public void attack(Troop troop, int damage) {
         if (troop.isAlive()) {
             troop.attackThis(damage);
             if (!troop.isAlive()) {
-                money++;
+                incrementMoney();
             }
         }
     }
@@ -182,7 +181,6 @@ public class BasicTower extends Tower {
         if (count >= 60) {
             if (this.getTroopFromList()) {
                 startShooting();
-
             }
             //System.out.println(result);
             count = 0;
