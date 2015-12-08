@@ -34,7 +34,7 @@ public class BasicTower extends Tower {
       int High = 5;
       result = r.nextInt(High-low)+low;
         setDamage(100);
-        setRange(5);
+        setRange(7);
         setPrice(1);
         setPosition(pos.getPosition());
         this.posTile = pos;

@@ -61,7 +61,7 @@ public class Handler extends Thread {
             GameObject gameObject = objects.get(i);
             if(gameObject.type().equals("Tower")){
               j++;
-                System.out.println("inserting troops: " + j);
+               // System.out.println("inserting troops: " + j);
                 ((Tower)gameObject).setTroopsToList(troops);
             }
         }
