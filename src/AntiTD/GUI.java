@@ -116,11 +116,10 @@ public class GUI {
 
         //basictropp button
         buyButton = new JButton("Basic troops");
-        buyButton.setBackground(Color.white);
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile[][] currentMap= Level.getCurrentMap();
+                Tile[][] currentMap = Level.getCurrentMap();
                 env.addTroop(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
                 //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
@@ -128,11 +127,9 @@ public class GUI {
         printScore();
         //Testar torn
         buyTeleport = new JButton("Teleport Troop");
-        buyTeleport.setBackground(Color.white);
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("TELEPORTELIAS");
                 Tile pos;
                 Tile[][] currentMap = Level.getCurrentMap();
                 for (int i = 0; i < currentMap.length; i++) {
@@ -152,13 +149,19 @@ public class GUI {
             }
         });
         buySpeed = new JButton("Speed Troop");
-        buySpeed.setBackground(Color.white);
         buySpeed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
                 env.addTroop(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
                 //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+            }
+        });
+        crossButton = new JButton("Change direction");
+        crossButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.out.print("eliashej");
             }
         });
 
@@ -249,12 +252,12 @@ public class GUI {
         score.setBackground(Color.white);
         score.setBorder(null);
         score.setText(currentScore);
-        buyPanel.add(score);
-        buyPanel.add(money);
+
     }
 
     public void updateScore(){
-        score.setText(String.valueOf(env.getScore()));
+        score.setText("Score:"+String.valueOf(env.getScore()));
+        money.setText("Money");
         score.setColumns(5);
     }
 }
