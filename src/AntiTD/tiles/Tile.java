@@ -79,6 +79,7 @@ public abstract class Tile implements TileRender {
     public void setImage(Image image){
         this.image=image;
     }
+
     public void setSize(Dimension size){
         this.size=size;
     }
