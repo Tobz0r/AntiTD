@@ -5,6 +5,10 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.SpringLayout;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 import AntiTD.*;
 import AntiTD.tiles.Level;
@@ -18,6 +22,8 @@ import AntiTD.troops.Troop;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Observable;
@@ -185,25 +191,26 @@ public class GUI {
 
 
     public void startScreen()  {
-       
+        //check to see if panel still exists
+        if(buyPanel !=null){
+            frame.remove(buyPanel);
+        }
+
         env.stop();
         frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
-        //behövs en bättre lösning <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         player.setEditable(true);
         player.setWrapStyleWord(true);
         player.setLineWrap(true);
-
         playerScroll = new JScrollPane(player);
-
         player.setBorder(BorderFactory.createLineBorder(Color.black));
-
         startPanel = new JPanel();
         startPanel.setBackground(Color.white);
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
+        checkTextField();
         frame.setSize(300, 200);
         frame.add(startPanel);
         frame.setVisible(true);
@@ -216,6 +223,68 @@ public class GUI {
             }
         });
 
+        
+    }
+    private void checkTextField(){
+
+        player.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent documentEvent) {
+                Document doc = player.getDocument();
+                if (doc.getLength() > 10) {
+                    player.setEditable(false);
+                    player.addKeyListener(new KeyListener() {
+                        @Override
+                        public void keyTyped(KeyEvent keyEvent) {
+
+                        }
+
+                        @Override
+                        public void keyPressed(KeyEvent keyEvent) {
+                            backSpace(keyEvent);
+                        }
+
+                        @Override
+                        public void keyReleased(KeyEvent keyEvent) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent documentEvent) {
+                if (player.getDocument().getLength() > 10) {
+                    player.setEditable(false);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent documentEvent) {
+                if (player.getDocument().getLength() > 10) {
+                    player.setEditable(false);
+                }
+            }
+        });
+
+    }
+
+    private void backSpace(KeyEvent k){
+        if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            player.setEditable(true);
+            k.consume();
+            Document doc = player.getDocument();
+            if(doc.getLength()>0 && doc.getLength() <12){
+                try {
+                    doc.remove(doc.getLength()-1, 1);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+        }
     }
     public void runMusic()  {
         gameSound = "cello.wav";
