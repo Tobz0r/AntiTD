@@ -1,7 +1,7 @@
 package AntiTD.tiles;
 
 import AntiTD.Position;
-import javafx.geometry.Pos;
+
 
 import java.awt.*;
 import java.util.ArrayList;
