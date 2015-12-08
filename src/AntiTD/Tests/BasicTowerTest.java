@@ -42,8 +42,8 @@ public class BasicTowerTest {
     troop = new BasicTroop(troopPos);
     troops.add(troop);
     img = new ImageIcon(skolan);
-    tower = new BasicTower(img, pos,troops);
-    tower.createTower(tower,pos);
+    //tower = new BasicTower(img, pos,troops);
+   // tower.createTower(tower,pos);
   }
 
   @Test

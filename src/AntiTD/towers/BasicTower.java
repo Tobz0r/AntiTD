@@ -26,7 +26,7 @@ public class BasicTower extends Tower {
     int bullets;
     int count;
 
-    public BasicTower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
+    public BasicTower(Image img, Tile pos, ArrayList<Troop> troops) {
         super(img, pos, troops);
         Random r = new Random();
         int low = 0;

@@ -1,6 +1,7 @@
 package AntiTD;
 
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -24,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Observable;
@@ -39,6 +41,8 @@ public class GUI {
     private Thread gameThread;
     private Environment env;
     private JFrame frame;
+    private BufferedImage basicImage;
+    private BufferedImage speedImage;
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
@@ -68,6 +72,12 @@ public class GUI {
 
         env = new Environment(this);
 
+        try {
+            basicImage= ImageIO.read(new File("ogre.gif"));
+            speedImage = ImageIO.read(new File("redDragon.gif"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         frame = new JFrame("AntiTD");
          scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -126,7 +136,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroop(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.addTroop(new BasicTroop(basicImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
                 //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
@@ -136,18 +146,7 @@ public class GUI {
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile pos;
-                Tile[][] currentMap = Level.getCurrentMap();
-                for (int i = 0; i < currentMap.length; i++) {
-                    for (int j = 0; j < currentMap[i].length; j++) {
-                        if (currentMap[i][j].isBuildable()) {
-                            //pos = currentMap[i][j];
-                            env.addTower(new BasicTower(img, currentMap[i][j], env.getTroops()));
-                            currentMap[i][j].setBuildable(false);
-                        }
 
-                    }
-                }
                 /*env.saveBuildableTilese();
                 env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
                 //env.addTower(new BasicTower(currentMap[env.getLevel().]);
@@ -159,7 +158,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroop(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.addTroop(new SpeedTroop(speedImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
                 //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });

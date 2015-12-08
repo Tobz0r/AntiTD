@@ -2,6 +2,7 @@ package AntiTD;
 
 import AntiTD.tiles.Tile;
 import AntiTD.towers.Tower;
+import AntiTD.troops.BasicTroop;
 import AntiTD.troops.Troop;
 
 import javax.print.attribute.standard.ReferenceUriSchemesSupported;
@@ -243,7 +244,7 @@ public class Handler {
                     Long x_current = Math.round(x_start - (x_global * progress.doubleValue()));
                     Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
 
-                    double scale = 0.3;
+                    double scale = 0.4;
 
                     double width = gameObject.getTilePosition().getSize().getWidth();
                     double height = gameObject.getTilePosition().getSize().getHeight();
@@ -255,7 +256,9 @@ public class Handler {
 
                     int xOffset = (new Long(Math.round((width/2)-(troopSizeY/2)))).intValue();
                     int yOffset = (new Long(Math.round((height/2)-(troopSizeX/2)))).intValue();
-                    g.fillRect(x_current.intValue()+xOffset, y_current.intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue());
+                    g.drawImage(gameObject.getImage(),x_current.intValue()+xOffset, y_current.intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue(),null);
+
+                    //g.fillRect(x_current.intValue()+xOffset, y_current.intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue());
                 }
 
             } catch (NullPointerException e) {

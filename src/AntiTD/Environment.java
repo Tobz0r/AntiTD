@@ -31,7 +31,7 @@ public class Environment extends JPanel implements Runnable {
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
     //private ArrayList<Troop> troops = new ArrayList<>();
     private ArrayList<CrossroadSwitch> switches;
-
+    private BufferedImage basicTower;
     private static boolean gameRunning;
     private static  boolean paused;
     private BufferedImage basicImage;
@@ -49,7 +49,7 @@ public class Environment extends JPanel implements Runnable {
     public Environment(GUI gui){
         super(new BorderLayout());
         try {
-            basicImage= ImageIO.read(new File("patheses.png"));
+            basicTower= ImageIO.read(new File("tempTower.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -247,11 +247,11 @@ public class Environment extends JPanel implements Runnable {
         Level.setCurrentMap(map);
         handler.reset();
         setUpNeighbors();
+        initTowers();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
-        initTowers();
         resumeGame();
     }
 
@@ -280,9 +280,11 @@ public class Environment extends JPanel implements Runnable {
     private void initTowers(){
         Tile[][] currentMap = Level.getCurrentMap();
         for (int i = 0; i < currentMap.length; i++) {
+            System.out.println("ELIASHEJ");
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
-                    addTower(new FrostTower(null, currentMap[i][j], getTroops()));
+                    System.out.println("DET ÄR JAG SOM ÄR ELIAS");
+                    addTower(new BasicTower(basicTower, currentMap[i][j], getTroops()));
                 }
             }
         }

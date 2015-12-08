@@ -31,7 +31,7 @@ public class FrostTower extends Tower{
     private HashMap<Troop,Boolean> targetSlowed = new HashMap<>();
     private int targetNumb = 0;
     ImageIcon img;
-    public FrostTower(ImageIcon img, Tile pos,ArrayList<Troop> troops) {
+    public FrostTower(Image img, Tile pos,ArrayList<Troop> troops) {
 
       super(img, pos, troops);
       setDamage(10);

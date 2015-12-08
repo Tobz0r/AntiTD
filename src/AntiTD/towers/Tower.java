@@ -16,7 +16,7 @@ import java.util.LinkedList;
 public abstract class Tower implements GameObject {
     private Tile pos;
     private int money;
-    private ImageIcon img;
+    private Image img;
     private Image imge;
 
     private ArrayList<Troop> troops = new ArrayList();
@@ -29,7 +29,7 @@ public abstract class Tower implements GameObject {
     private Tower iniTower;
     private Tile posTile;
 
-    public Tower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
+    public Tower(Image img, Tile pos, ArrayList<Troop> troops) {
         this.img = img;
         this.money = 0;
         this.pos = pos;
@@ -94,7 +94,7 @@ public abstract class Tower implements GameObject {
     @Override
     public Image getImage() {
 
-        return imge;
+        return img;
     }
 
     public void setCurrentScore(Troop troop) {
