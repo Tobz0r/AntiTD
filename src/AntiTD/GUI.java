@@ -183,6 +183,7 @@ public class GUI {
 
 
     public void startScreen()  {
+       
         env.stop();
         frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
