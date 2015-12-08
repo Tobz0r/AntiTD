@@ -93,8 +93,10 @@ public class GUI {
     }
     public void restartGame(){
         //ta bort alla torn och teleportertiles
-        Handler.clearList();
+        //Handler.clearList();
         env.stop();
+        env.isGameOver();
+        env = new Environment(this);
         startGame();
     }
 
@@ -106,7 +108,7 @@ public class GUI {
         buyPanel.setBackground(Color.magenta);
         buyPanel.setPreferredSize(new Dimension(50,75));
 
-
+        
         //basictropp button
         buyButton = new JButton("Basic troops");
         buyButton.setBackground(Color.white);
@@ -114,10 +116,11 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap= Level.getCurrentMap();
-                env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.addTroop(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-
+        printScore();
         //Testar torn
         buyTeleport = new JButton("Teleport Troop");
         buyTeleport.setBackground(Color.white);
@@ -150,7 +153,8 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.addTroop(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
 
@@ -242,11 +246,10 @@ public class GUI {
     }
 
     public void updateScore(){
-        String scoreValue=String.valueOf(Troop.getVictoryScore());
-        score.setText(scoreValue);
-        score.setColumns(scoreValue.length() + 1);
-        money.setText(scoreValue);
-        money.setColumns(scoreValue.length()+1);
+        int value = env.getScore();
+        //String scoreValue=String.valueOf(Troop.getVictoryScore());
+        score.setText(""+value);
+        score.setColumns(5);
     }
 
 }

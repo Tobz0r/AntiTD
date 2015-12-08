@@ -23,6 +23,8 @@ public interface GameObject{
     public abstract String type();
 
     public abstract Tile getTilePosition();
-    public abstract Tile getMoveToPosition();
+    public Tile getMoveToPosition();
     public abstract int getMoveProgres();
+
+
 }

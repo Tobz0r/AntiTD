@@ -57,4 +57,9 @@ public class Dummy extends Troop implements GameObject {
     public Tile getTilePosition() {
         return null;
     }
+
+    @Override
+    public Tile getMoveToPosition() {
+        return null;
+    }
 }
