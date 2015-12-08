@@ -16,7 +16,7 @@ import java.util.LinkedList;
 /**
  * Created by id12rdt on 2015-11-30.
  */
-public class FrostTower extends Tower {
+public class FrostTower extends Tower{
     private int damage;
     private int range;
     private int price;
@@ -28,30 +28,28 @@ public class FrostTower extends Tower {
     private String type = "FrostTower";
     private boolean slowedTarget;
     private LinkedList<Troop> slowedTroop = new LinkedList<Troop>();
-    private HashMap<Troop, Boolean> targetSlowed = new HashMap<>();
+    private HashMap<Troop,Boolean> targetSlowed = new HashMap<>();
     private int targetNumb = 0;
     ImageIcon img;
+    public FrostTower(ImageIcon img, Tile pos,ArrayList<Troop> troops) {
 
-    public FrostTower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
-
-        super(img, pos, troops);
-        setDamage(10);
-        setRange(10);
-        setPrice(5);
-        setPosition(pos.getPosition());
+      super(img, pos, troops);
+      setDamage(10);
+      setRange(10);
+      setPrice(5);
+      setPosition(pos.getPosition());
         slowedTarget = false;
         this.posTile = pos;
 
 
     }
-
     public void initScan() {
         int distance = Integer.MAX_VALUE;
-        ArrayList<Troop> troops = getTroopsList();
-        for (Troop troop : troops) {
+        ArrayList<Troop> troops=getTroopsList();
+        for(Troop troop : troops){
             Troop nearUnit = null;
             int dist = distance(troop);
-            if (dist <= getRange()) {
+            if(dist <= getRange()) {
                 pushInRange(troop);
                 if (dist < distance) {
                     nearUnit = troop;
@@ -59,14 +57,13 @@ public class FrostTower extends Tower {
                     distance = dist;
                 }
             }
-            if (nearUnit != null) {
+            if(nearUnit !=null){
                 target = nearUnit;
             }
         }
     }
-
-    public void aggroTarget() {
-        if (target != null) {
+    public void aggroTarget(){
+        if(target != null) {
 
             if (checkIfUnitIsClose(target) && target.isAlive() == true) {
                 //System.out.println("jao");
@@ -81,19 +78,17 @@ public class FrostTower extends Tower {
             }
         }
     }
-
-    public void createTower(Tower tower, Tile pos) {
-        //Tower temp = new FrostTower(img,pos);
-        tower.init(getTroopsList(), getTowerList(), pos);
-        getTowerList().add(tower);
+    public void createTower(Tower tower, Tile pos){
+      //Tower temp = new FrostTower(img,pos);
+      tower.init(getTroopsList(), getTowerList(), pos);
+      getTowerList().add(tower);
 
     }
-
-    public void startShooting() {
+    public void startShooting(){
         checkIfTroopReachedGoal();
         if (target != null) {
 
-            if (!target.isSlowed()) {
+            if(!target.isSlowed()) {
                 System.out.println("hola");
                 target.slowSpeed();
             }
@@ -103,68 +98,55 @@ public class FrostTower extends Tower {
             this.initScan();
         }
     }
-
-    public void attack(Troop troop, int damage) {
-        if (troop.isAlive()) {
+    public void attack(Troop troop, int damage){
+        if(troop.isAlive()) {
             troop.attackThis(damage);
-            if (!troop.isAlive()) {
+            if(!troop.isAlive()){
                 incrementMoney();
             }
         }
-    }
-
+   }
     public int distance(Troop troop) {
-        return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
+      return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
     }
-
-    public boolean checkIfUnitIsClose(Troop troop) {
-        if (Math.hypot(troop.getPosition().getX() - getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()) {
-            return true;
-        }
-        return false;
+    public boolean checkIfUnitIsClose(Troop troop){
+      if(Math.hypot(troop.getPosition().getX() -getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()){
+        return true;
+      }
+      return false;
     }
-
-    public String getTowerType() {
-        return type;
+    public String getTowerType(){
+      return type;
     }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
+    public void setDamage(int damage){
+      this.damage = damage;
     }
-
-    public int getDamage() {
-        return damage;
+    public int getDamage(){
+      return damage;
     }
-
-    public void setRange(int range) {
-        this.range = range;
+    public void setRange(int range){
+      this.range = range;
     }
-
-    public int getRange() {
-        return range;
+    public int getRange(){
+      return range;
     }
-
-    public void setPrice(int price) {
-        this.price = price;
+    public void setPrice(int price){
+      this.price = price;
     }
-
-    public int getPrice() {
-        return price;
+    public int getPrice(){
+      return price;
     }
-
-    public void setPosition(Position pos) {
-        this.pos = pos;
+    public void setPosition(Position pos){
+      this.pos = pos;
     }
-
-    public Position getPosition() {
-        return pos;
+    public Position getPosition(){
+      return pos;
     }
-
     @Override
-    public void tick() {
+    public void tick(){
 
-        count++;
-        if (count >= 60) {
+        count ++;
+        if(count >= 60) {
             if (this.getTroopFromList()) {
                 startShooting();
 
@@ -173,40 +155,37 @@ public class FrostTower extends Tower {
             count = 0;
         }
     }
-
     /*test method*/
-    public Troop getTarget() {
+    public Troop getTarget(){
         return target;
     }
-
-    public void setNearUnit(Troop tr) {
+    public void setNearUnit(Troop tr){
         this.tr = tr;
     }
-
-    public Troop getNearUnit() {
+    public Troop getNearUnit(){
         return tr;
     }
-
     public void setValueInHashMap(String target) {
+
     }
-        @Override
-        public void render (Graphics g){
 
-        }
+    @Override
+    public void render(Graphics g) {
 
-        @Override
-        public Tile getTilePosition () {
-            return posTile;
-        }
+    }
 
-        @Override
-        public Tile getMoveToPosition () {
-            return this.getTilePosition();
-        }
+    @Override
+    public Tile getTilePosition() {
+        return posTile;
+    }
 
-        @Override
-        public int getMoveProgres () {
-            return 0;
-        }
+    @Override
+    public Tile getMoveToPosition() {
+        return this.getTilePosition();
+    }
 
+    @Override
+    public int getMoveProgres() {
+        return 0;
+    }
 }
