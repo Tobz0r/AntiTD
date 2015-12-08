@@ -15,14 +15,14 @@ import java.util.LinkedList;
  */
 public abstract class Tower implements GameObject {
     private Tile pos;
-    protected int money;
+    private int money;
     private ImageIcon img;
     private Image imge;
 
-    protected ArrayList<Troop> troops = new ArrayList();
+    private ArrayList<Troop> troops = new ArrayList();
     private Troop target;
-    protected LinkedList<Troop> inRange = new LinkedList();
-    protected ArrayList<Tower> towers = new ArrayList();
+    private LinkedList<Troop> inRange = new LinkedList();
+    private ArrayList<Tower> towers = new ArrayList();
     private int range;
     private int damage;
     private int price;
@@ -42,6 +42,21 @@ public abstract class Tower implements GameObject {
         this.troops = troops;
         initScan();
     }*/
+    public void incrementMoney(){
+        money++;
+    }
+    public LinkedList getInRange(){
+        return inRange;
+    }
+    public void pushInRange(Troop troop){
+        inRange.push(troop);
+    }
+    public ArrayList getTroopsList(){
+        return troops;
+    }
+    public ArrayList getTowerList(){
+        return towers;
+    }
     public void init(ArrayList<Troop> troops, ArrayList<Tower> towers, Tile pos) {
         this.pos = pos;
         this.troops = troops;
@@ -257,3 +272,4 @@ public abstract class Tower implements GameObject {
         return this.posTile;
     }
 }
+

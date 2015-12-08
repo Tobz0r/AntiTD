@@ -23,7 +23,7 @@ public class FrostTower extends Tower{
     private Troop tr;
     private Troop target;
     private Position pos;
-    private int count = 61;
+    private int count = 0;
     private Tile posTile;
     private String type = "FrostTower";
     private boolean slowedTarget;
@@ -34,8 +34,8 @@ public class FrostTower extends Tower{
     public FrostTower(ImageIcon img, Tile pos,ArrayList<Troop> troops) {
 
       super(img, pos, troops);
-      setDamage(100);
-      setRange(5);
+      setDamage(10);
+      setRange(10);
       setPrice(5);
       setPosition(pos.getPosition());
         slowedTarget = false;
@@ -44,23 +44,23 @@ public class FrostTower extends Tower{
 
     }
     public void initScan() {
-      int distance = Integer.MAX_VALUE;
-      for(Troop troop : troops){
-
-        Troop nearUnit = null;
-        int dist = distance(troop);
-        if(dist <= getRange()) {
-          inRange.push(troop);
-          if (dist < distance) {
-            nearUnit = troop;
-              setNearUnit(troop);
-            distance = dist;
+        int distance = Integer.MAX_VALUE;
+        ArrayList<Troop> troops=getTroopsList();
+        for(Troop troop : troops){
+            Troop nearUnit = null;
+            int dist = distance(troop);
+            if(dist <= getRange()) {
+                pushInRange(troop);
+                if (dist < distance) {
+                    nearUnit = troop;
+                    setNearUnit(troop);
+                    distance = dist;
+                }
+            }
+            if(nearUnit !=null){
+                target = nearUnit;
+            }
         }
-      }
-      if(nearUnit !=null){
-        target = nearUnit;
-      }
-     }
     }
     public void aggroTarget(){
         if(target != null) {
@@ -74,14 +74,14 @@ public class FrostTower extends Tower{
                     removeTroopFromList(target);
                 }
                 target = null;
-                inRange.clear();
+                getInRange().clear();
             }
         }
     }
     public void createTower(Tower tower, Tile pos){
       //Tower temp = new FrostTower(img,pos);
-      tower.init(troops, towers, pos);
-      towers.add(tower);
+      tower.init(getTroopsList(), getTowerList(), pos);
+      getTowerList().add(tower);
 
     }
     public void startShooting(){
@@ -100,10 +100,9 @@ public class FrostTower extends Tower{
     }
     public void attack(Troop troop, int damage){
         if(troop.isAlive()) {
-
             troop.attackThis(damage);
             if(!troop.isAlive()){
-                money++;
+                incrementMoney();
             }
         }
    }
@@ -143,14 +142,12 @@ public class FrostTower extends Tower{
     public Position getPosition(){
       return pos;
     }
-
     @Override
     public void tick(){
 
         count ++;
         if(count >= 60) {
             if (this.getTroopFromList()) {
-
                 startShooting();
 
             }
@@ -171,7 +168,6 @@ public class FrostTower extends Tower{
     public void setValueInHashMap(String target){
 
 
-    }
 
     @Override
     public void render(Graphics g) {

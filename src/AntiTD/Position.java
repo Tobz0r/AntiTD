@@ -15,25 +15,32 @@ public class Position {
     public int getX() {
         return x;
     }
-    public Position getPosToSouth(){
-        Position p = new Position(x+1,y);
-        return p;
+    public boolean IsPosToSouth(Position p){
+        if((this.getX()+1)==p.getX()){
+            return this.getY()==p.getY();
+        }
+        return false;
     }
 
-    public Position getPosToNorth(){
-        Position p = new Position (x-1,y);
-        return p;
+    public boolean IsPosToNorth(Position p){
+        if(this.getX()-1==p.getY()){
+            return this.getY()==p.getY();
+        }
+        return false;
     }
 
-    public Position getPosToWest(){
-        Position p = new Position (x,y-1);
-        return p;
+    public boolean IsPosToWest(Position p){
+        if((this.getY()-1) == p.getY()){
+            return this.getX()==getX();
+        }
+        return false;
     }
 
-    public Position getPosToEast(){
-        Position p = new Position (x,y+1);
-        return p;
-
+    public boolean IsPosToEast(Position p){
+        if((this.getY()+1) == p.getY()){
+            return this.getY()==p.getX();
+        }
+        return false;
     }
 
     public int getY() {

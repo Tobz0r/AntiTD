@@ -25,8 +25,6 @@ public abstract class Troop implements GameObject {
     private boolean slowed;
 
 
-    private float velX;
-    private float velY;
 
 
     protected Troop(Tile pos) {

@@ -1,6 +1,7 @@
 package AntiTD.tiles;
 
 import AntiTD.Position;
+import javafx.geometry.Pos;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -61,6 +62,18 @@ public class CrossroadTile extends Tile {
         newPath=reverseArray(newPath);
         if(newPath[0]==null){
             newPath[0]=newPath[1];
+        }
+        Position p=newPath[0].getPosition();
+        if(getPosition().IsPosToEast(p)){
+            //eastimg
+        }else if(getPosition().IsPosToNorth(p)){
+            //northimg
+        }
+        else if(getPosition().IsPosToSouth(p)){
+
+        }
+        else if(getPosition().IsPosToWest(p)){
+ 
         }
         setNeighbors(newPath);
     }

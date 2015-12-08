@@ -83,7 +83,7 @@ public class GUI {
     }
 
     public void startGame() {
-        runMusic();
+        //runMusic();
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,7 +92,6 @@ public class GUI {
         env.repaint();
         buildBuyPanel();
         frame.pack();
-
     }
     public void restartGame(){
         //ta bort alla torn och teleportertiles
@@ -104,7 +103,6 @@ public class GUI {
     }
 
     private void buildBuyPanel(){
-
         buyPanel = new JPanel();
         printScore();
         buyPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -115,9 +113,10 @@ public class GUI {
         layout.setHgap(2);
         layout.setVgap(2);
 
-        
+
         //basictropp button
         buyButton = new JButton("Basic troops");
+        buyButton.setBackground(Color.white);
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -129,6 +128,7 @@ public class GUI {
         printScore();
         //Testar torn
         buyTeleport = new JButton("Teleport Troop");
+        buyTeleport.setBackground(Color.white);
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -139,21 +139,20 @@ public class GUI {
                     for (int j = 0; j < currentMap[i].length; j++) {
                         if (currentMap[i][j].isBuildable()) {
                             //pos = currentMap[i][j];
-                           // env.addTower(new BasicTower(img, currentMap[i][j], env.getTroops()));
-                            env.addTower(new FrostTower(img,currentMap[i][j], env.getTroops()));
+                            env.addTower(new BasicTower(img, currentMap[i][j], env.getTroops()));
                             currentMap[i][j].setBuildable(false);
                         }
 
                     }
                 }
                 /*env.saveBuildableTilese();
-                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/
-                ;
+                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
                 //env.addTower(new BasicTower(currentMap[env.getLevel().]);
                 //env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
             }
         });
         buySpeed = new JButton("Speed Troop");
+        buySpeed.setBackground(Color.white);
         buySpeed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -162,7 +161,6 @@ public class GUI {
                 //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-        crossButton = new JButton("Change direction");
 
 
 
@@ -187,9 +185,11 @@ public class GUI {
         env.stop();
         frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
+        //behövs en bättre lösning <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         player.setEditable(true);
         player.setWrapStyleWord(true);
         player.setLineWrap(true);
+
         playerScroll = new JScrollPane(player);
 
         player.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -206,6 +206,7 @@ public class GUI {
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
                 getName();
                 startGame();
             }
@@ -248,14 +249,12 @@ public class GUI {
         score.setBackground(Color.white);
         score.setBorder(null);
         score.setText(currentScore);
-
+        buyPanel.add(score);
+        buyPanel.add(money);
     }
 
     public void updateScore(){
-        int value = env.getScore();
-        score.setText("Score:"+value);
-        money.setText("Money:");
+        score.setText(String.valueOf(env.getScore()));
         score.setColumns(5);
     }
-
 }

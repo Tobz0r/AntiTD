@@ -8,6 +8,7 @@ import javax.print.attribute.standard.ReferenceUriSchemesSupported;
 import javax.sound.midi.SysexMessage;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.concurrent.RunnableFuture;
@@ -47,7 +48,9 @@ public class Handler {
     }
 
     public boolean hasAliveTroops() {
-        for (GameObject temp : objects) {
+        Iterator<GameObject> iter = objects.iterator();
+        while(iter.hasNext()) {
+            GameObject temp=iter.next();
             if (temp instanceof Troop) {
                 if (((Troop) temp).isAlive()) {
                     return true;
