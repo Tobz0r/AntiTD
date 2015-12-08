@@ -216,9 +216,10 @@ public class GUI {
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                getName();
-                startGame();
+                if(player.getDocument().getLength()!=0){
+                    getName();
+                    startGame();
+                }
             }
         });
 
