@@ -2,7 +2,10 @@ package AntiTD.troops;
 
 import AntiTD.tiles.Tile;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by mattias on 2015-11-30.

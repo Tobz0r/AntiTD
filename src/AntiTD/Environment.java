@@ -8,9 +8,12 @@ import AntiTD.towers.FrostTower;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.Executor;
@@ -31,7 +34,7 @@ public class Environment extends JPanel implements Runnable {
 
     private static boolean gameRunning;
     private static  boolean paused;
-
+    private BufferedImage basicImage;
     private int credits;
     private final int minimumCredits=20;
     private Tile[][] map;
@@ -45,6 +48,11 @@ public class Environment extends JPanel implements Runnable {
 
     public Environment(GUI gui){
         super(new BorderLayout());
+        try {
+            basicImage= ImageIO.read(new File("patheses.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.gui=gui;
         gameOver=false;
         handler=new Handler(0);
