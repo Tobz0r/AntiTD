@@ -15,7 +15,7 @@ import java.util.LinkedList;
 
 /**
  * Created by id12rdt on 2015-11-30.
- */ 
+ */
 public class FrostTower extends Tower{
     private int damage;
     private int range;

@@ -3,7 +3,11 @@ package AntiTD.tiles;
 import AntiTD.Position;
 
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,10 +32,18 @@ public class CrossroadTile extends Tile {
     @Override
     public void landOn(Graphics g) {
         g.setColor(Color.red);
-        g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),
-                (int)(getPosition().getY()*(getSize().getHeight())),
-                (int)getSize().getWidth(),
-                (int)getSize().getHeight());
+        if(getImage()==null){
+            g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),
+                    (int)(getPosition().getY()*(getSize().getHeight())),
+                    (int)getSize().getWidth(),
+                    (int)getSize().getHeight());
+        }
+        else{
+            g.drawImage(getImage(),(int)(getPosition().getX()*(getSize().getWidth())),
+                    (int)(getPosition().getY()*(getSize().getHeight())),
+                    (int)getSize().getWidth(),
+                    (int)getSize().getHeight(),null);
+        }
     }
 
     public Tile[] findNextWay(){
@@ -53,7 +65,7 @@ public class CrossroadTile extends Tile {
         Collections.reverse(Arrays.asList(copy));
         return copy;
     }
-    void changeWay(){
+    void changeWay() throws IOException {
         Tile[] current=getNeighbors2();
         Tile[] newPath=new Tile[current.length];
         for(int i=0; i < current.length;i++){
@@ -64,15 +76,20 @@ public class CrossroadTile extends Tile {
             newPath[0]=newPath[1];
         }
         Position p=newPath[0].getPosition();
+        System.out.println(getPosition());
+        System.out.println(p);
         if(getPosition().IsPosToEast(p)){
-            //eastimg
+            setImage(ImageIO.read(new File("rightarrow.png")));
+            System.out.println("ELIASHEJ");
         }else if(getPosition().IsPosToNorth(p)){
-            //northimg
+            setImage(ImageIO.read(new File("uparrow.png")));
         }
         else if(getPosition().IsPosToSouth(p)){
-
+            setImage(ImageIO.read(new File("downarrow.png")));
         }
         else if(getPosition().IsPosToWest(p)){
+            setImage(ImageIO.read(new File("leftarrow.png")));
+            System.out.println("ELaaaaaIASHEJ");
 
         }
         setNeighbors(newPath);
