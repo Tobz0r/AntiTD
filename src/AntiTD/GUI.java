@@ -10,6 +10,7 @@ import AntiTD.*;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
+import AntiTD.towers.FrostTower;
 import AntiTD.troops.BasicTroop;
 import AntiTD.troops.SpeedTroop;
 import AntiTD.troops.Troop;
@@ -138,7 +139,8 @@ public class GUI {
                     for (int j = 0; j < currentMap[i].length; j++) {
                         if (currentMap[i][j].isBuildable()) {
                             //pos = currentMap[i][j];
-                            env.addTower(new BasicTower(img, currentMap[i][j], env.getTroops()));
+                           // env.addTower(new BasicTower(img, currentMap[i][j], env.getTroops()));
+                            env.addTower(new FrostTower(img,currentMap[i][j], env.getTroops()));
                             currentMap[i][j].setBuildable(false);
                         }
 

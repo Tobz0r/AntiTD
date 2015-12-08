@@ -22,6 +22,7 @@ public abstract class Troop implements GameObject {
     private double moveProgres;
     private boolean hasReacedGoal;
     private boolean isMoving;
+    private boolean slowed;
 
 
     private float velX;
@@ -46,6 +47,7 @@ public abstract class Troop implements GameObject {
         this.speed = speed;
         this.history = new Stack<Tile>();
         this.history.push(pos);
+        slowed = false;
 
     }
 
@@ -200,5 +202,13 @@ public abstract class Troop implements GameObject {
     }
     public String type(){
         return "Troop";
+    }
+    public void slowSpeed(){
+        this.speed = (speed * 0.5);
+        slowed = true;
+        System.out.println(speed);
+    }
+    public boolean isSlowed(){
+        return slowed;
     }
 }
