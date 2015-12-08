@@ -133,18 +133,6 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 System.out.println("TELEPORTELIAS");
-                Tile pos;
-                Tile[][] currentMap = Level.getCurrentMap();
-                for (int i = 0; i < currentMap.length; i++) {
-                    for (int j = 0; j < currentMap[i].length; j++) {
-                        if (currentMap[i][j].isBuildable()) {
-                            //pos = currentMap[i][j];
-                            env.addTower(new BasicTower(img, currentMap[i][j], env.getTroops()));
-                            currentMap[i][j].setBuildable(false);
-                        }
-
-                    }
-                }
                 /*env.saveBuildableTilese();
                 env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
                 //env.addTower(new BasicTower(currentMap[env.getLevel().]);

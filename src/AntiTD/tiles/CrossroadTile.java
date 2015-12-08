@@ -73,7 +73,7 @@ public class CrossroadTile extends Tile {
 
         }
         else if(getPosition().IsPosToWest(p)){
- 
+
         }
         setNeighbors(newPath);
     }

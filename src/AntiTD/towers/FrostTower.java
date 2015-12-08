@@ -165,9 +165,9 @@ public class FrostTower extends Tower{
     public Troop getNearUnit(){
         return tr;
     }
-    public void setValueInHashMap(String target){
+    public void setValueInHashMap(String target) {
 
-
+    }
 
     @Override
     public void render(Graphics g) {
