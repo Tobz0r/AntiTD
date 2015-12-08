@@ -106,7 +106,7 @@ public class GUI {
         buyPanel.setBackground(Color.magenta);
         buyPanel.setPreferredSize(new Dimension(50,75));
 
-        
+
         //basictropp button
         buyButton = new JButton("Basic troops");
         buyButton.setBackground(Color.white);
