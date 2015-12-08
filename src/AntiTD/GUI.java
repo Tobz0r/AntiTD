@@ -270,19 +270,22 @@ public class GUI {
     }
 
     private void backSpace(KeyEvent k){
+        int i = 0;
         if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE){
             player.setEditable(true);
-            k.consume();
+            if(!k.isConsumed()){
+                k.consume();
+                i++;
+            }
             Document doc = player.getDocument();
-            if(doc.getLength()>0 && doc.getLength() <12){
+            if(doc.getLength()>0 && doc.getLength() <12 ){
                 try {
-                    doc.remove(doc.getLength()-1, 1);
+                    doc.remove(doc.getLength()-1, i);
                 } catch (BadLocationException e) {
                     e.printStackTrace();
                 }
 
             }
-
 
         }
     }
