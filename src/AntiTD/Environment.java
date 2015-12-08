@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -23,7 +24,7 @@ public class Environment extends JPanel implements Runnable {
     private int finalScore=10000000;
     private  Executor runner= Executors.newFixedThreadPool(2);;
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
-    private ArrayList<Troop> troops = new ArrayList<>();
+    //private ArrayList<Troop> troops = new ArrayList<>();
     private ArrayList<CrossroadSwitch> switches;
 
     private static boolean gameRunning;
@@ -45,7 +46,7 @@ public class Environment extends JPanel implements Runnable {
     public Environment(GUI gui){
         super(new BorderLayout());
         this.gui=gui;
-        Troop.resetScore();
+        //Troop.resetScore();
         gameOver=false;
         handler=new Handler(0);
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
@@ -138,7 +139,7 @@ public class Environment extends JPanel implements Runnable {
         Tile[][] map=Level.getCurrentMap();
         for(int i=0; i < map.length;i++){
             for(int j=0; j < map[i].length;j++){
-                map[i][j].setSize(new Dimension(getWidth()/map.length,getHeight()/map[i].length));
+                map[i][j].setSize(new Dimension(getWidth() / map.length, getHeight() / map[i].length));
             }
         }
     }
@@ -161,11 +162,14 @@ public class Environment extends JPanel implements Runnable {
                 if (! isPaused()) {
                     finalScore--;
                     gui.updateScore();
+                    handler.tick();
+                    /*
                     runner.execute(new Runnable() {
                         public void run() {
                             handler.tick();
                         }
                     });
+                    */
                     repaint();
                 }
 
@@ -177,12 +181,20 @@ public class Environment extends JPanel implements Runnable {
     public static boolean isRunning(){
         return gameRunning;
     }
-    public void addTroops(Troop troop){
+
+    public void addTroop(Troop troop){
+        handler.addObject(troop);
+        //handler.addTroop(troop);
+        /*
         troops.add(troop);
         handler.addTroop(troops);
         handler.addObject(troop);
+        */
     }
-    public void addTower(Tower tower){ Handler.addObject(tower);}
+    public void addTower(Tower tower){
+        handler.addObject(tower);
+        //Handler.addObject(tower);
+    }
     public void saveBuildableTilese(){
         Tile pos;
         for(int i = 0; i < map.length; i++){
@@ -196,7 +208,7 @@ public class Environment extends JPanel implements Runnable {
         }
     }
     public ArrayList<Troop> getTroops(){
-        return troops;
+        return handler.getAliveTroops();
     }
     public Tile getBuildAbleTile(int i){
         return buildableTiles.get(i);
@@ -225,11 +237,12 @@ public class Environment extends JPanel implements Runnable {
         for(CrossroadSwitch switc: switches){
             removeMouseListener(switc);
         }
-        Handler.clearList();
+        handler.clearList();
         level=levels.get(mapNr);
         map=level.getMap();
         Level.setCurrentMap(level.getMap());
-        Troop.resetScore();
+        handler.reset();
+        //Troop.resetScore();
         setUpNeighbors();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
@@ -239,13 +252,16 @@ public class Environment extends JPanel implements Runnable {
     }
 
     private void finishedLevel(long wait){
-        if(Troop.getVictoryScore() >= level.getVictoryPoints()){
+        if(handler.getVictoryScore() >= level.getVictoryPoints()){
+            handler.reset();
             incrementLevel();
+            /*
             try {
                 Thread.sleep(wait);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            */
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
             System.out.println("ELIASHEJ");
@@ -253,5 +269,9 @@ public class Environment extends JPanel implements Runnable {
             System.exit(0);
 
         }
+    }
+
+    public int getScore() {
+        return handler.getVictoryScore();
     }
 }

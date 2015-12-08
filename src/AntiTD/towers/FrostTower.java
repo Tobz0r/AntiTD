@@ -85,7 +85,7 @@ public class FrostTower extends Tower{
 
     }
     public void startShooting(){
-        checkIfTroopReachedGoal();
+        //checkIfTroopReachedGoal();
         if (target != null) {
 
             if(!target.isSlowed()) {
