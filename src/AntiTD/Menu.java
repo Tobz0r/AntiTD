@@ -87,9 +87,9 @@ public class Menu extends JMenu {
         mainMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // FUNGERAR INTE ATM
+
                 newGame.setText("New Game");
-                gui.startScreen();  //ksk ändra i denna
+                gui.startScreen();
             }
         });
         exitGame.addActionListener(new ActionListener() {

@@ -1,5 +1,6 @@
 package AntiTD;
 
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -34,6 +35,7 @@ public class GUI {
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
+    private JButton crossButton;
     private JButton buySpeed;
     private Thread thread;
     //startscreen
@@ -104,14 +106,17 @@ public class GUI {
 
         buyPanel = new JPanel();
         printScore();
-        buyPanel.setBorder(BorderFactory.createLineBorder(Color.green));
-        buyPanel.setBackground(Color.magenta);
+        buyPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        buyPanel.setBackground(Color.black);
         buyPanel.setPreferredSize(new Dimension(50,75));
+        GridLayout layout = new GridLayout(2,4);
+        buyPanel.setLayout(layout);
+        layout.setHgap(2);
+        layout.setVgap(2);
 
         
         //basictropp button
         buyButton = new JButton("Basic troops");
-        buyButton.setBackground(Color.white);
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -123,7 +128,6 @@ public class GUI {
         printScore();
         //Testar torn
         buyTeleport = new JButton("Teleport Troop");
-        buyTeleport.setBackground(Color.white);
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -148,7 +152,6 @@ public class GUI {
             }
         });
         buySpeed = new JButton("Speed Troop");
-        buySpeed.setBackground(Color.white);
         buySpeed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -157,12 +160,16 @@ public class GUI {
                 //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
+        crossButton = new JButton("Change direction");
 
 
 
-        buyPanel.add(buySpeed,BorderLayout.EAST);
-        buyPanel.add(buyTeleport,BorderLayout.CENTER);
-        buyPanel.add(buyButton, BorderLayout.CENTER);
+        buyPanel.add(score);
+        buyPanel.add(money);
+        buyPanel.add(buySpeed);
+        buyPanel.add(buyTeleport);
+        buyPanel.add(buyButton);
+        buyPanel.add(crossButton);
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
     public void getName(){
@@ -177,11 +184,9 @@ public class GUI {
         env.stop();
         frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
-        //behövs en bättre lösning <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         player.setEditable(true);
         player.setWrapStyleWord(true);
         player.setLineWrap(true);
-
         playerScroll = new JScrollPane(player);
 
         player.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -198,7 +203,6 @@ public class GUI {
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
                 getName();
                 startGame();
             }
@@ -241,14 +245,13 @@ public class GUI {
         score.setBackground(Color.white);
         score.setBorder(null);
         score.setText(currentScore);
-        buyPanel.add(score);
-        buyPanel.add(money);
+
     }
 
     public void updateScore(){
         int value = env.getScore();
-        //String scoreValue=String.valueOf(Troop.getVictoryScore());
-        score.setText(""+value);
+        score.setText("Score:"+value);
+        money.setText("Money:");
         score.setColumns(5);
     }
 
