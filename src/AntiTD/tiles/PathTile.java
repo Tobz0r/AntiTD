@@ -26,7 +26,7 @@ public class PathTile extends Tile {
             e.printStackTrace();
         }
     }
-
+ 
     @Override
     public void landOn(Graphics g) {
         g.drawImage(getImage(),(int)(getPosition().getX()*(getSize().getWidth())),
