@@ -7,7 +7,11 @@ import AntiTD.troops.Troop;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * Created by id12rdt on 2015-11-30.
@@ -22,6 +26,10 @@ public class FrostTower extends Tower{
     private int count = 0;
     private Tile posTile;
     private String type = "FrostTower";
+    private boolean slowedTarget;
+    private LinkedList<Troop> slowedTroop = new LinkedList<Troop>();
+    private HashMap<Troop,Boolean> targetSlowed = new HashMap<>();
+    private int targetNumb = 0;
     ImageIcon img;
     public FrostTower(ImageIcon img, Tile pos,ArrayList<Troop> troops) {
 
@@ -30,6 +38,7 @@ public class FrostTower extends Tower{
       setRange(10);
       setPrice(5);
       setPosition(pos.getPosition());
+        slowedTarget = false;
         this.posTile = pos;
 
 
@@ -55,6 +64,7 @@ public class FrostTower extends Tower{
     }
     public void aggroTarget(){
         if(target != null) {
+
             if (checkIfUnitIsClose(target) && target.isAlive() == true) {
                 //System.out.println("jao");
                 attack(target, getDamage());
@@ -75,9 +85,13 @@ public class FrostTower extends Tower{
 
     }
     public void startShooting(){
-        //checkIfTroopReachedGoal();
+        checkIfTroopReachedGoal();
         if (target != null) {
-            System.out.println("Target not null");
+
+            if(!target.isSlowed()) {
+                System.out.println("hola");
+                target.slowSpeed();
+            }
             this.aggroTarget();
         } else {
             //   System.out.println("Target null");
@@ -130,11 +144,14 @@ public class FrostTower extends Tower{
     }
     @Override
     public void tick(){
+
         count ++;
         if(count >= 60) {
             if (this.getTroopFromList()) {
                 startShooting();
+
             }
+            //System.out.println(result);
             count = 0;
         }
     }
@@ -148,6 +165,9 @@ public class FrostTower extends Tower{
     public Troop getNearUnit(){
         return tr;
     }
+    public void setValueInHashMap(String target){
+
+
 
     @Override
     public void render(Graphics g) {
