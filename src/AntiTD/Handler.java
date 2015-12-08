@@ -47,7 +47,7 @@ public class Handler {
         resetFlag = false;
     }
 
-    public boolean hasAliveTroops() {
+    public synchronized boolean hasAliveTroops() {
         Iterator<GameObject> iter = objects.iterator();
         while(iter.hasNext()) {
             GameObject temp=iter.next();

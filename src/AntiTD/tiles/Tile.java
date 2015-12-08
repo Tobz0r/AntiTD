@@ -6,6 +6,7 @@ package AntiTD.tiles;
 import AntiTD.Position;
 import AntiTD.troops.Troop;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,7 +18,7 @@ public abstract class Tile implements TileRender {
     private boolean isTeleportStart;
     private Tile teleportEnd;
     private Dimension size=new Dimension(48,48);
-    private Image image;
+    private BufferedImage image;
     private Position position;
     private Tile[] neighbors;
     Troop player;
@@ -76,9 +77,13 @@ public abstract class Tile implements TileRender {
          */
     }
 
-    public void setImage(Image image){
+    public void setImage(BufferedImage image){
         this.image=image;
     }
+    public BufferedImage getImage(){
+        return image;
+    }
+
     public void setSize(Dimension size){
         this.size=size;
     }
