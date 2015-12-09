@@ -29,6 +29,7 @@ public class Menu extends JMenu {
     private JScrollPane helpScroll;
     private JButton helpButton;
     private JPanel helpPanel;
+    private JPanel pricePanel;
 
 
     //statmenu
@@ -178,8 +179,69 @@ public class Menu extends JMenu {
     }
 
     private void callHelpFrame(){
+        //ogre
+        BufferedImage ogre = null;
+        try {
+            ogre = ImageIO.read(new File("sprites/ogre.gif"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ogre= (BufferedImage) resizeImage(ogre,25,25);
+        ImageIcon ogree= new ImageIcon(ogre);
+        JLabel ogreee = new JLabel(ogree);
+
+        //dragon
+        BufferedImage dragon = null;
+        try {
+            dragon = ImageIO.read(new File("sprites/redDragon.gif"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dragon= (BufferedImage) resizeImage(dragon,25,25);
+        ImageIcon dragonn= new ImageIcon(dragon);
+        JLabel dragonnn = new JLabel(dragonn);
+
+        //earthElemental
+        BufferedImage earth = null;
+        try {
+            earth = ImageIO.read(new File("sprites/earthElemental.gif"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        earth= (BufferedImage) resizeImage(earth,25,25);
+        ImageIcon earthh= new ImageIcon(earth);
+        JLabel earthhh = new JLabel(earthh);
+        //teleporter
+        BufferedImage tele = null;
+        try {
+            tele = ImageIO.read(new File("sprites/Teleporter.gif"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        tele= (BufferedImage) resizeImage(tele,50,50);
+        ImageIcon telee= new ImageIcon(tele);
+        JLabel teleee = new JLabel(telee);
+        JLabel units = new JLabel("Units");
+        JLabel price = new JLabel("Prices");
+        JLabel hp = new JLabel("Max health");
+        JLabel speed new JLabel("Speed");
+
+        //pricepanel
+        pricePanel = new JPanel();
+        GridLayout glayout = new GridLayout(5,4);
+        pricePanel.setLayout(glayout);
+        glayout.setVgap(3);
+        glayout.setHgap(3);
+        pricePanel.add(units);
+        pricePanel.add(ogreee);
+        pricePanel.add(dragonnn);
+        pricePanel.add(earthhh);
+        pricePanel.add(teleee);
+
+
+
         helpPanel = new JPanel();
-        helpPanel.setBackground(Color.blue);
+        helpPanel.setBackground(Color.yellow);
         Font font = new Font("Verdana",Font.BOLD,25);
         //textfältet
         helpText = new JTextArea(15,15);
@@ -205,10 +267,20 @@ public class Menu extends JMenu {
         helpScroll = new JScrollPane(helpText);
         helpFrame.add(helpScroll, BorderLayout.CENTER);
 
-        helpFrame.add(new JLabel(new ImageIcon("sprites/tobiashej.jpg")),BorderLayout.NORTH);
-        helpFrame.getContentPane().setBackground(Color.yellow);
-        helpFrame.add(helpPanel,BorderLayout.SOUTH);
+       // helpFrame.getContentPane().setBackground(Color.yellow);
+        helpFrame.add(helpPanel, BorderLayout.SOUTH);
+        helpFrame.add(pricePanel,BorderLayout.CENTER);
         helpFrame.setVisible(true);
+    }
+    private Image resizeImage(Image myImg, int w, int h){
+        BufferedImage resizeImg = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = resizeImg.createGraphics();
+
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(myImg,0,0,w,h,null);
+        g.dispose();
+
+        return resizeImg;
     }
 
 

@@ -138,28 +138,29 @@ public class GUI {
 
         teleportButton = new JButton("Set Teleporter");
         //basictropp button
-        ogreButton = new JButton("Small Ogre");
+        ogreButton = new JButton("Small Ogre $175");
         ogreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
                 env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
-
+                env.buyUnit(175);
                 //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
         //basictropp button
-        buyTank= new JButton("Earth Elemental");
+        buyTank= new JButton("Earth Elemental $450");
         buyTank.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
                 env.addTroop(new TankTroop(tankImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.buyUnit(450);
             }
         });
         printScore();
         //Testar torn
-        buyTeleport = new JButton("Teleporter");
+        buyTeleport = new JButton("Teleporter $4000");
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -167,14 +168,16 @@ public class GUI {
                 teleportTroop=new TeleportTroop(teleporterImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]);
                 env.addTroop(teleportTroop);
                 teleportButton.setEnabled(true);
+                env.buyUnit(4000);
             }
         });
-        buySpeed = new JButton("Speed Demon");
+        buySpeed = new JButton("Speed Demon $325");
         buySpeed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
                 env.addTroop(new SpeedTroop(speedImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.buyUnit(325);
                 //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
