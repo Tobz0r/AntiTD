@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapFile>
-    <mapData sizeX="9" sizeY="10" victory="30" name="Level 1" startingCredits="160">
+    <mapData sizeX="9" sizeY="10" victory="30" name="Level 1" startingCredits="800">
         <row>
             <tile>BasicTile</tile>
             <tile>BasicTile</tile>

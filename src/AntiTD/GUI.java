@@ -38,6 +38,7 @@ public class GUI {
 
     ImageIcon img = new ImageIcon("/home/id12/id12rdt/basictower.png");
     private Menu menu;
+    private File fp;
     private Thread gameThread;
     private Environment env;
     private JFrame frame;
@@ -77,9 +78,9 @@ public class GUI {
     private JTable scoreTable;
 
 
-    public GUI () {
-
-        env = new Environment(this);
+    public GUI (File fp) {
+        this.fp=fp;
+        env = new Environment(this,fp);
         try {
             basicImage= ImageIO.read(new File("sprites/ogre.gif"));
             speedImage = ImageIO.read(new File("sprites/redDragon.gif"));
@@ -121,7 +122,7 @@ public class GUI {
         //Handler.clearList();
         env.stop();
         env.isGameOver();
-        env = new Environment(this);
+        env = new Environment(this,fp);
         startGame();
     }
 
@@ -142,20 +143,21 @@ public class GUI {
         ogreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
-                env.buyUnit(175);
-                //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
-            }
+                if(env.buyUnit(175)) {
+                    Tile[][] currentMap = Level.getCurrentMap();
+                    env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                }
+                }
         });
         //basictropp button
         buyTank= new JButton("Earth Elemental $450");
         buyTank.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroop(new TankTroop(tankImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
-                env.buyUnit(450);
+                if(env.buyUnit(450)) {
+                    Tile[][] currentMap = Level.getCurrentMap();
+                    env.addTroop(new TankTroop(tankImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                }
             }
         });
         printScore();
@@ -164,11 +166,12 @@ public class GUI {
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile[][] currentMap = Level.getCurrentMap();
-                teleportTroop=new TeleportTroop(teleporterImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]);
-                env.addTroop(teleportTroop);
-                teleportButton.setEnabled(true);
-                env.buyUnit(4000);
+                if(env.buyUnit(4000)) {
+                    Tile[][] currentMap = Level.getCurrentMap();
+                    teleportTroop = new TeleportTroop(teleporterImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]);
+                    env.addTroop(teleportTroop);
+                    teleportButton.setEnabled(true);
+                }
             }
         });
         buySpeed = new JButton("Speed Demon $325");
@@ -176,9 +179,8 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroop(new SpeedTroop(speedImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
-                env.buyUnit(325);
-                //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+               if(env.buyUnit(325))
+                   env.addTroop(new SpeedTroop(speedImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
         crossButton = new JButton("Change direction");
