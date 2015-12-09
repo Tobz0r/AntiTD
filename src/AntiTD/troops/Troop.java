@@ -6,6 +6,7 @@ import AntiTD.tiles.Tile;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Stack;
 
 /**
@@ -23,6 +24,8 @@ public abstract class Troop implements GameObject {
     private boolean hasReacedGoal;
     private boolean isMoving;
     private boolean slowed;
+
+    private static LinkedList<Tile> teleportException=new LinkedList<>();
 
 
 
@@ -79,30 +82,13 @@ public abstract class Troop implements GameObject {
                 history.push(nextTile);
                 if (nextTile instanceof GoalTile) {
                     hasReacedGoal = true;
-                } else if (nextTile.isTeleporter()) {
+                } /*else if (nextTile.isTeleporter()) {
                     history.push(nextTile.getTeleportTo());
-                }
+                }*/
             }
         }
-        /*
-        if(hasReacedGoal ){
-            victoryScore++;
-            Handler.removeObject(this);
-        }
-        else if(!isAlive()){
-            Handler.removeObject(this);
-        }
-        */
     }
-    /*
-    public static int getVictoryScore(){
-        return victoryScore;
 
-    }
-    public static void resetScore(){
-        victoryScore=0;
-    }
-    */
 
     @Override
     public Tile getMoveToPosition() {
@@ -122,17 +108,18 @@ public abstract class Troop implements GameObject {
         Tile nextTile = null;
 
         for (Tile tile : neigbors) {
-            if (tile.isMoveable()) {
+            if (tile.isMoveable() && !teleportException.contains(tile)) {
                 if (history.search(tile) == -1) {
                     nextTile = tile;
                     break;
                 }
             }
         }
-        /*
+
         if (nextTile.isTeleporter()) {
+            history.push(nextTile);
             nextTile = nextTile.getTeleportTo();
-        }*/
+        }
         return nextTile;
     }
 
@@ -209,4 +196,10 @@ public abstract class Troop implements GameObject {
     public boolean isSlowed(){
         return slowed;
     }
+
+    public static void addTeleportException(Tile tile){
+        teleportException.add(tile);
+    }
+
+
 }

@@ -16,10 +16,7 @@ import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
 import AntiTD.towers.FrostTower;
-import AntiTD.troops.BasicTroop;
-import AntiTD.troops.SpeedTroop;
-import AntiTD.troops.TankTroop;
-import AntiTD.troops.Troop;
+import AntiTD.troops.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -48,6 +45,7 @@ public class GUI {
     private JButton crossButton;
     private JButton buySpeed;
     private JButton buyTank;
+    private JButton teleportButton;
     private Thread thread;
     //startscreen
     private String PlayerName;
@@ -71,6 +69,7 @@ public class GUI {
     private BufferedImage speedImage;
     private BufferedImage tankImage;
     private BufferedImage teleporterImage;
+    private TeleportTroop teleportTroop=null;
 
 
 
@@ -133,7 +132,7 @@ public class GUI {
         layout.setHgap(2);
         layout.setVgap(2);
 
-
+        teleportButton = new JButton("Set Teleporter");
         //basictropp button
         buyButton = new JButton("Small Ogre");
         buyButton.addActionListener(new ActionListener() {
@@ -160,7 +159,9 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroop(new TankTroop(teleporterImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                teleportTroop=new TeleportTroop(teleporterImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]);
+                env.addTroop(teleportTroop);
+                teleportButton.setEnabled(true);
             }
         });
         buySpeed = new JButton("Speed Demon");
@@ -180,6 +181,16 @@ public class GUI {
             }
         });
 
+        teleportButton.setEnabled(false);
+        teleportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Tile[][] currentMap = Level.getCurrentMap();
+                teleportTroop.initTeleport();
+                teleportButton.setEnabled(false);
+            }
+        });
+
 
 
         buyPanel.add(score);
@@ -189,6 +200,7 @@ public class GUI {
         buyPanel.add(buyButton);
         buyPanel.add(buyTank);
         buyPanel.add(crossButton);
+        buyPanel.add(teleportButton);
 
         frame.add(buyPanel, BorderLayout.SOUTH);
     }

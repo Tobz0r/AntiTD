@@ -96,7 +96,7 @@ public class Handler {
      * Should only be called in <b>tick()</b> method for thread safety
      */
     private void removeObjectsFromGame() {
-        for (GameObject object : objectsToRemove) {
+          for (GameObject object : objectsToRemove) {
             objects.remove(object);
             if (object instanceof Troop) {
                 aliveTroops.remove(object);
@@ -120,6 +120,7 @@ public class Handler {
      * @param object object to remove.
      */
     public synchronized void removeObject(GameObject object) {
+
         objectsToRemove.add(object);
     }
 
@@ -139,12 +140,10 @@ public class Handler {
                 GameObject gameObject = objects.get(i);
                 objects.get(i).tick();
                 if (gameObject.type().equals("Troop")) {
-
                     score += gameObject.getCurrentScore();
-
                     Troop t = (Troop) gameObject;
                     if (!t.isAlive()) {
-                        removeObject(objects.get(i));
+                        removeObject(gameObject);
                     }
                 }
 

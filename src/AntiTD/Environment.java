@@ -261,8 +261,9 @@ public class Environment extends JPanel implements Runnable {
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
-        resumeGame();
         initTowers();
+        resumeGame();
+
     }
 
     private void finishedLevel(long wait){
