@@ -17,7 +17,7 @@ import java.net.URL;
  */
 public class Menu extends JMenu {
     //startmenu
-    private JMenuItem newGame,mainMenu, exitGame, pauseGame, mute;
+    private JMenuItem newGame,mainMenu, exitGame, pauseGame, mute, highScore;
     private JMenuBar startMenuBar = new JMenuBar();
     private JFrame frame;
     private GUI gui;
@@ -58,11 +58,13 @@ public class Menu extends JMenu {
         newGame = this.add("Restart");
         pauseGame = this.add("Pause");
         mute = this.add("Mute");
+        highScore = this.add("High Score");
         mainMenu = this.add("Main Menu");
         exitGame = this.add("Quit");
         newGame.setBackground(Color.white);
         pauseGame.setBackground(Color.white);
         mute.setBackground(Color.white);
+        highScore.setBackground(Color.white);
         exitGame.setBackground(Color.white);
         mainMenu.setBackground(Color.white);
         if(!Environment.isRunning()){
