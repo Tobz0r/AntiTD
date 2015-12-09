@@ -38,13 +38,7 @@ public class CrossroadTile extends Tile {
     @Override
     public void landOn(Graphics g) {
         g.setColor(Color.red);
-        if(getImage()==null){
-            g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),
-                    (int)(getPosition().getY()*(getSize().getHeight())),
-                    (int)getSize().getWidth(),
-                    (int)getSize().getHeight());
-        }
-        else{
+        if(getImage()!=null){
             g.drawImage(basicTile,(int)(getPosition().getX()*(getSize().getWidth())),
                     (int)(getPosition().getY()*(getSize().getHeight())),
                     (int)getSize().getWidth(),

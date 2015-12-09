@@ -2,6 +2,7 @@ package AntiTD.tiles;
 
 import AntiTD.Position;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -35,7 +36,7 @@ public class Level {
     public int getStartingCredits(){
         return startingCredits;
     }
-    public ArrayList setUpCrossroad(){
+    public ArrayList setUpCrossroad() {
         ArrayList<CrossroadSwitch> tiles=new ArrayList<>();
         for(int i=0;i < map.length; i++) {
            for (int j = 0; j < map[i].length; j++) {
@@ -44,6 +45,11 @@ public class Level {
                    map[i][j].setNeighbors(tileMap);
                    CrossroadSwitch cSwitch=new CrossroadSwitch((CrossroadTile) map[i][j]);
                    tiles.add(cSwitch);
+                   try {
+                       ((CrossroadTile) map[i][j]).changeWay();
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
                }
            }
        }

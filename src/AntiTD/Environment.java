@@ -56,11 +56,7 @@ public class Environment extends JPanel implements Runnable {
 
     public Environment(GUI gui){
         super(new BorderLayout());
-        try {
-            basicTower= ImageIO.read(new File("sprites/basictower.gif"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         this.gui=gui;
         gameOver=false;
         handler=new Handler(0);
@@ -72,7 +68,12 @@ public class Environment extends JPanel implements Runnable {
         credits=level.getStartingCredits();
         Level.setCurrentMap(map);
         victoryScore=level.getVictoryPoints();
-        switches=level.setUpCrossroad();
+        try {
+            basicTower= ImageIO.read(new File("sprites/basictower.gif"));
+            switches=level.setUpCrossroad();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         initTowers();
 
         for(CrossroadSwitch cSwitch:switches){
@@ -84,7 +85,6 @@ public class Environment extends JPanel implements Runnable {
     }
 
     private void setUpNeighbors() {
-        System.out.println(map.length + "" + map[0].length);
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[0].length; x++) {
                 ArrayList<Tile> neighbors = new ArrayList<Tile>(8);
@@ -93,8 +93,9 @@ public class Environment extends JPanel implements Runnable {
                         if ( row+col == -1 || row+col == 1 ) {
                             if((((y+row)<map.length) && (0<=(y+row))) &&
                                     ((x+col>=0)&&((x+col)<map[0].length))) {
-                                if (map[y + row][x + col].isMoveable())
+                                if (map[y + row][x + col].isMoveable()) {
                                     neighbors.add(map[y + row][x + col]);
+                                }
                             }
                         }
                     }
@@ -166,7 +167,6 @@ public class Environment extends JPanel implements Runnable {
         long ns = Math.round(1000.0 / amountOfTicksPerSecond);
         double delta = 0;
         int ticks=0;
-
         while(gameRunning){
             long now = System.currentTimeMillis();
             long wait = ns - (now - lastTime);
@@ -287,7 +287,6 @@ public class Environment extends JPanel implements Runnable {
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
                     addTower(new BasicTower(basicTower, currentMap[i][j], getTroops()));
-                    System.out.println("VARFÖR FUNKAR DET HÄR INTE?!?!?!");
                 }
             }
         }
