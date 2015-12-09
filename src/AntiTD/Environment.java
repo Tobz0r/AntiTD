@@ -25,27 +25,34 @@ import java.util.concurrent.Executors;
 public class Environment extends JPanel implements Runnable {
 
     private int victoryScore;
-    private ArrayList<Level> levels;
-    private Handler handler;
+    private final int minimumCredits=20;
     private int finalScore=0;
-    private  Executor runner= Executors.newFixedThreadPool(2);;
+    private int credits;
+    private int mapNr=0;
+
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
-    //private ArrayList<Troop> troops = new ArrayList<>();
     private ArrayList<CrossroadSwitch> switches;
+    private ArrayList<Level> levels;
+
+    private Handler handler;
+
     private BufferedImage basicTower;
+    private BufferedImage basicImage;
+
+    private Tile[][] map;
+
+    private GUI gui;
+    
+    private  Executor runner= Executors.newFixedThreadPool(2);;
+
     private static boolean gameRunning;
     private static  boolean paused;
-    private BufferedImage basicImage;
-    private int credits;
-    private final int minimumCredits=20;
-    private Tile[][] map;
+    private boolean gameOver;
+
     private Thread thread;
-    private int mapNr=0;
+
     private Level level;
 
-    private double delta;
-    private boolean gameOver;
-    private GUI gui;
 
     public Environment(GUI gui){
         super(new BorderLayout());
