@@ -49,7 +49,7 @@ public class Environment extends JPanel implements Runnable {
     public Environment(GUI gui){
         super(new BorderLayout());
         try {
-            basicTower= ImageIO.read(new File("basictower.gif"));
+            basicTower= ImageIO.read(new File("sprites/basictower.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -163,8 +163,7 @@ public class Environment extends JPanel implements Runnable {
             long wait = ns - (now - lastTime);
             lastTime = now;
             wait = wait < 0 ? 0 : wait;
-            finishedLevel(wait);
-            //System.out.println(wait);
+            //finishedLevel(wait);
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
@@ -266,7 +265,6 @@ public class Environment extends JPanel implements Runnable {
             }
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
-            System.out.println("ELIASHEJ");
             gameRunning=false;
             JOptionPane.showMessageDialog(null, "Game over!! xD");
             System.exit(0);
@@ -280,10 +278,8 @@ public class Environment extends JPanel implements Runnable {
     private void initTowers(){
         Tile[][] currentMap = Level.getCurrentMap();
         for (int i = 0; i < currentMap.length; i++) {
-            System.out.println("ELIASHEJ");
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
-                    System.out.println("DET ÄR JAG SOM ÄR ELIAS");
                     addTower(new BasicTower(basicTower, currentMap[i][j], getTroops()));
                 }
             }

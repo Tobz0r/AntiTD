@@ -79,10 +79,10 @@ public class GUI {
         env = new Environment(this);
 
         try {
-            basicImage= ImageIO.read(new File("ogre.gif"));
-            speedImage = ImageIO.read(new File("redDragon.gif"));
-            tankImage = ImageIO.read(new File ("earthElemental.gif"));
-            teleporterImage = ImageIO.read(new File("Teleporter.gif"));
+            basicImage= ImageIO.read(new File("sprites/ogre.gif"));
+            speedImage = ImageIO.read(new File("sprites/redDragon.gif"));
+            tankImage = ImageIO.read(new File ("sprites/earthElemental.gif"));
+            teleporterImage = ImageIO.read(new File("sprites/Teleporter.gif"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -160,7 +160,7 @@ public class GUI {
         });
         printScore();
         //Testar torn
-        buyTeleport = new JButton("Teleport Troop");
+        buyTeleport = new JButton("Teleporter");
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

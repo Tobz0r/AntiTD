@@ -20,7 +20,7 @@ public class BasicTile extends Tile {
         setBuildable(false);
         setMoveable(false);
         try {
-            setImage(ImageIO.read(new File("rock.png")));
+            setImage(ImageIO.read(new File("sprites/rock.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

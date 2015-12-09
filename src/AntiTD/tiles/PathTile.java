@@ -21,7 +21,7 @@ public class PathTile extends Tile {
         setMoveable(true);
         setBuildable(false);
         try {
-            setImage(ImageIO.read(new File("patheses.png")));
+            setImage(ImageIO.read(new File("sprites/patheses.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

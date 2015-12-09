@@ -22,11 +22,11 @@ public class GoalTile extends Tile {
         setBuildable(false);
         setMoveable(true);
         try {
-            setImage(ImageIO.read(new File("goal.png")));
+            setImage(ImageIO.read(new File("sprites/goal.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
-    } 
+    }
 
     @Override
     public void landOn(Graphics g) {
