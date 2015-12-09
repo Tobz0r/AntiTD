@@ -53,6 +53,7 @@ public class GUI {
     private String PlayerName;
     private JTextArea player;
     private JButton enterName;
+    private JLabel tenChars;
 
     private JPanel startPanel;
     private JScrollPane playerScroll;
@@ -141,7 +142,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroop(new BasicTroop(basicImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
                 //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
@@ -171,7 +172,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroop(new SpeedTroop(speedImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.addTroop(new SpeedTroop(speedImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
                 //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
@@ -188,14 +189,14 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile tile = teleportTroop.getTilePosition();
-                if(teleportTroop.isAlive()) {
+                if (teleportTroop.isAlive()) {
                     if (!(tile instanceof CrossroadTile) && !(tile instanceof JunctionTile)) {
                         teleportTroop.initTeleport();
                         teleportButton.setEnabled(false);
                     } else {
                         JOptionPane.showMessageDialog(null, "Teleporters can't be placed on crossroads");
                     }
-                }else{
+                } else {
                     teleportButton.setEnabled(false);
                 }
             }
@@ -228,7 +229,7 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-
+        tenChars = new JLabel("Max 11 character");
         env.stop();
         frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
@@ -237,12 +238,14 @@ public class GUI {
         player.setLineWrap(true);
         playerScroll = new JScrollPane(player);
         player.setBorder(BorderFactory.createLineBorder(Color.black));
+        frame.add(tenChars);
         startPanel = new JPanel();
         startPanel.setBackground(Color.white);
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
+        startPanel.add(tenChars);
         checkTextField();
         frame.setSize(300, 200);
         frame.add(startPanel);
