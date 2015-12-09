@@ -26,7 +26,7 @@ public class GoalTile extends Tile {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } 
 
     @Override
     public void landOn(Graphics g) {
