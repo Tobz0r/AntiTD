@@ -23,10 +23,11 @@ public class BasicTower extends Tower {
     private Troop target;
     private String type = "BasicTower";
     private int result;
-    int bullets;
+    Bullets bullets;
     int count;
+    private int towerSpeed;
 
-    public BasicTower(Image img, Tile pos, ArrayList<Troop> troops) {
+    public BasicTower(Image img, Tile pos, ArrayList<Troop> troops, Bullets bullets) {
         super(img, pos, troops);
         Random r = new Random();
         int low = 0;
@@ -35,9 +36,11 @@ public class BasicTower extends Tower {
         setDamage(1);
         setRange(5);
         setPrice(1);
+        setTowerSpeed(10);
         setPosition(pos.getPosition());
         this.posTile = pos;
         count = 0;
+        this.bullets = bullets;
     }
 
     public void initScan() {
@@ -178,7 +181,7 @@ public class BasicTower extends Tower {
     public void tick() {
 
         count++;
-        if (count >= 60) {
+        if(count >= getTowerSpeed()) {
             if (this.getTroopFromList()) {
                 startShooting();
             }
@@ -187,6 +190,13 @@ public class BasicTower extends Tower {
         }
 
     }
+    public void setTowerSpeed(int towerSpeed){
+        this.towerSpeed = towerSpeed;
+    }
+    public int getTowerSpeed(){
+        return towerSpeed;
+    }
+
 
     @Override
     public void render(Graphics g) {
