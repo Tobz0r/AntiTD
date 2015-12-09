@@ -2,23 +2,15 @@ package AntiTD;
 
 import AntiTD.tiles.Tile;
 import AntiTD.towers.Tower;
-import AntiTD.troops.BasicTroop;
 import AntiTD.troops.Troop;
 
-import javax.print.attribute.standard.ReferenceUriSchemesSupported;
-import javax.sound.midi.SysexMessage;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Timer;
-import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.Semaphore;
+import java.util.*;
 
 /**
  * Created by dv13tes on 2015-11-27.
  */
-public class Handler {
+public class Handler extends Observable {
     private LinkedList<GameObject> objects;
     private int tid;
     private int score;
@@ -30,8 +22,9 @@ public class Handler {
 
 
 
-    public Handler(int tid) {
+    public Handler(int tid, Environment env) {
         this.tid = tid;
+        addObserver(env);
         objects = new LinkedList<>();
         aliveTroops = new LinkedList<>();
         towers = new LinkedList<>();
@@ -61,7 +54,7 @@ public class Handler {
      * <b>**Caution**</b> <br />
      * Should only be called in run method for thread safety
      */
-    private void addObjectsToGame() {
+    private synchronized void addObjectsToGame() {
         for (GameObject object : objectsToAdd) {
             objects.add(object);
             if (object instanceof Troop) {
@@ -95,7 +88,8 @@ public class Handler {
      * <b>**Caution**</b> <br />
      * Should only be called in <b>tick()</b> method for thread safety
      */
-    private void removeObjectsFromGame() {
+    private synchronized void removeObjectsFromGame() {
+
           for (GameObject object : objectsToRemove) {
             objects.remove(object);
             if (object instanceof Troop) {
@@ -120,12 +114,12 @@ public class Handler {
      * @param object object to remove.
      */
     public synchronized void removeObject(GameObject object) {
-
+        addObjectsToGame();
         objectsToRemove.add(object);
     }
 
 
-    public ArrayList<Troop> getAliveTroops() {
+    public synchronized ArrayList<Troop> getAliveTroops() {
         ArrayList<Troop> list = new ArrayList<Troop>(aliveTroops.size());
         for (GameObject go : aliveTroops) {
             list.add((Troop) go);
@@ -143,6 +137,10 @@ public class Handler {
                     score += gameObject.getCurrentScore();
                     Troop t = (Troop) gameObject;
                     if (!t.isAlive()) {
+                        removeObject(gameObject);
+                    }
+                    if(t.hasReacedGoal()){
+                        update(t.getCurrentScore());
                         removeObject(gameObject);
                     }
                 }
@@ -216,7 +214,7 @@ public class Handler {
      * <b>**Caution**</b> <br />
      * Should only be called in <b>tick()</b> method for thread safety
      */
-    private void resetGame() {
+    private synchronized void resetGame() {
         objects.clear();
         aliveTroops.clear();
         towers.clear();
@@ -236,11 +234,16 @@ public class Handler {
      * The score is restored when <b>reset()</b> method is called.
      * @return
      */
-    public int getVictoryScore() {
+    public synchronized int getVictoryScore() {
         return score;
     }
 
     void resetScore(){
         score=0;
+    }
+
+    private void update(int credit){
+        setChanged();
+        notifyObservers(credit);
     }
 }

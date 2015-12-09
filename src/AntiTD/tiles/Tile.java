@@ -99,6 +99,12 @@ public abstract class Tile implements TileRender {
         teleportEnd.setTeleporterimage(true);
 
     }
+    public void resetTeleport(){
+        isTeleporter=false;
+        isTeleportStart=false;
+        setTeleporterimage(false);
+        teleportEnd=null;
+    }
     public boolean isTeleporterimage(){
         return isTeleporter;
     }

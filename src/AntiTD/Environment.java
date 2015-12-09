@@ -17,16 +17,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
  * @author dv13tes
  */
-public class Environment extends JPanel implements Runnable {
+public class Environment extends JPanel implements Runnable,Observer {
 
     private int victoryScore;
-    private final int minimumCredits=20;
+    private final int minimumCredits=174;
     private int finalScore=0;
     private int credits;
     private int mapNr=0;
@@ -49,7 +51,7 @@ public class Environment extends JPanel implements Runnable {
 
     private GUI gui;
 
-    private  Executor runner= Executors.newFixedThreadPool(2);;
+    private  Executor runner= Executors.newFixedThreadPool(4);;
 
     private static boolean gameRunning;
     private static  boolean paused;
@@ -60,13 +62,13 @@ public class Environment extends JPanel implements Runnable {
     private Level level;
 
 
-    public Environment(GUI gui){
+    public Environment(GUI gui, File fp){
         super(new BorderLayout());
 
         this.gui=gui;
         gameOver=false;
-        handler=new Handler(0);
-        ReadXML xmlReader = new ReadXML(new File("levels.xml"));
+        handler=new Handler(0,this);
+        ReadXML xmlReader = new ReadXML(fp);
         levels=xmlReader.getLevels();
         level=levels.get(mapNr);
         map=level.getMap();
@@ -154,7 +156,7 @@ public class Environment extends JPanel implements Runnable {
         setTileSize();
         g.clearRect(0, 0, getWidth(), getHeight());
        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
+            for (int j = 0; j < map[0].length; j++) {
                 map[i][j].landOn(g);
             }
         }
@@ -186,13 +188,27 @@ public class Environment extends JPanel implements Runnable {
                 if (! isPaused()) {
                     finalScore++;
                     gui.updateScore();
+                    /* Varför skall dettas köras osäkert trådat? Detta gör ju att tick kan köras parallellt eller?
+                     * Om så är fallet kommer objectslistan manipuleras samtidigt, är det inte bättre att köra
+                     * det "som vanligt" och vara säker på att det inte händer parallellt eftersom Environment
+                     * redan är en egen tråd. Förklara gärna.
+                     *
+                     * För att vi måste ha det trådat :) och vi har tillräcklgit med synkronoserade lås för att den
+                     * är trådsäker, finns ingen möjlighet till varken deadlocks eller race condition :)
+                     */
                     runner.execute(new Runnable() {
                         public void run() {
                             handler.tick();
                         }
                     });
-
                     repaint();
+                    ticks++;
+                    if(ticks>60){
+                        int value=handler.getAliveTroops().size();
+                        credits+=(value*2);
+                        ticks=0;
+                    }
+
                 }
 
             } catch (InterruptedException e) {
@@ -210,26 +226,9 @@ public class Environment extends JPanel implements Runnable {
     public void addTower(Tower tower){
         handler.addObject(tower);
     }
-    public void addBullets(Bullets bullets){
-        handler.addObject(bullets);
-    }
-    public void saveBuildableTilese(){
-        Tile pos;
-        for(int i = 0; i < map.length; i++){
-            for(int j = 0; j <map[i].length; j++){
-                if(map[i][j].isBuildable()){
-                    pos = map[i][j];
-                    buildableTiles.add(pos);
-                }
 
-            }
-        }
-    }
     public ArrayList<Troop> getTroops(){
         return handler.getAliveTroops();
-    }
-    public Tile getBuildAbleTile(int i){
-        return buildableTiles.get(i);
     }
     public static void pauseGame(){
         paused=true;
@@ -242,11 +241,12 @@ public class Environment extends JPanel implements Runnable {
         mapNr++;
         if(mapNr>levels.size()-1){
             int reply = JOptionPane.showConfirmDialog(null, "EZ GAEM, You're score : " +
-                    finalScore + "Would you laeik to play again?",
+                    (handler.getVictoryScore()+credits) + "Would you laeik to play again?",
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 mapNr=0;
                 handler.resetScore();
+                resetTeleport();
             }
             else {
                 JOptionPane.showMessageDialog(null, "GOODBYE");
@@ -261,13 +261,8 @@ public class Environment extends JPanel implements Runnable {
         map=level.getMap();
         Level.setCurrentMap(map);
         credits+=level.getStartingCredits();
-       /* ................................................
-       ändra inte mina metoder och lägg in nya utan att testa det först.
-       TACK!
-        handler.reset();
-         */
         setUpNeighbors();
-
+        Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
@@ -280,6 +275,13 @@ public class Environment extends JPanel implements Runnable {
     private void finishedLevel(long wait){
         if(handler.getVictoryScore() >= victoryScore){
             handler.reset();
+            int reply = JOptionPane.showConfirmDialog(null, "Would you like to replay this map again?",
+                    "GG EZ!", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                mapNr--;
+                handler.resetScore();
+                resetTeleport();
+            }
             incrementLevel();
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
@@ -293,6 +295,16 @@ public class Environment extends JPanel implements Runnable {
     public int getScore() {
         return handler.getVictoryScore();
     }
+    public int getMoney(){
+        return credits;
+    }
+    public boolean buyUnit(int amount){
+        if((credits-amount)>0) {
+            credits -= amount;
+            return true;
+        }
+        return false;
+    }
     private void initTowers(){
         Tile[][] currentMap = Level.getCurrentMap();
         for (int i = 0; i < currentMap.length; i++) {
@@ -304,5 +316,20 @@ public class Environment extends JPanel implements Runnable {
                 }
             }
         }
+    }
+    private void resetTeleport(){
+        for(int i=0; i < levels.size(); i++){
+            Tile[][] map=levels.get(i).getMap();
+            for(int j=0; j < map.length; j++){
+                for(int k=0; k < map[0].length;k++){
+                    map[j][k].resetTeleport();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        credits+=(int)arg;
     }
 }
