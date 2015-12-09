@@ -19,7 +19,7 @@ public class TowerTile extends Tile {
         setBuildable(true);
         setMoveable(false);
         try {
-            setImage(ImageIO.read(new File("grass.png")));
+            setImage(ImageIO.read(new File("sprites/grass.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

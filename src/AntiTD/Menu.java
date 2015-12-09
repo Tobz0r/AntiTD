@@ -197,7 +197,7 @@ public class Menu extends JMenu {
         helpScroll = new JScrollPane(helpText);
         helpFrame.add(helpScroll, BorderLayout.CENTER);
 
-        helpFrame.add(new JLabel(new ImageIcon("tobiashej.jpg")),BorderLayout.NORTH);
+        helpFrame.add(new JLabel(new ImageIcon("sprites/tobiashej.jpg")),BorderLayout.NORTH);
         helpFrame.getContentPane().setBackground(Color.yellow);
         helpFrame.add(helpPanel,BorderLayout.SOUTH);
         helpFrame.setVisible(true);

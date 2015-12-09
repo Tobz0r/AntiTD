@@ -18,6 +18,7 @@ import java.util.Collections;
 public class CrossroadTile extends Tile {
 
     private ArrayList<Tile> nextTiles;
+    private BufferedImage basicTile;
 
     public CrossroadTile() {
         this(null);
@@ -26,19 +27,22 @@ public class CrossroadTile extends Tile {
         super(pos);
         setBuildable(false);
         setMoveable(true);
+        try {
+            basicTile=ImageIO.read(new File("sprites/patheses.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         nextTiles=new ArrayList<>();
     }
 
     @Override
     public void landOn(Graphics g) {
         g.setColor(Color.red);
-        if(getImage()==null){
-            g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),
+        if(getImage()!=null){
+            g.drawImage(basicTile,(int)(getPosition().getX()*(getSize().getWidth())),
                     (int)(getPosition().getY()*(getSize().getHeight())),
                     (int)getSize().getWidth(),
-                    (int)getSize().getHeight());
-        }
-        else{
+                    (int)getSize().getHeight(),null);
             g.drawImage(getImage(),(int)(getPosition().getX()*(getSize().getWidth())),
                     (int)(getPosition().getY()*(getSize().getHeight())),
                     (int)getSize().getWidth(),
@@ -76,21 +80,16 @@ public class CrossroadTile extends Tile {
             newPath[0]=newPath[1];
         }
         Position p=newPath[0].getPosition();
-        System.out.println(getPosition());
-        System.out.println(p);
         if(getPosition().IsPosToEast(p)){
-            setImage(ImageIO.read(new File("rightarrow.png")));
-            System.out.println("ELIASHEJ");
+            setImage(ImageIO.read(new File("sprites/right.gif")));
         }else if(getPosition().IsPosToNorth(p)){
-            setImage(ImageIO.read(new File("uparrow.png")));
+            setImage(ImageIO.read(new File("sprites/up.gif")));
         }
         else if(getPosition().IsPosToSouth(p)){
-            setImage(ImageIO.read(new File("downarrow.png")));
+            setImage(ImageIO.read(new File("sprites/down.gif")));
         }
         else if(getPosition().IsPosToWest(p)){
-            setImage(ImageIO.read(new File("leftarrow.png")));
-            System.out.println("ELaaaaaIASHEJ");
-
+            setImage(ImageIO.read(new File("sprites/left.gif")));
         }
         setNeighbors(newPath);
     }

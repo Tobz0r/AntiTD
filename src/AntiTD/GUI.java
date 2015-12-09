@@ -12,13 +12,13 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 import AntiTD.*;
+import AntiTD.tiles.CrossroadTile;
+import AntiTD.tiles.JunctionTile;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
 import AntiTD.towers.FrostTower;
-import AntiTD.troops.BasicTroop;
-import AntiTD.troops.SpeedTroop;
-import AntiTD.troops.Troop;
+import AntiTD.troops.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -41,18 +41,19 @@ public class GUI {
     private Thread gameThread;
     private Environment env;
     private JFrame frame;
-    private BufferedImage basicImage;
-    private BufferedImage speedImage;
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
     private JButton crossButton;
     private JButton buySpeed;
+    private JButton buyTank;
+    private JButton teleportButton;
     private Thread thread;
     //startscreen
     private String PlayerName;
     private JTextArea player;
     private JButton enterName;
+
     private JPanel startPanel;
     private JScrollPane playerScroll;
     private JScrollPane scrollPane;
@@ -65,16 +66,24 @@ public class GUI {
     //score
     private JTextField score;
     private JTextField money;
+    //Unit images
+    private BufferedImage basicImage;
+    private BufferedImage speedImage;
+    private BufferedImage tankImage;
+    private BufferedImage teleporterImage;
+    private TeleportTroop teleportTroop=null;
 
 
 
     public GUI () {
 
         env = new Environment(this);
-
         try {
-            basicImage= ImageIO.read(new File("ogre.gif"));
-            speedImage = ImageIO.read(new File("redDragon.gif"));
+            basicImage= ImageIO.read(new File("sprites/ogre.gif"));
+            speedImage = ImageIO.read(new File("sprites/redDragon.gif"));
+            tankImage = ImageIO.read(new File ("sprites/earthElemental.gif"));
+            teleporterImage = ImageIO.read(new File("sprites/Teleporter.gif"));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -92,10 +101,6 @@ public class GUI {
         menu.statMenu();
 
         frame.setVisible(true);
-
-
-
-
     }
 
     public void startGame() {
@@ -124,14 +129,14 @@ public class GUI {
         buyPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         buyPanel.setBackground(Color.black);
         buyPanel.setPreferredSize(new Dimension(50,75));
-        GridLayout layout = new GridLayout(2,4);
+        GridLayout layout = new GridLayout(4,2);
         buyPanel.setLayout(layout);
         layout.setHgap(2);
         layout.setVgap(2);
 
-
+        teleportButton = new JButton("Set Teleporter");
         //basictropp button
-        buyButton = new JButton("Basic troops");
+        buyButton = new JButton("Small Ogre");
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -140,20 +145,28 @@ public class GUI {
                 //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
+        //basictropp button
+        buyTank= new JButton("Earth Elemental");
+        buyTank.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Tile[][] currentMap = Level.getCurrentMap();
+                env.addTroop(new TankTroop(tankImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+            }
+        });
         printScore();
         //Testar torn
-        buyTeleport = new JButton("Teleport Troop");
+        buyTeleport = new JButton("Teleporter");
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                /*env.saveBuildableTilese();
-                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
-                //env.addTower(new BasicTower(currentMap[env.getLevel().]);
-                //env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
+                Tile[][] currentMap = Level.getCurrentMap();
+                teleportTroop=new TeleportTroop(teleporterImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]);
+                env.addTroop(teleportTroop);
+                teleportButton.setEnabled(true);
             }
         });
-        buySpeed = new JButton("Speed Troop");
+        buySpeed = new JButton("Speed Demon");
         buySpeed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -170,6 +183,24 @@ public class GUI {
             }
         });
 
+        teleportButton.setEnabled(false);
+        teleportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Tile tile = teleportTroop.getTilePosition();
+                if(teleportTroop.isAlive()) {
+                    if (!(tile instanceof CrossroadTile) && !(tile instanceof JunctionTile)) {
+                        teleportTroop.initTeleport();
+                        teleportButton.setEnabled(false);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Teleporters can't be placed on crossroads");
+                    }
+                }else{
+                    teleportButton.setEnabled(false);
+                }
+            }
+        });
+
 
 
         buyPanel.add(score);
@@ -177,7 +208,10 @@ public class GUI {
         buyPanel.add(buySpeed);
         buyPanel.add(buyTeleport);
         buyPanel.add(buyButton);
+        buyPanel.add(buyTank);
         buyPanel.add(crossButton);
+        buyPanel.add(teleportButton);
+
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
     public void getName(){

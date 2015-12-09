@@ -4,6 +4,7 @@ import AntiTD.Position;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,7 +12,7 @@ import java.io.IOException;
  * Created by dv13tes on 2015-11-30.
  */
 public class GoalTile extends Tile {
-
+    private BufferedImage goalFort;
     public GoalTile() {
         this(null);
     }
@@ -21,7 +22,7 @@ public class GoalTile extends Tile {
         setBuildable(false);
         setMoveable(true);
         try {
-            setImage(ImageIO.read(new File("goal.png")));
+            setImage(ImageIO.read(new File("sprites/goal.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

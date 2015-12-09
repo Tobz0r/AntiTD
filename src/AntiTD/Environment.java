@@ -24,35 +24,39 @@ import java.util.concurrent.Executors;
  */
 public class Environment extends JPanel implements Runnable {
 
-    private ArrayList<Level> levels;
-    private Handler handler;
+    private int victoryScore;
+    private final int minimumCredits=20;
     private int finalScore=0;
-    private  Executor runner= Executors.newFixedThreadPool(2);;
+    private int credits;
+    private int mapNr=0;
+
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
-    //private ArrayList<Troop> troops = new ArrayList<>();
     private ArrayList<CrossroadSwitch> switches;
+    private ArrayList<Level> levels;
+
+    private Handler handler;
+
     private BufferedImage basicTower;
+    private BufferedImage basicImage;
+
+    private Tile[][] map;
+
+    private GUI gui;
+
+    private  Executor runner= Executors.newFixedThreadPool(2);;
+
     private static boolean gameRunning;
     private static  boolean paused;
-    private BufferedImage basicImage;
-    private int credits;
-    private final int minimumCredits=20;
-    private Tile[][] map;
+    private boolean gameOver;
+
     private Thread thread;
-    private int mapNr=0;
+
     private Level level;
 
-    private double delta;
-    private boolean gameOver;
-    private GUI gui;
 
     public Environment(GUI gui){
         super(new BorderLayout());
-        try {
-            basicTower= ImageIO.read(new File("tempTower.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         this.gui=gui;
         gameOver=false;
         handler=new Handler(0);
@@ -63,7 +67,13 @@ public class Environment extends JPanel implements Runnable {
         setUpNeighbors();
         credits=level.getStartingCredits();
         Level.setCurrentMap(map);
-        switches=level.setUpCrossroad();
+        victoryScore=level.getVictoryPoints();
+        try {
+            basicTower= ImageIO.read(new File("sprites/basictower.gif"));
+            switches=level.setUpCrossroad();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         initTowers();
 
         for(CrossroadSwitch cSwitch:switches){
@@ -81,11 +91,11 @@ public class Environment extends JPanel implements Runnable {
                 for (int row = -1; row <= 1; row++) {
                     for (int col = -1; col <= 1; col++) {
                         if ( row+col == -1 || row+col == 1 ) {
-                            try {
-                                if(map[y+row][x+col].isMoveable())
-                                    neighbors.add(map[y+row][x+col]);
-                            } catch (IndexOutOfBoundsException e) {
-
+                            if((((y+row)<map.length) && (0<=(y+row))) &&
+                                    ((x+col>=0)&&((x+col)<map[0].length))) {
+                                if (map[y + row][x + col].isMoveable()) {
+                                    neighbors.add(map[y + row][x + col]);
+                                }
                             }
                         }
                     }
@@ -157,19 +167,22 @@ public class Environment extends JPanel implements Runnable {
         long ns = Math.round(1000.0 / amountOfTicksPerSecond);
         double delta = 0;
         int ticks=0;
-
         while(gameRunning){
             long now = System.currentTimeMillis();
             long wait = ns - (now - lastTime);
             lastTime = now;
             wait = wait < 0 ? 0 : wait;
             finishedLevel(wait);
-            //System.out.println(wait);
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
                     finalScore++;
                     gui.updateScore();
+                    /* Varför skall dettas köras osäkert trådat? Detta gör ju att tick kan köras parallellt eller?
+                     * Om så är fallet kommer objectslistan manipuleras samtidigt, är det inte bättre att köra
+                     * det "som vanligt" och vara säker på att det inte händer parallellt eftersom Environment
+                     * redan är en egen tråd. Förklara gärna.
+                     */
                     runner.execute(new Runnable() {
                         public void run() {
                             handler.tick();
@@ -190,12 +203,6 @@ public class Environment extends JPanel implements Runnable {
 
     public void addTroop(Troop troop){
         handler.addObject(troop);
-        //handler.addTroop(troop);
-        /*
-        troops.add(troop);
-        handler.addTroop(troops);
-        handler.addObject(troop);
-        */
     }
     public void addTower(Tower tower){
         handler.addObject(tower);
@@ -233,6 +240,7 @@ public class Environment extends JPanel implements Runnable {
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 mapNr=0;
+                handler.resetScore();
             }
             else {
                 JOptionPane.showMessageDialog(null, "GOODBYE");
@@ -243,30 +251,32 @@ public class Environment extends JPanel implements Runnable {
             removeMouseListener(switc);
         }
         level=levels.get(mapNr);
+        victoryScore=(level.getVictoryPoints()+handler.getVictoryScore());
         map=level.getMap();
         Level.setCurrentMap(map);
+        credits+=level.getStartingCredits();
+       /* ................................................
+       ändra inte mina metoder och lägg in nya utan att testa det först.
+       TACK!
         handler.reset();
+         */
         setUpNeighbors();
-        initTowers();
+
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
+        initTowers();
         resumeGame();
+
     }
 
     private void finishedLevel(long wait){
-        if(handler.getVictoryScore() >= level.getVictoryPoints()){
+        if(handler.getVictoryScore() >= victoryScore){
             handler.reset();
             incrementLevel();
-            try {
-                Thread.sleep(wait);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
-            System.out.println("ELIASHEJ");
             gameRunning=false;
             JOptionPane.showMessageDialog(null, "Game over!! xD");
             System.exit(0);
@@ -280,10 +290,8 @@ public class Environment extends JPanel implements Runnable {
     private void initTowers(){
         Tile[][] currentMap = Level.getCurrentMap();
         for (int i = 0; i < currentMap.length; i++) {
-            System.out.println("ELIASHEJ");
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
-                    System.out.println("DET ÄR JAG SOM ÄR ELIAS");
                     addTower(new BasicTower(basicTower, currentMap[i][j], getTroops()));
                 }
             }

@@ -67,7 +67,6 @@ public class BasicTower extends Tower {
 
     public void aggroTarget() {
         if (target != null) {
-
             if (checkIfUnitIsClose(target) && target.isAlive() == true) {
                 //System.out.println("jao");
                 attack(target, getDamage());
@@ -93,6 +92,7 @@ public class BasicTower extends Tower {
     public void attack(Troop troop, int damage) {
         if (troop.isAlive()) {
             troop.attackThis(damage);
+
             if (!troop.isAlive()) {
                 incrementMoney();
             }
