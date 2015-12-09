@@ -2,6 +2,8 @@ package AntiTD;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.html.ObjectView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,7 +31,7 @@ public class Menu extends JMenu {
     private JScrollPane helpScroll;
     private JButton helpButton;
     private JPanel helpPanel;
-    private JPanel pricePanel;
+    private JTable priceTable;
 
 
     //statmenu
@@ -164,7 +166,7 @@ public class Menu extends JMenu {
         about.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JOptionPane.showMessageDialog(null, "SPELET ÄR SKAPAT AV ELIAS","About",1);
+                JOptionPane.showMessageDialog(null, "Game created by:\n Thom Renström \n Tobias Estefors \n Rasmus Dahlkvist \n Mattias Edin","About",1);
 
             }
         });
@@ -188,7 +190,7 @@ public class Menu extends JMenu {
         }
         ogre= (BufferedImage) resizeImage(ogre,25,25);
         ImageIcon ogree= new ImageIcon(ogre);
-        JLabel ogreee = new JLabel(ogree);
+
 
         //dragon
         BufferedImage dragon = null;
@@ -199,7 +201,7 @@ public class Menu extends JMenu {
         }
         dragon= (BufferedImage) resizeImage(dragon,25,25);
         ImageIcon dragonn= new ImageIcon(dragon);
-        JLabel dragonnn = new JLabel(dragonn);
+
 
         //earthElemental
         BufferedImage earth = null;
@@ -210,7 +212,7 @@ public class Menu extends JMenu {
         }
         earth= (BufferedImage) resizeImage(earth,25,25);
         ImageIcon earthh= new ImageIcon(earth);
-        JLabel earthhh = new JLabel(earthh);
+
         //teleporter
         BufferedImage tele = null;
         try {
@@ -220,23 +222,33 @@ public class Menu extends JMenu {
         }
         tele= (BufferedImage) resizeImage(tele,50,50);
         ImageIcon telee= new ImageIcon(tele);
-        JLabel teleee = new JLabel(telee);
-        JLabel units = new JLabel("Units");
-        JLabel price = new JLabel("Prices");
-        JLabel hp = new JLabel("Max health");
-        JLabel speed new JLabel("Speed");
 
-        //pricepanel
-        pricePanel = new JPanel();
-        GridLayout glayout = new GridLayout(5,4);
-        pricePanel.setLayout(glayout);
-        glayout.setVgap(3);
-        glayout.setHgap(3);
-        pricePanel.add(units);
-        pricePanel.add(ogreee);
-        pricePanel.add(dragonnn);
-        pricePanel.add(earthhh);
-        pricePanel.add(teleee);
+
+
+        //priceTable
+        String[] columns={"Units","Image"};
+        Object[][] rows = {{ogre}};
+      /*  DefaultTableModel model = new DefaultTableModel(rows, columns) {
+            @Override
+            public Class<?> getColumnClass(int column) {
+                switch (column){
+                    case 0:
+                    case 1: return Integer.class;
+                    case 2: return ImageIcon.class;
+                    default: return Object.class;
+                }
+
+            }
+
+        }; */
+        priceTable = new JTable(5,2);
+        priceTable.setValueAt(ogree, 1,1);
+
+
+
+
+
+
 
 
 
@@ -269,7 +281,7 @@ public class Menu extends JMenu {
 
        // helpFrame.getContentPane().setBackground(Color.yellow);
         helpFrame.add(helpPanel, BorderLayout.SOUTH);
-        helpFrame.add(pricePanel,BorderLayout.CENTER);
+        helpFrame.add(priceTable, BorderLayout.CENTER);
         helpFrame.setVisible(true);
     }
     private Image resizeImage(Image myImg, int w, int h){
