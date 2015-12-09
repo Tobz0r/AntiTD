@@ -239,6 +239,8 @@ public class Environment extends JPanel implements Runnable {
         map=level.getMap();
         Level.setCurrentMap(map);
        /* ................................................
+       ändra inte mina metoder och lägg in nya utan att testa det först.
+       TACK!
         handler.reset();
          */
         setUpNeighbors();
