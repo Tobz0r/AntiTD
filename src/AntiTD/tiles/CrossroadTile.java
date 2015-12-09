@@ -2,7 +2,12 @@ package AntiTD.tiles;
 
 import AntiTD.Position;
 
+
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,6 +18,7 @@ import java.util.Collections;
 public class CrossroadTile extends Tile {
 
     private ArrayList<Tile> nextTiles;
+    private BufferedImage basicTile;
 
     public CrossroadTile() {
         this(null);
@@ -21,16 +27,27 @@ public class CrossroadTile extends Tile {
         super(pos);
         setBuildable(false);
         setMoveable(true);
+        try {
+            basicTile=ImageIO.read(new File("sprites/patheses.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         nextTiles=new ArrayList<>();
     }
 
     @Override
     public void landOn(Graphics g) {
         g.setColor(Color.red);
-        g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),
-                (int)(getPosition().getY()*(getSize().getHeight())),
-                (int)getSize().getWidth(),
-                (int)getSize().getHeight());
+        if(getImage()!=null){
+            g.drawImage(basicTile,(int)(getPosition().getX()*(getSize().getWidth())),
+                    (int)(getPosition().getY()*(getSize().getHeight())),
+                    (int)getSize().getWidth(),
+                    (int)getSize().getHeight(),null);
+            g.drawImage(getImage(),(int)(getPosition().getX()*(getSize().getWidth())),
+                    (int)(getPosition().getY()*(getSize().getHeight())),
+                    (int)getSize().getWidth(),
+                    (int)getSize().getHeight(),null);
+        }
     }
 
     public Tile[] findNextWay(){
@@ -52,7 +69,7 @@ public class CrossroadTile extends Tile {
         Collections.reverse(Arrays.asList(copy));
         return copy;
     }
-    void changeWay(){
+    void changeWay() throws IOException {
         Tile[] current=getNeighbors2();
         Tile[] newPath=new Tile[current.length];
         for(int i=0; i < current.length;i++){
@@ -61,6 +78,18 @@ public class CrossroadTile extends Tile {
         newPath=reverseArray(newPath);
         if(newPath[0]==null){
             newPath[0]=newPath[1];
+        }
+        Position p=newPath[0].getPosition();
+        if(getPosition().IsPosToEast(p)){
+            setImage(ImageIO.read(new File("sprites/right.gif")));
+        }else if(getPosition().IsPosToNorth(p)){
+            setImage(ImageIO.read(new File("sprites/up.gif")));
+        }
+        else if(getPosition().IsPosToSouth(p)){
+            setImage(ImageIO.read(new File("sprites/down.gif")));
+        }
+        else if(getPosition().IsPosToWest(p)){
+            setImage(ImageIO.read(new File("sprites/left.gif")));
         }
         setNeighbors(newPath);
     }

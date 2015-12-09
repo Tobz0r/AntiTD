@@ -8,16 +8,16 @@ import java.awt.image.BufferedImage;
 /**
  * Created by dv13tes on 2015-12-04.
  */
-public class SpeedTroop extends Troop {
-    static private final double SPEED = 5;
-    static private final int MAX_HEALTH = 5;
+public class TankTroop extends Troop {
+    static private final double SPEED = 1;
+    static private final int MAX_HEALTH = 10;
     static private final int KILL_DEATH_SCORE = 10;
 
     /**
      * Constructor for basic troop
      * @param pos Starting tile position.
      */
-    public SpeedTroop(Tile pos) {
+    public TankTroop(Tile pos) {
         this(null, pos);
     }
 
@@ -26,7 +26,7 @@ public class SpeedTroop extends Troop {
      * @param img Image used for rendering this object.
      * @param pos Starting tile position.
      */
-    public SpeedTroop(Image img, Tile pos) {
+    public TankTroop(Image img, Tile pos) {
         this(img, pos, MAX_HEALTH, KILL_DEATH_SCORE, SPEED);
     }
 
@@ -43,7 +43,7 @@ public class SpeedTroop extends Troop {
      *              0 and 100. The tick will increase the move progress with this
      *              value and when progress reaches 100 the move is finished.
      */
-    public SpeedTroop(Image img, Tile pos, int health, int score, double speed) {
+    public TankTroop(Image img, Tile pos, int health, int score, double speed) {
         super(img, pos, health, score, speed);
     }
     @Override

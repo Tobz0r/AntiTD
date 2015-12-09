@@ -1,20 +1,31 @@
 package AntiTD;
 
+
+import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.SpringLayout;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 import AntiTD.*;
+import AntiTD.tiles.CrossroadTile;
+import AntiTD.tiles.JunctionTile;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
-import AntiTD.troops.BasicTroop;
-import AntiTD.troops.SpeedTroop;
-import AntiTD.troops.Troop;
+import AntiTD.towers.FrostTower;
+import AntiTD.troops.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Observable;
@@ -33,12 +44,16 @@ public class GUI {
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
+    private JButton crossButton;
     private JButton buySpeed;
+    private JButton buyTank;
+    private JButton teleportButton;
     private Thread thread;
     //startscreen
     private String PlayerName;
     private JTextArea player;
     private JButton enterName;
+
     private JPanel startPanel;
     private JScrollPane playerScroll;
     private JScrollPane scrollPane;
@@ -51,13 +66,27 @@ public class GUI {
     //score
     private JTextField score;
     private JTextField money;
+    //Unit images
+    private BufferedImage basicImage;
+    private BufferedImage speedImage;
+    private BufferedImage tankImage;
+    private BufferedImage teleporterImage;
+    private TeleportTroop teleportTroop=null;
 
 
 
     public GUI () {
 
         env = new Environment(this);
+        try {
+            basicImage= ImageIO.read(new File("sprites/ogre.gif"));
+            speedImage = ImageIO.read(new File("sprites/redDragon.gif"));
+            tankImage = ImageIO.read(new File ("sprites/earthElemental.gif"));
+            teleporterImage = ImageIO.read(new File("sprites/Teleporter.gif"));
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         frame = new JFrame("AntiTD");
          scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -72,10 +101,6 @@ public class GUI {
         menu.statMenu();
 
         frame.setVisible(true);
-
-
-
-
     }
 
     public void startGame() {
@@ -91,64 +116,102 @@ public class GUI {
     }
     public void restartGame(){
         //ta bort alla torn och teleportertiles
-        Handler.clearList();
+        //Handler.clearList();
         env.stop();
+        env.isGameOver();
+        env = new Environment(this);
         startGame();
     }
 
     private void buildBuyPanel(){
         buyPanel = new JPanel();
-        buyPanel.setBorder(BorderFactory.createLineBorder(Color.green));
-        buyPanel.setBackground(Color.magenta);
+        printScore();
+        buyPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        buyPanel.setBackground(Color.black);
         buyPanel.setPreferredSize(new Dimension(50,75));
+        GridLayout layout = new GridLayout(4,2);
+        buyPanel.setLayout(layout);
+        layout.setHgap(2);
+        layout.setVgap(2);
+
+        teleportButton = new JButton("Set Teleporter");
         //basictropp button
-        buyButton = new JButton("Basic troops");
-        buyButton.setBackground(Color.white);
+        buyButton = new JButton("Small Ogre");
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile[][] currentMap= Level.getCurrentMap();
-                env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                Tile[][] currentMap = Level.getCurrentMap();
+                env.addTroop(new BasicTroop(basicImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+            }
+        });
+        //basictropp button
+        buyTank= new JButton("Earth Elemental");
+        buyTank.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Tile[][] currentMap = Level.getCurrentMap();
+                env.addTroop(new TankTroop(tankImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
         printScore();
         //Testar torn
-        buyTeleport = new JButton("Teleport Troop");
-        buyTeleport.setBackground(Color.white);
+        buyTeleport = new JButton("Teleporter");
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("TELEPORTELIAS");
-                Tile pos;
-                Tile[][] currentMap= Level.getCurrentMap();
-                for(int i = 0; i < currentMap.length; i++){
-                    for(int j = 0; j <currentMap[i].length; j++){
-                        if(currentMap[i][j].isBuildable()){
-                            //pos = currentMap[i][j];
-                            env.addTower(new BasicTower(img, currentMap[i][j],env.getTroops()));
-                            currentMap[i][j].setBuildable(false);
-                        }
-
-                    }
-                }
-                /*env.saveBuildableTilese();
-                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
-                //env.addTower(new BasicTower(currentMap[env.getLevel().]);
-                //env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
+                Tile[][] currentMap = Level.getCurrentMap();
+                teleportTroop=new TeleportTroop(teleporterImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]);
+                env.addTroop(teleportTroop);
+                teleportButton.setEnabled(true);
             }
         });
-        buySpeed = new JButton("Speed Troop");
-        buySpeed.setBackground(Color.white);
+        buySpeed = new JButton("Speed Demon");
         buySpeed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
-                env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                env.addTroop(new SpeedTroop(speedImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                //env.addTroops(new SpeedTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-        buyPanel.add(buySpeed,BorderLayout.EAST);
-        buyPanel.add(buyTeleport,BorderLayout.CENTER);
-        buyPanel.add(buyButton, BorderLayout.CENTER);
+        crossButton = new JButton("Change direction");
+        crossButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.out.print("eliashej");
+            }
+        });
+
+        teleportButton.setEnabled(false);
+        teleportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Tile tile = teleportTroop.getTilePosition();
+                if(teleportTroop.isAlive()) {
+                    if (!(tile instanceof CrossroadTile) && !(tile instanceof JunctionTile)) {
+                        teleportTroop.initTeleport();
+                        teleportButton.setEnabled(false);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Teleporters can't be placed on crossroads");
+                    }
+                }else{
+                    teleportButton.setEnabled(false);
+                }
+            }
+        });
+
+
+
+        buyPanel.add(score);
+        buyPanel.add(money);
+        buyPanel.add(buySpeed);
+        buyPanel.add(buyTeleport);
+        buyPanel.add(buyButton);
+        buyPanel.add(buyTank);
+        buyPanel.add(crossButton);
+        buyPanel.add(teleportButton);
+
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
     public void getName(){
@@ -159,37 +222,106 @@ public class GUI {
     }
 
 
+
     public void startScreen()  {
+        //check to see if panel still exists
+        if(buyPanel !=null){
+            frame.remove(buyPanel);
+        }
+
         env.stop();
         frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
-        //behövs en bättre lösning <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         player.setEditable(true);
         player.setWrapStyleWord(true);
         player.setLineWrap(true);
-
         playerScroll = new JScrollPane(player);
-
         player.setBorder(BorderFactory.createLineBorder(Color.black));
-
         startPanel = new JPanel();
         startPanel.setBackground(Color.white);
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
+        checkTextField();
         frame.setSize(300, 200);
         frame.add(startPanel);
         frame.setVisible(true);
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                getName();
-                startGame();
+                if(player.getDocument().getLength()!=0){
+                    getName();
+                    startGame();
+                }
             }
         });
 
+        
+    }
+    private void checkTextField(){
+
+        player.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent documentEvent) {
+                Document doc = player.getDocument();
+                if (doc.getLength() > 10) {
+                    player.setEditable(false);
+                    player.addKeyListener(new KeyListener() {
+                        @Override
+                        public void keyTyped(KeyEvent keyEvent) {
+
+                        }
+
+                        @Override
+                        public void keyPressed(KeyEvent keyEvent) {
+                            backSpace(keyEvent);
+                        }
+
+                        @Override
+                        public void keyReleased(KeyEvent keyEvent) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent documentEvent) {
+                if (player.getDocument().getLength() > 10) {
+                    player.setEditable(false);
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent documentEvent) {
+                if (player.getDocument().getLength() > 10) {
+                    player.setEditable(false);
+                }
+            }
+        });
+
+    }
+
+    private void backSpace(KeyEvent k){
+        int i = 0;
+        if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            player.setEditable(true);
+            if(!k.isConsumed()){
+                k.consume();
+                i++;
+            }
+            Document doc = player.getDocument();
+            if(doc.getLength()>0 && doc.getLength() <12 ){
+                try {
+                    doc.remove(doc.getLength()-1, i);
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
     }
     public void runMusic()  {
         gameSound = "cello.wav";
@@ -219,20 +351,20 @@ public class GUI {
         currentMoney=String.valueOf(0);
         currentScore=String.valueOf(0);
         money = new JTextField();
-        money.setColumns(3);
         money.setEditable(false);
+        money.setBackground(Color.white);
+        money.setBorder(null);
         score = new JTextField();
         score.setEditable(false);
         score.setBackground(Color.white);
         score.setBorder(null);
         score.setText(currentScore);
-        buyPanel.add(score,BorderLayout.WEST);
-        buyPanel.add(money, BorderLayout.WEST);
+
     }
 
     public void updateScore(){
-        String scoreValue=String.valueOf(Troop.getVictoryScore());
-        score.setText(scoreValue);
+        score.setText("Score:"+String.valueOf(env.getScore()));
+        money.setText("Money");
         score.setColumns(5);
     }
 }

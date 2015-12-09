@@ -3,13 +3,19 @@ package AntiTD;
 import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
+import AntiTD.towers.BasicTower;
+import AntiTD.towers.FrostTower;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -18,34 +24,40 @@ import java.util.concurrent.Executors;
  */
 public class Environment extends JPanel implements Runnable {
 
-    private ArrayList<Level> levels;
-    private Handler handler;
-    private int finalScore=10000000;
-    private  Executor runner= Executors.newFixedThreadPool(2);;
+    private int victoryScore;
+    private final int minimumCredits=20;
+    private int finalScore=0;
+    private int credits;
+    private int mapNr=0;
+
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
-    private ArrayList<Troop> troops = new ArrayList<>();
     private ArrayList<CrossroadSwitch> switches;
+    private ArrayList<Level> levels;
+
+    private Handler handler;
+
+    private BufferedImage basicTower;
+    private BufferedImage basicImage;
+
+    private Tile[][] map;
+
+    private GUI gui;
+
+    private  Executor runner= Executors.newFixedThreadPool(2);;
 
     private static boolean gameRunning;
     private static  boolean paused;
+    private boolean gameOver;
 
-    private int credits;
-    private final int minimumCredits=20;
-    private Tile[][] map;
     private Thread thread;
-    private int mapNr=0;
-    private final int nrthr=2;
+
     private Level level;
 
-    private double delta;
-    private boolean gameOver;
-    private GUI gui;
-    private Object lock=new Object();
 
     public Environment(GUI gui){
         super(new BorderLayout());
+
         this.gui=gui;
-        Troop.resetScore();
         gameOver=false;
         handler=new Handler(0);
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
@@ -54,9 +66,16 @@ public class Environment extends JPanel implements Runnable {
         map=level.getMap();
         setUpNeighbors();
         credits=level.getStartingCredits();
-
         Level.setCurrentMap(map);
-        switches=level.setUpCrossroad();
+        victoryScore=level.getVictoryPoints();
+        try {
+            basicTower= ImageIO.read(new File("sprites/basictower.gif"));
+            switches=level.setUpCrossroad();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        initTowers();
+
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
@@ -72,11 +91,11 @@ public class Environment extends JPanel implements Runnable {
                 for (int row = -1; row <= 1; row++) {
                     for (int col = -1; col <= 1; col++) {
                         if ( row+col == -1 || row+col == 1 ) {
-                            try {
-                                if(map[y+row][x+col].isMoveable())
-                                    neighbors.add(map[y+row][x+col]);
-                            } catch (IndexOutOfBoundsException e) {
-
+                            if((((y+row)<map.length) && (0<=(y+row))) &&
+                                    ((x+col>=0)&&((x+col)<map[0].length))) {
+                                if (map[y + row][x + col].isMoveable()) {
+                                    neighbors.add(map[y + row][x + col]);
+                                }
                             }
                         }
                     }
@@ -138,7 +157,7 @@ public class Environment extends JPanel implements Runnable {
         Tile[][] map=Level.getCurrentMap();
         for(int i=0; i < map.length;i++){
             for(int j=0; j < map[i].length;j++){
-                map[i][j].setSize(new Dimension(getWidth()/map.length,getHeight()/map[i].length));
+                map[i][j].setSize(new Dimension(getWidth() / map.length, getHeight() / map[i].length));
             }
         }
     }
@@ -148,24 +167,23 @@ public class Environment extends JPanel implements Runnable {
         long ns = Math.round(1000.0 / amountOfTicksPerSecond);
         double delta = 0;
         int ticks=0;
-
         while(gameRunning){
             long now = System.currentTimeMillis();
             long wait = ns - (now - lastTime);
             lastTime = now;
             wait = wait < 0 ? 0 : wait;
             finishedLevel(wait);
-            //System.out.println(wait);
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
-                    finalScore--;
+                    finalScore++;
                     gui.updateScore();
                     runner.execute(new Runnable() {
                         public void run() {
                             handler.tick();
                         }
                     });
+
                     repaint();
                 }
 
@@ -177,12 +195,13 @@ public class Environment extends JPanel implements Runnable {
     public static boolean isRunning(){
         return gameRunning;
     }
-    public void addTroops(Troop troop){
-        troops.add(troop);
-        handler.addTroop(troops);
+
+    public void addTroop(Troop troop){
         handler.addObject(troop);
     }
-    public void addTower(Tower tower){ Handler.addObject(tower);}
+    public void addTower(Tower tower){
+        handler.addObject(tower);
+    }
     public void saveBuildableTilese(){
         Tile pos;
         for(int i = 0; i < map.length; i++){
@@ -196,7 +215,7 @@ public class Environment extends JPanel implements Runnable {
         }
     }
     public ArrayList<Troop> getTroops(){
-        return troops;
+        return handler.getAliveTroops();
     }
     public Tile getBuildAbleTile(int i){
         return buildableTiles.get(i);
@@ -216,6 +235,7 @@ public class Environment extends JPanel implements Runnable {
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 mapNr=0;
+                handler.resetScore();
             }
             else {
                 JOptionPane.showMessageDialog(null, "GOODBYE");
@@ -225,31 +245,51 @@ public class Environment extends JPanel implements Runnable {
         for(CrossroadSwitch switc: switches){
             removeMouseListener(switc);
         }
-        Handler.clearList();
         level=levels.get(mapNr);
+        victoryScore=(level.getVictoryPoints()+handler.getVictoryScore());
         map=level.getMap();
-        Level.setCurrentMap(level.getMap());
-        Troop.resetScore();
+        Level.setCurrentMap(map);
+        credits+=level.getStartingCredits();
+       /* ................................................
+       ändra inte mina metoder och lägg in nya utan att testa det först.
+       TACK!
+        handler.reset();
+         */
         setUpNeighbors();
+
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
+        initTowers();
         resumeGame();
+
     }
 
     private void finishedLevel(long wait){
-        if(Troop.getVictoryScore() >= level.getVictoryPoints()){
+        if(handler.getVictoryScore() >= victoryScore){
+            handler.reset();
             incrementLevel();
-            try {
-                Thread.sleep(wait);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
-        
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
-            System.out.println("ELIASHEJ");
+            gameRunning=false;
+            JOptionPane.showMessageDialog(null, "Game over!! xD");
+            System.exit(0);
+
+        }
+    }
+
+    public int getScore() {
+        return handler.getVictoryScore();
+    }
+    private void initTowers(){
+        Tile[][] currentMap = Level.getCurrentMap();
+        for (int i = 0; i < currentMap.length; i++) {
+            for (int j = 0; j < currentMap[i].length; j++) {
+                if (currentMap[i][j].isBuildable()) {
+                    addTower(new BasicTower(basicTower, currentMap[i][j], getTroops()));
+                }
+            }
         }
     }
 }

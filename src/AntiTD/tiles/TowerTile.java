@@ -2,7 +2,10 @@ package AntiTD.tiles;
 
 import AntiTD.Position;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by mattias on 2015-11-27.
@@ -15,13 +18,18 @@ public class TowerTile extends Tile {
         super(pos);
         setBuildable(true);
         setMoveable(false);
+        try {
+            setImage(ImageIO.read(new File("sprites/grass.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void landOn(Graphics g) {
-        g.setColor(Color.green);
-        g.fillRect((int)(getPosition().getX()*(getSize().getWidth())),
+        g.drawImage(getImage(),(int)(getPosition().getX()*(getSize().getWidth())),
                 (int)(getPosition().getY()*(getSize().getHeight())),
                 (int)getSize().getWidth(),
-                (int)getSize().getHeight());    }
+                (int)getSize().getHeight(),null);
+    }
 }

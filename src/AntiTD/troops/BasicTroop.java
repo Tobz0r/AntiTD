@@ -2,15 +2,18 @@ package AntiTD.troops;
 
 import AntiTD.tiles.Tile;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by mattias on 2015-11-30.
  */
 public class BasicTroop extends Troop {
 
-    static private final double SPEED = 1;
-    static private final int MAX_HEALTH = 2000;
+    static private final double SPEED = 2;
+    static private final int MAX_HEALTH = 5;
     static private final int KILL_DEATH_SCORE = 10;
 
     /**
@@ -31,7 +34,7 @@ public class BasicTroop extends Troop {
     }
 
     /**
-     * Constructor for basic troop, used for overriding health score speed
+     * Constructor for basic troop, used for overriding default health, score and speed values
      *
      * ** CAUTION **
      * Use this constructor for test purposes only.

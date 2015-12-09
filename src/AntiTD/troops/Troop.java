@@ -6,13 +6,14 @@ import AntiTD.tiles.Tile;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Stack;
 
 /**
  * Created by dv13trm on 2015-11-27.
  */
 public abstract class Troop implements GameObject {
-    private static int victoryScore;
+    //private static int victoryScore;
     protected int health;
     protected int score;
     protected double speed;
@@ -22,10 +23,11 @@ public abstract class Troop implements GameObject {
     private double moveProgres;
     private boolean hasReacedGoal;
     private boolean isMoving;
+    private boolean slowed;
+
+    private static LinkedList<Tile> teleportException=new LinkedList<>();
 
 
-    private float velX;
-    private float velY;
 
 
     protected Troop(Tile pos) {
@@ -46,6 +48,7 @@ public abstract class Troop implements GameObject {
         this.speed = speed;
         this.history = new Stack<Tile>();
         this.history.push(pos);
+        slowed = false;
 
     }
 
@@ -79,26 +82,14 @@ public abstract class Troop implements GameObject {
                 history.push(nextTile);
                 if (nextTile instanceof GoalTile) {
                     hasReacedGoal = true;
-                } else if (nextTile.isTeleporter()) {
+                } /*else if (nextTile.isTeleporter()) {
                     history.push(nextTile.getTeleportTo());
-                }
+                }*/
             }
         }
-        if(hasReacedGoal ){
-            victoryScore++;
-            Handler.removeObject(this);
-        }
-        else if(!isAlive()){
-            Handler.removeObject(this);
-        }
     }
-    public static int getVictoryScore(){
-        return victoryScore;
 
-    }
-    public static void resetScore(){
-        victoryScore=0;
-    }
+
     @Override
     public Tile getMoveToPosition() {
         return nextTile;
@@ -117,17 +108,18 @@ public abstract class Troop implements GameObject {
         Tile nextTile = null;
 
         for (Tile tile : neigbors) {
-            if (tile.isMoveable()) {
+            if (tile.isMoveable() && !teleportException.contains(tile)) {
                 if (history.search(tile) == -1) {
                     nextTile = tile;
                     break;
                 }
             }
         }
-        /*
+
         if (nextTile.isTeleporter()) {
+            history.push(nextTile);
             nextTile = nextTile.getTeleportTo();
-        }*/
+        }
         return nextTile;
     }
 
@@ -138,7 +130,7 @@ public abstract class Troop implements GameObject {
 
     @Override
     public int getCurrentScore() {
-        if (hasReacedGoal && this.isAlive()) {
+        if (hasReacedGoal) {
             return score;
         } else {
             return 0;
@@ -160,8 +152,12 @@ public abstract class Troop implements GameObject {
      * @return true if this troop died else false
      */
     public boolean attackThis(int damage) {
-        health = health - damage;
-        return !this.isAlive();
+        if ( ! hasReacedGoal ) {
+            health = health - damage;
+            return !this.isAlive();
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -170,7 +166,14 @@ public abstract class Troop implements GameObject {
      * @return true if alive else false
      */
     public boolean isAlive() {
-        return health > 0;
+        boolean isAlive = true;
+        if (health <= 0) {
+            isAlive = false;
+        }
+        if (hasReacedGoal) {
+            isAlive = false;
+        }
+        return isAlive;
     }
 
     @Override
@@ -185,4 +188,21 @@ public abstract class Troop implements GameObject {
     public String type(){
         return "Troop";
     }
+    public void slowSpeed(){
+        this.speed = (speed * 0.5);
+        slowed = true;
+        System.out.println(speed);
+    }
+    public boolean isSlowed(){
+        return slowed;
+    }
+
+    public static void addTeleportException(Tile tile){
+        teleportException.add(tile);
+    }
+    public static void clearTeleports(){
+        teleportException.clear();
+    }
+
+
 }

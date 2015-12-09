@@ -24,151 +24,167 @@ public class BasicTower extends Tower {
     private String type = "BasicTower";
     private int result;
     int bullets;
-    int ticCount = 0;
-    public BasicTower(ImageIcon img, Tile pos, ArrayList<Troop> troops) {
+    int count;
 
-
+    public BasicTower(Image img, Tile pos, ArrayList<Troop> troops) {
         super(img, pos, troops);
-      Random r = new Random();
-      int low = 0;
-      int High = 5;
-      result = r.nextInt(High-low)+low;
-        setDamage(70);
+        Random r = new Random();
+        int low = 0;
+        int High = 5;
+        result = r.nextInt(High - low) + low;
+        setDamage(1);
         setRange(5);
         setPrice(1);
         setPosition(pos.getPosition());
         this.posTile = pos;
+        count = 0;
     }
+
     public void initScan() {
-      int distance = Integer.MAX_VALUE;
-      //System.out.println("initscan");
-      for(Troop troop : troops){
-      Troop nearUnit = null;
-      int dist = distance(troop);
-      if(dist <= getRange()) {
-        inRange.push(troop);
+        int distance = Integer.MAX_VALUE;
+        ArrayList<Troop>troops=getTroopsList();
+        for (Troop troop : troops) {
+            Troop nearUnit = null;
+            if (troop.isAlive()) {
+                int dist = distance(troop);
+                if (dist <= getRange()) {
+                    pushInRange(troop);
 
-          if (dist < distance) {
-           nearUnit = troop;
-            setNearUnit(troop);
-            distance = dist;
-            //removeTroopFromList(troop);
-          }
-        }
-        if(nearUnit !=null){
-         target = nearUnit;
-         // System.out.println("target gets value");
-        }
-      }
-    }
-    public void aggroTarget(){
-      if(target != null){
-
-        if(checkIfUnitIsClose(target) &&  target.isAlive() == true){
-          //System.out.println("jao");
-          attack(target,getDamage());
-        }else{
-            //System.out.println("else");
-            if(!target.isAlive()) {
-                removeTroopFromList(target);
+                    if (dist < distance) {
+                        nearUnit = troop;
+                        setNearUnit(troop);
+                        distance = dist;
+                        //removeTroopFromList(troop);
+                    }
+                }
             }
-          target = null;
-          inRange.clear();
+            if (nearUnit != null) {
+                target = nearUnit;
+                // System.out.println("target gets value");
+            }
         }
-      }
     }
-    public void createTower(Tower tower,Tile pos){
-      //Tower temp = new BasicTower(img,pos);
-      tower.init(troops, towers, pos);
-      towers.add(tower);
+
+    public void aggroTarget() {
+        if (target != null) {
+            if (checkIfUnitIsClose(target) && target.isAlive() == true) {
+                //System.out.println("jao");
+                attack(target, getDamage());
+            } else {
+                //System.out.println("else");
+                if (!target.isAlive()) {
+                    removeTroopFromList(target);
+                }
+                target = null;
+                getInRange().clear();
+            }
+        }
+    }
+
+    public void createTower(Tower tower, Tile pos) {
+        //Tower temp = new BasicTower(img,pos);
+        tower.init(getTroopsList(), getTowerList(), pos);
+        getTowerList().add(tower);
 
     }
-    public void attack(Troop troop, int damage){
-        if(troop.isAlive()) {
+
+
+    public void attack(Troop troop, int damage) {
+        if (troop.isAlive()) {
             troop.attackThis(damage);
-           if(!troop.isAlive()){
-                money++;
+
+            if (!troop.isAlive()) {
+                incrementMoney();
             }
         }
     }
+
     public int distance(Troop troop) {
-      return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
+        return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
     }
-    public boolean checkIfUnitIsClose(Troop troop){
-    if(Math.hypot(troop.getPosition().getX() -getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()){
-      return true;
-      }
-      return false;
+
+    public boolean checkIfUnitIsClose(Troop troop) {
+        if (Math.hypot(troop.getPosition().getX() - getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()) {
+            return true;
+        }
+        return false;
     }
-    public void startShooting(){
+
+    public void startShooting() {
+        int bullets = 5;
 
         if (target != null) {
-            System.out.println("Target not null");
-            this.aggroTarget();
-        } else {
-            //   System.out.println("Target null");
-            this.initScan();
+            //System.out.println(target.isAlive());
+            //System.out.println(target.type());
+            aggroTarget();
+        } else if (target == null) {
+            //System.out.println("target null");
+            initScan();
         }
 
 
+    }
 
+    public String getTowerType() {
+        return type;
     }
-    public String getTowerType(){
-      return type;
+
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
-    public void setDamage(int damage){
-     this.damage = damage;
+
+    public int getDamage() {
+        return damage;
     }
-    public int getDamage(){
-      return damage;
+
+    public void setRange(int range) {
+        this.range = range;
     }
-    public void setRange(int range){
-      this.range = range;
+
+    public int getRange() {
+        return range;
     }
-    public int getRange(){
-      return range;
+
+    public void setPrice(int price) {
+        this.price = price;
     }
-    public void setPrice(int price){
-     this.price = price;
+
+    public int getPrice() {
+        return price;
     }
-    public int getPrice(){
-     return price;
+
+    public void setPosition(Position pos) {
+        this.pos = pos;
     }
-    public void setPosition(Position pos){
-     this.pos = pos;
-   }
-    public Position getPosition(){
-      return pos;
+
+    public Position getPosition() {
+        return pos;
     }
 
     /*Test methods*/
-    public Troop getTarget(){
+    public Troop getTarget() {
         return target;
     }
-    public void setNearUnit(Troop tr){
+
+    public void setNearUnit(Troop tr) {
         this.tr = tr;
     }
-    public Troop getNearUnit(){
+
+    public Troop getNearUnit() {
         return tr;
     }
+
     @Override
     public void tick() {
 
-        ticCount++;
-        if(ticCount>=60) {
+        count++;
+        if (count >= 60) {
             if (this.getTroopFromList()) {
-          /*if (target != null) {
-            System.out.println("Target not null");
-            this.aggroTarget();
-          } else {
-            this.initScan();
-          }*/
                 startShooting();
-
             }
-            ticCount = 0;
+            //System.out.println(result);
+            count = 0;
         }
-     //System.out.println(result);
 
     }
 
@@ -176,7 +192,6 @@ public class BasicTower extends Tower {
     public void render(Graphics g) {
 
     }
-
 
 
     @Override

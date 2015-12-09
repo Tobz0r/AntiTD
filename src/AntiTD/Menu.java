@@ -87,9 +87,9 @@ public class Menu extends JMenu {
         mainMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // FUNGERAR INTE ATM
+
                 newGame.setText("New Game");
-                gui.startScreen();  //ksk ändra i denna
+                gui.startScreen();
             }
         });
         exitGame.addActionListener(new ActionListener() {
@@ -197,7 +197,7 @@ public class Menu extends JMenu {
         helpScroll = new JScrollPane(helpText);
         helpFrame.add(helpScroll, BorderLayout.CENTER);
 
-        helpFrame.add(new JLabel(new ImageIcon("tobiashej.jpg")),BorderLayout.NORTH);
+        helpFrame.add(new JLabel(new ImageIcon("sprites/tobiashej.jpg")),BorderLayout.NORTH);
         helpFrame.getContentPane().setBackground(Color.yellow);
         helpFrame.add(helpPanel,BorderLayout.SOUTH);
         helpFrame.setVisible(true);
