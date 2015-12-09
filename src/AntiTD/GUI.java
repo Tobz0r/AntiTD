@@ -77,7 +77,6 @@ public class GUI {
     public GUI () {
 
         env = new Environment(this);
-
         try {
             basicImage= ImageIO.read(new File("sprites/ogre.gif"));
             speedImage = ImageIO.read(new File("sprites/redDragon.gif"));
@@ -101,10 +100,6 @@ public class GUI {
         menu.statMenu();
 
         frame.setVisible(true);
-
-
-
-
     }
 
     public void startGame() {

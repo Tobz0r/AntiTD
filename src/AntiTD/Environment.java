@@ -163,7 +163,7 @@ public class Environment extends JPanel implements Runnable {
             long wait = ns - (now - lastTime);
             lastTime = now;
             wait = wait < 0 ? 0 : wait;
-            //finishedLevel(wait);
+            finishedLevel(wait);
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
@@ -189,12 +189,6 @@ public class Environment extends JPanel implements Runnable {
 
     public void addTroop(Troop troop){
         handler.addObject(troop);
-        //handler.addTroop(troop);
-        /*
-        troops.add(troop);
-        handler.addTroop(troops);
-        handler.addObject(troop);
-        */
     }
     public void addTower(Tower tower){
         handler.addObject(tower);
@@ -244,25 +238,23 @@ public class Environment extends JPanel implements Runnable {
         level=levels.get(mapNr);
         map=level.getMap();
         Level.setCurrentMap(map);
+       /* ................................................
         handler.reset();
+         */
         setUpNeighbors();
-        initTowers();
+
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
         resumeGame();
+        initTowers();
     }
 
     private void finishedLevel(long wait){
         if(handler.getVictoryScore() >= level.getVictoryPoints()){
             handler.reset();
             incrementLevel();
-            try {
-                Thread.sleep(wait);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
             gameRunning=false;
@@ -281,6 +273,7 @@ public class Environment extends JPanel implements Runnable {
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
                     addTower(new BasicTower(basicTower, currentMap[i][j], getTroops()));
+                    System.out.println("VARFÖR FUNKAR DET HÄR INTE?!?!?!");
                 }
             }
         }

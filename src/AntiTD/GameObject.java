@@ -11,20 +11,19 @@ import java.util.Objects;
  */
 public interface GameObject{
 
-    public abstract void tick();
-    public abstract void render(Graphics g);
+    void tick();
+    void render(Graphics g);
 
-    public abstract Image getImage();
+    Image getImage();
 
-    public abstract int getCurrentScore();
+    int getCurrentScore();
 
 
-    public abstract Position getPosition();
-    public abstract String type();
+    Position getPosition();
+    String type();
 
-    public abstract Tile getTilePosition();
-    public Tile getMoveToPosition();
-    public abstract int getMoveProgres();
-
+    Tile getTilePosition();
+    Tile getMoveToPosition();
+    int getMoveProgres();
 
 }
