@@ -146,7 +146,7 @@ public class Environment extends JPanel implements Runnable {
         setTileSize();
         g.clearRect(0, 0, getWidth(), getHeight());
        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
+            for (int j = 0; j < map[0].length; j++) {
                 map[i][j].landOn(g);
             }
         }
@@ -241,6 +241,7 @@ public class Environment extends JPanel implements Runnable {
             if (reply == JOptionPane.YES_OPTION) {
                 mapNr=0;
                 handler.resetScore();
+                resetTeleport();
             }
             else {
                 JOptionPane.showMessageDialog(null, "GOODBYE");
@@ -261,7 +262,7 @@ public class Environment extends JPanel implements Runnable {
         handler.reset();
          */
         setUpNeighbors();
-
+        Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
@@ -297,4 +298,15 @@ public class Environment extends JPanel implements Runnable {
             }
         }
     }
+    private void resetTeleport(){
+        for(int i=0; i < levels.size(); i++){
+            Tile[][] map=levels.get(i).getMap();
+            for(int j=0; j < map.length; j++){
+                for(int k=0; k < map[0].length;k++){
+                    map[j][k].resetTeleport();
+                }
+            }
+        }
+    }
+
 }
