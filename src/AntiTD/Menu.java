@@ -70,6 +70,12 @@ public class Menu extends JMenu {
         if(!Environment.isRunning()){
             newGame.setText("New Game");
         }
+        highScore.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                gui.highScoreTable();
+            }
+        });
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

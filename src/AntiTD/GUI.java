@@ -42,7 +42,7 @@ public class GUI {
     private Environment env;
     private JFrame frame;
     private JPanel buyPanel;
-    private JButton buyButton;
+    private JButton ogreButton;
     private JButton buyTeleport;
     private JButton crossButton;
     private JButton buySpeed;
@@ -138,12 +138,13 @@ public class GUI {
 
         teleportButton = new JButton("Set Teleporter");
         //basictropp button
-        buyButton = new JButton("Small Ogre");
-        buyButton.addActionListener(new ActionListener() {
+        ogreButton = new JButton("Small Ogre");
+        ogreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Tile[][] currentMap = Level.getCurrentMap();
                 env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+
                 //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
@@ -181,7 +182,18 @@ public class GUI {
         crossButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                System.out.print("eliashej");
+                Tile[][] currentMap = Level.getCurrentMap();
+                for(int i=0; i < currentMap.length; i++ ){
+                    for(int j=0; j < currentMap[0].length; j++){
+                        if( currentMap[i][j]instanceof CrossroadTile){
+                            try {
+                                ((CrossroadTile)currentMap[i][j]).changeWay();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
             }
         });
 
@@ -209,7 +221,7 @@ public class GUI {
         buyPanel.add(money);
         buyPanel.add(buySpeed);
         buyPanel.add(buyTeleport);
-        buyPanel.add(buyButton);
+        buyPanel.add(ogreButton);
         buyPanel.add(buyTank);
         buyPanel.add(crossButton);
         buyPanel.add(teleportButton);
@@ -372,7 +384,7 @@ public class GUI {
         money.setText("Money"+String.valueOf(env.getMoney()));
         score.setColumns(5);
     }
-    private void highScoreTable(){
+    public void highScoreTable(){
         scoreTable = new JTable(10,3);
 
     }

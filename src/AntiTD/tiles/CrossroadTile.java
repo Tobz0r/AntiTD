@@ -69,7 +69,7 @@ public class CrossroadTile extends Tile {
         Collections.reverse(Arrays.asList(copy));
         return copy;
     }
-    void changeWay() throws IOException {
+    public void changeWay() throws IOException {
         Tile[] current=getNeighbors2();
         Tile[] newPath=new Tile[current.length];
         for(int i=0; i < current.length;i++){
