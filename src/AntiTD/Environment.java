@@ -42,7 +42,7 @@ public class Environment extends JPanel implements Runnable {
     private Tile[][] map;
 
     private GUI gui;
-    
+
     private  Executor runner= Executors.newFixedThreadPool(2);;
 
     private static boolean gameRunning;
@@ -249,6 +249,7 @@ public class Environment extends JPanel implements Runnable {
         victoryScore=(level.getVictoryPoints()+handler.getVictoryScore());
         map=level.getMap();
         Level.setCurrentMap(map);
+        credits+=level.getStartingCredits();
        /* ................................................
        ändra inte mina metoder och lägg in nya utan att testa det först.
        TACK!
