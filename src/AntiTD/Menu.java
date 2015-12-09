@@ -224,7 +224,7 @@ public class Menu extends JMenu {
         JLabel units = new JLabel("Units");
         JLabel price = new JLabel("Prices");
         JLabel hp = new JLabel("Max health");
-        JLabel speed new JLabel("Speed");
+        JLabel speed = new JLabel("Speed");
 
         //pricepanel
         pricePanel = new JPanel();

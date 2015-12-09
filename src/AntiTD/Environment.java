@@ -27,7 +27,7 @@ import java.util.concurrent.Executors;
 public class Environment extends JPanel implements Runnable,Observer {
 
     private int victoryScore;
-    private final int minimumCredits=20;
+    private final int minimumCredits=174;
     private int finalScore=0;
     private int credits;
     private int mapNr=0;
@@ -56,13 +56,13 @@ public class Environment extends JPanel implements Runnable,Observer {
     private Level level;
 
 
-    public Environment(GUI gui){
+    public Environment(GUI gui, File fp){
         super(new BorderLayout());
 
         this.gui=gui;
         gameOver=false;
         handler=new Handler(0,this);
-        ReadXML xmlReader = new ReadXML(new File("levels.xml"));
+        ReadXML xmlReader = new ReadXML(fp);
         levels=xmlReader.getLevels();
         level=levels.get(mapNr);
         map=level.getMap();
@@ -267,6 +267,13 @@ public class Environment extends JPanel implements Runnable,Observer {
     private void finishedLevel(long wait){
         if(handler.getVictoryScore() >= victoryScore){
             handler.reset();
+            int reply = JOptionPane.showConfirmDialog(null, "Would you like to replay this map again?",
+                    "GG EZ!", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                mapNr--;
+                handler.resetScore();
+                resetTeleport();
+            }
             incrementLevel();
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
@@ -283,10 +290,12 @@ public class Environment extends JPanel implements Runnable,Observer {
     public int getMoney(){
         return credits;
     }
-    public void buyUnit(int amount){
+    public boolean buyUnit(int amount){
         if((credits-amount)>0) {
             credits -= amount;
+            return true;
         }
+        return false;
     }
     private void initTowers(){
         Tile[][] currentMap = Level.getCurrentMap();
