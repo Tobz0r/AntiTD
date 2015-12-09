@@ -55,7 +55,7 @@ public class Handler {
      * <b>**Caution**</b> <br />
      * Should only be called in run method for thread safety
      */
-    private void addObjectsToGame() {
+    private synchronized void addObjectsToGame() {
         for (GameObject object : objectsToAdd) {
             objects.add(object);
             if (object instanceof Troop) {
@@ -89,7 +89,7 @@ public class Handler {
      * <b>**Caution**</b> <br />
      * Should only be called in <b>tick()</b> method for thread safety
      */
-    private void removeObjectsFromGame() {
+    private synchronized void removeObjectsFromGame() {
 
           for (GameObject object : objectsToRemove) {
             objects.remove(object);
@@ -120,7 +120,7 @@ public class Handler {
     }
 
 
-    public ArrayList<Troop> getAliveTroops() {
+    public synchronized ArrayList<Troop> getAliveTroops() {
         ArrayList<Troop> list = new ArrayList<Troop>(aliveTroops.size());
         for (GameObject go : aliveTroops) {
             list.add((Troop) go);
@@ -211,7 +211,7 @@ public class Handler {
      * <b>**Caution**</b> <br />
      * Should only be called in <b>tick()</b> method for thread safety
      */
-    private void resetGame() {
+    private synchronized void resetGame() {
         objects.clear();
         aliveTroops.clear();
         towers.clear();
@@ -231,7 +231,7 @@ public class Handler {
      * The score is restored when <b>reset()</b> method is called.
      * @return
      */
-    public int getVictoryScore() {
+    public synchronized int getVictoryScore() {
         return score;
     }
 

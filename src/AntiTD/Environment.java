@@ -43,7 +43,7 @@ public class Environment extends JPanel implements Runnable {
 
     private GUI gui;
 
-    private  Executor runner= Executors.newFixedThreadPool(2);;
+    private  Executor runner= Executors.newFixedThreadPool(4);;
 
     private static boolean gameRunning;
     private static  boolean paused;
@@ -146,7 +146,7 @@ public class Environment extends JPanel implements Runnable {
         setTileSize();
         g.clearRect(0, 0, getWidth(), getHeight());
        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
+            for (int j = 0; j < map[0].length; j++) {
                 map[i][j].landOn(g);
             }
         }
@@ -182,6 +182,9 @@ public class Environment extends JPanel implements Runnable {
                      * Om så är fallet kommer objectslistan manipuleras samtidigt, är det inte bättre att köra
                      * det "som vanligt" och vara säker på att det inte händer parallellt eftersom Environment
                      * redan är en egen tråd. Förklara gärna.
+                     *
+                     * För att vi måste ha det trådat :) och vi har tillräcklgit med synkronoserade lås för att den
+                     * är trådsäker, finns ingen möjlighet till varken deadlocks eller race condition :)
                      */
                     runner.execute(new Runnable() {
                         public void run() {
@@ -190,6 +193,7 @@ public class Environment extends JPanel implements Runnable {
                     });
 
                     repaint();
+
                 }
 
             } catch (InterruptedException e) {
@@ -241,6 +245,7 @@ public class Environment extends JPanel implements Runnable {
             if (reply == JOptionPane.YES_OPTION) {
                 mapNr=0;
                 handler.resetScore();
+                resetTeleport();
             }
             else {
                 JOptionPane.showMessageDialog(null, "GOODBYE");
@@ -255,13 +260,8 @@ public class Environment extends JPanel implements Runnable {
         map=level.getMap();
         Level.setCurrentMap(map);
         credits+=level.getStartingCredits();
-       /* ................................................
-       ändra inte mina metoder och lägg in nya utan att testa det först.
-       TACK!
-        handler.reset();
-         */
         setUpNeighbors();
-
+        Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
@@ -290,6 +290,9 @@ public class Environment extends JPanel implements Runnable {
     public int getMoney(){
         return credits;
     }
+    public void buyUnit(int amount){
+        credits-=amount;
+    }
     private void initTowers(){
         Tile[][] currentMap = Level.getCurrentMap();
         for (int i = 0; i < currentMap.length; i++) {
@@ -300,4 +303,15 @@ public class Environment extends JPanel implements Runnable {
             }
         }
     }
+    private void resetTeleport(){
+        for(int i=0; i < levels.size(); i++){
+            Tile[][] map=levels.get(i).getMap();
+            for(int j=0; j < map.length; j++){
+                for(int k=0; k < map[0].length;k++){
+                    map[j][k].resetTeleport();
+                }
+            }
+        }
+    }
+
 }
