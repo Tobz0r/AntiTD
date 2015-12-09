@@ -200,6 +200,9 @@ public abstract class Troop implements GameObject {
     public static void addTeleportException(Tile tile){
         teleportException.add(tile);
     }
+    public static void clearTeleports(){
+        teleportException.clear();
+    }
 
 
 }

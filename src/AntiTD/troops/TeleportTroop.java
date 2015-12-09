@@ -72,8 +72,11 @@ public class TeleportTroop extends Troop {
                 teleportEndTile = this.getTilePosition();
                 teleportStartTile.setTeleportTo(teleportEndTile);
             }
-            else{
+            else if (isAlive()){
                 addTeleportException(currentPosition);
+            }else{
+                /* Clearar listan på tiles mellan teleporten om teleportgubben dör innan den är färdig med teleporten*/
+                clearTeleports();
             }
         }
         this.move();

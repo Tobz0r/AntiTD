@@ -12,6 +12,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 import AntiTD.*;
+import AntiTD.tiles.CrossroadTile;
+import AntiTD.tiles.JunctionTile;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
@@ -185,9 +187,17 @@ public class GUI {
         teleportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile[][] currentMap = Level.getCurrentMap();
-                teleportTroop.initTeleport();
-                teleportButton.setEnabled(false);
+                Tile tile = teleportTroop.getTilePosition();
+                if(teleportTroop.isAlive()) {
+                    if (!(tile instanceof CrossroadTile) && !(tile instanceof JunctionTile)) {
+                        teleportTroop.initTeleport();
+                        teleportButton.setEnabled(false);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Teleporters can't be placed on crossroads");
+                    }
+                }else{
+                    teleportButton.setEnabled(false);
+                }
             }
         });
 
