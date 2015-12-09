@@ -291,7 +291,9 @@ public class Environment extends JPanel implements Runnable {
         return credits;
     }
     public void buyUnit(int amount){
-        credits-=amount;
+        if((credits-amount)>0) {
+            credits -= amount;
+        }
     }
     private void initTowers(){
         Tile[][] currentMap = Level.getCurrentMap();
