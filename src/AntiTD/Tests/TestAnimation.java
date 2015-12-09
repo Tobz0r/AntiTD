@@ -32,7 +32,7 @@ public class TestAnimation {
   @Before
   public void setUp(){
     pos = new TowerTile(new Position(0,0));
-    handler=new Handler(0);
+    //handler=new Handler(0);
     ReadXML xmlReader = new ReadXML(new File("levels.xml"));
     levels=xmlReader.getLevels();
     level=levels.get(mapNr);

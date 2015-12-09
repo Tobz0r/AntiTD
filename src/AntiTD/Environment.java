@@ -226,6 +226,9 @@ public class Environment extends JPanel implements Runnable,Observer {
     public void addTower(Tower tower){
         handler.addObject(tower);
     }
+    public void addBullets(Bullets bullets){
+        handler.addObject(bullets);
+    }
 
     public ArrayList<Troop> getTroops(){
         return handler.getAliveTroops();
