@@ -18,6 +18,7 @@ import AntiTD.towers.BasicTower;
 import AntiTD.towers.FrostTower;
 import AntiTD.troops.BasicTroop;
 import AntiTD.troops.SpeedTroop;
+import AntiTD.troops.TankTroop;
 import AntiTD.troops.Troop;
 
 import java.awt.*;
@@ -41,18 +42,18 @@ public class GUI {
     private Thread gameThread;
     private Environment env;
     private JFrame frame;
-    private BufferedImage basicImage;
-    private BufferedImage speedImage;
     private JPanel buyPanel;
     private JButton buyButton;
     private JButton buyTeleport;
     private JButton crossButton;
     private JButton buySpeed;
+    private JButton buyTank;
     private Thread thread;
     //startscreen
     private String PlayerName;
     private JTextArea player;
     private JButton enterName;
+
     private JPanel startPanel;
     private JScrollPane playerScroll;
     private JScrollPane scrollPane;
@@ -65,6 +66,11 @@ public class GUI {
     //score
     private JTextField score;
     private JTextField money;
+    //Unit images
+    private BufferedImage basicImage;
+    private BufferedImage speedImage;
+    private BufferedImage tankImage;
+    private BufferedImage teleporterImage;
 
 
 
@@ -75,6 +81,9 @@ public class GUI {
         try {
             basicImage= ImageIO.read(new File("ogre.gif"));
             speedImage = ImageIO.read(new File("redDragon.gif"));
+            tankImage = ImageIO.read(new File ("earthElemental.gif"));
+            teleporterImage = ImageIO.read(new File("Teleporter.gif"));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -124,14 +133,14 @@ public class GUI {
         buyPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         buyPanel.setBackground(Color.black);
         buyPanel.setPreferredSize(new Dimension(50,75));
-        GridLayout layout = new GridLayout(2,4);
+        GridLayout layout = new GridLayout(4,2);
         buyPanel.setLayout(layout);
         layout.setHgap(2);
         layout.setVgap(2);
 
 
         //basictropp button
-        buyButton = new JButton("Basic troops");
+        buyButton = new JButton("Small Ogre");
         buyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -140,20 +149,26 @@ public class GUI {
                 //env.addTroops(new BasicTroop(currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
+        //basictropp button
+        buyTank= new JButton("Earth Elemental");
+        buyTank.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Tile[][] currentMap = Level.getCurrentMap();
+                env.addTroop(new TankTroop(tankImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+            }
+        });
         printScore();
         //Testar torn
         buyTeleport = new JButton("Teleport Troop");
         buyTeleport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                /*env.saveBuildableTilese();
-                env.addTower(new BasicTower(img, env.getBuildAbleTile(5)))*/;
-                //env.addTower(new BasicTower(currentMap[env.getLevel().]);
-                //env.addTroops(new Dummy(null)); //la in en dummy för att testa trådning
+                Tile[][] currentMap = Level.getCurrentMap();
+                env.addTroop(new TankTroop(teleporterImage,currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
         });
-        buySpeed = new JButton("Speed Troop");
+        buySpeed = new JButton("Speed Demon");
         buySpeed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -177,7 +192,9 @@ public class GUI {
         buyPanel.add(buySpeed);
         buyPanel.add(buyTeleport);
         buyPanel.add(buyButton);
+        buyPanel.add(buyTank);
         buyPanel.add(crossButton);
+
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
     public void getName(){

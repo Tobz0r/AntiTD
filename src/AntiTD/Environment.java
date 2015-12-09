@@ -49,7 +49,7 @@ public class Environment extends JPanel implements Runnable {
     public Environment(GUI gui){
         super(new BorderLayout());
         try {
-            basicTower= ImageIO.read(new File("tempTower.png"));
+            basicTower= ImageIO.read(new File("basictower.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
