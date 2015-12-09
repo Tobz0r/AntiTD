@@ -221,7 +221,6 @@ public class Handler {
         objects.clear();
         aliveTroops.clear();
         towers.clear();
-        score = 0;
     }
 
     /**
@@ -240,5 +239,9 @@ public class Handler {
      */
     public int getVictoryScore() {
         return score;
+    }
+
+    void resetScore(){
+        score=0;
     }
 }

@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
  */
 public class Environment extends JPanel implements Runnable {
 
+    private int victoryScore;
     private ArrayList<Level> levels;
     private Handler handler;
     private int finalScore=0;
@@ -63,6 +64,7 @@ public class Environment extends JPanel implements Runnable {
         setUpNeighbors();
         credits=level.getStartingCredits();
         Level.setCurrentMap(map);
+        victoryScore=level.getVictoryPoints();
         switches=level.setUpCrossroad();
         initTowers();
 
@@ -226,6 +228,7 @@ public class Environment extends JPanel implements Runnable {
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 mapNr=0;
+                handler.resetScore();
             }
             else {
                 JOptionPane.showMessageDialog(null, "GOODBYE");
@@ -236,6 +239,7 @@ public class Environment extends JPanel implements Runnable {
             removeMouseListener(switc);
         }
         level=levels.get(mapNr);
+        victoryScore=(level.getVictoryPoints()+handler.getVictoryScore());
         map=level.getMap();
         Level.setCurrentMap(map);
        /* ................................................
@@ -254,7 +258,7 @@ public class Environment extends JPanel implements Runnable {
     }
 
     private void finishedLevel(long wait){
-        if(handler.getVictoryScore() >= level.getVictoryPoints()){
+        if(handler.getVictoryScore() >= victoryScore){
             handler.reset();
             incrementLevel();
         }
