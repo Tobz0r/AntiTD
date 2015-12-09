@@ -5,14 +5,12 @@ import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * Created by dv13tes on 2015-11-27.
  */
-public class Handler {
+public class Handler extends Observable {
     private LinkedList<GameObject> objects;
     private int tid;
     private int score;
@@ -24,8 +22,9 @@ public class Handler {
 
 
 
-    public Handler(int tid) {
+    public Handler(int tid, Environment env) {
         this.tid = tid;
+        addObserver(env);
         objects = new LinkedList<>();
         aliveTroops = new LinkedList<>();
         towers = new LinkedList<>();
@@ -140,6 +139,10 @@ public class Handler {
                     if (!t.isAlive()) {
                         removeObject(gameObject);
                     }
+                    if(t.hasReacedGoal()){
+                        update(t.getCurrentScore());
+                        removeObject(gameObject);
+                    }
                 }
 
             } catch (java.util.ConcurrentModificationException e) {
@@ -237,5 +240,10 @@ public class Handler {
 
     void resetScore(){
         score=0;
+    }
+
+    private void update(int credit){
+        setChanged();
+        notifyObservers(credit);
     }
 }

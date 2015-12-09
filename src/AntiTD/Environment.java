@@ -16,13 +16,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
  * @author dv13tes
  */
-public class Environment extends JPanel implements Runnable {
+public class Environment extends JPanel implements Runnable,Observer {
 
     private int victoryScore;
     private final int minimumCredits=20;
@@ -59,7 +61,7 @@ public class Environment extends JPanel implements Runnable {
 
         this.gui=gui;
         gameOver=false;
-        handler=new Handler(0);
+        handler=new Handler(0,this);
         ReadXML xmlReader = new ReadXML(new File("levels.xml"));
         levels=xmlReader.getLevels();
         level=levels.get(mapNr);
@@ -191,8 +193,13 @@ public class Environment extends JPanel implements Runnable {
                             handler.tick();
                         }
                     });
-
                     repaint();
+                    ticks++;
+                    if(ticks>60){
+                        int value=handler.getAliveTroops().size();
+                        credits+=(value*2);
+                        ticks=0;
+                    }
 
                 }
 
@@ -211,23 +218,9 @@ public class Environment extends JPanel implements Runnable {
     public void addTower(Tower tower){
         handler.addObject(tower);
     }
-    public void saveBuildableTilese(){
-        Tile pos;
-        for(int i = 0; i < map.length; i++){
-            for(int j = 0; j <map[i].length; j++){
-                if(map[i][j].isBuildable()){
-                    pos = map[i][j];
-                    buildableTiles.add(pos);
-                }
 
-            }
-        }
-    }
     public ArrayList<Troop> getTroops(){
         return handler.getAliveTroops();
-    }
-    public Tile getBuildAbleTile(int i){
-        return buildableTiles.get(i);
     }
     public static void pauseGame(){
         paused=true;
@@ -240,7 +233,7 @@ public class Environment extends JPanel implements Runnable {
         mapNr++;
         if(mapNr>levels.size()-1){
             int reply = JOptionPane.showConfirmDialog(null, "EZ GAEM, You're score : " +
-                    finalScore + "Would you laeik to play again?",
+                    (handler.getVictoryScore()+credits) + "Would you laeik to play again?",
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 mapNr=0;
@@ -316,4 +309,8 @@ public class Environment extends JPanel implements Runnable {
         }
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        credits+=(int)arg;
+    }
 }
