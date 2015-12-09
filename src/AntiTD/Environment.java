@@ -287,6 +287,9 @@ public class Environment extends JPanel implements Runnable {
     public int getScore() {
         return handler.getVictoryScore();
     }
+    public int getMoney(){
+        return credits;
+    }
     private void initTowers(){
         Tile[][] currentMap = Level.getCurrentMap();
         for (int i = 0; i < currentMap.length; i++) {

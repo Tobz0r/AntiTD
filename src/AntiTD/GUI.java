@@ -73,7 +73,8 @@ public class GUI {
     private BufferedImage tankImage;
     private BufferedImage teleporterImage;
     private TeleportTroop teleportTroop=null;
-
+    //highscore
+    private JTable scoreTable;
 
 
     public GUI () {
@@ -240,7 +241,7 @@ public class GUI {
         player.setBorder(BorderFactory.createLineBorder(Color.black));
         frame.add(tenChars);
         startPanel = new JPanel();
-        startPanel.setBackground(Color.white);
+        startPanel.setBackground(Color.red);
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
@@ -250,6 +251,7 @@ public class GUI {
         frame.setSize(300, 200);
         frame.add(startPanel);
         frame.setVisible(true);
+        enterName.setBackground(Color.WHITE);
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -367,7 +369,11 @@ public class GUI {
 
     public void updateScore(){
         score.setText("Score:"+String.valueOf(env.getScore()));
-        money.setText("Money");
+        money.setText("Money"+String.valueOf(env.getMoney()));
         score.setColumns(5);
+    }
+    private void highScoreTable(){
+        scoreTable = new JTable(10,3);
+
     }
 }
