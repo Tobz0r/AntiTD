@@ -84,17 +84,17 @@ public class Environment extends JPanel implements Runnable {
     }
 
     private void setUpNeighbors() {
+        System.out.println(map.length + "" + map[0].length);
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[0].length; x++) {
                 ArrayList<Tile> neighbors = new ArrayList<Tile>(8);
                 for (int row = -1; row <= 1; row++) {
                     for (int col = -1; col <= 1; col++) {
                         if ( row+col == -1 || row+col == 1 ) {
-                            try {
-                                if(map[y+row][x+col].isMoveable())
-                                    neighbors.add(map[y+row][x+col]);
-                            } catch (IndexOutOfBoundsException e) {
-
+                            if((((y+row)<map.length) && (0<=(y+row))) &&
+                                    ((x+col>=0)&&((x+col)<map[0].length))) {
+                                if (map[y + row][x + col].isMoveable())
+                                    neighbors.add(map[y + row][x + col]);
                             }
                         }
                     }
