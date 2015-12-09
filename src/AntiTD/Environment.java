@@ -178,6 +178,10 @@ public class Environment extends JPanel implements Runnable {
                 if (! isPaused()) {
                     finalScore++;
                     gui.updateScore();
+                    /* Varför skall dettas köras osäkert trådat? Detta gör ju att tick kan köras parallellt eller?
+                     * Om så är fallet kommer objectslistan manipuleras samtidigt, är det inte bättre att köra
+                     * det "som vanligt" och vara säker på att det inte händer parallellt
+                     */
                     runner.execute(new Runnable() {
                         public void run() {
                             handler.tick();

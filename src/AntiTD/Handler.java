@@ -2,18 +2,12 @@ package AntiTD;
 
 import AntiTD.tiles.Tile;
 import AntiTD.towers.Tower;
-import AntiTD.troops.BasicTroop;
 import AntiTD.troops.Troop;
 
-import javax.print.attribute.standard.ReferenceUriSchemesSupported;
-import javax.sound.midi.SysexMessage;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Timer;
-import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.Semaphore;
 
 /**
  * Created by dv13tes on 2015-11-27.
@@ -96,6 +90,7 @@ public class Handler {
      * Should only be called in <b>tick()</b> method for thread safety
      */
     private void removeObjectsFromGame() {
+
           for (GameObject object : objectsToRemove) {
             objects.remove(object);
             if (object instanceof Troop) {
@@ -120,7 +115,7 @@ public class Handler {
      * @param object object to remove.
      */
     public synchronized void removeObject(GameObject object) {
-
+        addObjectsToGame();
         objectsToRemove.add(object);
     }
 
