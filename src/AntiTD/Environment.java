@@ -180,7 +180,8 @@ public class Environment extends JPanel implements Runnable {
                     gui.updateScore();
                     /* Varför skall dettas köras osäkert trådat? Detta gör ju att tick kan köras parallellt eller?
                      * Om så är fallet kommer objectslistan manipuleras samtidigt, är det inte bättre att köra
-                     * det "som vanligt" och vara säker på att det inte händer parallellt
+                     * det "som vanligt" och vara säker på att det inte händer parallellt eftersom Environment
+                     * redan är en egen tråd. Förklara gärna.
                      */
                     runner.execute(new Runnable() {
                         public void run() {
