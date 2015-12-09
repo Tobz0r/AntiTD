@@ -195,6 +195,10 @@ public class Environment extends JPanel implements Runnable,Observer {
                      *
                      * För att vi måste ha det trådat :) och vi har tillräcklgit med synkronoserade lås för att den
                      * är trådsäker, finns ingen möjlighet till varken deadlocks eller race condition :)
+                     * Är väl medveten om att det blir enklare med bara en tråd men när det står klart och tydligt i
+                     * spesen att vi ska ha flera trådar som arbetar samtidigt har vi nog inget annat val än att
+                     * försöka få en trådad handlar om inte du har något annat förslag på något vi kan tråda. Att
+                     * Enviroment är enda tråden tror jag inte räcker för att det kravet ska täckas
                      */
                     runner.execute(new Runnable() {
                         public void run() {
