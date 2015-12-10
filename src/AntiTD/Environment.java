@@ -286,7 +286,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
         initTowers();
         gameRunning=true;
-        resumeGame(); 
+        resumeGame();
 
     }
 
