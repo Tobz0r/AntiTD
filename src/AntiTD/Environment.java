@@ -216,6 +216,7 @@ public class Environment extends JPanel implements Runnable,Observer {
                         ticks=0;
                     }
 
+                    
                 }
 
             } catch (InterruptedException e) {
