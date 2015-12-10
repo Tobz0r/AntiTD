@@ -59,6 +59,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     private Thread thread;
 
     private Level level;
+    private Sounds sounds = new Sounds();
 
 
     public Environment(GUI gui, File fp){
@@ -291,10 +292,11 @@ public class Environment extends JPanel implements Runnable,Observer {
             incrementLevel();
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
-            gui.pauseMusic();
-            gui.runMusic("gameover.wav");
+            gui.pauseMainSound();
+            sounds.nonLoopMusic("music/gameover.wav");
             gameRunning=false;
             JOptionPane.showMessageDialog(null, "Game over!! xD");
+            sounds.pauseMusic();
             gui.startScreen();
 
         }

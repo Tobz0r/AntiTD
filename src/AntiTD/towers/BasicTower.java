@@ -6,8 +6,11 @@ import AntiTD.tiles.Tile;
 import AntiTD.towers.*;
 import AntiTD.troops.Troop;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.Timer;
 
@@ -28,6 +31,7 @@ public class BasicTower extends Tower {
     int bullets;
     int count;
     int cooldown;
+
 
     public BasicTower(Image img, Tile pos, ArrayList<Troop> troops, Handler handler) {
         super(img, pos, troops);
@@ -209,6 +213,5 @@ public class BasicTower extends Tower {
     public int getMoveProgres() {
         return 0;
     }
-
 
 }
