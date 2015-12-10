@@ -10,31 +10,24 @@ import java.io.IOException;
 public class Sounds {
 
     //sound
-    private String gameSound;
     Clip clip = null;
     long clipTime;
 
 
-    public void nonLoopMusic(String gameSound)  {
-        this.gameSound = gameSound;
+    public void music(String gameSound, boolean looping,boolean lowervolume)  {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
             DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
             clip = (Clip)AudioSystem.getLine(info);
             clip.open(audioInputStream);
-            clip.start();
-        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        }
-    }
-    public void startMusic(String gameSound)  {
-        this.gameSound = gameSound;
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
-            DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
-            clip = (Clip)AudioSystem.getLine(info);
-            clip.open(audioInputStream);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            if(looping){
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            }
+            //fungerar inte
+            if(lowervolume){
+                FloatControl control = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+                control.setValue(-10.0f);
+            }
             clip.start();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
@@ -44,9 +37,11 @@ public class Sounds {
         clipTime = clip.getMicrosecondPosition();
         clip.stop();
     }
-    public void resumeMusic(){
+    public void resumeMusic(boolean looping){
         clip.setMicrosecondPosition(clipTime);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        if(looping) {
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
         clip.start();
     }
 
