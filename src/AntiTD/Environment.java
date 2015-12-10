@@ -317,9 +317,9 @@ public class Environment extends JPanel implements Runnable,Observer {
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
-                    Bullets bullet = new Bullets(arrows,1,5,currentMap[i][j]);
-                    addBullets(bullet);
-                    addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(),bullet));
+                  //  Bullets bullet = new Bullets(arrows   ,1,5,currentMap[i][j]);
+                 //   addBullets(bullet);
+                    addTower(new BasicTower(basicTower, currentMap[i][j], getTroops(),null));
                 }
             }
         }
