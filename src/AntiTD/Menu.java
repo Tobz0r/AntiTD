@@ -122,7 +122,7 @@ public class Menu extends JMenu {
                 else{
                     Environment.resumeGame();
                     pauseGame.setText("Pause");
-                    sounds.resumeMusic();
+                    sounds.resumeMusic(true);
                     pause=true;
                 }
             }
@@ -136,7 +136,7 @@ public class Menu extends JMenu {
                     mutesound=false;
                 }
                 else {
-                    sounds.resumeMusic();
+                    sounds.resumeMusic(true);
                     mute.setText("Mute");
                     mutesound = true;
                 }

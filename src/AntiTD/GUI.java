@@ -105,7 +105,7 @@ public class GUI {
     }
 
     public void startGame() {
-        sounds.startMusic("music/cello.wav");
+        sounds.music("music/cello.wav",true,false);
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -245,7 +245,7 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        sounds.startMusic("music/cello.wav");
+        sounds.music("music/cello.wav",true,false);
         tenChars = new JLabel("Max 11 character");
         env.stop();
         frame.remove(scrollPane);

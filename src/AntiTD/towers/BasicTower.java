@@ -2,6 +2,7 @@ package AntiTD.towers;
 
 import AntiTD.Handler;
 import AntiTD.Position;
+import AntiTD.Sounds;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.*;
 import AntiTD.troops.Troop;
@@ -31,6 +32,7 @@ public class BasicTower extends Tower {
     int bullets;
     int count;
     int cooldown;
+    private Sounds sounds = new Sounds();
 
 
     public BasicTower(Image img, Tile pos, ArrayList<Troop> troops, Handler handler) {
@@ -78,6 +80,7 @@ public class BasicTower extends Tower {
         if (target != null) {
             Projectile bullet=new Projectile(target,this);
             if (checkIfUnitIsClose(target) && target.isAlive() && cooldown> 200) {
+                sounds.music("music/gun.wav",false,false);
                 attack(target, getDamage());
                 handler.addObject(bullet);
                 cooldown=0;
