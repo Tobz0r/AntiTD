@@ -123,6 +123,7 @@ public class GUI {
         env.stop();
         env.isGameOver();
         env = new Environment(this,fp);
+        
         startGame();
     }
 

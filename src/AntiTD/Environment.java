@@ -291,9 +291,11 @@ public class Environment extends JPanel implements Runnable,Observer {
             incrementLevel();
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
+            gui.pauseMusic();
+            gui.runMusic("gameover.wav");
             gameRunning=false;
             JOptionPane.showMessageDialog(null, "Game over!! xD");
-            System.exit(0);
+            gui.startScreen();
 
         }
     }
