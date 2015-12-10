@@ -61,6 +61,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     private Thread thread;
 
     private Level level;
+    private Sounds sounds = new Sounds();
 
 
     public Environment(GUI gui, File fp){

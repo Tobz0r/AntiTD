@@ -62,9 +62,7 @@ public class GUI {
     private static final int textRows = 10;
     private static final int textCols = 1;
     //sound
-    private String gameSound;
-    Clip clip = null;
-    long clipTime;
+    private Sounds sounds = new Sounds();
     //score
     private JTextField score;
     private JTextField money;
@@ -107,7 +105,7 @@ public class GUI {
     }
 
     public void startGame() {
-        runMusic("music/cello.wav");
+        sounds.startMusic("music/cello.wav");
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -118,9 +116,12 @@ public class GUI {
         frame.pack();
     }
     public void restartGame(){
-        //ta bort alla torn och teleportertiles
+        //ta bort alla torn och teleportertiles 
         //Handler.clearList();
         env.restartLevel();
+    }
+    public void pauseMainSound(){
+        sounds.pauseMusic();
     }
 
     private void buildBuyPanel(){
@@ -244,7 +245,7 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        runMusic("music/cello.wav");
+        sounds.startMusic("music/cello.wav");
         tenChars = new JLabel("Max 11 character");
         env.stop();
         frame.remove(scrollPane);
@@ -271,7 +272,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(player.getDocument().getLength()!=0){
-                    pauseMusic();
+                    sounds.pauseMusic();
                     getName();
                     startGame();
                 }
@@ -352,28 +353,7 @@ public class GUI {
 
         }
     }
-    public void runMusic(String gameSound)  {
-        this.gameSound = gameSound;
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
-            DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
-            clip = (Clip)AudioSystem.getLine(info);
-            clip.open(audioInputStream);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-            clip.start();
-        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        }
-    }
-    public void pauseMusic(){
-        clipTime = clip.getMicrosecondPosition();
-        clip.stop();
-    }
-    public void resumeMusic(){
-        clip.setMicrosecondPosition(clipTime);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-        clip.start();
-    }
+
     public void printScore(){
         String currentScore;
         String currentMoney;
