@@ -4,6 +4,7 @@ import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
+import AntiTD.towers.Bullets;
 import AntiTD.towers.FrostTower;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
@@ -41,6 +42,11 @@ public class Environment extends JPanel implements Runnable,Observer {
     private BufferedImage basicTower;
     private BufferedImage basicImage;
 
+    private BufferedImage frostTower;
+    private BufferedImage frostImage;
+
+    private BufferedImage arrows;
+    private BufferedImage arrowsImage;
     private Tile[][] map;
 
     private GUI gui;
@@ -72,6 +78,8 @@ public class Environment extends JPanel implements Runnable,Observer {
         victoryScore=level.getVictoryPoints();
         try {
             basicTower= ImageIO.read(new File("sprites/basictower.gif"));
+            frostTower= ImageIO.read(new File("sprites/frostTower.png"));
+            arrows= ImageIO.read(new File("sprites/arrowb.gif"));
             switches=level.setUpCrossroad();
         } catch (IOException e) {
             e.printStackTrace();
@@ -187,6 +195,10 @@ public class Environment extends JPanel implements Runnable,Observer {
                      *
                      * För att vi måste ha det trådat :) och vi har tillräcklgit med synkronoserade lås för att den
                      * är trådsäker, finns ingen möjlighet till varken deadlocks eller race condition :)
+                     * Är väl medveten om att det blir enklare med bara en tråd men när det står klart och tydligt i
+                     * spesen att vi ska ha flera trådar som arbetar samtidigt har vi nog inget annat val än att
+                     * försöka få en trådad handlar om inte du har något annat förslag på något vi kan tråda. Att
+                     * Enviroment är enda tråden tror jag inte räcker för att det kravet ska täckas
                      */
                     runner.execute(new Runnable() {
                         public void run() {
@@ -217,6 +229,9 @@ public class Environment extends JPanel implements Runnable,Observer {
     }
     public void addTower(Tower tower){
         handler.addObject(tower);
+    }
+    public void addBullets(Bullets bullets){
+        handler.addObject(bullets);
     }
 
     public ArrayList<Troop> getTroops(){
@@ -302,7 +317,9 @@ public class Environment extends JPanel implements Runnable,Observer {
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
-                    addTower(new BasicTower(basicTower, currentMap[i][j], getTroops()));
+                    Bullets bullet = new Bullets(arrows,1,5,currentMap[i][j]);
+                    addBullets(bullet);
+                    addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(),bullet));
                 }
             }
         }

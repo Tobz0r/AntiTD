@@ -8,10 +8,7 @@ import AntiTD.troops.Troop;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.annotation.Target;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * Created by id12rdt on 2015-11-30.
@@ -30,16 +27,28 @@ public class FrostTower extends Tower{
     private LinkedList<Troop> slowedTroop = new LinkedList<Troop>();
     private HashMap<Troop,Boolean> targetSlowed = new HashMap<>();
     private int targetNumb = 0;
+    private int towerSpeed;
+    private double shootDistance;
+    private boolean attacking;
+    private Bullets bullets;
+    private Stack<Tile> history;
+    private Image bulletImg;
     ImageIcon img;
-    public FrostTower(Image img, Tile pos,ArrayList<Troop> troops) {
+    public FrostTower(Image tower, Tile pos,ArrayList<Troop> troops, Bullets bullets) {
 
-      super(img, pos, troops);
-      setDamage(10);
-      setRange(10);
+      super(tower, pos, troops);
+      setDamage(1);
+      setRange(5);
       setPrice(5);
+        setTowerSpeed(20);
+
       setPosition(pos.getPosition());
         slowedTarget = false;
         this.posTile = pos;
+        this.bullets = bullets;
+        history = new Stack<Tile>();
+        this.history.push(pos);
+
 
 
     }
@@ -64,10 +73,13 @@ public class FrostTower extends Tower{
     }
     public void aggroTarget(){
         if(target != null) {
+            bullets = new Bullets(bulletImg,getDamage(),5,this.getTilePosition());
 
             if (checkIfUnitIsClose(target) && target.isAlive() == true) {
                 //System.out.println("jao");
                 attack(target, getDamage());
+                bullets.setTarget(target);
+                bullets.tick();
             } else {
                 //System.out.println("else");
                 if (!target.isAlive()) {
@@ -77,6 +89,10 @@ public class FrostTower extends Tower{
                 getInRange().clear();
             }
         }
+    }
+    public void pointAtTroop() {
+        double troopAng = Math.atan2(target.getPosition().getX() - this.pos.getX(), target.getPosition().getY() - this.pos.getY());
+        //attack = true;
     }
     public void createTower(Tower tower, Tile pos){
       //Tower temp = new FrostTower(img,pos);
@@ -100,6 +116,8 @@ public class FrostTower extends Tower{
     }
     public void attack(Troop troop, int damage){
         if(troop.isAlive()) {
+           /* bullets = new Bullets(getDamage(),5,this.getTilePosition());
+            this.shoot(bullets,target);*/
             troop.attackThis(damage);
             if(!troop.isAlive()){
                 incrementMoney();
@@ -146,7 +164,7 @@ public class FrostTower extends Tower{
     public void tick(){
 
         count ++;
-        if(count >= 60) {
+        if(count >= getTowerSpeed()) {
             if (this.getTroopFromList()) {
                 startShooting();
 
@@ -168,6 +186,55 @@ public class FrostTower extends Tower{
     public void setValueInHashMap(String target) {
 
     }
+    public void setTowerSpeed(int towerSpeed){
+        this.towerSpeed = towerSpeed;
+    }
+    public int getTowerSpeed(){
+        return towerSpeed;
+    }
+
+    /*protected void shoot(Bullets bullets, Troop target){
+        this.target = target;
+        this.bullets = bullets;
+
+        if(!attacking){
+            attacking = true;
+            this.shootDistance = bullets.getSpeed();
+            bullets.setPosition(getNextTile());
+            System.out.println(shootDistance);
+        }
+        if(this.shootDistance <100){
+            this.shootDistance += bullets.getSpeed();
+            //System.out.println(shootDistance);
+            System.out.println("y: " + bullets.getPosition().getY() + "x: " +bullets.getPosition().getX());
+            if(this.shootDistance > 100){
+                this.shootDistance = 100;
+                System.out.println("ellu");
+
+            }
+        }else{
+            this.attacking = false;
+            this.shootDistance = 0;
+            attack(target,bullets.getDamage());
+            history.push(bullets.getTilePosition());
+        }
+
+    }
+    public Tile getNextTile(){
+        Tile[] neighbors;
+        neighbors = history.peek().getNeighbors2();
+
+        Tile nextTile = null;
+        for(Tile tile : neighbors){
+            if(history.search(tile) == -1){
+                nextTile = tile;
+                break;
+            }
+        }
+
+        return nextTile;
+    }*/
+
 
     @Override
     public void render(Graphics g) {

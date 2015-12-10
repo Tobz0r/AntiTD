@@ -53,7 +53,7 @@ public class BasicTowerTest {
   }
 
 
-  @Test
+  /*@Test
   public void testDamage(){
     assertEquals(tower.getDamage(), 5);
   }
@@ -109,7 +109,7 @@ public class BasicTowerTest {
 
     assertEquals(t.isAlive(), false);
     assertEquals(tower.getCurrentScore(),1);
-  }
+  }*/
   @Test
   public void testScanTarget(){
 
