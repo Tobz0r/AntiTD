@@ -126,7 +126,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         gameRunning=true;
         thread=new Thread(this);
         thread.start();
-    }
+    } 
     public synchronized void stop(){
         try{
             gameRunning=false;
