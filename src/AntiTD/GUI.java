@@ -116,13 +116,9 @@ public class GUI {
         frame.pack();
     }
     public void restartGame(){
-        //ta bort alla torn och teleportertiles
+        //ta bort alla torn och teleportertiles 
         //Handler.clearList();
-        env.stop();
-        env.isGameOver();
-        env = new Environment(this,fp);
-
-        startGame();
+        env.restartLevel();
     }
     public void pauseMainSound(){
         sounds.pauseMusic();
