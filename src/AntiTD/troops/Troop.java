@@ -7,6 +7,7 @@ import AntiTD.tiles.Tile;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Stack;
 
 /**
@@ -49,6 +50,7 @@ public abstract class Troop implements GameObject {
         this.history = new Stack<Tile>();
         this.history.push(pos);
         slowed = false;
+
 
     }
 
@@ -152,7 +154,7 @@ public abstract class Troop implements GameObject {
      * @return true if this troop died else false
      */
     public boolean attackThis(int damage) {
-        if ( ! hasReacedGoal ) {
+        if ( !hasReacedGoal() ) {
             health = health - damage;
             return !this.isAlive();
         } else {

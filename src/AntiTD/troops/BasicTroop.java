@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class BasicTroop extends Troop {
 
-    static private final double SPEED = 2;
+    static private final double SPEED = 1;
     static private final int MAX_HEALTH = 5;
     static private final int KILL_DEATH_SCORE = 10;
 
