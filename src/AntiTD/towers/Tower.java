@@ -4,11 +4,11 @@ import AntiTD.*;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Stack;
 
 /**
  * Created by dv13tes on 2015-11-27.
@@ -17,7 +17,7 @@ public abstract class Tower implements GameObject {
     private Tile pos;
     private int money;
     private Image img;
-    private Image imgBullets;
+    private Image imge;
 
     private ArrayList<Troop> troops = new ArrayList();
     private Troop target;
@@ -28,10 +28,6 @@ public abstract class Tower implements GameObject {
     private int price;
     private Tower iniTower;
     private Tile posTile;
-    private double shootDistance;
-    private boolean attacking;
-    private Bullets bullets;
-    private Stack<Tile> history;
 
     public Tower(Image img, Tile pos, ArrayList<Troop> troops) {
         this.img = img;
@@ -71,47 +67,10 @@ public abstract class Tower implements GameObject {
     @Override
     public abstract void tick();
 
-    /*protected void shoot(Bullets bullets, Troop target){
-        this.target = target;
-        this.bullets = bullets;
-
-        if(!attacking){
-            attacking = true;
-            this.shootDistance = bullets.getSpeed();
-            bullets.setPosition(getNextTile());
-        }
-        if(this.shootDistance <100){
-            this.shootDistance += bullets.getSpeed();
-            if(this.shootDistance > 100){
-                this.shootDistance = 100;
-            }
-        }else{
-            this.attacking = false;
-            this.shootDistance = 0;
-            history.push(bullets.getPosition());
-        }
-
-    }
-    public Tile getNextTile(){
-        Tile[] neighbors;
-        neighbors = history.peek().getNeighbors2();
-
-        Tile nextTile = null;
-        for(Tile tile : neighbors){
-            if(history.search(tile) == -1){
-                nextTile = tile;
-                break;
-            }
-        }
-
-        return nextTile;
-    }*/
-
-
     /*Ska vara i environment???*
     *
      */
-    /*public void buildTower() {
+    public void buildTower() {
         int tempMoney = getCurrentScore();
         if (pos.isBuildable()) {
             if (tempMoney >= 5) {
@@ -122,16 +81,15 @@ public abstract class Tower implements GameObject {
                 setMoney(tempMoney);
 
             } else if (tempMoney >= 1) {
-                Tower temp = new BasicTower(img, pos, troops);
+               /* Tower temp = new BasicTower(img, pos, troops);
                 temp.createTower(temp, pos);
                 tempMoney = tempMoney - temp.getPrice();
                 addTowerToList(temp);
 
-                setMoney(tempMoney);
+                setMoney(tempMoney);*/
             }
         }
-    }*/
-
+    }
 
     @Override
     public Image getImage() {
@@ -314,4 +272,3 @@ public abstract class Tower implements GameObject {
         return this.posTile;
     }
 }
-

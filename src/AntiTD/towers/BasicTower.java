@@ -1,5 +1,6 @@
 package AntiTD.towers;
 
+import AntiTD.Handler;
 import AntiTD.Position;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.*;
@@ -23,24 +24,23 @@ public class BasicTower extends Tower {
     private Troop target;
     private String type = "BasicTower";
     private int result;
-    Bullets bullets;
+    private Handler handler;
+    int bullets;
     int count;
-    private int towerSpeed;
 
-    public BasicTower(Image img, Tile pos, ArrayList<Troop> troops, Bullets bullets) {
+    public BasicTower(Image img, Tile pos, ArrayList<Troop> troops, Handler handler) {
         super(img, pos, troops);
         Random r = new Random();
+        this.handler=handler;
         int low = 0;
         int High = 5;
         result = r.nextInt(High - low) + low;
         setDamage(1);
         setRange(5);
         setPrice(1);
-        setTowerSpeed(10);
         setPosition(pos.getPosition());
         this.posTile = pos;
         count = 0;
-        this.bullets = bullets;
     }
 
     public void initScan() {
@@ -70,9 +70,11 @@ public class BasicTower extends Tower {
 
     public void aggroTarget() {
         if (target != null) {
-            if (checkIfUnitIsClose(target) && target.isAlive() == true) {
-                //System.out.println("jao");
+            Projectile bullet=new Projectile(target,this);
+            if (checkIfUnitIsClose(target) && target.isAlive()) {
                 attack(target, getDamage());
+                handler.addObject(bullet);
+                //new Projectile
             } else {
                 //System.out.println("else");
                 if (!target.isAlive()) {
@@ -95,7 +97,6 @@ public class BasicTower extends Tower {
     public void attack(Troop troop, int damage) {
         if (troop.isAlive()) {
             troop.attackThis(damage);
-
             if (!troop.isAlive()) {
                 incrementMoney();
             }
@@ -181,7 +182,7 @@ public class BasicTower extends Tower {
     public void tick() {
 
         count++;
-        if(count >= getTowerSpeed()) {
+        if (count >= 60) {
             if (this.getTroopFromList()) {
                 startShooting();
             }
@@ -190,13 +191,6 @@ public class BasicTower extends Tower {
         }
 
     }
-    public void setTowerSpeed(int towerSpeed){
-        this.towerSpeed = towerSpeed;
-    }
-    public int getTowerSpeed(){
-        return towerSpeed;
-    }
-
 
     @Override
     public void render(Graphics g) {

@@ -4,7 +4,6 @@ import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
-import AntiTD.towers.Bullets;
 import AntiTD.towers.FrostTower;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
@@ -230,9 +229,9 @@ public class Environment extends JPanel implements Runnable,Observer {
     public void addTower(Tower tower){
         handler.addObject(tower);
     }
-    public void addBullets(Bullets bullets){
+ /*   public void addBullets(Bullets bullets){
         handler.addObject(bullets);
-    }
+    }*/
 
     public ArrayList<Troop> getTroops(){
         return handler.getAliveTroops();
@@ -319,7 +318,8 @@ public class Environment extends JPanel implements Runnable,Observer {
                 if (currentMap[i][j].isBuildable()) {
                   //  Bullets bullet = new Bullets(arrows   ,1,5,currentMap[i][j]);
                  //   addBullets(bullet);
-                    addTower(new BasicTower(basicTower, currentMap[i][j], getTroops(),null));
+                    addTower(new BasicTower(basicTower, currentMap[i][j], getTroops(),handler));
+                    break;
                 }
             }
         }
