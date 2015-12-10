@@ -27,6 +27,7 @@ public class BasicTower extends Tower {
     private Handler handler;
     int bullets;
     int count;
+    int cooldown;
 
     public BasicTower(Image img, Tile pos, ArrayList<Troop> troops, Handler handler) {
         super(img, pos, troops);
@@ -41,6 +42,7 @@ public class BasicTower extends Tower {
         setPosition(pos.getPosition());
         this.posTile = pos;
         count = 0;
+        cooldown=0;
     }
 
     public void initScan() {
@@ -71,10 +73,10 @@ public class BasicTower extends Tower {
     public void aggroTarget() {
         if (target != null) {
             Projectile bullet=new Projectile(target,this);
-            if (checkIfUnitIsClose(target) && target.isAlive()) {
+            if (checkIfUnitIsClose(target) && target.isAlive() && cooldown> 200) {
                 attack(target, getDamage());
                 handler.addObject(bullet);
-                //new Projectile
+                cooldown=0;
             } else {
                 //System.out.println("else");
                 if (!target.isAlive()) {
@@ -180,7 +182,7 @@ public class BasicTower extends Tower {
 
     @Override
     public void tick() {
-
+        cooldown++;
         count++;
         if (count >= 60) {
             if (this.getTroopFromList()) {

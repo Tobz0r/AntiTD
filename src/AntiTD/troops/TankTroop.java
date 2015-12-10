@@ -4,6 +4,7 @@ import AntiTD.tiles.Tile;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 /**
  * Created by dv13tes on 2015-12-04.
@@ -12,6 +13,8 @@ public class TankTroop extends Troop {
     static private final double SPEED = 1;
     static private final int MAX_HEALTH = 100;
     static private final int KILL_DEATH_SCORE = 10;
+    private Random r;
+
 
     /**
      * Constructor for basic troop
@@ -45,6 +48,7 @@ public class TankTroop extends Troop {
      */
     public TankTroop(Image img, Tile pos, int health, int score, double speed) {
         super(img, pos, health, score, speed);
+        r=new Random();
     }
     @Override
     public void tick() {
@@ -56,6 +60,25 @@ public class TankTroop extends Troop {
 
     }
 
+    /**
+     * Attacks the troop with the specified damage.
+     * TankTroop has a 20% chanse to avoid the damage.
+     * @param damage amount of damage to take
+     * @return true if unit died, else false
+     */
+    @Override
+    public boolean attackThis(int damage) {
+        if ( ! hasReacedGoal() ) {
+            if((r.nextInt(5) + 1)==1){
+                damage=0;
+                System.out.println("Blocked attack");
+            }
+            health = health - damage;
+            return !this.isAlive();
+        } else {
+            return false;
+        }
+    }
 
 
 }

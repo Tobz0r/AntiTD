@@ -172,7 +172,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     }
     public void run() {
         long lastTime = System.currentTimeMillis();
-        double amountOfTicksPerSecond = 60.0;
+        double amountOfTicksPerSecond = 80;
         long ns = Math.round(1000.0 / amountOfTicksPerSecond);
         double delta = 0;
         int ticks=0;
