@@ -56,7 +56,7 @@ public class GUI {
     private JButton enterName;
     private JLabel tenChars;
 
-    private JPanel startPanel;
+    private StartScreen startPanel;
     private JScrollPane playerScroll;
     private JScrollPane scrollPane;
     private static final int textRows = 10;
@@ -107,7 +107,7 @@ public class GUI {
     }
 
     public void startGame() {
-        //runMusic();
+        runMusic("cello.wav");
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -247,6 +247,7 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
+        runMusic("cello.wav");
         tenChars = new JLabel("Max 11 character");
         env.stop();
         frame.remove(scrollPane);
@@ -257,15 +258,15 @@ public class GUI {
         playerScroll = new JScrollPane(player);
         player.setBorder(BorderFactory.createLineBorder(Color.black));
         frame.add(tenChars);
-        startPanel = new JPanel();
-        startPanel.setBackground(Color.red);
+        startPanel = new StartScreen();
+        startPanel.repaint();
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
         startPanel.add(tenChars);
         checkTextField();
-        frame.setSize(300, 200);
+        frame.setSize(400, 300);
         frame.add(startPanel);
         frame.setVisible(true);
         enterName.setBackground(Color.WHITE);
@@ -273,6 +274,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(player.getDocument().getLength()!=0){
+                    pauseMusic();
                     getName();
                     startGame();
                 }
@@ -280,6 +282,14 @@ public class GUI {
         });
 
         
+    }
+    private class StartScreen extends JPanel{
+        Image bg = new ImageIcon("sprites/full_background.png").getImage();
+        @Override
+        public void paintComponent(Graphics g){
+            g.drawImage(bg,0,0,getWidth(),getHeight(),this);
+        }
+
     }
     private void checkTextField(){
 
@@ -345,8 +355,8 @@ public class GUI {
 
         }
     }
-    public void runMusic()  {
-        gameSound = "cello.wav";
+    public void runMusic(String gameSound)  {
+        this.gameSound = gameSound;
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
             DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
@@ -394,3 +404,4 @@ public class GUI {
 
     }
 }
+
