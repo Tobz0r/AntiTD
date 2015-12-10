@@ -31,6 +31,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     private int finalScore=0;
     private int credits;
     private int mapNr=0;
+    private int restartMoney;
 
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
     private ArrayList<CrossroadSwitch> switches;
@@ -49,6 +50,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     private Tile[][] map;
 
     private GUI gui;
+
 
     private  Executor runner= Executors.newFixedThreadPool(4);;
 
@@ -84,6 +86,7 @@ public class Environment extends JPanel implements Runnable,Observer {
             e.printStackTrace();
         }
         initTowers();
+        restartMoney=credits;
 
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
@@ -126,7 +129,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         gameRunning=true;
         thread=new Thread(this);
         thread.start();
-    } 
+    }
     public synchronized void stop(){
         try{
             gameRunning=false;
@@ -267,6 +270,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         map=level.getMap();
         Level.setCurrentMap(map);
         credits+=level.getStartingCredits();
+        restartMoney=credits;
         setUpNeighbors();
         Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
@@ -274,6 +278,16 @@ public class Environment extends JPanel implements Runnable,Observer {
             addMouseListener(cSwitch);
         }
         initTowers();
+        resumeGame();
+
+    }
+
+    public void restartLevel(){
+        pauseGame();
+        handler.resetScore();
+        handler.reset();
+        credits=restartMoney;
+        Troop.clearTeleports();
         resumeGame();
 
     }

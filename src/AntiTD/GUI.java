@@ -120,11 +120,7 @@ public class GUI {
     public void restartGame(){
         //ta bort alla torn och teleportertiles
         //Handler.clearList();
-        env.stop();
-        env.isGameOver();
-        env = new Environment(this,fp);
-        
-        startGame();
+        env.restartLevel();
     }
 
     private void buildBuyPanel(){
