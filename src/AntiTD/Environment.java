@@ -295,7 +295,7 @@ public class Environment extends JPanel implements Runnable,Observer {
             gui.runMusic("gameover.wav");
             gameRunning=false;
             JOptionPane.showMessageDialog(null, "Game over!! xD");
-            System.exit(0);
+            gui.startScreen();
 
         }
     }
