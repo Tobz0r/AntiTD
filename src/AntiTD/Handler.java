@@ -1,6 +1,7 @@
 package AntiTD;
 
 import AntiTD.tiles.Tile;
+import AntiTD.towers.Projectile;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
 
@@ -114,7 +115,6 @@ public class Handler extends Observable {
      * @param object object to remove.
      */
     public synchronized void removeObject(GameObject object) {
-        addObjectsToGame();
         objectsToRemove.add(object);
     }
 
@@ -133,7 +133,7 @@ public class Handler extends Observable {
             try {
                 GameObject gameObject = objects.get(i);
                 objects.get(i).tick();
-                if (gameObject.type().equals("Troop")) {
+                if (gameObject instanceof Troop) {
                     score += gameObject.getCurrentScore();
                     Troop t = (Troop) gameObject;
                     if (!t.isAlive()) {
@@ -191,6 +191,8 @@ public class Handler extends Observable {
                 Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
 
                 double scale =gameObject instanceof Troop ? 0.4 : 0.7;
+                scale = gameObject instanceof Projectile ? 0.2 : scale;
+
 
                 double width = gameObject.getTilePosition().getSize().getWidth();
                 double height = gameObject.getTilePosition().getSize().getHeight();
@@ -204,6 +206,16 @@ public class Handler extends Observable {
                 int yOffset = (new Long(Math.round((height/2)-(troopSizeX/2)))).intValue();
                 g.drawImage(gameObject.getImage(),x_current.intValue()+xOffset, y_current.intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue(),null);
                     //g.fillRect(x_current.intValue()+xOffset, y_current.intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue());
+                if(gameObject instanceof Projectile){
+                    if(x_global<=0 && y_global <= 0){
+                        ((Projectile)gameObject).damage();
+                        removeObject(gameObject);
+                    }
+                    else if(!((Projectile) gameObject).aliveTarget()){
+                        removeObject(gameObject);
+                    }
+                }
+
                 }
         }
     }
@@ -246,4 +258,5 @@ public class Handler extends Observable {
         setChanged();
         notifyObservers(credit);
     }
+
 }

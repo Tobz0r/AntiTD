@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
  */
 public class TankTroop extends Troop {
     static private final double SPEED = 1;
-    static private final int MAX_HEALTH = 10;
+    static private final int MAX_HEALTH = 100;
     static private final int KILL_DEATH_SCORE = 10;
 
     /**
