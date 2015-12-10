@@ -118,7 +118,7 @@ public class GUI {
         frame.pack();
     }
     public void restartGame(){
-        //ta bort alla torn och teleportertiles 
+        //ta bort alla torn och teleportertiles
         //Handler.clearList();
         env.restartLevel();
     }
@@ -244,7 +244,7 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        runMusic("cello.wav");
+        runMusic("music/cello.wav");
         tenChars = new JLabel("Max 11 character");
         env.stop();
         frame.remove(scrollPane);

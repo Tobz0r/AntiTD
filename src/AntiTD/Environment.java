@@ -245,15 +245,20 @@ public class Environment extends JPanel implements Runnable,Observer {
     public static void resumeGame(){
         paused=false;
     }
-    private void incrementLevel(){
+    private void incrementLevel(boolean restart){
         pauseGame();
         mapNr++;
-        if(mapNr>levels.size()-1){
-            int reply = JOptionPane.showConfirmDialog(null, "EZ GAEM, You're score : " +
-                    (handler.getVictoryScore()+credits) + "Would you laeik to play again?",
+        if(mapNr>levels.size()-1 || restart){
+            int reply = JOptionPane.showConfirmDialog(null, "GG! You're score : " +
+                    (handler.getVictoryScore()+credits) + "Would you like to play again?",
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                mapNr=0;
+                if(restart){
+                    mapNr--;
+                }
+                else{
+                    mapNr=0;
+                }
                 handler.resetScore();
                 resetTeleport();
             }
@@ -269,8 +274,9 @@ public class Environment extends JPanel implements Runnable,Observer {
         victoryScore=(level.getVictoryPoints()+handler.getVictoryScore());
         map=level.getMap();
         Level.setCurrentMap(map);
+        restartMoney=level.getStartingCredits();
         credits+=level.getStartingCredits();
-        restartMoney=credits;
+        credits = restart ? restartMoney : credits;
         setUpNeighbors();
         Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
@@ -278,21 +284,22 @@ public class Environment extends JPanel implements Runnable,Observer {
             addMouseListener(cSwitch);
         }
         initTowers();
+        gameRunning=true;
         resumeGame();
 
     }
 
     public void restartLevel(){
-        pauseGame();
-        handler.resetScore();
-        handler.reset();
-        credits=restartMoney;
-        Troop.clearTeleports();
-        resumeGame();
+        incrementLevel(true);
 
     }
 
     private void finishedLevel(long wait){
+        try {
+            Thread.sleep(wait);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if(handler.getVictoryScore() >= victoryScore){
             handler.reset();
             int reply = JOptionPane.showConfirmDialog(null, "Would you like to replay this map again?",
@@ -302,14 +309,14 @@ public class Environment extends JPanel implements Runnable,Observer {
                 handler.resetScore();
                 resetTeleport();
             }
-            incrementLevel();
+            incrementLevel(false);
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
             gui.pauseMusic();
-            gui.runMusic("gameover.wav");
+            gui.runMusic("music/gameover.wav");
             gameRunning=false;
-            JOptionPane.showMessageDialog(null, "Game over!! xD");
-            gui.startScreen();
+            mapNr=0;
+            restartLevel();
 
         }
     }
@@ -334,8 +341,9 @@ public class Environment extends JPanel implements Runnable,Observer {
                 if (currentMap[i][j].isBuildable()) {
                   //  Bullets bullet = new Bullets(arrows   ,1,5,currentMap[i][j]);
                  //   addBullets(bullet);
+                    System.out.println("ELIASHEJ");
                     addTower(new BasicTower(basicTower, currentMap[i][j], getTroops(),handler));
-                    break;
+
                 }
             }
         }
