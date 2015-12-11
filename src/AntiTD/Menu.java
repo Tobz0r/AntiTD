@@ -179,7 +179,12 @@ public class Menu extends JMenu {
         nameChange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                gui.changeName(JOptionPane.showInputDialog("Enter name"));
+                if(Environment.isRunning()){
+                    gui.changeName(JOptionPane.showInputDialog("Enter name"));
+                }
+                else{
+                    JOptionPane.showMessageDialog(null,"Submit name first!");
+                }
             }
         });
 
