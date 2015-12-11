@@ -126,6 +126,9 @@ public class GUI {
     public void pauseMainSound(){
         sounds.pauseMusic();
     }
+    public void resumeMainSound(){
+        sounds.resumeMusic(true);
+    }
 
     private void buildBuyPanel(){
         buyPanel = new JPanel();
@@ -396,5 +399,6 @@ public class GUI {
         scoreTable = new JTable(10,3);
 
     }
+
 }
 
