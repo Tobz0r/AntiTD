@@ -331,6 +331,7 @@ public class GUI {
                         @Override
                         public void keyPressed(KeyEvent keyEvent) {
                             backSpace(keyEvent);
+
                         }
 
                         @Override
@@ -358,6 +359,7 @@ public class GUI {
 
     }
 
+
     private void backSpace(KeyEvent k){
         int i = 0;
         if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE){
@@ -375,14 +377,12 @@ public class GUI {
                 }
 
             }
-
         }
+
     }
 
     public void printScore(){
         String currentScore;
-        String currentMoney;
-        currentMoney=String.valueOf(0);
         currentScore=String.valueOf(0);
         money = new JTextField();
         money.setEditable(false);

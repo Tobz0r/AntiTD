@@ -153,9 +153,12 @@ public class Menu extends JMenu {
         //lägga till menyitems
         help = statmenu.add("Help");
         about = statmenu.add("About");
+
+
         nameChange = statmenu.add("Change name");
-        help.setBackground(Color.white);
         nameChange.setBackground(Color.white);
+
+        help.setBackground(Color.white);
         about.setBackground(Color.white);
 
         help.addActionListener(new ActionListener() {
