@@ -66,7 +66,7 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     public Environment(GUI gui, File fp){
         super(new BorderLayout());
-
+        thread=null;
         this.gui=gui;
         gameOver=false;
         handler=new Handler(0,this);
@@ -128,8 +128,10 @@ public class Environment extends JPanel implements Runnable,Observer {
     public synchronized void start(){
         paused=false;
         gameRunning=true;
-        thread=new Thread(this);
-        thread.start();
+        if (thread==null) {
+            thread = new Thread(this);
+            thread.start();
+        }
     }
     public synchronized void stop(){
         try{

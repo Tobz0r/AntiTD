@@ -107,7 +107,8 @@ public class GUI {
     }
 
     public void startGame() {
-        sounds.music("music/cello.wav",true,false);
+        if(!sounds.isPlaying())
+            sounds.music("music/cello.wav",true,false);
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
@@ -251,7 +252,7 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        sounds.music("music/cello.wav",true,false);
+        sounds.music("music/start.wav",true,false);
         tenChars = new JLabel("Max 11 character");
         title = new JLabel("Anti TD");
         fixTitle(title);
@@ -285,6 +286,7 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(player.getDocument().getLength()!=0){
                     sounds.pauseMusic();
+                    menu.setNewGame("Restart");
                     getName();
                     startGame();
                 }

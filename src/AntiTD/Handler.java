@@ -20,6 +20,7 @@ public class Handler extends Observable {
     private LinkedList<GameObject> towers;
     private LinkedList<GameObject> objectsToAdd;
     private LinkedList<GameObject> objectsToRemove;
+    private Sounds sounds = new Sounds();
 
 
 
@@ -137,6 +138,7 @@ public class Handler extends Observable {
                     score += gameObject.getCurrentScore();
                     Troop t = (Troop) gameObject;
                     if (!t.isAlive()) {
+                        sounds.music("music/deadman.wav",false,false);
                         removeObject(gameObject);
                     }
                     if(t.hasReacedGoal()){
