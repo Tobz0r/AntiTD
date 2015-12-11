@@ -83,7 +83,7 @@ public class FrostTower extends Tower{
             Projectile bullet=new Projectile(target,this,projectileImg);
             if (checkIfUnitIsClose(target) && target.isAlive() ){
                 sounds.music("music/lazer.wav",false);
-                attack(target, getDamage());
+                //attack(target, getDamage());
                 handler.addObject(bullet);
                 cooldown=0;
             } else {
@@ -108,7 +108,7 @@ public class FrostTower extends Tower{
 
             if(!target.isSlowed()) {
                 System.out.println("hola");
-                target.slowSpeed();
+                //target.slowSpeed();
             }
             this.aggroTarget();
         } else {

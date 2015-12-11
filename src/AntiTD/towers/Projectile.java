@@ -52,6 +52,10 @@ public class Projectile implements GameObject {
         this.moveProgres += speed;
         if (this.moveProgres > 100.0) {
             target.attackThis(tower.getDamage());
+            if (tower instanceof FrostTower) {
+                target.slowSpeed();
+            }
+
         }
 
     }
