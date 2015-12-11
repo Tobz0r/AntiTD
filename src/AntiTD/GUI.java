@@ -250,7 +250,7 @@ public class GUI {
         }
         sounds.music("music/cello.wav",true,false);
         tenChars = new JLabel("Max 11 character");
-        title = new JLabel("Ez shoot");
+        title = new JLabel("Anti TD");
         fixTitle(title);
         env.stop();
         frame.remove(scrollPane);
@@ -261,7 +261,7 @@ public class GUI {
         playerScroll = new JScrollPane(player);
         player.setBorder(BorderFactory.createLineBorder(Color.black));
         titlePanel = new JPanel();
-        titlePanel.setBackground(Color.blue);
+        titlePanel.setBackground(Color.cyan);
         startPanel = new StartScreen();
         startPanel.repaint();
         startPanel.add(playerScroll, BorderLayout.CENTER);
