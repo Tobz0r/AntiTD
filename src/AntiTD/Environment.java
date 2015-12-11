@@ -75,7 +75,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         level=levels.get(mapNr);
         map=level.getMap();
         setUpNeighbors();
-        credits=level.getStartingCredits();
+        credits= 1000000;//level.getStartingCredits();
         Level.setCurrentMap(map);
         victoryScore=level.getVictoryPoints();
         try {
