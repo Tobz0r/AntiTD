@@ -7,9 +7,11 @@ import AntiTD.tiles.Tile;
 import AntiTD.towers.*;
 import AntiTD.troops.Troop;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -28,6 +30,7 @@ public class BasicTower extends Tower {
     private Troop target;
     private String type = "BasicTower";
     private int result;
+    private BufferedImage projectileImg;
     private Handler handler;
     int bullets;
     int count;
@@ -49,6 +52,12 @@ public class BasicTower extends Tower {
         this.posTile = pos;
         count = 0;
         cooldown=0;
+        try {
+            projectileImg=ImageIO.read(new File("sprites/fireball.gif"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void initScan() {
@@ -80,9 +89,9 @@ public class BasicTower extends Tower {
         if (target != null) {
             //Projectile bullet=new Projectile(target,this);
             if (checkIfUnitIsClose(target) && target.isAlive() && cooldown> 200) {
-                sounds.music("music/lazer.wav",false,false);
+                sounds.music("music/lazer.wav",false);
                 //attack(target, getDamage());
-                handler.addObject(new Projectile(target,this));
+                handler.addObject(new Projectile(target,this,projectileImg));
                 cooldown=0;
             } else {
                 target = null;

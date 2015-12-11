@@ -79,8 +79,8 @@ public class Environment extends JPanel implements Runnable,Observer {
         Level.setCurrentMap(map);
         victoryScore=level.getVictoryPoints();
         try {
-            basicTower= ImageIO.read(new File("sprites/basictower.gif"));
-            frostTower= ImageIO.read(new File("sprites/frostTower.png"));
+            basicTower= ImageIO.read(new File("sprites/basic.png"));
+            frostTower= ImageIO.read(new File("sprites/frost.gif"));
             arrows= ImageIO.read(new File("sprites/arrowb.gif"));
             switches=level.setUpCrossroad();
         } catch (IOException e) {
@@ -245,6 +245,8 @@ public class Environment extends JPanel implements Runnable,Observer {
             int reply = restart ? JOptionPane.YES_OPTION : JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
+                sounds.pauseMusic();
+                gui.resumeMainSound();
                 mapNr=restart ? currentMap : 0;
                 handler.resetScore();
                 resetTeleport();
@@ -285,15 +287,28 @@ public class Environment extends JPanel implements Runnable,Observer {
     private void finishedLevel(long wait){
         if(handler.getVictoryScore() >= victoryScore){
             handler.resetGame();
-            incrementLevel(false,false);
+            if((mapNr+1)>levels.size()-1) {
+                int reply = JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
+                        "GG EZ!", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    mapNr = -1;
+                    incrementLevel(false, false);
+                } else {
+                    System.exit(0);
+                }
+            }
+            else {
+                incrementLevel(false, false);
+            }
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
             gui.pauseMainSound();
-            sounds.music("music/gameover.wav",false,false);
+            sounds.music("music/gameover.wav",false);
             gameRunning=false;
-            incrementLevel(true,true);
+            incrementLevel(true, true);
         }
     }
+
 
     public int getScore() {
         return handler.getVictoryScore();
@@ -315,7 +330,7 @@ public class Environment extends JPanel implements Runnable,Observer {
                 if (currentMap[i][j].isBuildable()) {
                   //  Bullets bullet = new Bullets(arrows   ,1,5,currentMap[i][j]);
                  //   addBullets(bullet);
-                    addTower(new BasicTower(basicTower, currentMap[i][j], getTroops(),handler));
+                    addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(),handler));
                     break;
                 }
             }

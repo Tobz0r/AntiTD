@@ -112,7 +112,7 @@ public class GUI {
 
     public void startGame() {
         if(!sounds.isPlaying())
-            sounds.music("music/cello.wav",true,false);
+            sounds.music("music/runninggame.wav",true);
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
@@ -256,7 +256,7 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        sounds.music("music/start.wav",true,false);
+        sounds.music("music/start.wav",true);
         tenChars = new JLabel("Max 11 character");
         title = new JLabel("Anti TD");
         fixTitle(title);

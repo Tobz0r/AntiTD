@@ -16,7 +16,7 @@ public class Sounds {
 
 
 
-    public void music(String gameSound, boolean looping,boolean lowervolume)  {
+    public void music(String gameSound, boolean looping)  {
 
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
@@ -27,9 +27,7 @@ public class Sounds {
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
             //fungerar inte
-            if(lowervolume){
-             //sänk volymen
-            }
+
             playing=true;
             clip.start();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
