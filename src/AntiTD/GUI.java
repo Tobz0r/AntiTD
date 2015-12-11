@@ -121,7 +121,7 @@ public class GUI {
     public void restartGame(){
         //ta bort alla torn och teleportertiles 
         //Handler.clearList();
-        env.restartLevel();
+        env.restartLevel(true);
     }
     public void pauseMainSound(){
         sounds.pauseMusic();
