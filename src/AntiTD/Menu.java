@@ -99,7 +99,7 @@ public class Menu extends JMenu {
         mainMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                gui.pauseMainSound();
                 newGame.setText("New Game");
                 gui.startScreen();
             }
