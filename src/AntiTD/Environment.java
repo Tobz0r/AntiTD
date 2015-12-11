@@ -247,17 +247,19 @@ public class Environment extends JPanel implements Runnable,Observer {
     public static void resumeGame(){
         paused=false;
     }
-    private void incrementLevel(boolean restart){
+    private void incrementLevel(boolean restart, boolean gameOver){
         pauseGame();
         int currentMap=mapNr;
         mapNr++;
         if(mapNr>levels.size()-1 || restart){
+            restart = gameOver ? false : true;
             int reply = restart ? JOptionPane.YES_OPTION : JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 mapNr=restart ? currentMap : 0;
                 handler.resetScore();
                 resetTeleport();
+                restart=true;
             }
             else {
                 JOptionPane.showMessageDialog(null, "GOODBYE");
@@ -282,27 +284,25 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
         initTowers();
         resumeGame();
+        gameRunning=true;
 
     }
 
     public void restartLevel(boolean restart){
         handler.resetGame();
-        incrementLevel(restart);
+        incrementLevel(restart,false);
     }
 
     private void finishedLevel(long wait){
         if(handler.getVictoryScore() >= victoryScore){
             handler.resetGame();
-            incrementLevel(false);
+            incrementLevel(false,false);
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
             gui.pauseMainSound();
             sounds.music("music/gameover.wav",false,false);
             gameRunning=false;
-            JOptionPane.showMessageDialog(null, "Game over!! xD");
-            sounds.pauseMusic();
-            gui.startScreen();
-
+            incrementLevel(true,true);
         }
     }
 
