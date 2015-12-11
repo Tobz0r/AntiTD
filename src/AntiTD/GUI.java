@@ -55,6 +55,8 @@ public class GUI {
     private JTextArea player;
     private JButton enterName;
     private JLabel tenChars;
+    private JLabel title;
+    private JPanel titlePanel;
 
     private StartScreen startPanel;
     private JScrollPane playerScroll;
@@ -89,7 +91,11 @@ public class GUI {
             e.printStackTrace();
         }
         frame = new JFrame("AntiTD");
-         scrollPane = new JScrollPane(env);
+
+        ImageIcon img = new ImageIcon("sprites/icon.png");
+        frame.setIconImage(img.getImage());
+
+        scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -105,8 +111,10 @@ public class GUI {
     }
 
     public void startGame() {
-        sounds.music("music/cello.wav",true,false);
+        if(!sounds.isPlaying())
+            sounds.music("music/cello.wav",true,false);
         frame.remove(startPanel);
+        frame.remove(titlePanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(scrollPane, BorderLayout.CENTER);
@@ -118,10 +126,13 @@ public class GUI {
     public void restartGame(){
         //ta bort alla torn och teleportertiles 
         //Handler.clearList();
-        env.restartLevel();
+        env.restartLevel(true);
     }
     public void pauseMainSound(){
         sounds.pauseMusic();
+    }
+    public void resumeMainSound(){
+        sounds.resumeMusic(true);
     }
 
     private void buildBuyPanel(){
@@ -245,8 +256,10 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        sounds.music("music/cello.wav",true,false);
+        sounds.music("music/start.wav",true,false);
         tenChars = new JLabel("Max 11 character");
+        title = new JLabel("Anti TD");
+        fixTitle(title);
         env.stop();
         frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
@@ -255,17 +268,21 @@ public class GUI {
         player.setLineWrap(true);
         playerScroll = new JScrollPane(player);
         player.setBorder(BorderFactory.createLineBorder(Color.black));
-        frame.add(tenChars);
+        titlePanel = new JPanel();
+        titlePanel.setBackground(Color.cyan);
         startPanel = new StartScreen();
         startPanel.repaint();
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
+        titlePanel.add(title);
         startPanel.add(tenChars);
         checkTextField();
         frame.setSize(400, 300);
+        frame.add(titlePanel,BorderLayout.NORTH);
         frame.add(startPanel);
+
         frame.setVisible(true);
         enterName.setBackground(Color.WHITE);
         enterName.addActionListener(new ActionListener() {
@@ -273,6 +290,7 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(player.getDocument().getLength()!=0){
                     sounds.pauseMusic();
+                    menu.setNewGame("Restart");
                     getName();
                     startGame();
                 }
@@ -280,6 +298,13 @@ public class GUI {
         });
 
         
+    }
+    private void fixTitle(JLabel title){
+        Font lableFont = title.getFont();
+        int biggerFont = (int)(lableFont.getSize() * 50);
+        int fontSizeUse = Math.min(biggerFont, 30);
+        title.setFont(new Font(lableFont.getName(),Font.PLAIN,fontSizeUse));
+        title.setForeground(Color.white);
     }
     private class StartScreen extends JPanel{
         Image bg = new ImageIcon("sprites/full_background.png").getImage();
@@ -306,6 +331,7 @@ public class GUI {
                         @Override
                         public void keyPressed(KeyEvent keyEvent) {
                             backSpace(keyEvent);
+
                         }
 
                         @Override
@@ -333,6 +359,7 @@ public class GUI {
 
     }
 
+
     private void backSpace(KeyEvent k){
         int i = 0;
         if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE){
@@ -350,14 +377,12 @@ public class GUI {
                 }
 
             }
-
         }
+
     }
 
     public void printScore(){
         String currentScore;
-        String currentMoney;
-        currentMoney=String.valueOf(0);
         currentScore=String.valueOf(0);
         money = new JTextField();
         money.setEditable(false);
@@ -380,5 +405,6 @@ public class GUI {
         scoreTable = new JTable(10,3);
 
     }
+
 }
 

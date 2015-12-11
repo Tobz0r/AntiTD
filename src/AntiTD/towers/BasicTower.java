@@ -80,7 +80,7 @@ public class BasicTower extends Tower {
         if (target != null) {
             Projectile bullet=new Projectile(target,this);
             if (checkIfUnitIsClose(target) && target.isAlive() && cooldown> 200) {
-                sounds.music("music/gun.wav",false,false);
+                sounds.music("music/lazer.wav",false,false);
                 attack(target, getDamage());
                 handler.addObject(bullet);
                 cooldown=0;

@@ -66,7 +66,7 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     public Environment(GUI gui, File fp){
         super(new BorderLayout());
-
+        thread=null;
         this.gui=gui;
         gameOver=false;
         handler=new Handler(0,this);
@@ -128,8 +128,10 @@ public class Environment extends JPanel implements Runnable,Observer {
     public synchronized void start(){
         paused=false;
         gameRunning=true;
-        thread=new Thread(this);
-        thread.start();
+        if (thread==null) {
+            thread = new Thread(this);
+            thread.start();
+        }
     }
     public synchronized void stop(){
         try{
@@ -139,7 +141,6 @@ public class Environment extends JPanel implements Runnable,Observer {
             e.printStackTrace();
         }
         catch (NullPointerException e ){
-            System.out.println("eliashej");
 
         }
     }
@@ -191,18 +192,6 @@ public class Environment extends JPanel implements Runnable,Observer {
                 if (! isPaused()) {
                     finalScore++;
                     gui.updateScore();
-                    /* Varför skall dettas köras osäkert trådat? Detta gör ju att tick kan köras parallellt eller?
-                     * Om så är fallet kommer objectslistan manipuleras samtidigt, är det inte bättre att köra
-                     * det "som vanligt" och vara säker på att det inte händer parallellt eftersom Environment
-                     * redan är en egen tråd. Förklara gärna.
-                     *
-                     * För att vi måste ha det trådat :) och vi har tillräcklgit med synkronoserade lås för att den
-                     * är trådsäker, finns ingen möjlighet till varken deadlocks eller race condition :)
-                     * Är väl medveten om att det blir enklare med bara en tråd men när det står klart och tydligt i
-                     * spesen att vi ska ha flera trådar som arbetar samtidigt har vi nog inget annat val än att
-                     * försöka få en trådad handlar om inte du har något annat förslag på något vi kan tråda. Att
-                     * Enviroment är enda tråden tror jag inte räcker för att det kravet ska täckas
-                     */
                     runner.execute(new Runnable() {
                         public void run() {
                             handler.tick();
@@ -247,17 +236,19 @@ public class Environment extends JPanel implements Runnable,Observer {
     public static void resumeGame(){
         paused=false;
     }
-    private void incrementLevel(){
+    private void incrementLevel(boolean restart, boolean gameOver){
         pauseGame();
+        int currentMap=mapNr;
         mapNr++;
-        if(mapNr>levels.size()-1){
-            int reply = JOptionPane.showConfirmDialog(null, "EZ GAEM, You're score : " +
-                    (handler.getVictoryScore()+credits) + "Would you laeik to play again?",
+        if(mapNr>levels.size()-1 || restart){
+            restart = gameOver ? false : true;
+            int reply = restart ? JOptionPane.YES_OPTION : JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                mapNr=0;
+                mapNr=restart ? currentMap : 0;
                 handler.resetScore();
                 resetTeleport();
+                restart=true;
             }
             else {
                 JOptionPane.showMessageDialog(null, "GOODBYE");
@@ -273,6 +264,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         Level.setCurrentMap(map);
         credits+=level.getStartingCredits();
         restartMoney=credits;
+        credits= restart ? level.getStartingCredits() : restartMoney;
         setUpNeighbors();
         Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
@@ -281,39 +273,25 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
         initTowers();
         resumeGame();
+        gameRunning=true;
 
     }
 
-    public void restartLevel(){
-        pauseGame();
-        handler.resetScore();
-        handler.reset();
-        credits=restartMoney;
-        Troop.clearTeleports();
-        resumeGame();
-
+    public void restartLevel(boolean restart){
+        handler.resetGame();
+        incrementLevel(restart,false);
     }
 
     private void finishedLevel(long wait){
         if(handler.getVictoryScore() >= victoryScore){
-            handler.reset();
-            int reply = JOptionPane.showConfirmDialog(null, "Would you like to replay this map again?",
-                    "GG EZ!", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                mapNr--;
-                handler.resetScore();
-                resetTeleport();
-            }
-            incrementLevel();
+            handler.resetGame();
+            incrementLevel(false,false);
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
             gui.pauseMainSound();
             sounds.music("music/gameover.wav",false,false);
             gameRunning=false;
-            JOptionPane.showMessageDialog(null, "Game over!! xD");
-            sounds.pauseMusic();
-            gui.startScreen();
-
+            incrementLevel(true,true);
         }
     }
 

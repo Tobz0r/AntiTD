@@ -101,7 +101,7 @@ public class Menu extends JMenu {
         mainMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                gui.pauseMainSound();
                 newGame.setText("New Game");
                 gui.startScreen();
             }
@@ -118,13 +118,13 @@ public class Menu extends JMenu {
                 if(pause){
                     Environment.pauseGame();
                     pauseGame.setText("Resume");
-                    sounds.pauseMusic();
+                    gui.pauseMainSound();
                     pause=false;
                 }
                 else{
                     Environment.resumeGame();
                     pauseGame.setText("Pause");
-                    sounds.resumeMusic(true);
+                    gui.resumeMainSound();
                     pause=true;
                 }
             }
@@ -133,12 +133,12 @@ public class Menu extends JMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(mutesound){
-                    sounds.pauseMusic();
+                    gui.pauseMainSound();
                     mute.setText("Unmute");
                     mutesound=false;
                 }
                 else {
-                    sounds.resumeMusic(true);
+                    gui.resumeMainSound();
                     mute.setText("Mute");
                     mutesound = true;
                 }
@@ -155,9 +155,12 @@ public class Menu extends JMenu {
         //lägga till menyitems
         help = statmenu.add("Help");
         about = statmenu.add("About");
+
+
         nameChange = statmenu.add("Change name");
-        help.setBackground(Color.white);
         nameChange.setBackground(Color.white);
+
+        help.setBackground(Color.white);
         about.setBackground(Color.white);
 
         help.addActionListener(new ActionListener() {

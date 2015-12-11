@@ -14,6 +14,7 @@ import java.util.*;
 public class Handler extends Observable {
     private LinkedList<GameObject> objects;
     private int tid;
+    private int aliveCount;
     private int score;
     private boolean resetFlag;
     private LinkedList<GameObject> aliveTroops;
@@ -33,19 +34,11 @@ public class Handler extends Observable {
         objectsToRemove = new LinkedList<>();
         score = 0;
         resetFlag = false;
+        aliveCount=0;
     }
 
-    public synchronized boolean hasAliveTroops() {
-        Iterator<GameObject> iter = objects.iterator();
-        while(iter.hasNext()) {
-            GameObject temp=iter.next();
-            if (temp instanceof Troop) {
-                if (((Troop) temp).isAlive()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public  boolean hasAliveTroops() {
+        return aliveCount>0;
     }
 
 
@@ -80,6 +73,9 @@ public class Handler extends Observable {
      * @param object object to add.
      */
     public synchronized void addObject(GameObject object) {
+        if(object instanceof  Troop){
+            aliveCount++;
+        }
         objectsToAdd.add(object);
     }
 
@@ -137,6 +133,7 @@ public class Handler extends Observable {
                     score += gameObject.getCurrentScore();
                     Troop t = (Troop) gameObject;
                     if (!t.isAlive()) {
+                        aliveCount--;
                         removeObject(gameObject);
                     }
                     if(t.hasReacedGoal()){
@@ -152,10 +149,6 @@ public class Handler extends Observable {
         }
         removeObjectsFromGame();
         addObjectsToGame();
-        if(resetFlag) {
-            resetGame();
-            resetFlag = false;
-        }
     }
 
     public synchronized void render(Graphics g) {
@@ -226,18 +219,12 @@ public class Handler extends Observable {
      * <b>**Caution**</b> <br />
      * Should only be called in <b>tick()</b> method for thread safety
      */
-    private synchronized void resetGame() {
+    public synchronized void resetGame() {
         objects.clear();
         aliveTroops.clear();
         towers.clear();
     }
 
-    /**
-     * Invoke game reset on next tick.
-     */
-    public synchronized void reset() {
-        resetFlag = true;
-    }
 
     /**
      * Get accumulated score.
