@@ -331,7 +331,7 @@ public class GUI {
                         @Override
                         public void keyPressed(KeyEvent keyEvent) {
                             backSpace(keyEvent);
-                        }
+                        } 
 
                         @Override
                         public void keyReleased(KeyEvent keyEvent) {
