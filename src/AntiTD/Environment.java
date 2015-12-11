@@ -308,7 +308,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
             gui.pauseMainSound();
-            sounds.music("music/gameover.wav",false,true);
+            sounds.music("music/gameover.wav",false,false);
             gameRunning=false;
             JOptionPane.showMessageDialog(null, "Game over!! xD");
             sounds.pauseMusic();
