@@ -100,9 +100,9 @@ public class GUI {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         scrollPane.setBounds(0,0,env.getWidth()+32,env.getHeight()+32);
-
         startScreen();
         //menu = new Menu(frame);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menu = new Menu(frame, this);
         menu.startMenu();
         menu.statMenu();
@@ -116,7 +116,6 @@ public class GUI {
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(scrollPane, BorderLayout.CENTER);
         env.start();
         env.repaint();

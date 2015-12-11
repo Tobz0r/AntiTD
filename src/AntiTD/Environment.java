@@ -268,7 +268,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         restartMoney=credits;
         credits= restart ? level.getStartingCredits() : restartMoney;
         setUpNeighbors();
-        Troop.clearTeleports();
+        //Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
@@ -287,7 +287,24 @@ public class Environment extends JPanel implements Runnable,Observer {
     private void finishedLevel(long wait){
         if(handler.getVictoryScore() >= victoryScore){
             handler.resetGame();
-            incrementLevel(false,false);
+            if((mapNr+1)>levels.size()-1) {
+                sounds.music("music/gameover.wav",false);
+                gui.pauseMainSound();
+                int reply = JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
+                        "GG EZ!", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    sounds.pauseMusic();
+                    gui.resumeMainSound();
+                    mapNr = -1;
+                    incrementLevel(false, false);
+
+                } else {
+                    System.exit(0);
+                }
+            }
+            else {
+                incrementLevel(false, false);
+            }
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
             gui.pauseMainSound();

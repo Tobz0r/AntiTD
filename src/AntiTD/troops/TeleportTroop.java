@@ -63,6 +63,7 @@ public class TeleportTroop extends Troop {
     @Override
     public void tick() {
         Tile currentPosition = this.getTilePosition();
+        this.move();
         if (isTeleporting) {
             if (tpMoves == 0) {
                 teleportStartTile = this.getTilePosition();
@@ -71,15 +72,21 @@ public class TeleportTroop extends Troop {
                 tpMoves = 0;
                 teleportEndTile = this.getTilePosition();
                 teleportStartTile.setTeleportTo(teleportEndTile);
+            } else {
+                if (currentPosition != this.getTilePosition()) {
+                    tpMoves++;
+                }
             }
+            /*
             else if (isAlive()){
-                addTeleportException(currentPosition);
+                //addTeleportException(currentPosition);
             }else{
-                /* Clearar listan på tiles mellan teleporten om teleportgubben dör innan den är färdig med teleporten*/
+                //Clearar listan på tiles mellan teleporten om teleportgubben dör innan den är färdig med teleporten
                 clearTeleports();
             }
+            */
         }
-        this.move();
+
     }
 
 
