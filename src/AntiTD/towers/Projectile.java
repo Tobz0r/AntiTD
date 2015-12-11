@@ -27,7 +27,7 @@ public class Projectile implements GameObject {
 
     private Tower tower;
 
-    private final int speed=10;
+    private final int speed=1;
     private int moveProgres;
 
     private BufferedImage img;

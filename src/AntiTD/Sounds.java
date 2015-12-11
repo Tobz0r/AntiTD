@@ -14,7 +14,9 @@ public class Sounds {
     long clipTime;
 
 
+
     public void music(String gameSound, boolean looping,boolean lowervolume)  {
+
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
             DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
@@ -25,8 +27,7 @@ public class Sounds {
             }
             //fungerar inte
             if(lowervolume){
-                FloatControl control = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-                control.setValue(-10.0f);
+             //sänk volymen
             }
             clip.start();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {

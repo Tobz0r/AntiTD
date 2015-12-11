@@ -247,15 +247,15 @@ public class Environment extends JPanel implements Runnable,Observer {
     public static void resumeGame(){
         paused=false;
     }
-    private void incrementLevel(){
+    private void incrementLevel(boolean restart){
         pauseGame();
+        int currentMap=mapNr;
         mapNr++;
-        if(mapNr>levels.size()-1){
-            int reply = JOptionPane.showConfirmDialog(null, "EZ GAEM, You're score : " +
-                    (handler.getVictoryScore()+credits) + "Would you laeik to play again?",
+        if(mapNr>levels.size()-1 || restart){
+            int reply = restart ? JOptionPane.YES_OPTION : JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                mapNr=0;
+                mapNr=restart ? currentMap : 0;
                 handler.resetScore();
                 resetTeleport();
             }
@@ -273,6 +273,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         Level.setCurrentMap(map);
         credits+=level.getStartingCredits();
         restartMoney=credits;
+        credits= restart ? level.getStartingCredits() : restartMoney;
         setUpNeighbors();
         Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
@@ -284,27 +285,15 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     }
 
-    public void restartLevel(){
-        pauseGame();
-        handler.resetScore();
-        handler.reset();
-        credits=restartMoney;
-        Troop.clearTeleports();
-        resumeGame();
-
+    public void restartLevel(boolean restart){
+        handler.resetGame();
+        incrementLevel(restart);
     }
 
     private void finishedLevel(long wait){
         if(handler.getVictoryScore() >= victoryScore){
-            handler.reset();
-            int reply = JOptionPane.showConfirmDialog(null, "Would you like to replay this map again?",
-                    "GG EZ!", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                mapNr--;
-                handler.resetScore();
-                resetTeleport();
-            }
-            incrementLevel();
+            handler.resetGame();
+            incrementLevel(false);
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
             gui.pauseMainSound();

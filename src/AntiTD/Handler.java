@@ -152,10 +152,6 @@ public class Handler extends Observable {
         }
         removeObjectsFromGame();
         addObjectsToGame();
-        if(resetFlag) {
-            resetGame();
-            resetFlag = false;
-        }
     }
 
     public synchronized void render(Graphics g) {
@@ -226,18 +222,12 @@ public class Handler extends Observable {
      * <b>**Caution**</b> <br />
      * Should only be called in <b>tick()</b> method for thread safety
      */
-    private synchronized void resetGame() {
+    public synchronized void resetGame() {
         objects.clear();
         aliveTroops.clear();
         towers.clear();
     }
 
-    /**
-     * Invoke game reset on next tick.
-     */
-    public synchronized void reset() {
-        resetFlag = true;
-    }
 
     /**
      * Get accumulated score.
