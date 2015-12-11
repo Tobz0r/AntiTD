@@ -247,7 +247,9 @@ public class GUI {
     void changeName(String name){
         PlayerName=name;
     }
-
+    public String getPlayerName(){
+        return PlayerName;
+    }
 
 
     public void startScreen()  {

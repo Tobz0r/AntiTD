@@ -76,7 +76,7 @@ public class Database {
      * @param playername name of the player
      * @param score score value
      */
-    private synchronized void insertOrUpdateHighscore(String playername, int score) {
+    public synchronized void insertOrUpdateHighscore(String playername, int score) {
         try {
             //stmt = conn.createStatement();
             prepStmt = conn.prepareStatement(sqlAddScore);
@@ -115,7 +115,7 @@ public class Database {
      * @param playername name of the player
      * @return score if player exists exists else -1
      */
-    private synchronized DBModel getHighscore(String playername) {
+    public synchronized DBModel getHighscore(String playername) {
         DBModel highscore = null;
         try {
             //stmt = conn.createStatement();
@@ -170,7 +170,7 @@ public class Database {
         System.out.println();
     }
 
-    private synchronized void shutdown()
+    public synchronized void shutdown()
     {
         try {
             if (stmt != null) {

@@ -1,5 +1,7 @@
 package AntiTD;
 
+import AntiTD.database.DBModel;
+import AntiTD.database.Database;
 import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
@@ -26,6 +28,7 @@ import java.util.concurrent.Executors;
  */
 public class Environment extends JPanel implements Runnable,Observer {
 
+    private Database db;
     private int victoryScore;
     private final int minimumCredits=174;
     private int finalScore=0;
@@ -94,7 +97,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
         setLayout(new GridLayout(1, 1));
         setPreferredSize(new Dimension(map.length * 70, map[0].length * 70));
-
+        db = new Database();
     }
 
     private void setUpNeighbors() {
@@ -290,6 +293,10 @@ public class Environment extends JPanel implements Runnable,Observer {
             if((mapNr+1)>levels.size()-1) {
                 sounds.music("music/gameover.wav",false);
                 gui.pauseMainSound();
+                DBModel dbEntry = db.getHighscore(gui.getPlayerName());
+                if (dbEntry.getScore() < handler.getVictoryScore()) {
+                    db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
+                }
                 int reply = JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
                         "GG EZ!", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
