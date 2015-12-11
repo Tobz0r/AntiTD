@@ -89,10 +89,9 @@ public class Menu extends JMenu {
                     gui.restartGame();
                     mute.setText("Mute");
                     newGame.setText("Restart");
-                } else {
-                    gui.startGame();
-                    newGame.setText("Restart");
-                    mute.setText("Mute");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null,"Please Enter Name");
                 }
 
             }

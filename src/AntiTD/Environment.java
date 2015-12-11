@@ -248,7 +248,8 @@ public class Environment extends JPanel implements Runnable,Observer {
             int reply = restart ? JOptionPane.YES_OPTION : JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
                     "GG EZ!", JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
-                sounds.pauseMusic();
+                if(sounds.isPlaying())
+                 sounds.pauseMusic();
                 gui.resumeMainSound();
                 mapNr=restart ? currentMap : 0;
                 handler.resetScore();
