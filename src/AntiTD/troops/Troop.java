@@ -26,7 +26,7 @@ public abstract class Troop implements GameObject {
     private boolean isMoving;
     private boolean slowed;
 
-    private static LinkedList<Tile> teleportException=new LinkedList<>();
+    //private static LinkedList<Tile> teleportException=new LinkedList<>();
 
 
 
@@ -74,9 +74,9 @@ public abstract class Troop implements GameObject {
 
             if (this.moveProgres < 100) {
                 this.moveProgres += speed;
-                if (this.moveProgres > 100) {
+                /*if (this.moveProgres > 100) {
                     this.moveProgres = 100;
-                }
+                }*/
             } else {
                 this.isMoving = false;
                 this.moveProgres = 0;
@@ -84,9 +84,17 @@ public abstract class Troop implements GameObject {
                 history.push(nextTile);
                 if (nextTile instanceof GoalTile) {
                     hasReacedGoal = true;
-                } /*else if (nextTile.isTeleporter()) {
-                    history.push(nextTile.getTeleportTo());
-                }*/
+                } else if (nextTile.isTeleporter()) {
+                    Tile endTPTile = nextTile.getTeleportTo();
+
+                    // Add all tiles between end and start teleport in history
+                    Tile tempTile = getNextTile();
+                    while (endTPTile != getTilePosition() ) {
+                        history.push(tempTile);
+                        tempTile = getNextTile();
+                    }
+
+                }
             }
         }
     }
@@ -110,18 +118,19 @@ public abstract class Troop implements GameObject {
         Tile nextTile = null;
 
         for (Tile tile : neigbors) {
-            if (tile.isMoveable() && !teleportException.contains(tile)) {
+            if (tile.isMoveable()) { // && !teleportException.contains(tile)
                 if (history.search(tile) == -1) {
                     nextTile = tile;
                     break;
                 }
             }
         }
-
+        /*
         if (nextTile.isTeleporter()) {
             history.push(nextTile);
             nextTile = nextTile.getTeleportTo();
         }
+        */
         return nextTile;
     }
 
@@ -199,12 +208,13 @@ public abstract class Troop implements GameObject {
         return slowed;
     }
 
+    /*
     public static void addTeleportException(Tile tile){
         teleportException.add(tile);
     }
     public static void clearTeleports(){
         teleportException.clear();
     }
-
+    */
 
 }

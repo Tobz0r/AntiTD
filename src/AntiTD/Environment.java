@@ -266,7 +266,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         restartMoney=credits;
         credits= restart ? level.getStartingCredits() : restartMoney;
         setUpNeighbors();
-        Troop.clearTeleports();
+        //Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
