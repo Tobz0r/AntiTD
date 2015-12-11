@@ -91,7 +91,11 @@ public class GUI {
             e.printStackTrace();
         }
         frame = new JFrame("AntiTD");
-         scrollPane = new JScrollPane(env);
+
+        ImageIcon img = new ImageIcon("sprites/icon.png");
+        frame.setIconImage(img.getImage());
+
+        scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -107,7 +111,8 @@ public class GUI {
     }
 
     public void startGame() {
-        sounds.music("music/cello.wav",true,false);
+        if(!sounds.isPlaying())
+            sounds.music("music/cello.wav",true,false);
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
@@ -251,7 +256,7 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        sounds.music("music/cello.wav",true,false);
+        sounds.music("music/start.wav",true,false);
         tenChars = new JLabel("Max 11 character");
         title = new JLabel("Anti TD");
         fixTitle(title);
@@ -285,6 +290,7 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(player.getDocument().getLength()!=0){
                     sounds.pauseMusic();
+                    menu.setNewGame("Restart");
                     getName();
                     startGame();
                 }
@@ -325,6 +331,7 @@ public class GUI {
                         @Override
                         public void keyPressed(KeyEvent keyEvent) {
                             backSpace(keyEvent);
+
                         }
 
                         @Override
@@ -352,6 +359,7 @@ public class GUI {
 
     }
 
+
     private void backSpace(KeyEvent k){
         int i = 0;
         if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE){
@@ -369,14 +377,12 @@ public class GUI {
                 }
 
             }
-
         }
+
     }
 
     public void printScore(){
         String currentScore;
-        String currentMoney;
-        currentMoney=String.valueOf(0);
         currentScore=String.valueOf(0);
         money = new JTextField();
         money.setEditable(false);
