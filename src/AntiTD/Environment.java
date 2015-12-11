@@ -287,7 +287,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         initTowers();
         resumeGame();
         gameRunning=true;
-
+ 
     }
 
     public void restartLevel(boolean restart){
