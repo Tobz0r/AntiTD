@@ -25,8 +25,7 @@ public class Sounds {
             }
             //fungerar inte
             if(lowervolume){
-                FloatControl control = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-                control.setValue(-10.0f);
+             //sänk volymen
             }
             clip.start();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
