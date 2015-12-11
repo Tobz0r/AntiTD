@@ -32,16 +32,11 @@ public class Projectile implements GameObject {
 
     private BufferedImage img;
 
-    public Projectile(Troop target, Tower tower){
+    public Projectile(Troop target, Tower tower, BufferedImage img){
         super();
         this.target=target;
         this.tower=tower;
-        try {
-            img= ImageIO.read(new File("sprites/fireball.gif"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        this.img=img;
 
     }
 

@@ -79,8 +79,8 @@ public class Environment extends JPanel implements Runnable,Observer {
         Level.setCurrentMap(map);
         victoryScore=level.getVictoryPoints();
         try {
-            basicTower= ImageIO.read(new File("sprites/basictower.gif"));
-            frostTower= ImageIO.read(new File("sprites/frostTower.png"));
+            basicTower= ImageIO.read(new File("sprites/basic.png"));
+            frostTower= ImageIO.read(new File("sprites/frost.gif"));
             arrows= ImageIO.read(new File("sprites/arrowb.gif"));
             switches=level.setUpCrossroad();
         } catch (IOException e) {
@@ -315,7 +315,7 @@ public class Environment extends JPanel implements Runnable,Observer {
                 if (currentMap[i][j].isBuildable()) {
                   //  Bullets bullet = new Bullets(arrows   ,1,5,currentMap[i][j]);
                  //   addBullets(bullet);
-                    addTower(new BasicTower(basicTower, currentMap[i][j], getTroops(),handler));
+                    addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(),handler));
                     break;
                 }
             }
