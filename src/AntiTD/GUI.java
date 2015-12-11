@@ -91,7 +91,11 @@ public class GUI {
             e.printStackTrace();
         }
         frame = new JFrame("AntiTD");
-         scrollPane = new JScrollPane(env);
+
+        ImageIcon img = new ImageIcon("sprites/icon.png");
+        frame.setIconImage(img.getImage());
+
+        scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
