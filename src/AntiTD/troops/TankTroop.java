@@ -57,7 +57,7 @@ public class TankTroop extends Troop {
 
     @Override
     public void render(Graphics g) {
- 
+
     }
 
     /**
