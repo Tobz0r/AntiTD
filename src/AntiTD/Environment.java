@@ -4,7 +4,6 @@ import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.BasicTower;
-import AntiTD.towers.Bullets;
 import AntiTD.towers.FrostTower;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
@@ -32,6 +31,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     private int finalScore=0;
     private int credits;
     private int mapNr=0;
+    private int restartMoney;
 
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
     private ArrayList<CrossroadSwitch> switches;
@@ -51,6 +51,7 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     private GUI gui;
 
+
     private  Executor runner= Executors.newFixedThreadPool(4);;
 
     private static boolean gameRunning;
@@ -60,6 +61,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     private Thread thread;
 
     private Level level;
+    private Sounds sounds = new Sounds();
 
 
     public Environment(GUI gui, File fp){
@@ -85,6 +87,7 @@ public class Environment extends JPanel implements Runnable,Observer {
             e.printStackTrace();
         }
         initTowers();
+        restartMoney=credits;
 
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
@@ -173,7 +176,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     }
     public void run() {
         long lastTime = System.currentTimeMillis();
-        double amountOfTicksPerSecond = 60.0;
+        double amountOfTicksPerSecond = 80;
         long ns = Math.round(1000.0 / amountOfTicksPerSecond);
         double delta = 0;
         int ticks=0;
@@ -195,6 +198,10 @@ public class Environment extends JPanel implements Runnable,Observer {
                      *
                      * För att vi måste ha det trådat :) och vi har tillräcklgit med synkronoserade lås för att den
                      * är trådsäker, finns ingen möjlighet till varken deadlocks eller race condition :)
+                     * Är väl medveten om att det blir enklare med bara en tråd men när det står klart och tydligt i
+                     * spesen att vi ska ha flera trådar som arbetar samtidigt har vi nog inget annat val än att
+                     * försöka få en trådad handlar om inte du har något annat förslag på något vi kan tråda. Att
+                     * Enviroment är enda tråden tror jag inte räcker för att det kravet ska täckas
                      */
                     runner.execute(new Runnable() {
                         public void run() {
@@ -209,6 +216,7 @@ public class Environment extends JPanel implements Runnable,Observer {
                         ticks=0;
                     }
 
+                    
                 }
 
             } catch (InterruptedException e) {
@@ -226,9 +234,9 @@ public class Environment extends JPanel implements Runnable,Observer {
     public void addTower(Tower tower){
         handler.addObject(tower);
     }
-    public void addBullets(Bullets bullets){
+ /*   public void addBullets(Bullets bullets){
         handler.addObject(bullets);
-    }
+    }*/
 
     public ArrayList<Troop> getTroops(){
         return handler.getAliveTroops();
@@ -264,6 +272,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         map=level.getMap();
         Level.setCurrentMap(map);
         credits+=level.getStartingCredits();
+        restartMoney=credits;
         setUpNeighbors();
         Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
@@ -271,6 +280,16 @@ public class Environment extends JPanel implements Runnable,Observer {
             addMouseListener(cSwitch);
         }
         initTowers();
+        resumeGame();
+
+    }
+
+    public void restartLevel(){
+        pauseGame();
+        handler.resetScore();
+        handler.reset();
+        credits=restartMoney;
+        Troop.clearTeleports();
         resumeGame();
 
     }
@@ -288,9 +307,12 @@ public class Environment extends JPanel implements Runnable,Observer {
             incrementLevel();
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
+            gui.pauseMainSound();
+            sounds.music("music/gameover.wav",false,false);
             gameRunning=false;
             JOptionPane.showMessageDialog(null, "Game over!! xD");
-            System.exit(0);
+            sounds.pauseMusic();
+            gui.startScreen();
 
         }
     }
@@ -313,9 +335,10 @@ public class Environment extends JPanel implements Runnable,Observer {
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
-                    Bullets bullet = new Bullets(arrows,1,5,currentMap[i][j]);
-                    addBullets(bullet);
-                    addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(),bullet));
+                  //  Bullets bullet = new Bullets(arrows   ,1,5,currentMap[i][j]);
+                 //   addBullets(bullet);
+                    addTower(new BasicTower(basicTower, currentMap[i][j], getTroops(),handler));
+                    break;
                 }
             }
         }

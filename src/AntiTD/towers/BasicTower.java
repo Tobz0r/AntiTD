@@ -1,12 +1,17 @@
 package AntiTD.towers;
 
+import AntiTD.Handler;
 import AntiTD.Position;
+import AntiTD.Sounds;
 import AntiTD.tiles.Tile;
 import AntiTD.towers.*;
 import AntiTD.troops.Troop;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.Timer;
 
@@ -23,24 +28,27 @@ public class BasicTower extends Tower {
     private Troop target;
     private String type = "BasicTower";
     private int result;
-    Bullets bullets;
+    private Handler handler;
+    int bullets;
     int count;
-    private int towerSpeed;
+    int cooldown;
+    private Sounds sounds = new Sounds();
 
-    public BasicTower(Image img, Tile pos, ArrayList<Troop> troops, Bullets bullets) {
+
+    public BasicTower(Image img, Tile pos, ArrayList<Troop> troops, Handler handler) {
         super(img, pos, troops);
         Random r = new Random();
+        this.handler=handler;
         int low = 0;
         int High = 5;
         result = r.nextInt(High - low) + low;
         setDamage(1);
         setRange(5);
         setPrice(1);
-        setTowerSpeed(10);
         setPosition(pos.getPosition());
         this.posTile = pos;
         count = 0;
-        this.bullets = bullets;
+        cooldown=0;
     }
 
     public void initScan() {
@@ -70,9 +78,12 @@ public class BasicTower extends Tower {
 
     public void aggroTarget() {
         if (target != null) {
-            if (checkIfUnitIsClose(target) && target.isAlive() == true) {
-                //System.out.println("jao");
+            Projectile bullet=new Projectile(target,this);
+            if (checkIfUnitIsClose(target) && target.isAlive() && cooldown> 200) {
+                sounds.music("music/gun.wav",false,false);
                 attack(target, getDamage());
+                handler.addObject(bullet);
+                cooldown=0;
             } else {
                 //System.out.println("else");
                 if (!target.isAlive()) {
@@ -95,7 +106,6 @@ public class BasicTower extends Tower {
     public void attack(Troop troop, int damage) {
         if (troop.isAlive()) {
             troop.attackThis(damage);
-
             if (!troop.isAlive()) {
                 incrementMoney();
             }
@@ -179,9 +189,9 @@ public class BasicTower extends Tower {
 
     @Override
     public void tick() {
-
+        cooldown++;
         count++;
-        if(count >= getTowerSpeed()) {
+        if (count >= 60) {
             if (this.getTroopFromList()) {
                 startShooting();
             }
@@ -190,13 +200,6 @@ public class BasicTower extends Tower {
         }
 
     }
-    public void setTowerSpeed(int towerSpeed){
-        this.towerSpeed = towerSpeed;
-    }
-    public int getTowerSpeed(){
-        return towerSpeed;
-    }
-
 
     @Override
     public void render(Graphics g) {
@@ -213,6 +216,5 @@ public class BasicTower extends Tower {
     public int getMoveProgres() {
         return 0;
     }
-
 
 }

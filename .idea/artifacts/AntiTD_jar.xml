@@ -6,8 +6,8 @@
       <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/junit-4.11.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/hamcrest-core-1.3.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/hamcrest-library-1.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../java/db-derby-10.12.1.1-lib/lib/derby.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../java/db-derby-10.12.1.1-lib/lib/derbyclient.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/java/db-derby-10.12.1.1-lib/lib/derby.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/java/db-derby-10.12.1.1-lib/lib/derbyclient.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

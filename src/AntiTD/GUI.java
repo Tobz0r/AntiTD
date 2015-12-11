@@ -56,15 +56,13 @@ public class GUI {
     private JButton enterName;
     private JLabel tenChars;
 
-    private JPanel startPanel;
+    private StartScreen startPanel;
     private JScrollPane playerScroll;
     private JScrollPane scrollPane;
     private static final int textRows = 10;
     private static final int textCols = 1;
     //sound
-    private String gameSound;
-    Clip clip = null;
-    long clipTime;
+    private Sounds sounds = new Sounds();
     //score
     private JTextField score;
     private JTextField money;
@@ -107,7 +105,7 @@ public class GUI {
     }
 
     public void startGame() {
-        //runMusic();
+        sounds.music("music/cello.wav",true,false);
         frame.remove(startPanel);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -118,12 +116,12 @@ public class GUI {
         frame.pack();
     }
     public void restartGame(){
-        //ta bort alla torn och teleportertiles
+        //ta bort alla torn och teleportertiles 
         //Handler.clearList();
-        env.stop();
-        env.isGameOver();
-        env = new Environment(this,fp);
-        startGame();
+        env.restartLevel();
+    }
+    public void pauseMainSound(){
+        sounds.pauseMusic();
     }
 
     private void buildBuyPanel(){
@@ -247,6 +245,7 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
+        sounds.music("music/cello.wav",true,false);
         tenChars = new JLabel("Max 11 character");
         env.stop();
         frame.remove(scrollPane);
@@ -257,15 +256,15 @@ public class GUI {
         playerScroll = new JScrollPane(player);
         player.setBorder(BorderFactory.createLineBorder(Color.black));
         frame.add(tenChars);
-        startPanel = new JPanel();
-        startPanel.setBackground(Color.red);
+        startPanel = new StartScreen();
+        startPanel.repaint();
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
         startPanel.add(tenChars);
         checkTextField();
-        frame.setSize(300, 200);
+        frame.setSize(400, 300);
         frame.add(startPanel);
         frame.setVisible(true);
         enterName.setBackground(Color.WHITE);
@@ -273,6 +272,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(player.getDocument().getLength()!=0){
+                    sounds.pauseMusic();
                     getName();
                     startGame();
                 }
@@ -280,6 +280,14 @@ public class GUI {
         });
 
         
+    }
+    private class StartScreen extends JPanel{
+        Image bg = new ImageIcon("sprites/full_background.png").getImage();
+        @Override
+        public void paintComponent(Graphics g){
+            g.drawImage(bg,0,0,getWidth(),getHeight(),this);
+        }
+
     }
     private void checkTextField(){
 
@@ -345,28 +353,7 @@ public class GUI {
 
         }
     }
-    public void runMusic()  {
-        gameSound = "cello.wav";
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
-            DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
-            clip = (Clip)AudioSystem.getLine(info);
-            clip.open(audioInputStream);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-            clip.start();
-        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        }
-    }
-    public void pauseMusic(){
-        clipTime = clip.getMicrosecondPosition();
-        clip.stop();
-    }
-    public void resumeMusic(){
-        clip.setMicrosecondPosition(clipTime);
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-        clip.start();
-    }
+
     public void printScore(){
         String currentScore;
         String currentMoney;
@@ -394,3 +381,4 @@ public class GUI {
 
     }
 }
+
