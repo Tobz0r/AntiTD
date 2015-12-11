@@ -292,7 +292,7 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     private void finishedLevel(long wait){
         if(handler.getVictoryScore() >= victoryScore){
-            handler.reset();
+            handler.resetGame();
             incrementLevel(false);
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
