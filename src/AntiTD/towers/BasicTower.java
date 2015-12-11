@@ -78,19 +78,22 @@ public class BasicTower extends Tower {
 
     public void aggroTarget() {
         if (target != null) {
-            Projectile bullet=new Projectile(target,this);
+            //Projectile bullet=new Projectile(target,this);
             if (checkIfUnitIsClose(target) && target.isAlive() && cooldown> 200) {
                 sounds.music("music/lazer.wav",false,false);
-                attack(target, getDamage());
-                handler.addObject(bullet);
+                //attack(target, getDamage());
+                handler.addObject(new Projectile(target,this));
                 cooldown=0;
             } else {
+                target = null;
                 //System.out.println("else");
+                /*
                 if (!target.isAlive()) {
                     removeTroopFromList(target);
                 }
                 target = null;
                 getInRange().clear();
+                */
             }
         }
     }

@@ -27,12 +27,10 @@ public class Projectile implements GameObject {
 
     private Tower tower;
 
-    private final int speed=1;
-    private int moveProgres;
+    private final double speed = 1;
+    private double moveProgres;
 
     private BufferedImage img;
-
-    private boolean isMoving;
 
     public Projectile(Troop target, Tower tower){
         super();
@@ -56,26 +54,18 @@ public class Projectile implements GameObject {
 
     @Override
     public void tick() {
-        if (target.isAlive()) {
-            if (!this.isMoving) {
-                this.isMoving = true;
-                this.moveProgres = speed;
-            }
-
-            if (this.moveProgres < 100) {
-                this.moveProgres += speed;
-                if (this.moveProgres > 100) {
-                    this.moveProgres = 100;
-                }
-            } else {
-                this.isMoving = false;
-                this.moveProgres = 0;
-            }
+        this.moveProgres += speed;
+        if (this.moveProgres > 100.0) {
+            target.attackThis(tower.getDamage());
         }
 
     }
     public boolean aliveTarget(){
         return target.isAlive();
+    }
+
+    public boolean isAlive() {
+        return moveProgres > 100 ? false : true;
     }
 
     @Override
@@ -113,8 +103,13 @@ public class Projectile implements GameObject {
         return target.getTilePosition();
     }
 
-    @Override
+    public GameObject getMoveTo() {
+        return target;
+    }
+
+
     public int getMoveProgres() {
-        return moveProgres;
+        Long v = Math.round(this.moveProgres);
+        return v.intValue();
     }
 }
