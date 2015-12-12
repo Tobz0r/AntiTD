@@ -50,6 +50,7 @@ public abstract class Troop implements GameObject {
         slowed = false;
 
 
+
     }
 
     @Override

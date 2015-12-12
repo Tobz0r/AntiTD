@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="AntiTD:jar">
+  <artifact type="jar" build-on-make="true" name="AntiTD:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/AntiTD_jar</output-path>
     <root id="archive" name="AntiTD.jar">
       <element id="module-output" name="AntiTD" />

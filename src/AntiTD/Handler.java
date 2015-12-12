@@ -273,6 +273,7 @@ public class Handler extends Observable {
         objects.clear();
         aliveTroops.clear();
         towers.clear();
+        aliveCount=0;
     }
 
 

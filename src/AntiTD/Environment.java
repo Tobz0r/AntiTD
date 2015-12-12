@@ -239,19 +239,27 @@ public class Environment extends JPanel implements Runnable,Observer {
     public static void resumeGame(){
         paused=false;
     }
-    private void incrementLevel(boolean restart, boolean gameOver){
+    private void incrementLevel(boolean restart, boolean gameOver, boolean wonMap){
         pauseGame();
         int currentMap=mapNr;
         mapNr++;
         if(mapNr>levels.size()-1 || restart){
-            restart = gameOver ? false : true;
-            int reply = restart ? JOptionPane.YES_OPTION : JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
-                    "GG EZ!", JOptionPane.YES_NO_OPTION);
+            restart = !gameOver;
+            int reply;
+            if(restart){
+                reply=0;
+                System.out.println("123");
+            }
+            else{
+                reply=JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
+                        "GG EZ!", JOptionPane.YES_NO_OPTION);
+            }
             if (reply == JOptionPane.YES_OPTION) {
                 if(sounds.isPlaying())
                  sounds.pauseMusic();
                 gui.resumeMainSound();
                 mapNr=restart ? currentMap : 0;
+                mapNr=wonMap ? currentMap+1 :mapNr;
                 handler.resetScore();
                 resetTeleport();
                 restart=true;
@@ -285,40 +293,46 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     public void restartLevel(boolean restart){
         handler.resetGame();
-        incrementLevel(restart,false);
+        incrementLevel(restart,false,false);
     }
 
     private void finishedLevel(long wait){
+        System.out.println("ELIASHEJ");
+
         if(handler.getVictoryScore() >= victoryScore){
             handler.resetGame();
+            System.out.println("ELIASHEJ");
+
             if((mapNr+1)>levels.size()-1) {
                 sounds.music("music/gameover.wav",false);
                 gui.pauseMainSound();
+                /* STÄNGER AV TILLS VIDARE
                 DBModel dbEntry = db.getHighscore(gui.getPlayerName());
                 if (dbEntry.getScore() < handler.getVictoryScore()) {
                     db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
                 }
+                */
                 int reply = JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
                         "GG EZ!", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
                     sounds.pauseMusic();
                     gui.resumeMainSound();
                     mapNr = -1;
-                    incrementLevel(false, false);
+                    incrementLevel(true,false,true);
 
                 } else {
                     System.exit(0);
                 }
             }
             else {
-                incrementLevel(false, false);
+                incrementLevel(false, false,false);
             }
         }
-        else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
+        else if(!handler.hasAliveTroops() && (credits <= minimumCredits)){
             gui.pauseMainSound();
             sounds.music("music/gameover.wav",false);
             gameRunning=false;
-            incrementLevel(true, true);
+            incrementLevel(true, true,false);
         }
     }
 
