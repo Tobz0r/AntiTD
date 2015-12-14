@@ -101,7 +101,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         try {
             db = new Database();
             onlineMode = true;
-        } catch (DatabaseConnectionIsBusyException e) {
+        } catch (DatabaseConnectionIsBusyException | NoDatabaseDriverInstalledException e) {
             onlineMode = false;
         }
     }

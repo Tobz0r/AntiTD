@@ -13,7 +13,6 @@ import javax.swing.text.*;
 
 import AntiTD.*;
 import AntiTD.database.DBModel;
-import AntiTD.database.NoDatabaseConnectionException;
 import AntiTD.tiles.CrossroadTile;
 import AntiTD.tiles.JunctionTile;
 import AntiTD.tiles.Level;
@@ -114,9 +113,16 @@ public class GUI {
         frame.setVisible(true);
     }
 
+
+
     public void startGame() {
-        if(!sounds.isPlaying())
+        if(!sounds.isPlaying()) {
             sounds.music("music/runninggame.wav", true);
+            if (menu.musicStatus()) {
+                pauseMainSound();
+            }
+        }
+
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
@@ -126,6 +132,7 @@ public class GUI {
         buildBuyPanel();
         frame.pack();
     }
+
     public void restartGame(){
         //ta bort alla torn och teleportertiles 
         //Handler.clearList();
@@ -258,15 +265,19 @@ public class GUI {
         return PlayerName;
     }
 
+    public void playMusic(){
+        if(!menu.musicStatus()){
+            sounds.music("music/start.wav",true);
+        }
+    }
 
     public void startScreen()  {
         //check to see if panel still exists
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        if(!menu.musicStatus()){
-            sounds.music("music/start.wav",true);
-        }
+        playMusic();
+
         tenChars = new JLabel("Max 11 character");
         title = new JLabel("Anti TD");
         fixTitle(title);
@@ -300,9 +311,11 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(player.getDocument().getLength()!=0){
                     sounds.pauseMusic();
+
                     menu.setNewGame("Restart");
                     getName();
                     startGame();
+
                 }
             }
         });
@@ -416,69 +429,60 @@ public class GUI {
         score.setColumns(5);
     }
     public void highScoreTable(){
-
-        JFrame scoreFrame = new JFrame();
-        //scoreTable = new JTable(10,3);
-        JPanel topPanel = new JPanel();
-
-        Object data[][] = { { "ralle", "100000"},
-                { "ralle2", "2000"} };
-        Object columnNames[] = { "Player", "Score"};
-        scoreTable= new JTable();
-
-        ArrayList<DBModel> dbHighScore = null;
         try {
-            dbHighScore = env.getHighScores();
-        } catch (NoDatabaseConnectionException e) {
-            e.printStackTrace();
-        }
+            JFrame scoreFrame = new JFrame();
+            JPanel topPanel = new JPanel();
 
-        for(int i =0; i< dbHighScore.size(); i++) {
+            Object data[][] = {{"ralle", "100000"},
+                    {"ralle2", "2000"}};
+            Object columnNames[] = {"Player", "Score"};
+            scoreTable = new JTable();
+            ArrayList<DBModel> dbHighScore = env.getHighScores();
 
-            System.out.println(dbHighScore.get(i).toString());
-        }
 
-        DefaultTableModel model = new DefaultTableModel(columnNames,0){
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                if(getRowCount() > 0){
-                    return getValueAt(0,columnIndex).getClass();
+            for (int i = 0; i < dbHighScore.size(); i++) {
 
-                }
-                return super.getColumnClass(columnIndex);
+                System.out.println(dbHighScore.get(i).toString());
             }
-        };
 
-        for(int row = 0; row <dbHighScore.size(); row++){
-            Object[] rowData = {"Name: " + dbHighScore.get(row).getPlayername(),"Score: " +dbHighScore.get(row).getScore()};
-            model.addRow(rowData);
+            DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+                @Override
+                public Class<?> getColumnClass(int columnIndex) {
+                    if (getRowCount() > 0) {
+                        return getValueAt(0, columnIndex).getClass();
+
+                    }
+                    return super.getColumnClass(columnIndex);
+                }
+            };
+
+            for (int row = 0; row < dbHighScore.size(); row++) {
+                Object[] rowData = {"Name: " + dbHighScore.get(row).getPlayername(), "Score: " + dbHighScore.get(row).getScore()};
+                model.addRow(rowData);
+
+
+            }
+            JTextPane textPane = new JTextPane();
+            textPane.setBackground(Color.black);
+            this.appendToPane(textPane, "Player highscore", Color.white, 34);
+            topPanel.add(textPane, BorderLayout.CENTER);
+
+            scoreTable.setModel(model);
+            scoreFrame.setSize(1000, 1000);
+            scoreFrame.add(topPanel, BorderLayout.NORTH);
+            scoreFrame.add(scoreTable, BorderLayout.CENTER);
+            scoreFrame.setVisible(true);
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Database is busy please try again later! Check if you have another instance of the game running! ");
 
 
         }
-        JTextPane textPane = new JTextPane();
-        textPane.setBackground(Color.black);
-        this.appendToPane(textPane, "Player highscore", Color.white);
-        topPanel.add(textPane, BorderLayout.CENTER);
-
-        scoreTable.setModel(model);
-        scoreFrame.setSize(1000, 1000);
-        scoreFrame.add(topPanel,BorderLayout.NORTH);
-        scoreFrame.add(scoreTable, BorderLayout.CENTER);
-        scoreFrame.setVisible(true);
-
-        /*helpPanel.add(textPane, BorderLayout.SOUTH);
-        helpPanel.add(helpButton, BorderLayout.NORTH);
-
-        helpFrame.setSize(1000, 1000);
-        helpFrame.add(helpPanel, BorderLayout.SOUTH);
-        helpFrame.add(priceTable, BorderLayout.CENTER);
-        helpFrame.setVisible(true);*/
-
 
 
 
     }
-    private void appendToPane(JTextPane tp, String msg, Color c)
+    private void appendToPane(JTextPane tp, String msg, Color c, int fontSize)
     {
         Font f = new Font(Font.SANS_SERIF, 3 ,5);
         StyleContext sc = StyleContext.getDefaultStyleContext();
@@ -486,6 +490,7 @@ public class GUI {
 
         aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Verdana");
         aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+        aset = sc.addAttribute(aset, StyleConstants.FontSize, fontSize);
 
         int len = tp.getDocument().getLength();
         tp.setCaretPosition(len);
