@@ -12,7 +12,6 @@ import java.util.Objects;
 public interface GameObject{
 
     void tick();
-    void render(Graphics g);
 
     Image getImage();
 

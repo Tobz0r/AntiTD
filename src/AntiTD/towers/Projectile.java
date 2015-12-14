@@ -68,11 +68,6 @@ public class Projectile implements GameObject {
     }
 
     @Override
-    public void render(Graphics g) {
-
-    }
-
-    @Override
     public Image getImage() {
         return img;
     }

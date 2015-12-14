@@ -103,12 +103,6 @@ public class TeleportTroop extends Troop {
         }
     }
 
-
-    @Override
-    public void render(Graphics g) {
-
-    }
-
     public void initTeleport() {
         isTeleporting = true;
     }

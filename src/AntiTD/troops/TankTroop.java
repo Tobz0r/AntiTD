@@ -54,11 +54,6 @@ public class TankTroop extends Troop {
         this.move();
     }
 
-    @Override
-    public void render(Graphics g) {
-
-    }
-
     /**
      * Attacks the troop with the specified damage.
      * TankTroop has a 20% chanse to avoid the damage.

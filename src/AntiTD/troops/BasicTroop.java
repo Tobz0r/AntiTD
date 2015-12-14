@@ -61,9 +61,4 @@ public class BasicTroop extends Troop {
     public void tick() {
         this.move();
     }
-
-    @Override
-    public void render(Graphics g) {
-
-    }
 }
