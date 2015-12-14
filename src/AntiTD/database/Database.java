@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class Database {
     private static String dbURL = "jdbc:derby:highscoresDB;create=true;user=me;password=mine";
     private static String tableName = "highscores";
-    // jdbc Connection
     private Connection conn = null;
     private Statement stmt = null;
     private PreparedStatement prepStmt = null;
@@ -19,32 +18,13 @@ public class Database {
     private final static String sqlAddScore =
             "INSERT INTO " + tableName + "(name, score) VALUES (?,?)";
 
-    private final static String sqlAddScore2 =
-            "INSERT INTO " + tableName + " VALUES (null, ?,?)";
-
     private final static String sqlGetId =
             "SELECT id FROM "+tableName+" WHERE name=?";
 
     private final static String sqlUpdateScore =
             "UPDATE " + tableName + " SET score=? WHERE id=?";
 
-    public static void main(String[] args) {
-        Database db = new Database();
-        db.insertOrUpdateHighscore("LaVals", 100);
-        db.printHighscores();
-        db.insertOrUpdateHighscore("LaVals", 110);
-        db.printHighscores();
-        DBModel highscore = null;
-        try {
-            highscore = db.getHighscore("LaVals");
-        } catch (DatabaseEntryDoesNotExists e) {
-            e.printStackTrace();
-        }
-        System.out.println(highscore);
-        db.shutdown();
-    }
-
-    public Database() {
+    public Database() throws DatabaseConnectionIsBusyException, NoDatabaseDriverInstalledException {
         createConnection();
         createTable();
     }
@@ -68,14 +48,19 @@ public class Database {
     }
 
 
-    private synchronized void createConnection(){
+    private synchronized void createConnection() throws DatabaseConnectionIsBusyException, NoDatabaseDriverInstalledException{
         try {
             Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
             //Get a connection
             conn = DriverManager.getConnection(dbURL);
         }
-        catch (Exception except) {
-            except.printStackTrace();
+        catch (SQLException e) {
+            if (DatabaseHelper.databaseConnectionCouldNotBeMade(e)) {
+                throw new DatabaseConnectionIsBusyException();
+            }
+        }
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            throw new NoDatabaseDriverInstalledException();
         }
     }
 
@@ -124,7 +109,7 @@ public class Database {
      * @param playername name of the player
      * @return score if player exists exists else -1
      */
-    public synchronized DBModel getHighscore(String playername) throws DatabaseEntryDoesNotExists {
+    public synchronized DBModel getHighscore(String playername) throws DatabaseEntryDoesNotExistsException {
         DBModel highscore = null;
         try {
             //stmt = conn.createStatement();
@@ -135,7 +120,7 @@ public class Database {
                 results.next();
                 highscore = new DBModel(results.getInt(1), results.getString(2), results.getInt(3));
             } catch (SQLException sqlExcept) {
-                throw new DatabaseEntryDoesNotExists();
+                throw new DatabaseEntryDoesNotExistsException();
             }
             results.close();
             stmt.close();
@@ -175,10 +160,10 @@ public class Database {
      */
     public synchronized void printHighscores(){
         ArrayList<DBModel> highscores = getHighscores();
-        System.out.print("ID\t\t"+"NAME\t\t"+"SCORE\t\t\n");
+        System.out.print("ID\t\t"+"NAME\t\t\t\t"+"SCORE\t\t\n");
         System.out.println("-------------------------------------------------");
         for (DBModel model : highscores) {
-            System.out.println(model.getId() + "\t\t" + model.getPlayername() + "\t\t" + model.getScore());
+            System.out.println(model.getId() + "\t\t" + model.getPlayername() + "\t\t\t\t" + model.getScore());
         }
         System.out.println();
     }

@@ -2,11 +2,12 @@ package AntiTD.Tests;
 
 import AntiTD.database.DBModel;
 import AntiTD.database.Database;
+import AntiTD.database.DatabaseEntryDoesNotExistsException;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -19,6 +20,7 @@ public class DatabaseTest {
     @Before
     public void setUp() throws Exception {
         db = new Database();
+        db.insertOrUpdateHighscore("DatabaseTestUser1", 1);
     }
 
     @After
@@ -36,19 +38,25 @@ public class DatabaseTest {
     @Test
     public void testGetHighscoreShouldReturnTrue() throws Exception {
         DBModel hs = db.getHighscore("LaVals");
-        assertEquals(hs.getPlayername(), "LaVals");
+        assertEquals("LaVals", hs.getPlayername());
 
     }
 
     @Test
-    public void testGetHighscoreShouldReturnNull() throws Exception {
-        DBModel hs = db.getHighscore("Laloa");
-        assertNull(hs);
+    public void testGetHighscoreShouldTrowExceptionReturnNull() throws Exception {
+        DBModel usr = null;
+        try {
+            usr = db.getHighscore("Laloa");
+        } catch (DatabaseEntryDoesNotExistsException e) {
+            assertNull(usr);
+        }
 
     }
 
     @Test
-    public void testGetHighscores() throws Exception {
+    public void testGetHighscoresShouldContainAtLeastOneReturnTrue() throws Exception {
+        ArrayList<DBModel> entrys = db.getHighscores();
         db.printHighscores();
+        assertTrue(entrys.size() > 0);
     }
 }

@@ -1,12 +1,9 @@
 package AntiTD;
 
-import AntiTD.database.DBModel;
-import AntiTD.database.Database;
-import AntiTD.database.DatabaseEntryDoesNotExists;
+import AntiTD.database.*;
 import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
-import AntiTD.towers.BasicTower;
 import AntiTD.towers.FrostTower;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
@@ -18,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.Executor;
@@ -30,6 +26,8 @@ import java.util.concurrent.Executors;
 public class Environment extends JPanel implements Runnable,Observer {
 
     private Database db;
+    private boolean onlineMode;
+
     private int victoryScore;
     private final int minimumCredits=174;
     private int finalScore=0;
@@ -100,7 +98,12 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
         setLayout(new GridLayout(1, 1));
         setPreferredSize(new Dimension(map.length * 70, map[0].length * 70));
-        db = new Database();
+        try {
+            db = new Database();
+            onlineMode = true;
+        } catch (DatabaseConnectionIsBusyException | NoDatabaseDriverInstalledException e) {
+            onlineMode = false;
+        }
     }
 
     private void setUpNeighbors() {
@@ -125,6 +128,13 @@ public class Environment extends JPanel implements Runnable,Observer {
                 }
                 map[y][x].setNeighbors(neighborsArr);
             }
+        }
+    }
+    public synchronized ArrayList<DBModel> getHighScores() throws NoDatabaseConnectionException{
+        if (onlineMode) {
+            return db.getHighscores();
+        } else {
+            throw new NoDatabaseConnectionException();
         }
     }
 
@@ -168,7 +178,7 @@ public class Environment extends JPanel implements Runnable,Observer {
        for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j].landOn(g);
-            }
+            } 
         }
         handler.render(g);
 
@@ -312,19 +322,17 @@ public class Environment extends JPanel implements Runnable,Observer {
                     sounds.music("music/gameover.wav",false);
                 }
                 gui.pauseMainSound();
-                // STÄNGER AV TILLS VIDARE
-                try {
-                    DBModel dbEntry = db.getHighscore(gui.getPlayerName());
-                    if (dbEntry.getScore() < handler.getVictoryScore()) {
+                if (onlineMode) {
+                    try {
+                        DBModel dbEntry = db.getHighscore(gui.getPlayerName());
+                        if (dbEntry.getScore() < handler.getVictoryScore()) {
+                            db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
+                        }
+
+                    } catch (DatabaseEntryDoesNotExistsException e) {
                         db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
                     }
-
-                } catch (DatabaseEntryDoesNotExists databaseEntryDoesNotExists) {
-                    db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
                 }
-
-
-
 
                 int reply = JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
                         "GG EZ!", JOptionPane.YES_NO_OPTION);
@@ -364,11 +372,11 @@ public class Environment extends JPanel implements Runnable,Observer {
         return credits;
     }
     public boolean buyUnit(int amount){
-        if((credits-amount)>0) {
+        //if((credits-amount)>0) {
             credits -= amount;
             return true;
-        }
-        return false;
+        //}
+        //return false;
     }
     private void initTowers(){
         towers.clear();

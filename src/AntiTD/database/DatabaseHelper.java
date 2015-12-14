@@ -19,4 +19,11 @@ public class DatabaseHelper {
         }
         return false;
     }
+
+    public static boolean databaseConnectionCouldNotBeMade(SQLException e) {
+        if (e.getSQLState().equals("XJ040")) {
+            return true;
+        }
+        return false;
+    }
 }
