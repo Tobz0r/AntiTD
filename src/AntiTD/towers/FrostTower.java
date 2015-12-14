@@ -32,7 +32,7 @@ public class FrostTower extends Tower{
     private int cooldown=0;
     private int count = 0;
     private Sounds sounds = new Sounds();
-
+    private boolean playMusic = true;
     private BufferedImage projectileImg;
     private Tile posTile;
     private String type = "FrostTower";
@@ -82,7 +82,9 @@ public class FrostTower extends Tower{
         if (target != null) {
             Projectile bullet=new Projectile(target,this,projectileImg);
             if (checkIfUnitIsClose(target) && target.isAlive() ){
-                sounds.music("music/lazer.wav",false);
+                if(playMusic){
+                    sounds.music("music/lazer.wav",false);
+                }
                 //attack(target, getDamage());
                 handler.addObject(bullet);
                 cooldown=0;
@@ -107,7 +109,6 @@ public class FrostTower extends Tower{
         if (target != null) {
 
             if(!target.isSlowed()) {
-                System.out.println("hola");
                 //target.slowSpeed();
             }
             this.aggroTarget();
@@ -115,6 +116,12 @@ public class FrostTower extends Tower{
             //   System.out.println("Target null");
             this.initScan();
         }
+    }
+    public void pauseTowerSound(){
+        playMusic = false;
+    }
+    public void resumeTowerSound(){
+        playMusic = true;
     }
     public void attack(Troop troop, int damage){
         if(troop.isAlive()) {

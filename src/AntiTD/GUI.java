@@ -28,6 +28,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -65,6 +66,7 @@ public class GUI {
     private static final int textCols = 1;
     //sound
     private Sounds sounds = new Sounds();
+    private ArrayList<Troop> troops = new ArrayList();
     //score
     private JTextField score;
     private JTextField money;
@@ -153,7 +155,9 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(env.buyUnit(175)) {
                     Tile[][] currentMap = Level.getCurrentMap();
-                    env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                    env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel()
+                            .getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                    
                 }
                 }
         });
@@ -164,7 +168,9 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(env.buyUnit(450)) {
                     Tile[][] currentMap = Level.getCurrentMap();
-                    env.addTroop(new TankTroop(tankImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                    env.addTroop(new TankTroop(tankImage, currentMap[env.getLevel()
+                            .getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+
                 }
             }
         });
@@ -300,6 +306,7 @@ public class GUI {
 
         
     }
+
     private void fixTitle(JLabel title){
         Font lableFont = title.getFont();
         int biggerFont = (int)(lableFont.getSize() * 50);
@@ -315,6 +322,9 @@ public class GUI {
         }
 
     }
+    /*
+     * Check if textfield
+     */
     private void checkTextField(){
 
         player.getDocument().addDocumentListener(new DocumentListener() {
@@ -406,6 +416,14 @@ public class GUI {
         scoreTable = new JTable(10,3);
 
     }
-
+    public ArrayList getTowers(){
+        return env.getTowers();
+    }
+    public void pauseTroopSound(){
+        env.setPaused(true);
+    }
+    public void resumeTroopSound(){
+        env.setPaused(false);
+    }
 }
 
