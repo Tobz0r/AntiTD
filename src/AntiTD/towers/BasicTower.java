@@ -106,7 +106,12 @@ public class BasicTower extends Tower {
             }
         }
     }
-
+    public void pauseTowerSound(){
+        sounds.pauseMusic();
+    }
+    public void resumeTowerSound(){
+        sounds.resumeMusic(true);
+    }
     public void createTower(Tower tower, Tile pos) {
         //Tower temp = new BasicTower(img,pos);
         tower.init(getTroopsList(), getTowerList(), pos);

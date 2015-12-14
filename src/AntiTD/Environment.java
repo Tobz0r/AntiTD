@@ -40,7 +40,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
     private ArrayList<CrossroadSwitch> switches;
     private ArrayList<Level> levels;
-    private ArrayList<Tower> towers;
+    private ArrayList<Tower> towers = new ArrayList<>();
 
     private Handler handler;
 

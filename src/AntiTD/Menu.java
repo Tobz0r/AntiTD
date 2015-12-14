@@ -29,6 +29,7 @@ public class Menu extends JMenu {
     private GUI gui;
 
     private ArrayList<Tower> towerList;
+    private boolean pauseMusic;
     private boolean pause = true;
     private boolean mutesound = true;
     //helpframe
@@ -135,14 +136,28 @@ public class Menu extends JMenu {
         mute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                towerList = gui.getTowers();
                 if(mutesound){
+                    pauseMusic = true;
                     gui.pauseMainSound();
+                    if(Environment.isRunning()){
+                        for(int i=0; i < towerList.size(); i++){
+                            towerList.get(i).pauseTowerSound();
+                        }
+                    }
 
                     mute.setText("Unmute");
                     mutesound=false;
                 }
                 else {
+                    pauseMusic = false;
                     gui.resumeMainSound();
+                    if(Environment.isRunning()){
+                        for(int i=0; i < towerList.size(); i++){
+                            towerList.get(i).resumeTowerSound();
+                        }
+                    }
+
                     mute.setText("Mute");
                     mutesound = true;
                 }

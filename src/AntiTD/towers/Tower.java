@@ -126,12 +126,8 @@ public abstract class Tower implements GameObject {
     }
 
     // testar
-    public void pauseTowerSound(){
-        sounds.pauseMusic();
-    }
-    public void resumeTowerSound(){
-        sounds.resumeMusic(true);
-    }
+    public abstract void pauseTowerSound();
+    public abstract void resumeTowerSound();
     @Override
     public int getCurrentScore() {
         return money;
