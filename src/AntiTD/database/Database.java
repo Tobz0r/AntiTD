@@ -34,7 +34,12 @@ public class Database {
         db.printHighscores();
         db.insertOrUpdateHighscore("LaVals", 110);
         db.printHighscores();
-        DBModel highscore = db.getHighscore("LaVals");
+        DBModel highscore = null;
+        try {
+            highscore = db.getHighscore("LaVals");
+        } catch (DatabaseEntryDoesNotExists e) {
+            e.printStackTrace();
+        }
         System.out.println(highscore);
         db.shutdown();
     }
@@ -118,15 +123,18 @@ public class Database {
      * @param playername name of the player
      * @return score if player exists exists else -1
      */
-    public synchronized DBModel getHighscore(String playername) {
+    public synchronized DBModel getHighscore(String playername) throws DatabaseEntryDoesNotExists {
         DBModel highscore = null;
         try {
             //stmt = conn.createStatement();
             prepStmt = conn.prepareStatement(sqlGetScore);
             prepStmt.setString(1,playername);
             ResultSet results = prepStmt.executeQuery();
-            if (results.next()) {
+            try {
+                results.next();
                 highscore = new DBModel(results.getInt(1), results.getString(2), results.getInt(3));
+            } catch (SQLException sqlExcept) {
+                throw new DatabaseEntryDoesNotExists();
             }
             results.close();
             stmt.close();

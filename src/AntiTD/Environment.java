@@ -2,6 +2,7 @@ package AntiTD;
 
 import AntiTD.database.DBModel;
 import AntiTD.database.Database;
+import AntiTD.database.DatabaseEntryDoesNotExists;
 import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
@@ -310,10 +311,18 @@ public class Environment extends JPanel implements Runnable,Observer {
                 sounds.music("music/gameover.wav",false);
                 gui.pauseMainSound();
                 // STÄNGER AV TILLS VIDARE
-                DBModel dbEntry = db.getHighscore(gui.getPlayerName());
-                if (dbEntry.getScore() < handler.getVictoryScore()) {
+                try {
+                    DBModel dbEntry = db.getHighscore(gui.getPlayerName());
+                    if (dbEntry.getScore() < handler.getVictoryScore()) {
+                        db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
+                    }
+
+                } catch (DatabaseEntryDoesNotExists databaseEntryDoesNotExists) {
                     db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
                 }
+
+
+
 
                 int reply = JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
                         "GG EZ!", JOptionPane.YES_NO_OPTION);
