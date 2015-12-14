@@ -25,22 +25,27 @@ public class Database {
             "UPDATE " + tableName + " SET score=? WHERE id=?";
 
     public static void main(String[] args) {
-        Database db = new Database();
-        db.insertOrUpdateHighscore("LaVals", 100);
-        db.printHighscores();
-        db.insertOrUpdateHighscore("LaVals", 110);
-        db.printHighscores();
-        DBModel highscore = null;
         try {
-            highscore = db.getHighscore("LaVals");
-        } catch (DatabaseEntryDoesNotExists e) {
+            Database db = new Database();
+            db.insertOrUpdateHighscore("LaVals", 100);
+            db.printHighscores();
+            db.insertOrUpdateHighscore("LaVals", 110);
+            db.printHighscores();
+            DBModel highscore = null;
+            try {
+                highscore = db.getHighscore("LaVals");
+            } catch (DatabaseEntryDoesNotExistsException e) {
+                e.printStackTrace();
+            }
+            System.out.println(highscore);
+            db.shutdown();
+        } catch (DatabaseConnectionIsBusyException e) {
             e.printStackTrace();
         }
-        System.out.println(highscore);
-        db.shutdown();
+
     }
 
-    public Database() {
+    public Database() throws DatabaseConnectionIsBusyException {
         createConnection();
         createTable();
     }
@@ -64,11 +69,16 @@ public class Database {
     }
 
 
-    private synchronized void createConnection(){
+    private synchronized void createConnection() throws DatabaseConnectionIsBusyException{
         try {
             Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
             //Get a connection
             conn = DriverManager.getConnection(dbURL);
+        }
+        catch (SQLException e) {
+            if (DatabaseHelper.databaseConnectionCouldNotBeMade(e)) {
+                throw new DatabaseConnectionIsBusyException();
+            }
         }
         catch (Exception except) {
             except.printStackTrace();
@@ -120,7 +130,7 @@ public class Database {
      * @param playername name of the player
      * @return score if player exists exists else -1
      */
-    public synchronized DBModel getHighscore(String playername) throws DatabaseEntryDoesNotExists {
+    public synchronized DBModel getHighscore(String playername) throws DatabaseEntryDoesNotExistsException {
         DBModel highscore = null;
         try {
             //stmt = conn.createStatement();
@@ -131,7 +141,7 @@ public class Database {
                 results.next();
                 highscore = new DBModel(results.getInt(1), results.getString(2), results.getInt(3));
             } catch (SQLException sqlExcept) {
-                throw new DatabaseEntryDoesNotExists();
+                throw new DatabaseEntryDoesNotExistsException();
             }
             results.close();
             stmt.close();

@@ -104,7 +104,8 @@ public class GUI {
         scrollPane.setBounds(0,0,env.getWidth()+32,env.getHeight()+32);
         //menu = new Menu(frame);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        menu = new Menu(frame, this,env);
+        //menu = new Menu(frame, this,env);
+        menu = new Menu(frame, this);
         menu.startMenu();
         menu.statMenu();
         startScreen();

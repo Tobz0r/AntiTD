@@ -2,15 +2,12 @@ package AntiTD.Tests;
 
 import AntiTD.database.DBModel;
 import AntiTD.database.Database;
-import AntiTD.database.DatabaseEntryDoesNotExists;
+import AntiTD.database.DatabaseEntryDoesNotExistsException;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.util.ArrayList;
-
-import static org.junit.Assert.*;
 
 import static org.junit.Assert.*;
 
@@ -50,7 +47,7 @@ public class DatabaseTest {
         DBModel usr = null;
         try {
             usr = db.getHighscore("Laloa");
-        } catch (DatabaseEntryDoesNotExists e) {
+        } catch (DatabaseEntryDoesNotExistsException e) {
             assertNull(usr);
         }
 

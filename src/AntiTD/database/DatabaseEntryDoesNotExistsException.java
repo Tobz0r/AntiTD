@@ -3,5 +3,5 @@ package AntiTD.database;
 /**
  * Created by id12men on 2015-12-14.
  */
-public class DatabaseEntryDoesNotExists extends Exception{
+public class DatabaseEntryDoesNotExistsException extends Exception{
 }
