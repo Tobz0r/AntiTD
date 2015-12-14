@@ -29,9 +29,10 @@ public class Menu extends JMenu {
     private GUI gui;
 
     private ArrayList<Tower> towerList;
-    private boolean pauseMusic;
+    private boolean pauseMusic = false;
     private boolean pause = true;
     private boolean mutesound = true;
+    private boolean mainMusic = false;
     private Environment env;
     //helpframe
     private JTextArea helpText;
@@ -52,7 +53,7 @@ public class Menu extends JMenu {
 
 
 
-    public Menu(JFrame frame, GUI gui) {
+    public Menu(JFrame frame, GUI gui, Environment env) {
         super("Start");
         this.env = env;
         this.gui = gui;
@@ -107,6 +108,7 @@ public class Menu extends JMenu {
         mainMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                mainMusic = true;
                 gui.pauseMainSound();
                 newGame.setText("New Game");
                 gui.startScreen();
@@ -140,6 +142,7 @@ public class Menu extends JMenu {
             public void actionPerformed(ActionEvent actionEvent) {
                 towerList = gui.getTowers();
                 if(mutesound){
+                    mainMusic=false;
                     pauseMusic = true;
                     gui.pauseMainSound();
                     env.pauseEnvSound();
@@ -149,9 +152,7 @@ public class Menu extends JMenu {
                         }
                         gui.pauseTroopSound();
                     }
-                    if(sounds.isPlaying()){
-                        sounds.pauseMusic();
-                    }
+
 
 
                     mute.setText("Unmute");
@@ -159,22 +160,17 @@ public class Menu extends JMenu {
                 }
                 else {
                     pauseMusic = false;
-                    gui.resumeMainSound();
-                    if(Environment.isRunning()){
-                        gui.resumeMainSound();
-
-                    }
-                    else{
-                        sounds.music("music/start.wav", true);
-                    }
-
-
                     env.resumeEnvSound();
                     if(Environment.isRunning()){
+                        gui.resumeMainSound();
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).resumeTowerSound();
                         }
+
                         gui.resumeTroopSound();
+                    }
+                    if(mainMusic){
+                       gui.playMusic();
                     }
 
                     mute.setText("Mute");

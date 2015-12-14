@@ -111,9 +111,16 @@ public class GUI {
         frame.setVisible(true);
     }
 
+
+
     public void startGame() {
-        if(!sounds.isPlaying())
+        if(!sounds.isPlaying()) {
             sounds.music("music/runninggame.wav", true);
+            if (menu.musicStatus()) {
+                pauseMainSound();
+            }
+        }
+
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
@@ -123,6 +130,7 @@ public class GUI {
         buildBuyPanel();
         frame.pack();
     }
+
     public void restartGame(){
         //ta bort alla torn och teleportertiles 
         //Handler.clearList();
@@ -255,15 +263,19 @@ public class GUI {
         return PlayerName;
     }
 
+    public void playMusic(){
+        if(!menu.musicStatus()){
+            sounds.music("music/start.wav",true);
+        }
+    }
 
     public void startScreen()  {
         //check to see if panel still exists
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        if(!menu.musicStatus()){
-            sounds.music("music/start.wav",true);
-        }
+        playMusic();
+
         tenChars = new JLabel("Max 11 character");
         title = new JLabel("Anti TD");
         fixTitle(title);
@@ -297,9 +309,11 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(player.getDocument().getLength()!=0){
                     sounds.pauseMusic();
+
                     menu.setNewGame("Restart");
                     getName();
                     startGame();
+
                 }
             }
         });
