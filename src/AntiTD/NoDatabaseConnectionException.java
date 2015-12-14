@@ -1,4 +1,4 @@
-package AntiTD.database;
+package AntiTD;
 
 /**
  * Created by id12men on 2015-12-14.
