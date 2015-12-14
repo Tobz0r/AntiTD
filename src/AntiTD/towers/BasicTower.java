@@ -230,7 +230,7 @@ public class BasicTower extends Tower {
     }
 
     @Override
-    public int getMoveProgres() {
+    public int getMoveProgress() {
         return 0;
     }
 

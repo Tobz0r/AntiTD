@@ -4,7 +4,6 @@ import AntiTD.*;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -232,7 +231,7 @@ public abstract class Tower implements GameObject {
             Iterator<Troop> itTroop =troops.iterator();
             while(itTroop.hasNext()){
                 Troop t = itTroop.next();
-                if(t.hasReacedGoal()){
+                if(t.hasReachedGoal()){
                     itTroop.remove();
                 }
 

@@ -105,7 +105,7 @@ public class TeleportTroopTest {
         //assertEquals(basicT.getTilePosition(), middle3);
         basicT.tick();
 
-        assertEquals(basicT.hasReacedGoal(), true);
+        assertEquals(basicT.hasReachedGoal(), true);
 
     }
 

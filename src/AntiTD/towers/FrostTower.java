@@ -107,10 +107,6 @@ public class FrostTower extends Tower{
     public void startShooting(){
         checkIfTroopReachedGoal();
         if (target != null) {
-
-            if(!target.isSlowed()) {
-                //target.slowSpeed();
-            }
             this.aggroTarget();
         } else {
             //   System.out.println("Target null");
@@ -211,7 +207,7 @@ public class FrostTower extends Tower{
     }
 
     @Override
-    public int getMoveProgres() {
+    public int getMoveProgress() {
         return 0;
     }
 }

@@ -95,7 +95,7 @@ public class Handler extends Observable {
                 aliveTroops.remove(object);
                 for (GameObject go : towers) {
                     Tower t = (Tower) go;
-                    t.removeTroopFromList((Troop)object);
+                    t.removeTroopFromList((Troop) object);
                 }
             } else if (object instanceof Tower) {
                 towers.remove(object);
@@ -141,7 +141,7 @@ public class Handler extends Observable {
                             sounds.music("music/deadman.wav", false);
                         }
                     }
-                    if(t.hasReacedGoal()){
+                    if(t.hasReachedGoal()){
                         update(t.getCurrentScore());
                         removeObject(gameObject);
                     }
@@ -168,7 +168,7 @@ public class Handler extends Observable {
             boolean shouldDraw = true;
             if (gameObject instanceof Troop) {
                 Troop troop = (Troop) gameObject;
-                if (!troop.isAlive() || troop.hasReacedGoal()) {
+                if (!troop.isAlive() || troop.hasReachedGoal()) {
                     shouldDraw = false;
                 }
             }
@@ -232,7 +232,7 @@ public class Handler extends Observable {
         double x_to = (moveTo.getPosition().getX() * sizeX) * 1.0;
         double y_to = (moveTo.getPosition().getY() * sizeY) * 1.0;
 
-        Double progress = (thisGO.getMoveProgres() * 1.0) / 100.0;
+        Double progress = (thisGO.getMoveProgress() * 1.0) / 100.0;
         double x_global = x_start - x_to;
         double y_global = y_start - y_to;
 
@@ -257,7 +257,7 @@ public class Handler extends Observable {
         double x_to = (moveToPosition.getX()) * 1.0;
         double y_to = (moveToPosition.getY()) * 1.0;
 
-        Double progress = (thisGO.getMoveProgres() * 1.0) / 100.0;
+        Double progress = (thisGO.getMoveProgress() * 1.0) / 100.0;
         double x_global = x_start - x_to;
         double y_global = y_start - y_to;
 

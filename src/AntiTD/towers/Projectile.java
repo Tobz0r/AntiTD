@@ -107,7 +107,7 @@ public class Projectile implements GameObject {
     }
 
 
-    public int getMoveProgres() {
+    public int getMoveProgress() {
         Long v = Math.round(this.moveProgres);
         return v.intValue();
     }

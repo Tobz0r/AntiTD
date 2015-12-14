@@ -5,16 +5,12 @@ import AntiTD.tiles.GoalTile;
 import AntiTD.tiles.Tile;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
 import java.util.Stack;
 
 /**
  * Created by dv13trm on 2015-11-27.
  */
 public abstract class Troop implements GameObject {
-    //private static int victoryScore;
     protected int health;
     protected int score;
     protected double speed;
@@ -26,20 +22,42 @@ public abstract class Troop implements GameObject {
     private boolean isMoving;
     private boolean slowed;
 
-
-
-
+    /**
+     * Constructor for troop object.
+     * @param pos starting position tile
+     */
     protected Troop(Tile pos) {
         this(null, pos);
     }
 
+    /**
+     * Constructor for troop object.
+     * @param img image to store for rendering
+     * @param pos starting position tile
+     */
     protected Troop(Image img, Tile pos) {
-        this(pos, 1, 1, 1);
+        this(img, pos, 1, 1, 1);
     }
+
+    /**
+     * Constructor for troop object.
+     * @param pos starting position tile
+     * @param health health of troop
+     * @param score score to gain when troop finishes
+     * @param speed move speed
+     */
     protected Troop(Tile pos, int health, int score, double speed) {
         this(null, pos, health, score, speed);
     }
 
+    /**
+     * Constructor for troop object.
+     * @param img image to store for rendering
+     * @param pos starting position tile
+     * @param health health of troop
+     * @param score score to gain when troop finishes
+     * @param speed move speed
+     */
     protected Troop(Image img, Tile pos, int health, int score, double speed) {
         this.img = img;
         this.health = health;
@@ -48,9 +66,6 @@ public abstract class Troop implements GameObject {
         this.history = new Stack<Tile>();
         this.history.push(pos);
         slowed = false;
-
-
-
     }
 
     @Override
@@ -73,9 +88,6 @@ public abstract class Troop implements GameObject {
 
             if (this.moveProgres < 100) {
                 this.moveProgres += speed;
-                /*if (this.moveProgres > 100) {
-                    this.moveProgres = 100;
-                }*/
             } else {
                 this.isMoving = false;
                 this.moveProgres = 0;
@@ -98,18 +110,21 @@ public abstract class Troop implements GameObject {
         }
     }
 
-
     @Override
     public Tile getMoveToPosition() {
         return nextTile;
     }
 
     @Override
-    public int getMoveProgres() {
+    public int getMoveProgress() {
         Long p = Math.round(this.moveProgres);
         return p.intValue();
     }
 
+    /**
+     * Get next in path that is movable and not in move history.
+     * @return next tile
+     */
     private Tile getNextTile() {
         Tile[] neigbors;
         neigbors = history.peek().getNeighbors2();
@@ -141,7 +156,11 @@ public abstract class Troop implements GameObject {
         }
     }
 
-    public boolean hasReacedGoal() {
+    /**
+     * Get if this object has reached the goal.
+     * @return
+     */
+    public boolean hasReachedGoal() {
         return hasReacedGoal;
     }
 
@@ -151,12 +170,11 @@ public abstract class Troop implements GameObject {
 
     /**
      * Attacks this troop
-     *
      * @param damage amount of damage to take
      * @return true if this troop died else false
      */
     public boolean attackThis(int damage) {
-        if ( !hasReacedGoal() ) {
+        if ( !hasReachedGoal() ) {
             health = health - damage;
             return !this.isAlive();
         } else {
@@ -166,7 +184,6 @@ public abstract class Troop implements GameObject {
 
     /**
      * Checks troops life status
-     *
      * @return true if alive else false
      */
     public boolean isAlive() {
@@ -193,16 +210,13 @@ public abstract class Troop implements GameObject {
         return "Troop";
     }
 
+    /**
+     * Slows the movement speed to this troop whe called.
+     */
     public void slowSpeed(){
-        if (! this.isSlowed()) {
+        if (! slowed) {
             this.speed = (speed * 0.5);
             slowed = true;
-            System.out.println(speed);
         }
     }
-    public boolean isSlowed(){
-        return slowed;
-    }
-
-
 }

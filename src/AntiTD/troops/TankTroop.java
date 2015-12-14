@@ -3,7 +3,6 @@ package AntiTD.troops;
 import AntiTD.tiles.Tile;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
@@ -68,7 +67,7 @@ public class TankTroop extends Troop {
      */
     @Override
     public boolean attackThis(int damage) {
-        if ( ! hasReacedGoal() ) {
+        if ( ! hasReachedGoal() ) {
             if((r.nextInt(5) + 1)==1){
                 damage=0;
                 System.out.println("Blocked attack");

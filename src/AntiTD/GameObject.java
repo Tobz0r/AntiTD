@@ -24,6 +24,6 @@ public interface GameObject{
 
     Tile getTilePosition();
     Tile getMoveToPosition();
-    int getMoveProgres();
+    int getMoveProgress();
 
 }
