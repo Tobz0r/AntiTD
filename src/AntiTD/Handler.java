@@ -22,6 +22,7 @@ public class Handler extends Observable {
     private LinkedList<GameObject> objectsToAdd;
     private LinkedList<GameObject> objectsToRemove;
     private Sounds sounds = new Sounds();
+    private boolean isPaused=false;
 
 
 
@@ -136,7 +137,9 @@ public class Handler extends Observable {
                     if (!t.isAlive()) {
                         aliveCount--;
                         removeObject(gameObject);
-                        sounds.music("music/deadman.wav",false);
+                        if(!isPaused) {
+                            sounds.music("music/deadman.wav", false);
+                        }
                     }
                     if(t.hasReacedGoal()){
                         update(t.getCurrentScore());
@@ -216,6 +219,7 @@ public class Handler extends Observable {
             }
         }
     }
+
 
     private PositionPair calculatePosition(GameObject thisGO, Tile moveTo) {
         int sizeX = (int) thisGO.getTilePosition().getSize().getWidth();
@@ -298,5 +302,7 @@ public class Handler extends Observable {
         setChanged();
         notifyObservers(credit);
     }
-
+    public void setIsPaused(boolean paused){
+        this.isPaused=paused;
+    }
 }

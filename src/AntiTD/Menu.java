@@ -52,7 +52,7 @@ public class Menu extends JMenu {
 
 
 
-    public Menu(JFrame frame, GUI gui, Environment env) {
+    public Menu(JFrame frame, GUI gui) {
         super("Start");
         this.env = env;
         this.gui = gui;
@@ -98,7 +98,7 @@ public class Menu extends JMenu {
                     newGame.setText("Restart");
                 }
                 else{
-                    JOptionPane.showMessageDialog(null, "Please Enter Name");
+                    JOptionPane.showMessageDialog(null,"Please Enter Name");
                 }
 
             }
@@ -147,6 +147,7 @@ public class Menu extends JMenu {
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).pauseTowerSound();
                         }
+                        gui.pauseTroopSound();
                     }
                     if(sounds.isPlaying()){
                         sounds.pauseMusic();
@@ -158,6 +159,7 @@ public class Menu extends JMenu {
                 }
                 else {
                     pauseMusic = false;
+                    gui.resumeMainSound();
                     if(Environment.isRunning()){
                         gui.resumeMainSound();
 
@@ -172,6 +174,7 @@ public class Menu extends JMenu {
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).resumeTowerSound();
                         }
+                        gui.resumeTroopSound();
                     }
 
                     mute.setText("Mute");
