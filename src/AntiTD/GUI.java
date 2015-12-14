@@ -451,7 +451,7 @@ public class GUI {
         }
         JTextPane textPane = new JTextPane();
         textPane.setBackground(Color.black);
-        this.appendToPane(textPane, "<html><font-size=6>Player highscore</font></html>", Color.white);
+        this.appendToPane(textPane, "Player highscore", Color.white);
         topPanel.add(textPane, BorderLayout.CENTER);
 
         scoreTable.setModel(model);
@@ -474,6 +474,7 @@ public class GUI {
     }
     private void appendToPane(JTextPane tp, String msg, Color c)
     {
+        Font f = new Font(Font.SANS_SERIF, 3 ,5);
         StyleContext sc = StyleContext.getDefaultStyleContext();
         AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
 
