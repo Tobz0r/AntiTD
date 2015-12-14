@@ -65,6 +65,7 @@ public abstract class Troop implements MovableGameObject {
         this.speed = speed;
         this.history = new Stack<Tile>();
         this.history.push(pos);
+        this.nextTile = getNextTile();
         slowed = false;
     }
 
@@ -129,17 +130,17 @@ public abstract class Troop implements MovableGameObject {
         Tile[] neigbors;
         neigbors = history.peek().getNeighbors2();
 
-        Tile nextTile = null;
+        Tile returnTile = null;
 
         for (Tile tile : neigbors) {
             if (tile.isMoveable()) {
                 if (history.search(tile) == -1) {
-                    nextTile = tile;
+                    returnTile = tile;
                     break;
                 }
             }
         }
-        return nextTile;
+        return returnTile;
     }
 
     @Override
