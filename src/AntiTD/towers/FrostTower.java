@@ -109,7 +109,6 @@ public class FrostTower extends Tower{
         if (target != null) {
 
             if(!target.isSlowed()) {
-                System.out.println("hola");
                 //target.slowSpeed();
             }
             this.aggroTarget();

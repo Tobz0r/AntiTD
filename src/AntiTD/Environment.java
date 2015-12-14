@@ -385,4 +385,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     public void update(Observable o, Object arg) {
         credits+=(int)arg;
     }
+    public void setPaused(boolean paused){
+        handler.setIsPaused(paused);
+    }
 }

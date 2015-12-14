@@ -419,6 +419,11 @@ public class GUI {
     public ArrayList getTowers(){
         return env.getTowers();
     }
-
+    public void pauseTroopSound(){
+        env.setPaused(true);
+    }
+    public void resumeTroopSound(){
+        env.setPaused(false);
+    }
 }
 

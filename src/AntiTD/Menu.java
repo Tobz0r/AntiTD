@@ -144,6 +144,7 @@ public class Menu extends JMenu {
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).pauseTowerSound();
                         }
+                        gui.pauseMainSound();
                     }
 
                     mute.setText("Unmute");
@@ -156,6 +157,7 @@ public class Menu extends JMenu {
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).resumeTowerSound();
                         }
+                        gui.resumeMainSound();
                     }
 
                     mute.setText("Mute");
