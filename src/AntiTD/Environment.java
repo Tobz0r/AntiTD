@@ -310,14 +310,13 @@ public class Environment extends JPanel implements Runnable,Observer {
             if((mapNr+1)>levels.size()-1) {
                 sounds.music("music/gameover.wav",false);
                 gui.pauseMainSound();
-                // STÄNGER AV TILLS VIDARE
                 try {
                     DBModel dbEntry = db.getHighscore(gui.getPlayerName());
                     if (dbEntry.getScore() < handler.getVictoryScore()) {
                         db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
                     }
 
-                } catch (DatabaseEntryDoesNotExists databaseEntryDoesNotExists) {
+                } catch (DatabaseEntryDoesNotExists e) {
                     db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
                 }
 

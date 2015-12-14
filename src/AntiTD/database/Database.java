@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class Database {
     private static String dbURL = "jdbc:derby:highscoresDB;create=true;user=me;password=mine";
     private static String tableName = "highscores";
-    // jdbc Connection
     private Connection conn = null;
     private Statement stmt = null;
     private PreparedStatement prepStmt = null;
@@ -18,9 +17,6 @@ public class Database {
 
     private final static String sqlAddScore =
             "INSERT INTO " + tableName + "(name, score) VALUES (?,?)";
-
-    private final static String sqlAddScore2 =
-            "INSERT INTO " + tableName + " VALUES (null, ?,?)";
 
     private final static String sqlGetId =
             "SELECT id FROM "+tableName+" WHERE name=?";
@@ -174,10 +170,10 @@ public class Database {
      */
     public synchronized void printHighscores(){
         ArrayList<DBModel> highscores = getHighscores();
-        System.out.print("ID\t\t"+"NAME\t\t"+"SCORE\t\t\n");
+        System.out.print("ID\t\t"+"NAME\t\t\t\t"+"SCORE\t\t\n");
         System.out.println("-------------------------------------------------");
         for (DBModel model : highscores) {
-            System.out.println(model.getId() + "\t\t" + model.getPlayername() + "\t\t" + model.getScore());
+            System.out.println(model.getId() + "\t\t" + model.getPlayername() + "\t\t\t\t" + model.getScore());
         }
         System.out.println();
     }
