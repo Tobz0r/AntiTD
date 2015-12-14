@@ -74,8 +74,8 @@ public abstract class Troop implements MovableGameObject {
     /**
      * ** CAUTION **
      * Should be used in implemented tick method and no where else.
-     *
-     * Moves the troop to next tile according to speed when accumulated
+     * <br /><br />
+     * Moves the troop to next tile according to speed, when accumulated
      * speed reaches the value of 100 the position will be updated.
      */
     protected void move() {
@@ -156,14 +156,15 @@ public abstract class Troop implements MovableGameObject {
         }
     }
 
-    /**
-     * Get if this object has reached the goal.
-     * @return
-     */
+    @Override
     public boolean hasReachedGoal() {
         return hasReacedGoal;
     }
 
+    /**
+     * Get current health of object.
+     * @return health value
+     */
     public int getHealth() {
         return this.health;
     }

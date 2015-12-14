@@ -1,50 +1,43 @@
 package AntiTD.towers;
 
-import AntiTD.GameObject;
 import AntiTD.MovableGameObject;
 import AntiTD.Position;
-import AntiTD.tiles.GoalTile;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by dv13tes on 2015-12-10.
  */
-
-/*
-Velocity
-(-1 / dist ) * deltaX
- */
 public class Projectile implements MovableGameObject {
 
     private Troop target;
-
     private Tower tower;
-
     private final double speed = 1;
     private double moveProgres;
-
     private BufferedImage img;
 
+    /**
+     * Constructor for <b>Projectile</b> object
+     * @param target destination object
+     * @param tower originator object
+     * @param img image for rendering
+     */
     public Projectile(Troop target, Tower tower, BufferedImage img){
         super();
         this.target=target;
         this.tower=tower;
         this.img=img;
-
     }
 
-    public void damage(){
-        tower.attack(target,tower.getDamage());
+    /**
+     * Get the destination target.
+     * @return the target
+     */
+    public Troop getTarget(){
+        return target;
     }
-
 
     @Override
     public void tick() {
@@ -61,7 +54,7 @@ public class Projectile implements MovableGameObject {
 
     @Override
     public boolean isAlive() {
-        return moveProgres > 100 ? false : true;
+        return moveProgres < 100;
     }
 
     @Override
@@ -84,9 +77,6 @@ public class Projectile implements MovableGameObject {
         return tower.getTilePosition();
     }
 
-    public Troop getTarget(){
-        return target;
-    }
     @Override
     public Tile getMoveToPosition() {
         return target.getTilePosition();

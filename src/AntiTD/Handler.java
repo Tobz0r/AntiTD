@@ -182,8 +182,8 @@ public class Handler extends Observable {
             double width = gameObject.getTilePosition().getSize().getWidth();
             double height = gameObject.getTilePosition().getSize().getHeight();
 
-            Long troopSizeX = new Long(Math.round(width * scale));
-            Long troopSizeY = new Long(Math.round(height * scale));
+            Long troopSizeX = Math.round(width * scale);
+            Long troopSizeY = Math.round(height * scale);
 
             int xOffset = (new Long(Math.round((width/2)-(troopSizeY/2)))).intValue();
             int yOffset = (new Long(Math.round((height/2)-(troopSizeX/2)))).intValue();
@@ -196,7 +196,6 @@ public class Handler extends Observable {
                 MovableGameObject mgo = (MovableGameObject) gameObject;
                 Tile moveTo = mgo.getMoveToPosition();
                 position = calculatePosition(mgo, moveTo);
-
                 if(mgo instanceof Projectile){
                     Projectile p = (Projectile) mgo;
                     position = calculatePosition(mgo, p.getTarget());
@@ -228,10 +227,10 @@ public class Handler extends Observable {
         double x_global = x_start - x_to;
         double y_global = y_start - y_to;
 
-        Long x_current = Math.round(x_start - (x_global * progress.doubleValue()));
-        Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
+        Long x_current = Math.round(x_start - (x_global * progress));
+        Long y_current = Math.round(y_start - (y_global * progress));
 
-        return new PositionPair(new Long(x_current), new Long(y_current));
+        return new PositionPair(x_current, y_current);
     }
 
     private PositionPair calculatePosition(MovableGameObject thisGO, Tile moveTo) {
@@ -270,8 +269,8 @@ public class Handler extends Observable {
      * Get accumulated score.
      * <br /><br />
      * <b>**Note**</b><br />
-     * The score is restored when <b>reset()</b> method is called.
-     * @return
+     * The score is restored when <b>resetScore()</b> method is called.
+     * @return the score
      */
     public synchronized int getVictoryScore() {
         return score;
