@@ -21,5 +21,4 @@ public interface GameObject{
     Position getPosition();
 
     Tile getTilePosition();
-    Tile getMoveToPosition();
 }

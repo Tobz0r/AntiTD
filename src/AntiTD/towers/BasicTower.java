@@ -218,10 +218,10 @@ public class BasicTower extends Tower {
 
     }
 
-
+    /*
     @Override
     public Tile getMoveToPosition() {
         return this.posTile;
     }
-
+    */
 }

@@ -473,10 +473,10 @@ public class GUI {
             scoreFrame.add(scoreTable, BorderLayout.CENTER);
             scoreFrame.setVisible(true);
 
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Database is busy please try again later! Check if you have another instance of the game running! ");
-
-
+        }catch (NoDatabaseConnectionException e){
+            JOptionPane.showMessageDialog(null,"Game running in offline mode, nothing is saved to the database.\n" +
+                    "To fix this:\n" +
+                    "Make sure you are only running one instance of the game and restart.\n");
         }
 
 

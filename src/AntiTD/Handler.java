@@ -163,8 +163,7 @@ public class Handler extends Observable {
     }
 
     public synchronized void render(Graphics g) {
-        for (int i = 0; i < objects.size(); i++) {
-            GameObject gameObject = objects.get(i);
+        for (GameObject gameObject : objects) {
             boolean shouldDraw = true;
             if (gameObject instanceof Troop) {
                 Troop troop = (Troop) gameObject;
@@ -173,11 +172,12 @@ public class Handler extends Observable {
                 }
             }
             if (shouldDraw) {
+                /*
                 Tile moveTo=null;
                 moveTo = gameObject.getMoveToPosition();
                 if(moveTo==null)
                     continue;
-
+                */
 
 
 
@@ -190,8 +190,6 @@ public class Handler extends Observable {
 
                 Long troopSizeX = new Long(Math.round(width * scale));
                 Long troopSizeY = new Long(Math.round(height * scale));
-                //int x = Math.round(position.getX()*size+(size*progress));
-                //int y = Math.round(position.getY()*size+(size*progress));
 
                 int xOffset = (new Long(Math.round((width/2)-(troopSizeY/2)))).intValue();
                 int yOffset = (new Long(Math.round((height/2)-(troopSizeX/2)))).intValue();
@@ -202,6 +200,7 @@ public class Handler extends Observable {
 
                 if (gameObject instanceof MovableGameObject) {
                     MovableGameObject mgo = (MovableGameObject) gameObject;
+                    Tile moveTo = mgo.getMoveToPosition();
                     position = calculatePosition(mgo, moveTo);
 
                     if(mgo instanceof Projectile){
