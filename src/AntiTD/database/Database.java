@@ -19,6 +19,9 @@ public class Database {
     private final static String sqlAddScore =
             "INSERT INTO " + tableName + "(name, score) VALUES (?,?)";
 
+    private final static String sqlAddScore2 =
+            "INSERT INTO " + tableName + " VALUES (null, ?,?)";
+
     private final static String sqlGetId =
             "SELECT id FROM "+tableName+" WHERE name=?";
 
@@ -97,8 +100,8 @@ public class Database {
                     prepStmt.close();
 
                     prepStmt = conn.prepareStatement(sqlUpdateScore);
-                    prepStmt.setInt(1, score);
-                    prepStmt.setInt(2, id);
+                    prepStmt.setInt(2, score);
+                    prepStmt.setInt(1, id);
                     prepStmt.execute();
                     prepStmt.close();
                 } catch (SQLException e) {
@@ -122,8 +125,9 @@ public class Database {
             prepStmt = conn.prepareStatement(sqlGetScore);
             prepStmt.setString(1,playername);
             ResultSet results = prepStmt.executeQuery();
-            results.next();
-            highscore = new DBModel(results.getInt(1), results.getString(2), results.getInt(1));
+            if (results.next()) {
+                highscore = new DBModel(results.getInt(1), results.getString(2), results.getInt(3));
+            }
             results.close();
             stmt.close();
         } catch (SQLException sqlExcept) {
@@ -160,7 +164,7 @@ public class Database {
     /**
      * prints highscore
      */
-    private synchronized void printHighscores(){
+    public synchronized void printHighscores(){
         ArrayList<DBModel> highscores = getHighscores();
         System.out.print("ID\t\t"+"NAME\t\t"+"SCORE\t\t\n");
         System.out.println("-------------------------------------------------");
