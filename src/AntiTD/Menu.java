@@ -146,7 +146,7 @@ public class Menu extends JMenu {
                         }
                         gui.pauseTroopSound();
                     }
-
+ 
                     mute.setText("Unmute");
                     mutesound=false;
                 }
