@@ -1,9 +1,9 @@
 package AntiTD;
 
+import AntiTD.database.*;
 import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
-import AntiTD.towers.BasicTower;
 import AntiTD.towers.FrostTower;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.Executor;
@@ -26,16 +25,21 @@ import java.util.concurrent.Executors;
  */
 public class Environment extends JPanel implements Runnable,Observer {
 
+    private Database db;
+    private boolean onlineMode;
+
     private int victoryScore;
     private final int minimumCredits=174;
     private int finalScore=0;
     private int credits;
     private int mapNr=0;
     private int restartMoney;
+    private boolean playMusic = true;
 
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
     private ArrayList<CrossroadSwitch> switches;
     private ArrayList<Level> levels;
+    private ArrayList<Tower> towers = new ArrayList<>();
 
     private Handler handler;
 
@@ -66,7 +70,7 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     public Environment(GUI gui, File fp){
         super(new BorderLayout());
-
+        thread=null;
         this.gui=gui;
         gameOver=false;
         handler=new Handler(0,this);
@@ -75,12 +79,12 @@ public class Environment extends JPanel implements Runnable,Observer {
         level=levels.get(mapNr);
         map=level.getMap();
         setUpNeighbors();
-        credits=level.getStartingCredits();
+        credits= 1000000;//level.getStartingCredits();
         Level.setCurrentMap(map);
         victoryScore=level.getVictoryPoints();
         try {
-            basicTower= ImageIO.read(new File("sprites/basictower.gif"));
-            frostTower= ImageIO.read(new File("sprites/frostTower.png"));
+            basicTower= ImageIO.read(new File("sprites/basic.png"));
+            frostTower= ImageIO.read(new File("sprites/frost.gif"));
             arrows= ImageIO.read(new File("sprites/arrowb.gif"));
             switches=level.setUpCrossroad();
         } catch (IOException e) {
@@ -94,7 +98,12 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
         setLayout(new GridLayout(1, 1));
         setPreferredSize(new Dimension(map.length * 70, map[0].length * 70));
-
+        try {
+            db = new Database();
+            onlineMode = true;
+        } catch (DatabaseConnectionIsBusyException | NoDatabaseDriverInstalledException e) {
+            onlineMode = false;
+        }
     }
 
     private void setUpNeighbors() {
@@ -121,6 +130,13 @@ public class Environment extends JPanel implements Runnable,Observer {
             }
         }
     }
+    public synchronized ArrayList<DBModel> getHighScores() throws NoDatabaseConnectionException{
+        if (onlineMode) {
+            return db.getHighscores();
+        } else {
+            throw new NoDatabaseConnectionException();
+        }
+    }
 
     Level getLevel(){
         return level;
@@ -128,8 +144,10 @@ public class Environment extends JPanel implements Runnable,Observer {
     public synchronized void start(){
         paused=false;
         gameRunning=true;
-        thread=new Thread(this);
-        thread.start();
+        if (thread==null) {
+            thread = new Thread(this);
+            thread.start();
+        }
     }
     public synchronized void stop(){
         try{
@@ -139,7 +157,6 @@ public class Environment extends JPanel implements Runnable,Observer {
             e.printStackTrace();
         }
         catch (NullPointerException e ){
-            System.out.println("eliashej");
 
         }
     }
@@ -161,7 +178,7 @@ public class Environment extends JPanel implements Runnable,Observer {
        for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j].landOn(g);
-            }
+            } 
         }
         handler.render(g);
 
@@ -191,18 +208,6 @@ public class Environment extends JPanel implements Runnable,Observer {
                 if (! isPaused()) {
                     finalScore++;
                     gui.updateScore();
-                    /* Varför skall dettas köras osäkert trådat? Detta gör ju att tick kan köras parallellt eller?
-                     * Om så är fallet kommer objectslistan manipuleras samtidigt, är det inte bättre att köra
-                     * det "som vanligt" och vara säker på att det inte händer parallellt eftersom Environment
-                     * redan är en egen tråd. Förklara gärna.
-                     *
-                     * För att vi måste ha det trådat :) och vi har tillräcklgit med synkronoserade lås för att den
-                     * är trådsäker, finns ingen möjlighet till varken deadlocks eller race condition :)
-                     * Är väl medveten om att det blir enklare med bara en tråd men när det står klart och tydligt i
-                     * spesen att vi ska ha flera trådar som arbetar samtidigt har vi nog inget annat val än att
-                     * försöka få en trådad handlar om inte du har något annat förslag på något vi kan tråda. Att
-                     * Enviroment är enda tråden tror jag inte räcker för att det kravet ska täckas
-                     */
                     runner.execute(new Runnable() {
                         public void run() {
                             handler.tick();
@@ -216,7 +221,7 @@ public class Environment extends JPanel implements Runnable,Observer {
                         ticks=0;
                     }
 
-                    
+
                 }
 
             } catch (InterruptedException e) {
@@ -233,6 +238,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     }
     public void addTower(Tower tower){
         handler.addObject(tower);
+        towers.add(tower);
     }
  /*   public void addBullets(Bullets bullets){
         handler.addObject(bullets);
@@ -247,17 +253,30 @@ public class Environment extends JPanel implements Runnable,Observer {
     public static void resumeGame(){
         paused=false;
     }
-    private void incrementLevel(){
+    private void incrementLevel(boolean restart, boolean gameOver, boolean wonMap){
         pauseGame();
+        int currentMap=mapNr;
         mapNr++;
-        if(mapNr>levels.size()-1){
-            int reply = JOptionPane.showConfirmDialog(null, "EZ GAEM, You're score : " +
-                    (handler.getVictoryScore()+credits) + "Would you laeik to play again?",
-                    "GG EZ!", JOptionPane.YES_NO_OPTION);
+        if(mapNr>levels.size()-1 || restart){
+            restart = !gameOver;
+            int reply;
+            if(restart){
+                reply=0;
+                System.out.println("123");
+            }
+            else{
+                reply=JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
+                        "GG EZ!", JOptionPane.YES_NO_OPTION);
+            }
             if (reply == JOptionPane.YES_OPTION) {
-                mapNr=0;
+                if(sounds.isPlaying())
+                 sounds.pauseMusic();
+                gui.resumeMainSound();
+                mapNr=restart ? currentMap : 0;
+                mapNr=wonMap ? currentMap+1 :mapNr;
                 handler.resetScore();
                 resetTeleport();
+                restart=true;
             }
             else {
                 JOptionPane.showMessageDialog(null, "GOODBYE");
@@ -273,49 +292,78 @@ public class Environment extends JPanel implements Runnable,Observer {
         Level.setCurrentMap(map);
         credits+=level.getStartingCredits();
         restartMoney=credits;
+        credits= restart ? level.getStartingCredits() : restartMoney;
         setUpNeighbors();
-        Troop.clearTeleports();
+        //Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
         initTowers();
         resumeGame();
+        gameRunning=true;
 
     }
 
-    public void restartLevel(){
-        pauseGame();
-        handler.resetScore();
-        handler.reset();
-        credits=restartMoney;
-        Troop.clearTeleports();
-        resumeGame();
-
+    public void restartLevel(boolean restart){
+        handler.resetGame();
+        incrementLevel(restart,false,false);
     }
 
     private void finishedLevel(long wait){
-        if(handler.getVictoryScore() >= victoryScore){
-            handler.reset();
-            int reply = JOptionPane.showConfirmDialog(null, "Would you like to replay this map again?",
-                    "GG EZ!", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                mapNr--;
-                handler.resetScore();
-                resetTeleport();
-            }
-            incrementLevel();
-        }
-        else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
-            gui.pauseMainSound();
-            sounds.music("music/gameover.wav",false,false);
-            gameRunning=false;
-            JOptionPane.showMessageDialog(null, "Game over!! xD");
-            sounds.pauseMusic();
-            gui.startScreen();
+        System.out.println("ELIASHEJ");
 
+        if(handler.getVictoryScore() >= victoryScore){
+            handler.resetGame();
+            System.out.println("ELIASHEJ");
+
+            if((mapNr+1)>levels.size()-1) {
+                if(playMusic){
+                    sounds.music("music/gameover.wav",false);
+                }
+                gui.pauseMainSound();
+                if (onlineMode) {
+                    try {
+                        DBModel dbEntry = db.getHighscore(gui.getPlayerName());
+                        if (dbEntry.getScore() < handler.getVictoryScore()) {
+                            db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
+                        }
+
+                    } catch (DatabaseEntryDoesNotExistsException e) {
+                        db.insertOrUpdateHighscore(gui.getPlayerName(), handler.getVictoryScore());
+                    }
+                }
+
+                int reply = JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
+                        "GG EZ!", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    sounds.pauseMusic();
+                    gui.resumeMainSound();
+                    mapNr = -1;
+                    incrementLevel(true,false,true);
+
+                } else {
+                    System.exit(0);
+                }
+            }
+            else {
+                incrementLevel(false, false,false);
+            }
+        }
+        else if(!handler.hasAliveTroops() && (credits <= minimumCredits)){
+            gui.pauseMainSound();
+            sounds.music("music/gameover.wav",false);
+            gameRunning=false;
+            incrementLevel(true, true,false);
         }
     }
+    public void pauseEnvSound(){
+        playMusic = false;
+    }
+    public void resumeEnvSound(){
+        playMusic = true;
+    }
+
 
     public int getScore() {
         return handler.getVictoryScore();
@@ -324,24 +372,28 @@ public class Environment extends JPanel implements Runnable,Observer {
         return credits;
     }
     public boolean buyUnit(int amount){
-        if((credits-amount)>0) {
+        //if((credits-amount)>0) {
             credits -= amount;
             return true;
-        }
-        return false;
+        //}
+        //return false;
     }
     private void initTowers(){
+        towers.clear();
         Tile[][] currentMap = Level.getCurrentMap();
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
                   //  Bullets bullet = new Bullets(arrows   ,1,5,currentMap[i][j]);
                  //   addBullets(bullet);
-                    addTower(new BasicTower(basicTower, currentMap[i][j], getTroops(),handler));
+                    addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(),handler));
                     break;
                 }
             }
         }
+    }
+    public ArrayList getTowers(){
+        return towers;
     }
     private void resetTeleport(){
         for(int i=0; i < levels.size(); i++){
@@ -357,5 +409,8 @@ public class Environment extends JPanel implements Runnable,Observer {
     @Override
     public void update(Observable o, Object arg) {
         credits+=(int)arg;
+    }
+    public void setPaused(boolean paused){
+        handler.setIsPaused(paused);
     }
 }

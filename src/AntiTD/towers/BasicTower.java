@@ -7,9 +7,11 @@ import AntiTD.tiles.Tile;
 import AntiTD.towers.*;
 import AntiTD.troops.Troop;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -28,6 +30,7 @@ public class BasicTower extends Tower {
     private Troop target;
     private String type = "BasicTower";
     private int result;
+    private BufferedImage projectileImg;
     private Handler handler;
     int bullets;
     int count;
@@ -49,6 +52,12 @@ public class BasicTower extends Tower {
         this.posTile = pos;
         count = 0;
         cooldown=0;
+        try {
+            projectileImg=ImageIO.read(new File("sprites/fireball.gif"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void initScan() {
@@ -78,23 +87,31 @@ public class BasicTower extends Tower {
 
     public void aggroTarget() {
         if (target != null) {
-            Projectile bullet=new Projectile(target,this);
+            //Projectile bullet=new Projectile(target,this);
             if (checkIfUnitIsClose(target) && target.isAlive() && cooldown> 200) {
-                sounds.music("music/gun.wav",false,false);
-                attack(target, getDamage());
-                handler.addObject(bullet);
+                sounds.music("music/lazer.wav",false);
+                //attack(target, getDamage());
+                handler.addObject(new Projectile(target,this,projectileImg));
                 cooldown=0;
             } else {
+                target = null;
                 //System.out.println("else");
+                /*
                 if (!target.isAlive()) {
                     removeTroopFromList(target);
                 }
                 target = null;
                 getInRange().clear();
+                */
             }
         }
     }
-
+    public void pauseTowerSound(){
+        sounds.pauseMusic();
+    }
+    public void resumeTowerSound(){
+        sounds.resumeMusic(true);
+    }
     public void createTower(Tower tower, Tile pos) {
         //Tower temp = new BasicTower(img,pos);
         tower.init(getTroopsList(), getTowerList(), pos);

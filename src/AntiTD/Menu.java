@@ -1,8 +1,11 @@
 package AntiTD;
 
+import AntiTD.towers.Tower;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.*;
 import javax.swing.text.html.ObjectView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * @author dv13trm
@@ -23,8 +27,13 @@ public class Menu extends JMenu {
     private JMenuBar startMenuBar = new JMenuBar();
     private JFrame frame;
     private GUI gui;
+
+    private ArrayList<Tower> towerList;
+    private boolean pauseMusic = false;
     private boolean pause = true;
     private boolean mutesound = true;
+    private boolean mainMusic = false;
+    private Environment env;
     //helpframe
     private JTextArea helpText;
     private JFrame helpFrame = new JFrame();
@@ -44,8 +53,9 @@ public class Menu extends JMenu {
 
 
 
-    public Menu(JFrame frame, GUI gui) {
+    public Menu(JFrame frame, GUI gui, Environment env) {
         super("Start");
+        this.env = env;
         this.gui = gui;
         this.frame = frame;
     }
@@ -87,10 +97,9 @@ public class Menu extends JMenu {
                     gui.restartGame();
                     mute.setText("Mute");
                     newGame.setText("Restart");
-                } else {
-                    gui.startGame();
-                    newGame.setText("Restart");
-                    mute.setText("Mute");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null,"Please Enter Name");
                 }
 
             }
@@ -99,7 +108,8 @@ public class Menu extends JMenu {
         mainMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                mainMusic = true;
+                gui.pauseMainSound();
                 newGame.setText("New Game");
                 gui.startScreen();
             }
@@ -116,13 +126,13 @@ public class Menu extends JMenu {
                 if(pause){
                     Environment.pauseGame();
                     pauseGame.setText("Resume");
-                    sounds.pauseMusic();
+                    gui.pauseMainSound();
                     pause=false;
                 }
                 else{
                     Environment.resumeGame();
                     pauseGame.setText("Pause");
-                    sounds.resumeMusic(true);
+                    gui.resumeMainSound();
                     pause=true;
                 }
             }
@@ -130,13 +140,39 @@ public class Menu extends JMenu {
         mute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                towerList = gui.getTowers();
                 if(mutesound){
-                    sounds.pauseMusic();
+                    mainMusic=false;
+                    pauseMusic = true;
+                    gui.pauseMainSound();
+                    env.pauseEnvSound();
+                    if(Environment.isRunning()){
+                        for(int i=0; i < towerList.size(); i++){
+                            towerList.get(i).pauseTowerSound();
+                        }
+                        gui.pauseTroopSound();
+                    }
+
+
+
                     mute.setText("Unmute");
                     mutesound=false;
                 }
                 else {
-                    sounds.resumeMusic(true);
+                    pauseMusic = false;
+                    env.resumeEnvSound();
+                    if(Environment.isRunning()){
+                        gui.resumeMainSound();
+                        for(int i=0; i < towerList.size(); i++){
+                            towerList.get(i).resumeTowerSound();
+                        }
+
+                        gui.resumeTroopSound();
+                    }
+                    if(mainMusic){
+                       gui.playMusic();
+                    }
+
                     mute.setText("Mute");
                     mutesound = true;
                 }
@@ -146,6 +182,9 @@ public class Menu extends JMenu {
 
         startMenuBar.add(this);
     }
+    public boolean musicStatus(){
+        return pauseMusic;
+    }
 
     public void statMenu(){
         frame.setJMenuBar(statMenuBar);
@@ -153,9 +192,12 @@ public class Menu extends JMenu {
         //lägga till menyitems
         help = statmenu.add("Help");
         about = statmenu.add("About");
+
+
         nameChange = statmenu.add("Change name");
-        help.setBackground(Color.white);
         nameChange.setBackground(Color.white);
+
+        help.setBackground(Color.white);
         about.setBackground(Color.white);
 
         help.addActionListener(new ActionListener() {
@@ -174,7 +216,12 @@ public class Menu extends JMenu {
         nameChange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                gui.changeName(JOptionPane.showInputDialog("Enter name"));
+                if(Environment.isRunning()){
+                    gui.changeName(JOptionPane.showInputDialog("Enter name"));
+                }
+                else{
+                    JOptionPane.showMessageDialog(null,"Submit name first!");
+                }
             }
         });
 
@@ -182,6 +229,7 @@ public class Menu extends JMenu {
     }
 
     private void callHelpFrame(){
+        ArrayList<ImageIcon> icons = new ArrayList<>();
         //ogre
         BufferedImage ogre = null;
         try {
@@ -191,6 +239,7 @@ public class Menu extends JMenu {
         }
         ogre= (BufferedImage) resizeImage(ogre,25,25);
         ImageIcon ogree= new ImageIcon(ogre);
+        icons.add(ogree);
 
 
         //dragon
@@ -202,6 +251,7 @@ public class Menu extends JMenu {
         }
         dragon= (BufferedImage) resizeImage(dragon,25,25);
         ImageIcon dragonn= new ImageIcon(dragon);
+        icons.add(dragonn);
 
 
         //earthElemental
@@ -213,6 +263,7 @@ public class Menu extends JMenu {
         }
         earth= (BufferedImage) resizeImage(earth,25,25);
         ImageIcon earthh= new ImageIcon(earth);
+        icons.add(earthh);
 
         //teleporter
         BufferedImage tele = null;
@@ -223,7 +274,7 @@ public class Menu extends JMenu {
         }
         tele= (BufferedImage) resizeImage(tele,50,50);
         ImageIcon telee= new ImageIcon(tele);
-
+        icons.add(telee);
 
 
         //priceTable
@@ -242,8 +293,64 @@ public class Menu extends JMenu {
             }
 
         }; */
-        priceTable = new JTable(5,2);
-        priceTable.setValueAt(ogree, 1,1);
+        Object[][] data ={ {"Ogre",ogre},{"earth",earth},
+        {"teleport",tele},{"dragon",dragon}
+        };
+
+        priceTable = new JTable();
+       // priceTable.setValueAt(ogree, 1,1);
+        JTable unitTable = new JTable();
+
+        DefaultTableModel model = new DefaultTableModel(columns,0){
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if(getRowCount() > 0){
+                    return getValueAt(0,columnIndex).getClass();
+
+                }
+                return super.getColumnClass(columnIndex);
+            }
+        };
+        String[] units = {"Ogre", "Dragon","EarthElement","Teleport"};
+        ArrayList<JTextArea> textAreas = new ArrayList<>();
+        JTextArea ogreText = new JTextArea("ogreText");
+        ogreText.append("<html>Ogre <br> HP:200 \n Speed = 1</html>");
+        textAreas.add(ogreText);
+        JTextArea dragonText = new JTextArea("ogreText");
+        dragonText.append("Ogre \n HP:200 \n Speed = 1");
+        textAreas.add(dragonText);
+        JTextArea earthText = new JTextArea("ogreText");
+        earthText.append("Ogre \n HP:200 \n Speed = 1");
+        textAreas.add(earthText);
+        JTextArea teleText = new JTextArea("ogreText");
+        teleText.append("Teleport \n HP:200 \n Speed = 1");
+        textAreas.add(teleText);
+
+
+
+        int y1 = 20;
+        for(int row = 0; row <icons.size(); row++){
+            Object[] rowData = {textAreas.get(row), icons.get(row)};
+            model.addRow(rowData);
+            //model.addColumn(units);
+        }
+
+        priceTable.setModel(model);
+        priceTable.setRowHeight(240);
+        priceTable.setBackground(Color.white);
+        priceTable.setValueAt("<html><body style=background-color:lightgrey>" +
+                " <font size= 6> Health: 5 <br> Speed: 5 <br>" +
+                "Cost: $175" +
+                "</font></body>" +
+                "</html>", 0,0);
+        priceTable.setValueAt("<html> <font size= 6> Health: 5 <br> Speed: 10 <br>" +
+                "Cost: $325</font></html>", 1,0);
+        priceTable.setValueAt("<html><font size= 6 style= Lucida Console>  Health: 100 <br> Speed: 1 <br>" +
+                "Cost: $450 </font></html>", 2,0);
+        priceTable.setValueAt("<html><font size= 6>  Health: 10 <br> Speed: 2 <br> Teleport distance = 3 <br>" +
+                "Cost: $4000</font></html>", 3,0);
+        /*unitTable.setModel(model);
+        unitTable.setRowHeight(((ImageIcon)model.getValueAt(0,1)).getIconHeight());*/
 
 
 
@@ -254,7 +361,8 @@ public class Menu extends JMenu {
 
 
         helpPanel = new JPanel();
-        helpPanel.setBackground(Color.yellow);
+        helpPanel.setBackground(Color.black);
+       // helpPanel.add(unitTable.getTableHeader());;
         Font font = new Font("Verdana",Font.BOLD,25);
         //textfältet
         helpText = new JTextArea(15,15);
@@ -273,18 +381,44 @@ public class Menu extends JMenu {
                 helpFrame.dispatchEvent(new WindowEvent(helpFrame, WindowEvent.WINDOW_CLOSING));
             }
         });
-        helpPanel.add(helpButton);
+        JTextPane textPane = new JTextPane();
+        textPane.setBackground(Color.black);
+        this.appendToPane(textPane, "To Play start by choosing a name then you spawn troops with your " +
+                "starting money. You will " +
+                "get money if your unit reach goal", Color.white);
+        JTextArea informationArea = new JTextArea();
+        /*informationArea.setText("To Play start by choosing a name then you spawn troops with your " +
+                "starting money. You will " +
+                "get money if your unit reach goal");*/
+        informationArea.setBackground(Color.black);
+        informationArea.setSelectedTextColor(Color.white);
+        helpPanel.add(textPane, BorderLayout.SOUTH);
+        helpPanel.add(helpButton, BorderLayout.NORTH);
 
         helpFrame.setSize(1000, 1000);
-        helpFrame.add(helpText);
+        /*helpFrame.add(helpText);
         helpScroll = new JScrollPane(helpText);
-        helpFrame.add(helpScroll, BorderLayout.CENTER);
+        helpFrame.add(helpScroll, BorderLayout.CENTER);*/
 
        // helpFrame.getContentPane().setBackground(Color.yellow);
         helpFrame.add(helpPanel, BorderLayout.SOUTH);
         helpFrame.add(priceTable, BorderLayout.CENTER);
         helpFrame.setVisible(true);
     }
+    private void appendToPane(JTextPane tp, String msg, Color c)
+    {
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
+
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Verdana");
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+
+        int len = tp.getDocument().getLength();
+        tp.setCaretPosition(len);
+        tp.setCharacterAttributes(aset, false);
+        tp.replaceSelection(msg);
+    }
+
     private Image resizeImage(Image myImg, int w, int h){
         BufferedImage resizeImg = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = resizeImg.createGraphics();

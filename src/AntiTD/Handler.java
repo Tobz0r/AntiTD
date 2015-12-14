@@ -14,12 +14,15 @@ import java.util.*;
 public class Handler extends Observable {
     private LinkedList<GameObject> objects;
     private int tid;
+    private int aliveCount;
     private int score;
     private boolean resetFlag;
     private LinkedList<GameObject> aliveTroops;
     private LinkedList<GameObject> towers;
     private LinkedList<GameObject> objectsToAdd;
     private LinkedList<GameObject> objectsToRemove;
+    private Sounds sounds = new Sounds();
+    private boolean isPaused=false;
 
 
 
@@ -33,19 +36,11 @@ public class Handler extends Observable {
         objectsToRemove = new LinkedList<>();
         score = 0;
         resetFlag = false;
+        aliveCount=0;
     }
 
-    public synchronized boolean hasAliveTroops() {
-        Iterator<GameObject> iter = objects.iterator();
-        while(iter.hasNext()) {
-            GameObject temp=iter.next();
-            if (temp instanceof Troop) {
-                if (((Troop) temp).isAlive()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public  boolean hasAliveTroops() {
+        return aliveCount>0;
     }
 
 
@@ -80,6 +75,9 @@ public class Handler extends Observable {
      * @param object object to add.
      */
     public synchronized void addObject(GameObject object) {
+        if(object instanceof  Troop){
+            aliveCount++;
+        }
         objectsToAdd.add(object);
     }
 
@@ -137,10 +135,20 @@ public class Handler extends Observable {
                     score += gameObject.getCurrentScore();
                     Troop t = (Troop) gameObject;
                     if (!t.isAlive()) {
+                        aliveCount--;
                         removeObject(gameObject);
+                        if(!isPaused) {
+                            sounds.music("music/deadman.wav", false);
+                        }
                     }
                     if(t.hasReacedGoal()){
                         update(t.getCurrentScore());
+                        removeObject(gameObject);
+                    }
+                }
+                if (gameObject instanceof Projectile) {
+                    Projectile p = (Projectile) gameObject;
+                    if (!p.isAlive()) {
                         removeObject(gameObject);
                     }
                 }
@@ -152,10 +160,6 @@ public class Handler extends Observable {
         }
         removeObjectsFromGame();
         addObjectsToGame();
-        if(resetFlag) {
-            resetGame();
-            resetFlag = false;
-        }
     }
 
     public synchronized void render(Graphics g) {
@@ -173,22 +177,9 @@ public class Handler extends Observable {
                 moveTo = gameObject.getMoveToPosition();
                 if(moveTo==null)
                     continue;
-                int sizeX = (int) gameObject.getTilePosition().getSize().getWidth();
-                int sizeY = (int) gameObject.getTilePosition().getSize().getHeight();
 
-                Position position = gameObject.getTilePosition().getPosition();
-                double x_start = (position.getX() * sizeX) * 1.0;
-                double y_start = (position.getY() * sizeY) * 1.0;
+                PositionPair position = calculatePosition(gameObject, moveTo);
 
-                double x_to = (moveTo.getPosition().getX() * sizeX) * 1.0;
-                double y_to = (moveTo.getPosition().getY() * sizeY) * 1.0;
-
-                Double progress = (gameObject.getMoveProgres() * 1.0) / 100.0;
-                double x_global = x_start - x_to;
-                double y_global = y_start - y_to;
-
-                Long x_current = Math.round(x_start - (x_global * progress.doubleValue()));
-                Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
 
                 double scale =gameObject instanceof Troop ? 0.4 : 0.7;
                 scale = gameObject instanceof Projectile ? 0.2 : scale;
@@ -199,13 +190,21 @@ public class Handler extends Observable {
 
                 Long troopSizeX = new Long(Math.round(width * scale));
                 Long troopSizeY = new Long(Math.round(height * scale));
-                    //int x = Math.round(position.getX()*size+(size*progress));
-                    //int y = Math.round(position.getY()*size+(size*progress));
+                //int x = Math.round(position.getX()*size+(size*progress));
+                //int y = Math.round(position.getY()*size+(size*progress));
 
                 int xOffset = (new Long(Math.round((width/2)-(troopSizeY/2)))).intValue();
                 int yOffset = (new Long(Math.round((height/2)-(troopSizeX/2)))).intValue();
-                g.drawImage(gameObject.getImage(),x_current.intValue()+xOffset, y_current.intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue(),null);
+
+                if(gameObject instanceof Projectile){
+                    Projectile p = (Projectile) gameObject;
+                    position = calculatePosition(gameObject, p.getTarget());
+                }
+
+                g.drawImage(gameObject.getImage(),position.getX().intValue()+xOffset, position.getY().intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue(),null);
                     //g.fillRect(x_current.intValue()+xOffset, y_current.intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue());
+
+                /*
                 if(gameObject instanceof Projectile){
                     if(x_global<=0 && y_global <= 0){
                         ((Projectile)gameObject).damage();
@@ -215,9 +214,59 @@ public class Handler extends Observable {
                         removeObject(gameObject);
                     }
                 }
+                */
 
-                }
+            }
         }
+    }
+
+
+    private PositionPair calculatePosition(GameObject thisGO, Tile moveTo) {
+        int sizeX = (int) thisGO.getTilePosition().getSize().getWidth();
+        int sizeY = (int) thisGO.getTilePosition().getSize().getHeight();
+
+        Position position = thisGO.getTilePosition().getPosition();
+        double x_start = (position.getX() * sizeX) * 1.0;
+        double y_start = (position.getY() * sizeY) * 1.0;
+
+        double x_to = (moveTo.getPosition().getX() * sizeX) * 1.0;
+        double y_to = (moveTo.getPosition().getY() * sizeY) * 1.0;
+
+        Double progress = (thisGO.getMoveProgres() * 1.0) / 100.0;
+        double x_global = x_start - x_to;
+        double y_global = y_start - y_to;
+
+        Long x_current = Math.round(x_start - (x_global * progress.doubleValue()));
+        Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
+
+
+
+        return new PositionPair(new Long(x_current), new Long(y_current));
+    }
+
+    private PositionPair calculatePosition(GameObject thisGO, GameObject moveTo) {
+        PositionPair moveToPosition = calculatePosition(moveTo, moveTo.getMoveToPosition());
+
+        int sizeX = (int) thisGO.getTilePosition().getSize().getWidth();
+        int sizeY = (int) thisGO.getTilePosition().getSize().getHeight();
+
+        Position position = thisGO.getTilePosition().getPosition();
+        double x_start = (position.getX() * sizeX) * 1.0;
+        double y_start = (position.getY() * sizeY) * 1.0;
+
+        double x_to = (moveToPosition.getX()) * 1.0;
+        double y_to = (moveToPosition.getY()) * 1.0;
+
+        Double progress = (thisGO.getMoveProgres() * 1.0) / 100.0;
+        double x_global = x_start - x_to;
+        double y_global = y_start - y_to;
+
+        Long x_current = Math.round(x_start - (x_global * progress.doubleValue()));
+        Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
+
+
+
+        return new PositionPair(new Long(x_current), new Long(y_current));
     }
 
     /**
@@ -226,18 +275,13 @@ public class Handler extends Observable {
      * <b>**Caution**</b> <br />
      * Should only be called in <b>tick()</b> method for thread safety
      */
-    private synchronized void resetGame() {
+    public synchronized void resetGame() {
         objects.clear();
         aliveTroops.clear();
         towers.clear();
+        aliveCount=0;
     }
 
-    /**
-     * Invoke game reset on next tick.
-     */
-    public synchronized void reset() {
-        resetFlag = true;
-    }
 
     /**
      * Get accumulated score.
@@ -258,5 +302,7 @@ public class Handler extends Observable {
         setChanged();
         notifyObservers(credit);
     }
-
+    public void setIsPaused(boolean paused){
+        this.isPaused=paused;
+    }
 }

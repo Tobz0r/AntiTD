@@ -27,23 +27,16 @@ public class Projectile implements GameObject {
 
     private Tower tower;
 
-    private final int speed=10;
-    private int moveProgres;
+    private final double speed = 1;
+    private double moveProgres;
 
     private BufferedImage img;
 
-    private boolean isMoving;
-
-    public Projectile(Troop target, Tower tower){
+    public Projectile(Troop target, Tower tower, BufferedImage img){
         super();
         this.target=target;
         this.tower=tower;
-        try {
-            img= ImageIO.read(new File("sprites/fireball.gif"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        this.img=img;
 
     }
 
@@ -56,26 +49,22 @@ public class Projectile implements GameObject {
 
     @Override
     public void tick() {
-        if (target.isAlive()) {
-            if (!this.isMoving) {
-                this.isMoving = true;
-                this.moveProgres = speed;
+        this.moveProgres += speed;
+        if (this.moveProgres > 100.0) {
+            target.attackThis(tower.getDamage());
+            if (tower instanceof FrostTower) {
+                target.slowSpeed();
             }
 
-            if (this.moveProgres < 100) {
-                this.moveProgres += speed;
-                if (this.moveProgres > 100) {
-                    this.moveProgres = 100;
-                }
-            } else {
-                this.isMoving = false;
-                this.moveProgres = 0;
-            }
         }
 
     }
     public boolean aliveTarget(){
         return target.isAlive();
+    }
+
+    public boolean isAlive() {
+        return moveProgres > 100 ? false : true;
     }
 
     @Override
@@ -113,8 +102,13 @@ public class Projectile implements GameObject {
         return target.getTilePosition();
     }
 
-    @Override
+    public GameObject getMoveTo() {
+        return target;
+    }
+
+
     public int getMoveProgres() {
-        return moveProgres;
+        Long v = Math.round(this.moveProgres);
+        return v.intValue();
     }
 }
