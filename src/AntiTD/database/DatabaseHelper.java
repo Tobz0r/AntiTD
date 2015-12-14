@@ -11,7 +11,7 @@ public class DatabaseHelper {
      * @param e exception to check
      * @return true or false
      */
-    public static boolean tableAlreadyExists(SQLException e) {
+    public static synchronized boolean tableAlreadyExists(SQLException e) {
         if (e.getSQLState().equals("X0Y32")) {
             return true;
         }
@@ -23,7 +23,7 @@ public class DatabaseHelper {
      * @param e exception to check
      * @return true or false
      */
-    public static boolean postAlreadyExists(SQLException e) {
+    public static synchronized boolean postAlreadyExists(SQLException e) {
         if (e.getSQLState().equals("23505")) {
             return true;
         }
@@ -35,7 +35,7 @@ public class DatabaseHelper {
      * @param e exception to check
      * @return true or false
      */
-    public static boolean databaseConnectionCouldNotBeMade(SQLException e) {
+    public static synchronized boolean databaseConnectionCouldNotBeMade(SQLException e) {
         if (e.getSQLState().equals("XJ040")) {
             return true;
         }
