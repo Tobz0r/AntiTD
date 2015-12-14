@@ -78,9 +78,7 @@ public class TeleportTroop extends Troop {
                 }
             }
         }
-
     }
-
 
     @Override
     protected void move() {
@@ -95,12 +93,10 @@ public class TeleportTroop extends Troop {
         }
     }
 
+    /**
+     * Initiates teleport creation
+     */
     public void initTeleport() {
         isTeleporting = true;
-    }
-
-    @Override
-    public int getCurrentScore() {
-        return 0;
     }
 }
