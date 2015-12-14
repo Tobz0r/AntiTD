@@ -1,9 +1,6 @@
 package AntiTD;
 
-import AntiTD.database.DBModel;
-import AntiTD.database.Database;
-import AntiTD.database.DatabaseConnectionIsBusyException;
-import AntiTD.database.DatabaseEntryDoesNotExistsException;
+import AntiTD.database.*;
 import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
@@ -133,10 +130,12 @@ public class Environment extends JPanel implements Runnable,Observer {
             }
         }
     }
-    public synchronized ArrayList<DBModel> getHighScores(){
-
-        return db.getHighscores();
-
+    public synchronized ArrayList<DBModel> getHighScores() throws NoDatabaseConnectionException{
+        if (onlineMode) {
+            return db.getHighscores();
+        } else {
+            throw new NoDatabaseConnectionException();
+        }
     }
 
     Level getLevel(){
