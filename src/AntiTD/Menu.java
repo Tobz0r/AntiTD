@@ -1,5 +1,7 @@
 package AntiTD;
 
+import AntiTD.towers.Tower;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -25,6 +27,8 @@ public class Menu extends JMenu {
     private JMenuBar startMenuBar = new JMenuBar();
     private JFrame frame;
     private GUI gui;
+
+    private ArrayList<Tower> towerList;
     private boolean pause = true;
     private boolean mutesound = true;
     //helpframe
@@ -133,6 +137,7 @@ public class Menu extends JMenu {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(mutesound){
                     gui.pauseMainSound();
+
                     mute.setText("Unmute");
                     mutesound=false;
                 }

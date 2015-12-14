@@ -28,6 +28,7 @@ public abstract class Tower implements GameObject {
     private int price;
     private Tower iniTower;
     private Tile posTile;
+    private Sounds sounds;
 
     public Tower(Image img, Tile pos, ArrayList<Troop> troops) {
         this.img = img;
@@ -124,6 +125,13 @@ public abstract class Tower implements GameObject {
         this.money = money;
     }
 
+    // testar
+    public void pauseTowerSound(){
+        sounds.pauseMusic();
+    }
+    public void resumeTowerSound(){
+        sounds.resumeMusic(true);
+    }
     @Override
     public int getCurrentScore() {
         return money;

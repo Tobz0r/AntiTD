@@ -28,6 +28,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -300,6 +301,7 @@ public class GUI {
 
         
     }
+
     private void fixTitle(JLabel title){
         Font lableFont = title.getFont();
         int biggerFont = (int)(lableFont.getSize() * 50);
@@ -315,6 +317,9 @@ public class GUI {
         }
 
     }
+    /*
+     * Check if textfield
+     */
     private void checkTextField(){
 
         player.getDocument().addDocumentListener(new DocumentListener() {
@@ -405,6 +410,9 @@ public class GUI {
     public void highScoreTable(){
         scoreTable = new JTable(10,3);
 
+    }
+    public ArrayList getTowers(){
+        return env.getTowers();
     }
 
 }
