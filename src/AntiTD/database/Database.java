@@ -29,6 +29,9 @@ public class Database {
         createTable();
     }
 
+    /**
+     * Creates database table high score.
+     */
     private synchronized void createTable() {
         try {
             stmt = conn.createStatement();
@@ -48,6 +51,11 @@ public class Database {
     }
 
 
+    /**
+     * Create connection to <b>derby</b> database with embedded client driver.
+     * @throws DatabaseConnectionIsBusyException if a connection is already made by another object or instance
+     * @throws NoDatabaseDriverInstalledException if no database driver is installed or imported
+     */
     private synchronized void createConnection() throws DatabaseConnectionIsBusyException, NoDatabaseDriverInstalledException{
         try {
             Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
@@ -107,7 +115,8 @@ public class Database {
     /**
      * Gets highscore for specified playername.
      * @param playername name of the player
-     * @return score if player exists exists else -1
+     * @return model of database entry
+     * @throws DatabaseEntryDoesNotExistsException if no player with given name exists
      */
     public synchronized DBModel getHighscore(String playername) throws DatabaseEntryDoesNotExistsException {
         DBModel highscore = null;
@@ -130,6 +139,10 @@ public class Database {
         return highscore;
     }
 
+    /**
+     * Get list of all database entrys as <b>ArrayList</b>
+     * @return list of all entrys in database
+     */
     public synchronized ArrayList<DBModel> getHighscores() {
         ArrayList<DBModel> returnList = null;
         try {
@@ -168,6 +181,9 @@ public class Database {
         System.out.println();
     }
 
+    /**
+     * Shuts database connection down so it can be used by new instance.
+     */
     public synchronized void shutdown()
     {
         try {

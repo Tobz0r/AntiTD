@@ -8,20 +8,38 @@ public class DBModel {
     private String playername;
     private int score;
 
+    /**
+     * Constructor for object.
+     * @param id id of object
+     * @param playername name of the player
+     * @param score highscore value
+     */
     public DBModel(int id, String playername, int score) {
         this.id = id;
         this.playername = playername;
         this.score = score;
     }
 
+    /**
+     * Getter for id
+     * @return the id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Getter for name
+     * @return the name
+     */
     public String getPlayername() {
         return playername;
     }
 
+    /**
+     * Getter for score
+     * @return the score
+     */
     public int getScore() {
         return score;
     }
