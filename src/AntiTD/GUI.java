@@ -103,19 +103,19 @@ public class GUI {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         scrollPane.setBounds(0,0,env.getWidth()+32,env.getHeight()+32);
-        startScreen();
         //menu = new Menu(frame);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //menu = new Menu(frame, this,env);
         menu = new Menu(frame, this);
         menu.startMenu();
         menu.statMenu();
-
+        startScreen();
         frame.setVisible(true);
     }
 
     public void startGame() {
         if(!sounds.isPlaying())
-            sounds.music("music/runninggame.wav",true);
+            sounds.music("music/runninggame.wav", true);
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
@@ -158,7 +158,6 @@ public class GUI {
                     Tile[][] currentMap = Level.getCurrentMap();
                     env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel()
                             .getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
-                    
                 }
                 }
         });
@@ -264,7 +263,9 @@ public class GUI {
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        sounds.music("music/start.wav",true);
+        if(!menu.musicStatus()){
+            sounds.music("music/start.wav",true);
+        }
         tenChars = new JLabel("Max 11 character");
         title = new JLabel("Anti TD");
         fixTitle(title);
