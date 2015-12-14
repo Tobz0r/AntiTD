@@ -24,27 +24,6 @@ public class Database {
     private final static String sqlUpdateScore =
             "UPDATE " + tableName + " SET score=? WHERE id=?";
 
-    public static void main(String[] args) {
-        try {
-            Database db = new Database();
-            db.insertOrUpdateHighscore("LaVals", 100);
-            db.printHighscores();
-            db.insertOrUpdateHighscore("LaVals", 110);
-            db.printHighscores();
-            DBModel highscore = null;
-            try {
-                highscore = db.getHighscore("LaVals");
-            } catch (DatabaseEntryDoesNotExistsException e) {
-                e.printStackTrace();
-            }
-            System.out.println(highscore);
-            db.shutdown();
-        } catch (DatabaseConnectionIsBusyException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public Database() throws DatabaseConnectionIsBusyException {
         createConnection();
         createTable();
