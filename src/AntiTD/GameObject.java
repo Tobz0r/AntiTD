@@ -19,10 +19,7 @@ public interface GameObject{
 
 
     Position getPosition();
-    String type();
 
     Tile getTilePosition();
     Tile getMoveToPosition();
-    int getMoveProgress();
-
 }

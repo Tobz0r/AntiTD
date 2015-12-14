@@ -1,6 +1,7 @@
 package AntiTD.towers;
 
 import AntiTD.GameObject;
+import AntiTD.MovableGameObject;
 import AntiTD.Position;
 import AntiTD.tiles.GoalTile;
 import AntiTD.tiles.Tile;
@@ -21,7 +22,7 @@ import java.io.IOException;
 Velocity
 (-1 / dist ) * deltaX
  */
-public class Projectile implements GameObject {
+public class Projectile implements MovableGameObject {
 
     private Troop target;
 
@@ -59,10 +60,8 @@ public class Projectile implements GameObject {
         }
 
     }
-    public boolean aliveTarget(){
-        return target.isAlive();
-    }
 
+    @Override
     public boolean isAlive() {
         return moveProgres > 100 ? false : true;
     }
@@ -83,11 +82,6 @@ public class Projectile implements GameObject {
     }
 
     @Override
-    public String type() {
-        return null;
-    }
-
-    @Override
     public Tile getTilePosition() {
         return tower.getTilePosition();
     }
@@ -95,10 +89,6 @@ public class Projectile implements GameObject {
     @Override
     public Tile getMoveToPosition() {
         return target.getTilePosition();
-    }
-
-    public GameObject getMoveTo() {
-        return target;
     }
 
 

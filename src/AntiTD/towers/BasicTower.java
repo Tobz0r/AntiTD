@@ -224,9 +224,4 @@ public class BasicTower extends Tower {
         return this.posTile;
     }
 
-    @Override
-    public int getMoveProgress() {
-        return 0;
-    }
-
 }

@@ -10,7 +10,7 @@ import java.util.Stack;
 /**
  * Created by id12men on 2015-11-27.
  */
-public abstract class Troop implements GameObject {
+public abstract class Troop implements MovableGameObject {
     protected int health;
     protected int score;
     protected double speed;
@@ -186,6 +186,7 @@ public abstract class Troop implements GameObject {
      * Checks troops life status
      * @return true if alive else false
      */
+    @Override
     public boolean isAlive() {
         boolean isAlive = true;
         if (health <= 0) {

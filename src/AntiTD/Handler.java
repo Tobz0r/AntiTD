@@ -178,7 +178,7 @@ public class Handler extends Observable {
                 if(moveTo==null)
                     continue;
 
-                PositionPair position = calculatePosition(gameObject, moveTo);
+
 
 
                 double scale =gameObject instanceof Troop ? 0.4 : 0.7;
@@ -196,9 +196,18 @@ public class Handler extends Observable {
                 int xOffset = (new Long(Math.round((width/2)-(troopSizeY/2)))).intValue();
                 int yOffset = (new Long(Math.round((height/2)-(troopSizeX/2)))).intValue();
 
-                if(gameObject instanceof Projectile){
-                    Projectile p = (Projectile) gameObject;
-                    position = calculatePosition(gameObject, p.getTarget());
+                PositionPair position = new PositionPair(
+                        (long)(gameObject.getTilePosition().getPosition().getX()*width),
+                        (long)(gameObject.getTilePosition().getPosition().getY()*height));
+
+                if (gameObject instanceof MovableGameObject) {
+                    MovableGameObject mgo = (MovableGameObject) gameObject;
+                    position = calculatePosition(mgo, moveTo);
+
+                    if(mgo instanceof Projectile){
+                        Projectile p = (Projectile) mgo;
+                        position = calculatePosition(mgo, p.getTarget());
+                    }
                 }
 
                 g.drawImage(gameObject.getImage(),position.getX().intValue()+xOffset, position.getY().intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue(),null);
@@ -221,7 +230,7 @@ public class Handler extends Observable {
     }
 
 
-    private PositionPair calculatePosition(GameObject thisGO, Tile moveTo) {
+    private PositionPair calculatePosition(MovableGameObject thisGO, Tile moveTo) {
         int sizeX = (int) thisGO.getTilePosition().getSize().getWidth();
         int sizeY = (int) thisGO.getTilePosition().getSize().getHeight();
 
@@ -244,7 +253,7 @@ public class Handler extends Observable {
         return new PositionPair(new Long(x_current), new Long(y_current));
     }
 
-    private PositionPair calculatePosition(GameObject thisGO, GameObject moveTo) {
+    private PositionPair calculatePosition(MovableGameObject thisGO, MovableGameObject moveTo) {
         PositionPair moveToPosition = calculatePosition(moveTo, moveTo.getMoveToPosition());
 
         int sizeX = (int) thisGO.getTilePosition().getSize().getWidth();
