@@ -19,6 +19,9 @@ public class Database {
     private final static String sqlAddScore =
             "INSERT INTO " + tableName + "(name, score) VALUES (?,?)";
 
+    private final static String sqlAddScore2 =
+            "INSERT INTO " + tableName + " VALUES (null, ?,?)";
+
     private final static String sqlGetId =
             "SELECT id FROM "+tableName+" WHERE name=?";
 
@@ -31,7 +34,12 @@ public class Database {
         db.printHighscores();
         db.insertOrUpdateHighscore("LaVals", 110);
         db.printHighscores();
-        DBModel highscore = db.getHighscore("LaVals");
+        DBModel highscore = null;
+        try {
+            highscore = db.getHighscore("LaVals");
+        } catch (DatabaseEntryDoesNotExists e) {
+            e.printStackTrace();
+        }
         System.out.println(highscore);
         db.shutdown();
     }
@@ -97,8 +105,8 @@ public class Database {
                     prepStmt.close();
 
                     prepStmt = conn.prepareStatement(sqlUpdateScore);
-                    prepStmt.setInt(1, score);
-                    prepStmt.setInt(2, id);
+                    prepStmt.setInt(2, score);
+                    prepStmt.setInt(1, id);
                     prepStmt.execute();
                     prepStmt.close();
                 } catch (SQLException e) {
@@ -115,15 +123,19 @@ public class Database {
      * @param playername name of the player
      * @return score if player exists exists else -1
      */
-    public synchronized DBModel getHighscore(String playername) {
+    public synchronized DBModel getHighscore(String playername) throws DatabaseEntryDoesNotExists {
         DBModel highscore = null;
         try {
             //stmt = conn.createStatement();
             prepStmt = conn.prepareStatement(sqlGetScore);
             prepStmt.setString(1,playername);
             ResultSet results = prepStmt.executeQuery();
-            results.next();
-            highscore = new DBModel(results.getInt(1), results.getString(2), results.getInt(1));
+            try {
+                results.next();
+                highscore = new DBModel(results.getInt(1), results.getString(2), results.getInt(3));
+            } catch (SQLException sqlExcept) {
+                throw new DatabaseEntryDoesNotExists();
+            }
             results.close();
             stmt.close();
         } catch (SQLException sqlExcept) {
@@ -160,7 +172,7 @@ public class Database {
     /**
      * prints highscore
      */
-    private synchronized void printHighscores(){
+    public synchronized void printHighscores(){
         ArrayList<DBModel> highscores = getHighscores();
         System.out.print("ID\t\t"+"NAME\t\t"+"SCORE\t\t\n");
         System.out.println("-------------------------------------------------");
