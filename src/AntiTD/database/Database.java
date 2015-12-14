@@ -24,7 +24,7 @@ public class Database {
     private final static String sqlUpdateScore =
             "UPDATE " + tableName + " SET score=? WHERE id=?";
 
-    public Database() throws DatabaseConnectionIsBusyException {
+    public Database() throws DatabaseConnectionIsBusyException, NoDatabaseDriverInstalledException {
         createConnection();
         createTable();
     }
@@ -48,7 +48,7 @@ public class Database {
     }
 
 
-    private synchronized void createConnection() throws DatabaseConnectionIsBusyException{
+    private synchronized void createConnection() throws DatabaseConnectionIsBusyException, NoDatabaseDriverInstalledException{
         try {
             Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
             //Get a connection
@@ -59,8 +59,8 @@ public class Database {
                 throw new DatabaseConnectionIsBusyException();
             }
         }
-        catch (Exception except) {
-            except.printStackTrace();
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            throw new NoDatabaseDriverInstalledException();
         }
     }
 
