@@ -9,4 +9,5 @@ public interface MovableGameObject extends GameObject {
     int getMoveProgress();
     boolean isAlive();
     Tile getMoveToPosition();
+    boolean hasReachedGoal();
 }

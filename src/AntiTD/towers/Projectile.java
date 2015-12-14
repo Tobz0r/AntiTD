@@ -44,9 +44,7 @@ public class Projectile implements MovableGameObject {
     public void damage(){
         tower.attack(target,tower.getDamage());
     }
-    public Troop getTarget(){
-        return target;
-    }
+
 
     @Override
     public void tick() {
@@ -86,14 +84,22 @@ public class Projectile implements MovableGameObject {
         return tower.getTilePosition();
     }
 
+    public Troop getTarget(){
+        return target;
+    }
     @Override
     public Tile getMoveToPosition() {
         return target.getTilePosition();
     }
 
-
+    @Override
     public int getMoveProgress() {
         Long v = Math.round(this.moveProgres);
         return v.intValue();
+    }
+
+    @Override
+    public boolean hasReachedGoal() {
+        return false;
     }
 }
