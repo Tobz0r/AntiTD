@@ -32,6 +32,7 @@ public class Menu extends JMenu {
     private boolean pauseMusic;
     private boolean pause = true;
     private boolean mutesound = true;
+    private Environment env;
     //helpframe
     private JTextArea helpText;
     private JFrame helpFrame = new JFrame();
@@ -51,8 +52,9 @@ public class Menu extends JMenu {
 
 
 
-    public Menu(JFrame frame, GUI gui) {
+    public Menu(JFrame frame, GUI gui, Environment env) {
         super("Start");
+        this.env = env;
         this.gui = gui;
         this.frame = frame;
     }
@@ -96,7 +98,7 @@ public class Menu extends JMenu {
                     newGame.setText("Restart");
                 }
                 else{
-                    JOptionPane.showMessageDialog(null,"Please Enter Name");
+                    JOptionPane.showMessageDialog(null, "Please Enter Name");
                 }
 
             }
@@ -140,18 +142,32 @@ public class Menu extends JMenu {
                 if(mutesound){
                     pauseMusic = true;
                     gui.pauseMainSound();
+                    env.pauseEnvSound();
                     if(Environment.isRunning()){
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).pauseTowerSound();
                         }
                     }
+                    if(sounds.isPlaying()){
+                        sounds.pauseMusic();
+                    }
+
 
                     mute.setText("Unmute");
                     mutesound=false;
                 }
                 else {
                     pauseMusic = false;
-                    gui.resumeMainSound();
+                    if(Environment.isRunning()){
+                        gui.resumeMainSound();
+
+                    }
+                    else{
+                        sounds.music("music/start.wav", true);
+                    }
+
+
+                    env.resumeEnvSound();
                     if(Environment.isRunning()){
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).resumeTowerSound();
@@ -166,6 +182,9 @@ public class Menu extends JMenu {
 
 
         startMenuBar.add(this);
+    }
+    public boolean musicStatus(){
+        return pauseMusic;
     }
 
     public void statMenu(){

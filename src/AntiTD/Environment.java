@@ -35,7 +35,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     private int credits;
     private int mapNr=0;
     private int restartMoney;
-
+    private boolean playMusic = true;
 
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
     private ArrayList<CrossroadSwitch> switches;
@@ -307,7 +307,9 @@ public class Environment extends JPanel implements Runnable,Observer {
             System.out.println("ELIASHEJ");
 
             if((mapNr+1)>levels.size()-1) {
-                sounds.music("music/gameover.wav",false);
+                if(playMusic){
+                    sounds.music("music/gameover.wav",false);
+                }
                 gui.pauseMainSound();
                 /* STÄNGER AV TILLS VIDARE
                 DBModel dbEntry = db.getHighscore(gui.getPlayerName());
@@ -337,6 +339,12 @@ public class Environment extends JPanel implements Runnable,Observer {
             gameRunning=false;
             incrementLevel(true, true,false);
         }
+    }
+    public void pauseEnvSound(){
+        playMusic = false;
+    }
+    public void resumeEnvSound(){
+        playMusic = true;
     }
 
 
