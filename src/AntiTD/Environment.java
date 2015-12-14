@@ -127,6 +127,11 @@ public class Environment extends JPanel implements Runnable,Observer {
             }
         }
     }
+    public synchronized ArrayList<DBModel> getHighScores(){
+
+        return db.getHighscores();
+
+    }
 
     Level getLevel(){
         return level;
@@ -356,11 +361,11 @@ public class Environment extends JPanel implements Runnable,Observer {
         return credits;
     }
     public boolean buyUnit(int amount){
-        if((credits-amount)>0) {
+        //if((credits-amount)>0) {
             credits -= amount;
             return true;
-        }
-        return false;
+        //}
+        //return false;
     }
     private void initTowers(){
         towers.clear();

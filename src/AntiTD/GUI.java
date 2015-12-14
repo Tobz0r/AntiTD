@@ -8,10 +8,11 @@ import javax.swing.border.Border;
 import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.*;
 
 import AntiTD.*;
+import AntiTD.database.DBModel;
 import AntiTD.tiles.CrossroadTile;
 import AntiTD.tiles.JunctionTile;
 import AntiTD.tiles.Level;
@@ -413,8 +414,75 @@ public class GUI {
         score.setColumns(5);
     }
     public void highScoreTable(){
-        scoreTable = new JTable(10,3);
 
+        JFrame scoreFrame = new JFrame();
+        //scoreTable = new JTable(10,3);
+        JPanel topPanel = new JPanel();
+
+        Object data[][] = { { "ralle", "100000"},
+                { "ralle2", "2000"} };
+        Object columnNames[] = { "Player", "Score"};
+        scoreTable= new JTable();
+
+        ArrayList<DBModel> dbHighScore = env.getHighScores();
+
+        for(int i =0; i< dbHighScore.size(); i++) {
+
+            System.out.println(dbHighScore.get(i).toString());
+        }
+
+        DefaultTableModel model = new DefaultTableModel(columnNames,0){
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if(getRowCount() > 0){
+                    return getValueAt(0,columnIndex).getClass();
+
+                }
+                return super.getColumnClass(columnIndex);
+            }
+        };
+
+        for(int row = 0; row <dbHighScore.size(); row++){
+            Object[] rowData = {"Name: " + dbHighScore.get(row).getPlayername(),"Score: " +dbHighScore.get(row).getScore()};
+            model.addRow(rowData);
+
+
+        }
+        JTextPane textPane = new JTextPane();
+        textPane.setBackground(Color.black);
+        this.appendToPane(textPane, "<html><font-size=6>Player highscore</font></html>", Color.white);
+        topPanel.add(textPane, BorderLayout.CENTER);
+
+        scoreTable.setModel(model);
+        scoreFrame.setSize(1000, 1000);
+        scoreFrame.add(topPanel,BorderLayout.NORTH);
+        scoreFrame.add(scoreTable, BorderLayout.CENTER);
+        scoreFrame.setVisible(true);
+
+        /*helpPanel.add(textPane, BorderLayout.SOUTH);
+        helpPanel.add(helpButton, BorderLayout.NORTH);
+
+        helpFrame.setSize(1000, 1000);
+        helpFrame.add(helpPanel, BorderLayout.SOUTH);
+        helpFrame.add(priceTable, BorderLayout.CENTER);
+        helpFrame.setVisible(true);*/
+
+
+
+
+    }
+    private void appendToPane(JTextPane tp, String msg, Color c)
+    {
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
+
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Verdana");
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+
+        int len = tp.getDocument().getLength();
+        tp.setCaretPosition(len);
+        tp.setCharacterAttributes(aset, false);
+        tp.replaceSelection(msg);
     }
     public ArrayList getTowers(){
         return env.getTowers();
