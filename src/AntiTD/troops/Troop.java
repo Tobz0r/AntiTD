@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.Stack;
 
 /**
- * Created by dv13trm on 2015-11-27.
+ * Created by id12men on 2015-11-27.
  */
 public abstract class Troop implements GameObject {
     protected int health;

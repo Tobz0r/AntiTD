@@ -62,16 +62,25 @@ public class TankTroop extends Troop {
      */
     @Override
     public boolean attackThis(int damage) {
+        if((r.nextInt(5) + 1)==1){
+            System.out.println("Blocked attack");
+        } else {
+            super.attackThis(damage);
+        }
+        return !this.isAlive();
+        /*
         if ( ! hasReachedGoal() ) {
             if((r.nextInt(5) + 1)==1){
                 damage=0;
                 System.out.println("Blocked attack");
             }
+            super.attackThis(5);
             health = health - damage;
             return !this.isAlive();
         } else {
             return false;
         }
+        */
     }
 
 

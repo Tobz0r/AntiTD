@@ -5,7 +5,7 @@ import AntiTD.tiles.Tile;
 import java.awt.*;
 
 /**
- * Created by dv13trm on 2015-11-27.
+ * Created by id12men on 2015-11-27.
  */
 public class TeleportTroop extends Troop {
 
@@ -40,8 +40,8 @@ public class TeleportTroop extends Troop {
 
     /**
      * Constructor for teleport troop, used for overriding health score speed
-     *
-     * ** CAUTION **
+     * <br /><br />
+     * <b>** CAUTION **</b>
      * Use this constructor for test purposes only.
      * @param img Image used for rendering this object.
      * @param pos Starting tile position.
@@ -77,14 +77,6 @@ public class TeleportTroop extends Troop {
                     tpMoves++;
                 }
             }
-            /*
-            else if (isAlive()){
-                //addTeleportException(currentPosition);
-            }else{
-                //Clearar listan på tiles mellan teleporten om teleportgubben dör innan den är färdig med teleporten
-                clearTeleports();
-            }
-            */
         }
 
     }

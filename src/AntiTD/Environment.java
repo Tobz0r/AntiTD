@@ -311,11 +311,11 @@ public class Environment extends JPanel implements Runnable,Observer {
     }
 
     private void finishedLevel(long wait){
-        System.out.println("ELIASHEJ");
+        //System.out.println("ELIASHEJ");
 
         if(handler.getVictoryScore() >= victoryScore){
             handler.resetGame();
-            System.out.println("ELIASHEJ");
+            //System.out.println("ELIASHEJ");
 
             if((mapNr+1)>levels.size()-1) {
                 if(playMusic){

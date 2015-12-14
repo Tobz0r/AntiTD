@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by mattias on 2015-11-30.
+ * Created by id12men on 2015-11-30.
  */
 public class BasicTroop extends Troop {
 
