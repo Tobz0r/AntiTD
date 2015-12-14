@@ -190,7 +190,7 @@ public abstract class Troop implements MovableGameObject {
     @Override
     public boolean isAlive() {
         boolean isAlive = true;
-        if (health <= 0) {
+        if (health < 1) {
             isAlive = false;
         }
         if (hasReacedGoal) {

@@ -68,22 +68,22 @@ public class TeleportTroopTest {
         middle1.setTeleportTo(middle3);
         t.tick();
         t.tick();
-        assertEquals(t.getTilePosition(), end);
+        assertEquals(end, t.getTilePosition());
     }
 
     @Test
     public void testInitTeleportShouldReturnTrue() throws Exception {
         TeleportTroop t = new TeleportTroop(null, start,1, 1, 100, new Integer(1));
         t.tick();
-        assertEquals(t.getTilePosition(), middle1);
+        assertEquals(middle1, t.getTilePosition());
         t.initTeleport();
         t.tick();
-        assertEquals(t.getTilePosition(), middle2);
+        assertEquals(middle2, t.getTilePosition());
         t.tick();
-        assertEquals(t.getTilePosition(), middle3);
+        assertEquals(middle3, t.getTilePosition());
         t.tick();
-        assertEquals(t.getTilePosition(), end);
-        assertEquals(middle1.isTeleporter(), true);
+        assertEquals(end, t.getTilePosition());
+        assertEquals(true, middle1.isTeleporter());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class TeleportTroopTest {
         //assertEquals(basicT.getTilePosition(), middle3);
         basicT.tick();
 
-        assertEquals(basicT.hasReachedGoal(), true);
+        assertEquals(true, basicT.hasReachedGoal());
 
     }
 

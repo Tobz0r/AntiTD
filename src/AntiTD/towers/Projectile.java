@@ -51,10 +51,9 @@ public class Projectile implements MovableGameObject {
         }
 
     }
-
     @Override
     public boolean isAlive() {
-        return moveProgres < 100;
+        return moveProgres > 100 ? false : true;
     }
 
     @Override

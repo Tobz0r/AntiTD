@@ -140,7 +140,7 @@ public class Handler extends Observable {
                     MovableGameObject mgo = (MovableGameObject) gameObject;
                     if (!mgo.isAlive()) {
                         //aliveCount--;
-                        removeObject(gameObject);
+                        removeObject(mgo);
                         if (mgo instanceof Troop) {
                             if(!isPaused) {
                                 sounds.music("music/deadman.wav", false);
