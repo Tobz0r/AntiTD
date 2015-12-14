@@ -13,6 +13,7 @@ import javax.swing.text.*;
 
 import AntiTD.*;
 import AntiTD.database.DBModel;
+import AntiTD.database.NoDatabaseConnectionException;
 import AntiTD.tiles.CrossroadTile;
 import AntiTD.tiles.JunctionTile;
 import AntiTD.tiles.Level;
@@ -425,7 +426,12 @@ public class GUI {
         Object columnNames[] = { "Player", "Score"};
         scoreTable= new JTable();
 
-        ArrayList<DBModel> dbHighScore = env.getHighScores();
+        ArrayList<DBModel> dbHighScore = null;
+        try {
+            dbHighScore = env.getHighScores();
+        } catch (NoDatabaseConnectionException e) {
+            e.printStackTrace();
+        }
 
         for(int i =0; i< dbHighScore.size(); i++) {
 

@@ -178,7 +178,7 @@ public class Environment extends JPanel implements Runnable,Observer {
        for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j].landOn(g);
-            } 
+            }
         }
         handler.render(g);
 
@@ -279,7 +279,6 @@ public class Environment extends JPanel implements Runnable,Observer {
                 restart=true;
             }
             else {
-                JOptionPane.showMessageDialog(null, "GOODBYE");
                 System.exit(0);
             }
         }
@@ -372,11 +371,11 @@ public class Environment extends JPanel implements Runnable,Observer {
         return credits;
     }
     public boolean buyUnit(int amount){
-        //if((credits-amount)>0) {
+        if((credits-amount)>0) {
             credits -= amount;
             return true;
-        //}
-        //return false;
+        }
+        return false;
     }
     private void initTowers(){
         towers.clear();
