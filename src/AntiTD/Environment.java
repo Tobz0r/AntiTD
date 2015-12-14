@@ -36,9 +36,11 @@ public class Environment extends JPanel implements Runnable,Observer {
     private int mapNr=0;
     private int restartMoney;
 
+
     private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
     private ArrayList<CrossroadSwitch> switches;
     private ArrayList<Level> levels;
+    private ArrayList<Tower> towers;
 
     private Handler handler;
 
@@ -225,6 +227,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     }
     public void addTower(Tower tower){
         handler.addObject(tower);
+        towers.add(tower);
     }
  /*   public void addBullets(Bullets bullets){
         handler.addObject(bullets);
@@ -351,6 +354,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         return false;
     }
     private void initTowers(){
+        towers.clear();
         Tile[][] currentMap = Level.getCurrentMap();
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
@@ -362,6 +366,9 @@ public class Environment extends JPanel implements Runnable,Observer {
                 }
             }
         }
+    }
+    public ArrayList getTowers(){
+        return towers;
     }
     private void resetTeleport(){
         for(int i=0; i < levels.size(); i++){
