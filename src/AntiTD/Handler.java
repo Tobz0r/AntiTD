@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * @author Tobias Estefors, Mattias Edin
+ * Created by dv13tes on 2015-11-27.
  */
 public class Handler extends Observable {
     private LinkedList<GameObject> objects;
@@ -23,8 +23,6 @@ public class Handler extends Observable {
     private LinkedList<GameObject> objectsToRemove;
     private Sounds sounds = new Sounds();
     private boolean isPaused=false;
-
-    private Object lock = new Object();
 
 
 
@@ -91,13 +89,13 @@ public class Handler extends Observable {
      */
     private synchronized void removeObjectsFromGame() {
 
-          for (GameObject object : objectsToRemove) {
+        for (GameObject object : objectsToRemove) {
             objects.remove(object);
             if (object instanceof Troop) {
                 aliveTroops.remove(object);
                 for (GameObject go : towers) {
                     Tower t = (Tower) go;
-                    t.removeTroopFromList((Troop) object);
+                    t.removeTroopFromList((Troop)object);
                 }
             } else if (object instanceof Tower) {
                 towers.remove(object);
@@ -129,23 +127,28 @@ public class Handler extends Observable {
 
 
     public synchronized void tick() {
-        for (GameObject gameObject : objects) {
+        for (int i = 0; i < objects.size(); i++) {
             try {
-                gameObject.tick();
-                if (gameObject instanceof MovableGameObject) {
+                GameObject gameObject = objects.get(i);
+                objects.get(i).tick();
+                if (gameObject instanceof Troop) {
                     score += gameObject.getCurrentScore();
-                    MovableGameObject mgo = (MovableGameObject) gameObject;
-                    if (!mgo.isAlive()) {
+                    Troop t = (Troop) gameObject;
+                    if (!t.isAlive()) {
+                        aliveCount--;
                         removeObject(gameObject);
-                        if (mgo instanceof Troop) {
-                            aliveCount--;
-                            if(!isPaused) {
-                                sounds.music("music/deadman.wav", false);
-                            }
+                        if(!isPaused) {
+                            sounds.music("music/deadman.wav", false);
                         }
                     }
-                    if(mgo.hasReachedGoal()){
-                        update(mgo.getCurrentScore());
+                    if(t.hasReachedGoal()){
+                        update(t.getCurrentScore());
+                        removeObject(gameObject);
+                    }
+                }
+                if (gameObject instanceof Projectile) {
+                    Projectile p = (Projectile) gameObject;
+                    if (!p.isAlive()) {
                         removeObject(gameObject);
                     }
                 }
@@ -156,59 +159,69 @@ public class Handler extends Observable {
             }
         }
         removeObjectsFromGame();
-        if (resetFlag) {
-            objects.clear();
-            aliveTroops.clear();
-            towers.clear();
-            synchronized (lock) {
-                resetFlag = false;
-            }
-        }
         addObjectsToGame();
-
     }
 
     public synchronized void render(Graphics g) {
-        for (GameObject gameObject : objects) {
-
-            double scale =gameObject instanceof Troop ? 0.4 : 0.7;
-            scale = gameObject instanceof Projectile ? 0.2 : scale;
-
-
-            double width = gameObject.getTilePosition().getSize().getWidth();
-            double height = gameObject.getTilePosition().getSize().getHeight();
-
-            Long troopSizeX = Math.round(width * scale);
-            Long troopSizeY = Math.round(height * scale);
-
-            int xOffset = (new Long(Math.round((width/2)-(troopSizeY/2)))).intValue();
-            int yOffset = (new Long(Math.round((height/2)-(troopSizeX/2)))).intValue();
-
-            PositionPair position = new PositionPair(
-                    (long)(gameObject.getTilePosition().getPosition().getX()*width),
-                    (long)(gameObject.getTilePosition().getPosition().getY()*height));
-
-            if (gameObject instanceof MovableGameObject) {
-                MovableGameObject mgo = (MovableGameObject) gameObject;
-                Tile moveTo = mgo.getMoveToPosition();
-                position = calculatePosition(mgo, moveTo);
-                if(mgo instanceof Projectile){
-                    Projectile p = (Projectile) mgo;
-                    position = calculatePosition(mgo, p.getTarget());
+        for (int i = 0; i < objects.size(); i++) {
+            GameObject gameObject = objects.get(i);
+            boolean shouldDraw = true;
+            if (gameObject instanceof Troop) {
+                Troop troop = (Troop) gameObject;
+                if (!troop.isAlive() || troop.hasReachedGoal()) {
+                    shouldDraw = false;
                 }
             }
+            if (shouldDraw) {
+                Tile moveTo=null;
+                moveTo = gameObject.getMoveToPosition();
+                if(moveTo==null)
+                    continue;
 
-            g.drawImage(
-                gameObject.getImage(),
-                position.getX().intValue() + xOffset,
-                position.getY().intValue() + yOffset,
-                troopSizeX.intValue(),
-                troopSizeY.intValue(),
-                null);
+                PositionPair position = calculatePosition(gameObject, moveTo);
+
+
+                double scale =gameObject instanceof Troop ? 0.4 : 0.7;
+                scale = gameObject instanceof Projectile ? 0.2 : scale;
+
+
+                double width = gameObject.getTilePosition().getSize().getWidth();
+                double height = gameObject.getTilePosition().getSize().getHeight();
+
+                Long troopSizeX = new Long(Math.round(width * scale));
+                Long troopSizeY = new Long(Math.round(height * scale));
+                //int x = Math.round(position.getX()*size+(size*progress));
+                //int y = Math.round(position.getY()*size+(size*progress));
+
+                int xOffset = (new Long(Math.round((width/2)-(troopSizeY/2)))).intValue();
+                int yOffset = (new Long(Math.round((height/2)-(troopSizeX/2)))).intValue();
+
+                if(gameObject instanceof Projectile){
+                    Projectile p = (Projectile) gameObject;
+                    position = calculatePosition(gameObject, p.getTarget());
+                }
+
+                g.drawImage(gameObject.getImage(),position.getX().intValue()+xOffset, position.getY().intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue(),null);
+                //g.fillRect(x_current.intValue()+xOffset, y_current.intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue());
+
+                /*
+                if(gameObject instanceof Projectile){
+                    if(x_global<=0 && y_global <= 0){
+                        ((Projectile)gameObject).damage();
+                        removeObject(gameObject);
+                    }
+                    else if(!((Projectile) gameObject).aliveTarget()){
+                        removeObject(gameObject);
+                    }
+                }
+                */
+
+            }
         }
     }
 
-    private PositionPair calculatePosition(MovableGameObject thisGO, double moveToXpx, double moveToYpx) {
+
+    private PositionPair calculatePosition(GameObject thisGO, Tile moveTo) {
         int sizeX = (int) thisGO.getTilePosition().getSize().getWidth();
         int sizeY = (int) thisGO.getTilePosition().getSize().getHeight();
 
@@ -216,28 +229,44 @@ public class Handler extends Observable {
         double x_start = (position.getX() * sizeX) * 1.0;
         double y_start = (position.getY() * sizeY) * 1.0;
 
-        double x_to = moveToXpx;
-        double y_to = moveToYpx;
+        double x_to = (moveTo.getPosition().getX() * sizeX) * 1.0;
+        double y_to = (moveTo.getPosition().getY() * sizeY) * 1.0;
 
-        Double progress = (thisGO.getMoveProgress() * 1.0) / 100.0;
+        Double progress = (thisGO.getMoveProgres() * 1.0) / 100.0;
         double x_global = x_start - x_to;
         double y_global = y_start - y_to;
 
-        Long x_current = Math.round(x_start - (x_global * progress));
-        Long y_current = Math.round(y_start - (y_global * progress));
+        Long x_current = Math.round(x_start - (x_global * progress.doubleValue()));
+        Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
 
-        return new PositionPair(x_current, y_current);
+
+
+        return new PositionPair(new Long(x_current), new Long(y_current));
     }
 
-    private PositionPair calculatePosition(MovableGameObject thisGO, Tile moveTo) {
-        Position p = moveTo.getPosition();
-        Dimension size = moveTo.getSize();
-        return calculatePosition(thisGO, ( p.getX() * size.getWidth() ), ( p.getY() * size.getHeight() ));
-    }
-
-    private PositionPair calculatePosition(MovableGameObject thisGO, MovableGameObject moveTo) {
+    private PositionPair calculatePosition(GameObject thisGO, GameObject moveTo) {
         PositionPair moveToPosition = calculatePosition(moveTo, moveTo.getMoveToPosition());
-        return calculatePosition(thisGO, moveToPosition.getX(), moveToPosition.getY());
+
+        int sizeX = (int) thisGO.getTilePosition().getSize().getWidth();
+        int sizeY = (int) thisGO.getTilePosition().getSize().getHeight();
+
+        Position position = thisGO.getTilePosition().getPosition();
+        double x_start = (position.getX() * sizeX) * 1.0;
+        double y_start = (position.getY() * sizeY) * 1.0;
+
+        double x_to = (moveToPosition.getX()) * 1.0;
+        double y_to = (moveToPosition.getY()) * 1.0;
+
+        Double progress = (thisGO.getMoveProgres() * 1.0) / 100.0;
+        double x_global = x_start - x_to;
+        double y_global = y_start - y_to;
+
+        Long x_current = Math.round(x_start - (x_global * progress.doubleValue()));
+        Long y_current = Math.round(y_start - (y_global * progress.doubleValue()));
+
+
+
+        return new PositionPair(new Long(x_current), new Long(y_current));
     }
 
     /**
@@ -246,18 +275,11 @@ public class Handler extends Observable {
      * <b>**Caution**</b> <br />
      * Should only be called in <b>tick()</b> method for thread safety
      */
-    public void resetGame() {
-        synchronized (lock) {
-            resetFlag = true;
-            //lock.notifyAll();
-        }
-
-        /*
+    public synchronized void resetGame() {
         objects.clear();
         aliveTroops.clear();
         towers.clear();
-        */
-        //aliveCount=0;
+        aliveCount=0;
     }
 
 
@@ -265,8 +287,8 @@ public class Handler extends Observable {
      * Get accumulated score.
      * <br /><br />
      * <b>**Note**</b><br />
-     * The score is restored when <b>resetScore()</b> method is called.
-     * @return the score
+     * The score is restored when <b>reset()</b> method is called.
+     * @return
      */
     public synchronized int getVictoryScore() {
         return score;

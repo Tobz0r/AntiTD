@@ -1,40 +1,48 @@
 package AntiTD.towers;
 
-import AntiTD.MovableGameObject;
+import AntiTD.GameObject;
 import AntiTD.Position;
+import AntiTD.tiles.GoalTile;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
+
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by dv13tes on 2015-12-10.
  */
-public class Projectile implements MovableGameObject {
+
+/*
+Velocity
+(-1 / dist ) * deltaX
+ */
+public class Projectile implements GameObject {
 
     private Troop target;
+
     private Tower tower;
+
     private final double speed = 1;
     private double moveProgres;
+
     private BufferedImage img;
 
-    /**
-     * Constructor for <b>Projectile</b> object
-     * @param target destination object
-     * @param tower originator object
-     * @param img image for rendering
-     */
     public Projectile(Troop target, Tower tower, BufferedImage img){
         super();
         this.target=target;
         this.tower=tower;
         this.img=img;
+
     }
 
-    /**
-     * Get the destination target.
-     * @return the target
-     */
+    public void damage(){
+        tower.attack(target,tower.getDamage());
+    }
     public Troop getTarget(){
         return target;
     }
@@ -51,10 +59,17 @@ public class Projectile implements MovableGameObject {
         }
 
     }
+    public boolean aliveTarget(){
+        return target.isAlive();
+    }
+
+    public boolean isAlive() {
+        return moveProgres > 100 ? false : true;
+    }
 
     @Override
-    public boolean isAlive() {
-        return moveProgres < 100;
+    public void render(Graphics g) {
+
     }
 
     @Override
@@ -73,6 +88,11 @@ public class Projectile implements MovableGameObject {
     }
 
     @Override
+    public String type() {
+        return null;
+    }
+
+    @Override
     public Tile getTilePosition() {
         return tower.getTilePosition();
     }
@@ -82,14 +102,13 @@ public class Projectile implements MovableGameObject {
         return target.getTilePosition();
     }
 
-    @Override
-    public int getMoveProgress() {
-        Long v = Math.round(this.moveProgres);
-        return v.intValue();
+    public GameObject getMoveTo() {
+        return target;
     }
 
-    @Override
-    public boolean hasReachedGoal() {
-        return false;
+
+    public int getMoveProgres() {
+        Long v = Math.round(this.moveProgres);
+        return v.intValue();
     }
 }
