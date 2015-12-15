@@ -2,25 +2,17 @@ package AntiTD;
 
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.*;
-
-import AntiTD.*;
 import AntiTD.database.DBModel;
 import AntiTD.tiles.CrossroadTile;
 import AntiTD.tiles.JunctionTile;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
-import AntiTD.towers.BasicTower;
-import AntiTD.towers.FrostTower;
 import AntiTD.troops.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,8 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+
 
 /**
  * @author dv13trm
@@ -59,7 +50,6 @@ public class GUI {
     private JLabel tenChars;
     private JLabel title;
     private JPanel titlePanel;
-
     private StartScreen startPanel;
     private JScrollPane playerScroll;
     private JScrollPane scrollPane;
