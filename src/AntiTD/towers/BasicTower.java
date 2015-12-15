@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.Timer;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author Rasmus Dahlkvist
  */
 public class BasicTower extends Tower {
     private int damage;
@@ -212,17 +212,10 @@ public class BasicTower extends Tower {
             if (this.getTroopFromList()) {
                 startShooting();
             }
-            //System.out.println(result);
             count = 0;
         }
 
     }
-
-    @Override
-    public void render(Graphics g) {
-
-    }
-
 
     @Override
     public Tile getMoveToPosition() {

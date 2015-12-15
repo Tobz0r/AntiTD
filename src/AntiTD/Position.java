@@ -1,7 +1,7 @@
 package AntiTD;
 
 /**
- * Created by dv13trm on 2015-11-27.
+ * @author Tobias Estefors
  */
 public class Position {
     private int x;

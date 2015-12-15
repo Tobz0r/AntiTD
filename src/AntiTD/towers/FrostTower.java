@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Created by id12rdt on 2015-11-30.
+ * @author Rasmus Dahlkvist
  */
 public class FrostTower extends Tower{
     private int damage;
@@ -195,10 +195,7 @@ public class FrostTower extends Tower{
 
     }
 
-    @Override
-    public void render(Graphics g) {
 
-    }
 
     @Override
     public Tile getTilePosition() {

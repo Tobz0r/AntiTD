@@ -2,24 +2,16 @@ package AntiTD.towers;
 
 import AntiTD.GameObject;
 import AntiTD.Position;
-import AntiTD.tiles.GoalTile;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
-import javax.imageio.ImageIO;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
+
 
 /**
- * Created by dv13tes on 2015-12-10.
- */
-
-/*
-Velocity
-(-1 / dist ) * deltaX
+ * @author Tobias Estefors
  */
 public class Projectile implements GameObject {
 
@@ -59,17 +51,9 @@ public class Projectile implements GameObject {
         }
 
     }
-    public boolean aliveTarget(){
-        return target.isAlive();
-    }
 
     public boolean isAlive() {
         return moveProgres > 100 ? false : true;
-    }
-
-    @Override
-    public void render(Graphics g) {
-
     }
 
     @Override
@@ -87,10 +71,6 @@ public class Projectile implements GameObject {
         return null;
     }
 
-    @Override
-    public String type() {
-        return null;
-    }
 
     @Override
     public Tile getTilePosition() {
