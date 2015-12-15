@@ -6,16 +6,13 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.*;
-import javax.swing.text.html.ObjectView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -60,36 +57,43 @@ public class Menu extends JMenu {
         this.frame = frame;
     }
 
-
+    /*
+     * Take a string, and sets newGame button to that string
+     */
     public void setNewGame(String change) {
         newGame.setText(change);
     }
 
+    /**
+     * Create the start menu with menu items
+     * Each menu item have its own actionlistener
+     * newGame restart current level or start a new game
+     * pauseGame pauses the game or resumes
+     * mute mutes the game or unmute
+     * highScore shows highscorelist
+     * mainMenu takes user back to main menu
+     * exitGame quits the game
+     */
     public void startMenu(){
         frame.setJMenuBar(startMenuBar);
         startMenuBar.add(this);
-        //lägga till menyitems
+        //add items to menu
         newGame = this.add("Restart");
-        pauseGame = this.add("Pause");
-        mute = this.add("Mute");
-        highScore = this.add("High Score");
-        mainMenu = this.add("Main Menu");
-        exitGame = this.add("Quit");
         newGame.setBackground(Color.white);
+        pauseGame = this.add("Pause");
         pauseGame.setBackground(Color.white);
+        mute = this.add("Mute");
         mute.setBackground(Color.white);
+        highScore = this.add("High Score");
         highScore.setBackground(Color.white);
+        mainMenu = this.add("Main Menu");
+        mainMenu.setBackground(Color.white);
+        exitGame = this.add("Quit");
         exitGame.setBackground(Color.white);
         mainMenu.setBackground(Color.white);
         if(!env.isRunning()){
             newGame.setText("New Game");
         }
-        highScore.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                gui.highScoreTable();
-            }
-        });
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -105,6 +109,13 @@ public class Menu extends JMenu {
             }
 
         });
+        highScore.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                gui.highScoreTable();
+            }
+        });
+
         mainMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -182,23 +193,31 @@ public class Menu extends JMenu {
 
         startMenuBar.add(this);
     }
+
+    /**
+     * @return true if its pause false if not
+     */
     public boolean musicStatus(){
         return pauseMusic;
     }
 
+    /**
+     * Adds a menu bar to the menu, with menuitem help, about and namechange
+     * Each menu item have its own actionlistener
+     * help shows a new frame with info about how the game
+     * about show info about who created the game
+     * nameChange let the user change its name
+     */
     public void statMenu(){
         frame.setJMenuBar(statMenuBar);
         statMenuBar.add(this);
         //lägga till menyitems
         help = statmenu.add("Help");
+        help.setBackground(Color.white);
         about = statmenu.add("About");
-
-
+        about.setBackground(Color.white);
         nameChange = statmenu.add("Change name");
         nameChange.setBackground(Color.white);
-
-        help.setBackground(Color.white);
-        about.setBackground(Color.white);
 
         help.addActionListener(new ActionListener() {
             @Override
