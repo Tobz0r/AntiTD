@@ -288,7 +288,7 @@ public class Environment extends JPanel implements Runnable,Observer {
      */
     public void addTroop(Troop troop){
         handler.addObject(troop);
-    }
+    } 
     /**
      * Adds a tower to the handlers liost
      * @param tower the troop to be added
