@@ -22,6 +22,11 @@ import java.util.concurrent.Executors;
 
 /**
  * @author Tobias Estefors
+ * Class that acts as an operator for the whole game. Have responsability to
+ * update the gameboard and gamestate each timetick wich is calculated by the class.
+ * Is used to increment/restart levels and checks if the game is finished.
+ * Each new level, Enviroment sets up the neighbors for each tile and places the towers on the
+ * board.
  *
  */
 public class Environment extends JPanel implements Runnable,Observer {
