@@ -1,6 +1,7 @@
 package AntiTD;
 
 /**
+ * @author Thom Renström, Tobias Estefors
  * Position class that is used for all game objects and tiles
  * Mostly used to check position for every unit and tile
  */
@@ -19,7 +20,6 @@ public class Position {
     public int getX() {
         return x;
     }
-
     /**
      * Check if position given in parameter is to south
      * @param p parameter to check

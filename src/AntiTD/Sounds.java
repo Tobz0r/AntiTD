@@ -4,7 +4,7 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 /**
- * @author dv13trm
+ * @author Thom Renström
  * Sound class that is used for every sound that is made during a running session of the game
  *
  */
