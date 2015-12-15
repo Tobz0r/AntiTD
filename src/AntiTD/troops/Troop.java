@@ -5,9 +5,6 @@ import AntiTD.tiles.GoalTile;
 import AntiTD.tiles.Tile;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
 import java.util.Stack;
 
 /**
@@ -112,7 +109,7 @@ public abstract class Troop implements GameObject {
 
     private Tile getNextTile() {
         Tile[] neigbors;
-        neigbors = history.peek().getNeighbors2();
+        neigbors = history.peek().getNeighbors();
 
         Tile nextTile = null;
 
