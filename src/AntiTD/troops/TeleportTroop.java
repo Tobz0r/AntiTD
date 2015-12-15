@@ -68,7 +68,7 @@ public class TeleportTroop extends Troop {
             if (tpMoves == 0) {
                 teleportStartTile = this.getTilePosition();
                 tpMoves++;
-            } else if (tpMoves >= tpLength) {
+            } else if (tpMoves > tpLength) {
                 isTeleporting = false;
                 tpMoves = 0;
                 teleportEndTile = this.getTilePosition();

@@ -61,7 +61,7 @@ public class Projectile implements MovableGameObject {
      * @return true if it hasnt hit his target else false
      */
     public boolean isAlive() {
-        return moveProgres < 100;
+        return moveProgres > 100 ? false : true;
     }
 
     /**

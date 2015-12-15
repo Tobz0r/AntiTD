@@ -10,7 +10,7 @@ import java.util.Stack;
 /**
  * Created by dv13trm on 2015-11-27.
  */
-public abstract class Troop implements GameObject {
+public abstract class Troop implements MovableGameObject {
     //private static int victoryScore;
     protected int health;
     protected int score;
@@ -103,7 +103,7 @@ public abstract class Troop implements GameObject {
     }
 
     @Override
-    public int getMoveProgres() {
+    public int getMoveProgress() {
         Long p = Math.round(this.moveProgres);
         return p.intValue();
     }

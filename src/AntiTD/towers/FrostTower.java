@@ -201,14 +201,4 @@ public class FrostTower extends Tower{
     public Tile getTilePosition() {
         return posTile;
     }
-
-    @Override
-    public Tile getMoveToPosition() {
-        return this.getTilePosition();
-    }
-
-    @Override
-    public int getMoveProgres() {
-        return 0;
-    }
 }

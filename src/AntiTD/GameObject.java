@@ -38,16 +38,6 @@ public interface GameObject{
      * @return a tileposition of this object
      */
     Tile getTilePosition();
-    /**
-     * Returns this gameobjects next tiles
-     * @return a tileposition of this object
-     */
-    Tile getMoveToPosition();
 
-    /**
-     * Checks how far the unit has walked
-     * @return moveprogress for troops
-     */
-    int getMoveProgres();
 
 }
