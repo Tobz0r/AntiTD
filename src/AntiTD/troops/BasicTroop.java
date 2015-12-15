@@ -36,11 +36,10 @@ public class BasicTroop extends Troop {
     }
 
     /**
-     * Constructor for basic troop, used for overriding default health, score and speed values
-     * <p/>
-     * ** CAUTION **
-     * Use this constructor for test purposes only.
+     * <p>Constructor for basic troop, used for overriding default health, score and speed values.</p>
      *
+     * <p><b>** CAUTION **</b></p>
+     * Use this constructor for test purposes only.
      * @param img    Image used for rendering this object.
      * @param pos    Starting tile position.
      * @param health Damage the troop can sustain.
@@ -53,14 +52,6 @@ public class BasicTroop extends Troop {
         super(img, pos, health, score, speed);
     }
 
-    /*
-    public BasicTroop(Tile pos) {
-        super(null, pos);
-        super.health = MAX_HEALTH;
-        super.score = KILL_DEATH_SCORE;
-        super.speed = SPEED;
-    }
-    */
     @Override
     public void tick() {
         this.move();

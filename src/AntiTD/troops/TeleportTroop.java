@@ -41,7 +41,7 @@ public class TeleportTroop extends Troop {
     /**
      * Constructor for teleport troop, used for overriding health score speed
      * <br /><br />
-     * <b>** CAUTION **</b>
+     * <b>** CAUTION **</b><br />
      * Use this constructor for test purposes only.
      * @param img Image used for rendering this object.
      * @param pos Starting tile position.
