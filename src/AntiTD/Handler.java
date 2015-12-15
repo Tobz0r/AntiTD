@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author Tobias Estefors, Mattias Edin
  */
 public class Handler extends Observable {
     private LinkedList<GameObject> objects;
@@ -130,7 +130,9 @@ public class Handler extends Observable {
         return list;
     }
 
-
+    /**
+     * Gets called each timetick from environment. Updates the gamestate.
+     */
     public synchronized void tick() {
         for (GameObject gameObject : objects) {
             try {
@@ -140,7 +142,7 @@ public class Handler extends Observable {
                     MovableGameObject mgo = (MovableGameObject) gameObject;
                     if (!mgo.isAlive()) {
                         //aliveCount--;
-                        removeObject(mgo);
+                        removeObject(gameObject);
                         if (mgo instanceof Troop) {
                             if(!isPaused) {
                                 sounds.music("music/deadman.wav", false);
@@ -172,6 +174,10 @@ public class Handler extends Observable {
 
     }
 
+    /**
+     * Draws the current gamestate on the board for each timetick
+     * @param g the boards graphics
+     */
     public synchronized void render(Graphics g) {
         for (GameObject gameObject : objects) {
 

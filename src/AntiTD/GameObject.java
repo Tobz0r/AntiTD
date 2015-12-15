@@ -7,36 +7,47 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author Tobias Estefors
  */
 public interface GameObject{
-
     /**
-     * Fixed time step update of object. Updates the object when called.
+     * Method to be called each timetick for every gameobject
      */
     void tick();
 
     /**
-     * Gets the assigned image of the object.
-     * @return image object.
+     * Getter for the image of gameobjects
+     * @return this gameobjets image
      */
     Image getImage();
 
     /**
-     * Get the current score of the object that it has accumulated since created.
-     * @return the score
+     * Returns how much this gameobject is worth in score
+     * @return this gameobjects score
      */
     int getCurrentScore();
 
     /**
-     * Get the coordinates of current position.
-     * @return the coordinates
+     * Returns this gameobjects position
+     * @return a position of this object
      */
     Position getPosition();
 
     /**
-     * Get current position as <b>Tile</b> object.
-     * @return the position
+     * Returns this gameobjects tiles
+     * @return a tileposition of this object
      */
     Tile getTilePosition();
+    /**
+     * Returns this gameobjects next tiles
+     * @return a tileposition of this object
+     */
+    Tile getMoveToPosition();
+
+    /**
+     * Checks how far the unit has walked
+     * @return moveprogress for troops
+     */
+    int getMoveProgres();
+
 }

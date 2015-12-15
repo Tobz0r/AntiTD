@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Created by id12rdt on 2015-11-30.
+ * @author Rasmus Dahlkvist
  */
 public class FrostTower extends Tower{
     private int damage;
@@ -107,6 +107,10 @@ public class FrostTower extends Tower{
     public void startShooting(){
         checkIfTroopReachedGoal();
         if (target != null) {
+
+            if(!target.isSlowed()) {
+                //target.slowSpeed();
+            }
             this.aggroTarget();
         } else {
             //   System.out.println("Target null");
@@ -191,14 +195,20 @@ public class FrostTower extends Tower{
 
     }
 
+
+
     @Override
     public Tile getTilePosition() {
         return posTile;
     }
-    /*
+
     @Override
     public Tile getMoveToPosition() {
         return this.getTilePosition();
     }
-    */
+
+    @Override
+    public int getMoveProgres() {
+        return 0;
+    }
 }

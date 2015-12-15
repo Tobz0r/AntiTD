@@ -8,34 +8,52 @@ import java.util.LinkedList;
 import java.util.Random;
 
 /**
- * Created by dv13tes on 2015-11-30.
+ * @author Tobias Estefors
+ * A class that holds all information needed to start a level.
+ * Will be created for each level when the game starts.
  */
 public class Level {
 
-    private Position startPosition;
+    private Position startPosition=null;
     private int startingCredits;
-    private Position goalPosition;
-    private static Tile[][] currentMap;
     private Tile[][] map;
     private String name;
-
-
 
     private int victoryPoints;
 
     public Level(String name){
         this.name=name;
     }
+
+    /**
+     * Adds a matrix of tiles to the level
+     * @param map a matrix of tiles
+     */
     public  void addMap(Tile[][] map){
-        //First setUp crossroads
         this.map=map;
     }
+
+    /**
+     * Sets the startingcredits for this level
+     * @param startingCredits an integer containing starting credits
+     */
     public void setStartingCredits(int startingCredits){
         this.startingCredits=startingCredits;
     }
+
+    /**
+     * Returns this levels startingcredit
+     * @return an integer of startingcredits
+     */
     public int getStartingCredits(){
         return startingCredits;
     }
+
+    /**
+     * Sets up the crossroad for each crossroad tile this level.
+     * needs to be called each time a new level is loaded
+     * @return An arraylist of mouseliteners for crossroads
+     */
     public ArrayList setUpCrossroad() {
         ArrayList<CrossroadSwitch> tiles=new ArrayList<>();
         for(int i=0;i < map.length; i++) {
@@ -55,30 +73,45 @@ public class Level {
        }
         return tiles;
     }
+
+    /**
+     * Returns how many points needed for win this map
+     * @return the score needed to win this map
+     */
     public int getVictoryPoints(){
         return victoryPoints;
     }
+
+    /**
+     * Returns a matrix of this levels tiles
+     * @return A matrix of tiles
+     */
     public  Tile[][] getMap(){
         return map;
     }
+
+    /**
+     * Sets the startposition for this level
+     * @param startPosition
+     */
     public void setStartPosition(Position startPosition){
         this.startPosition=startPosition;
     }
+
+    /**
+     * Returns this levels startposition
+     * @return startposition of this level
+     */
     public Position getStartPosition(){
         return startPosition;
     }
-    public void setGoalPosition(Position goalPosition){
 
-        this.goalPosition=goalPosition;
-    }
+    /**
+     * Sets score needed to win this level
+     * @param victoryPoints the score needed to win this level
+     */
     public void setVictoryPoints(int victoryPoints) {
-
         this.victoryPoints = victoryPoints;
     }
-    public static void setCurrentMap(Tile[][] map){
-        Level.currentMap=map;
-    }
-    public static Tile[][] getCurrentMap(){
-        return Level.currentMap;
-    }
+
 }

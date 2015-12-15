@@ -5,7 +5,7 @@ import AntiTD.tiles.Tile;
 import java.awt.*;
 
 /**
- * Created by id12men on 2015-11-27.
+ * Created by dv13trm on 2015-11-27.
  */
 public class TeleportTroop extends Troop {
 
@@ -17,8 +17,8 @@ public class TeleportTroop extends Troop {
 
     private int tpLength = 3;
 
-    static private final int MAX_HEALTH = 1000;
-    static private final int KILL_DEATH_SCORE = 1;
+    static private final int MAX_HEALTH = 10;
+    static private final int KILL_DEATH_SCORE = 100;
     static private final double SPEED = 2;
 
     /**
@@ -81,7 +81,6 @@ public class TeleportTroop extends Troop {
         }
     }
 
-    /*
     @Override
     protected void move() {
         if (isTeleporting) {
@@ -94,7 +93,7 @@ public class TeleportTroop extends Troop {
             super.move();
         }
     }
-    */
+
     /**
      * Initiates teleport creation
      */

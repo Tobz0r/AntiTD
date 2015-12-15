@@ -10,7 +10,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by mattias on 2015-11-27.
+ * @author Tobias Estefors
+ * Tiles used for the troops to walk on
  */
 public class PathTile extends Tile {
 
@@ -30,7 +31,10 @@ public class PathTile extends Tile {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Draws the tile on the board
+     * @param g the board graphics
+     */
     @Override
     public void landOn(Graphics g) {
         g.drawImage(getImage(),(int)(getPosition().getX()*(getSize().getWidth())),

@@ -4,13 +4,14 @@ import AntiTD.*;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author Rasmus Dahlkvist
  */
 public abstract class Tower implements GameObject {
     private Tile pos;

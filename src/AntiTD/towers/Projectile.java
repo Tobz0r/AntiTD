@@ -8,7 +8,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Created by dv13tes on 2015-12-10.
+ * @author Tobias Estefors
+ * A projectile used to be sent from a tower to a troop
  */
 public class Projectile implements MovableGameObject {
 
@@ -32,13 +33,16 @@ public class Projectile implements MovableGameObject {
     }
 
     /**
-     * Get the destination target.
-     * @return the target
+     * returns this projectiles current target
+     * @return A troop that is this target
      */
     public Troop getTarget(){
         return target;
     }
 
+    /**
+     * Gets called every timetick and updates this projectiles position
+     */
     @Override
     public void tick() {
         this.moveProgres += speed;
@@ -51,11 +55,19 @@ public class Projectile implements MovableGameObject {
         }
 
     }
-    @Override
+
+    /**
+     * Checks if the projectile is still in the game
+     * @return true if it hasnt hit his target else false
+     */
     public boolean isAlive() {
-        return moveProgres > 100 ? false : true;
+        return moveProgres < 100;
     }
 
+    /**
+     * Returns this projectiles visuals
+     * @return a buffered image
+     */
     @Override
     public Image getImage() {
         return img;

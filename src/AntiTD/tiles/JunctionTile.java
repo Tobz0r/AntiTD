@@ -8,7 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by dv13tes on 2015-12-04.
+ * @author Tobias Estefors
+ * Tile to be used before any crossroad so the crossroad wont point back
  */
 public class JunctionTile extends Tile {
 
@@ -26,7 +27,10 @@ public class JunctionTile extends Tile {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Draws the tile on the board
+     * @param g the board graphics
+     */
     @Override
     public void landOn(Graphics g) {
         g.drawImage(getImage(),(int)(getPosition().getX()*(getSize().getWidth())),
