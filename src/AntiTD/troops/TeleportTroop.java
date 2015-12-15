@@ -77,14 +77,6 @@ public class TeleportTroop extends Troop {
                     tpMoves++;
                 }
             }
-            /*
-            else if (isAlive()){
-                //addTeleportException(currentPosition);
-            }else{
-                //Clearar listan på tiles mellan teleporten om teleportgubben dör innan den är färdig med teleporten
-                clearTeleports();
-            }
-            */
         }
 
     }
@@ -101,12 +93,6 @@ public class TeleportTroop extends Troop {
         } else {
             super.move();
         }
-    }
-
-
-    @Override
-    public void render(Graphics g) {
-
     }
 
     public void initTeleport() {

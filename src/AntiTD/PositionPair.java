@@ -1,7 +1,7 @@
 package AntiTD;
 
 /**
- * Created by id12men on 2015-12-11.
+ * @author Mattias Edin
  */
 public class PositionPair {
 

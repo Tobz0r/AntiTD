@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * @author dv13trm
+ * @author Thom Renström
  * Menu class is designed to create a menu for the game
  * Each menu item on the menu have an actionlistener
  * Every actionlistener preformes an action depending on its task
