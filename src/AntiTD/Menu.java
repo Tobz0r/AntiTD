@@ -94,6 +94,7 @@ public class Menu extends JMenu {
         if(!Environment.isRunning()){
             newGame.setText("New Game");
         }
+        
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
