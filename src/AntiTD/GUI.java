@@ -10,7 +10,6 @@ import javax.swing.text.*;
 import AntiTD.database.DBModel;
 import AntiTD.tiles.CrossroadTile;
 import AntiTD.tiles.JunctionTile;
-import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.*;
 import java.awt.*;
