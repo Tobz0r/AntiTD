@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * @author Tobias Estefors
+ * A projectile used to be sent from a tower to a troop
  */
 public class Projectile implements GameObject {
 
@@ -32,13 +33,17 @@ public class Projectile implements GameObject {
 
     }
 
-    public void damage(){
-        tower.attack(target,tower.getDamage());
-    }
+    /**
+     * returns this projectiles current target
+     * @return A troop that is this target
+     */
     public Troop getTarget(){
         return target;
     }
 
+    /**
+     * Gets called every timetick and updates this projectiles position
+     */
     @Override
     public void tick() {
         this.moveProgres += speed;
@@ -52,10 +57,18 @@ public class Projectile implements GameObject {
 
     }
 
+    /**
+     * Checks if the projectile is still in the game
+     * @return true if it hasnt hit his target else false
+     */
     public boolean isAlive() {
         return moveProgres > 100 ? false : true;
     }
 
+    /**
+     * Returns this projectiles visuals
+     * @return a buffered image
+     */
     @Override
     public Image getImage() {
         return img;
@@ -80,10 +93,6 @@ public class Projectile implements GameObject {
     @Override
     public Tile getMoveToPosition() {
         return target.getTilePosition();
-    }
-
-    public GameObject getMoveTo() {
-        return target;
     }
 
 

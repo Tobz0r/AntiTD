@@ -19,7 +19,7 @@ public abstract class Troop implements GameObject {
     private Stack<Tile> history;
     private Tile nextTile;
     private double moveProgres;
-    private boolean hasReacedGoal;
+    private boolean hasReachedGoal;
     private boolean isMoving;
     private boolean slowed;
 
@@ -61,7 +61,7 @@ public abstract class Troop implements GameObject {
      * speed reaches the value of 100 the position will be updated.
      */
     protected void move() {
-        if (!hasReacedGoal && isAlive()) {
+        if (!hasReachedGoal && isAlive()) {
             if (!this.isMoving) {
                 this.isMoving = true;
                 this.moveProgres = speed;
@@ -79,7 +79,7 @@ public abstract class Troop implements GameObject {
 
                 history.push(nextTile);
                 if (nextTile instanceof GoalTile) {
-                    hasReacedGoal = true;
+                    hasReachedGoal = true;
                 } else if (nextTile.isTeleporter()) {
                     Tile endTPTile = nextTile.getTeleportTo();
 
@@ -131,7 +131,7 @@ public abstract class Troop implements GameObject {
 
     @Override
     public int getCurrentScore() {
-        if (hasReacedGoal) {
+        if (hasReachedGoal) {
             return score;
         } else {
             return 0;
@@ -139,7 +139,7 @@ public abstract class Troop implements GameObject {
     }
 
     public boolean hasReachedGoal() {
-        return hasReacedGoal;
+        return hasReachedGoal;
     }
 
     public int getHealth() {
@@ -171,7 +171,7 @@ public abstract class Troop implements GameObject {
         if (health <= 0) {
             isAlive = false;
         }
-        if (hasReacedGoal) {
+        if (hasReachedGoal) {
             isAlive = false;
         }
         return isAlive;

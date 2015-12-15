@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * @author Tobias Estefors
  * Parses an xml-file containing all the levels and adds them to an arraylist
  */
-public class ReadXML { 
+public class ReadXML {
 
     private File xmlMap;
 

@@ -116,11 +116,19 @@ public abstract class Tile implements TileRender {
     public Tile[] getNeighbors() {
         return neighbors;
     }
+
+    /**
+     * Sets the neighbors for this tile
+     * @param neighbors a array of tiles
+     */
     public void setNeighbors(Tile[] neighbors) {
         this.neighbors = neighbors;
     }
 
-
+    /**
+     * Sets the next tile for this tile if this is a teleporter
+     * @param tile the next tile
+     */
     public void setTeleportTo(Tile tile){
         this.teleportEnd=tile;
         isTeleportStart = true;
@@ -128,21 +136,44 @@ public abstract class Tile implements TileRender {
         teleportEnd.setTeleporterimage(true);
 
     }
+
+    /**
+     * Return the tile to be teleported to from this tile
+     * @return a tile to be teleported to
+     */
     public Tile getTeleportTo(){
         return teleportEnd;
     }
+
+    /**
+     * Resets all teleports
+     */
     public void resetTeleport(){
         isTeleporter=false;
         isTeleportStart=false;
         setTeleporterimage(false);
         teleportEnd=null;
     }
+
+    /**
+     * Checks if this is teleporter
+     * @return true if teleporter else false
+     */
     public boolean isTeleporterimage(){
         return isTeleporter;
     }
+
+    /**
+     * Sets this to a teleporter
+     * @param isTeleporter true if its teleporter else false
+     */
     public void setTeleporterimage(boolean isTeleporter){
         this.isTeleporter=isTeleporter;
     }
+    /**
+     * Checks if this is teleporter
+     * @return true if teleporter else false
+     */
     public boolean isTeleporter(){
         return this.isTeleportStart;
     }
