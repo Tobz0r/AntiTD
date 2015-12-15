@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -62,7 +61,7 @@ public class CrossroadTile extends Tile {
      */
     public Tile[] findNextWay(){
         nextTiles.clear();
-        Tile[] neighbors = getNeighbors2();
+        Tile[] neighbors = getNeighbors();
         Tile[] arrNeighbors=new Tile[neighbors.length];
         for(Tile tile: neighbors){
             if(!(tile instanceof JunctionTile )){
@@ -102,7 +101,7 @@ public class CrossroadTile extends Tile {
      * @throws IOException
      */
     public void changeWay() throws IOException {
-        Tile[] current=getNeighbors2();
+        Tile[] current= getNeighbors();
         Tile[] newPath=new Tile[current.length];
         for(int i=0; i < current.length;i++){
             newPath[i]=current[i];

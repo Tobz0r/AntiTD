@@ -1,8 +1,6 @@
 package AntiTD.tiles;
 
-/**
- * Created by dv13trm on 2015-11-27.
- */
+
 import AntiTD.Position;
 import AntiTD.troops.Troop;
 import java.awt.*;
@@ -10,6 +8,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * @author Tobias Estefors
+ */
 public abstract class Tile implements TileRender {
 
 
@@ -22,54 +23,113 @@ public abstract class Tile implements TileRender {
     private BufferedImage image=null;
     private Position position;
     private Tile[] neighbors;
-    Troop player;
 
     public Tile(Position pos) {
         this.position = pos;
         isTeleportStart=false;
         isTeleporter=false;
     }
+
+    /**
+     * Specifies if this tile is buildable or not
+     * @param true if tile is buildable else false
+     */
     public void setBuildable(boolean buildable) {
         this.buildable = buildable;
     }
+    /**
+     * Specifies if this tile is walkable or not
+     * @param true if tile is walkable else false
+     */
     public void setMoveable(boolean moveable){
         this.moveable=moveable;
     }
+
+    /**
+     * Checks if this tile is walkable or not
+     * @return true if tile is walkable else false
+     */
     public boolean isMoveable() {
         return moveable;
     }
+
+    /**
+     * Checks if this tile is buildable or not
+     * @return true if its buildable else false
+     */
     public boolean isBuildable() {
         return buildable;
     }
+
+    /**
+     * Returns the size of this tile
+     * @return An dimension containing width and height for this tile
+     */
     public Dimension getSize(){
         return size;
     }
+
+    /**
+     * Sets the size of this tile
+     * @param size an dimension containing width and height
+     */
+    public void setSize(Dimension size){
+        this.size=size;
+    }
+
+    /**
+     * Sets the position of this tile
+     * @param position the position of this tile
+     */
     public void setPosition(Position position){
         this.position=position;
     }
+
+    /**
+     * Returns the position of this tile
+     * @return this tiles position
+     */
     public Position getPosition(){
         return position;
     }
 
+    /**
+     * Sets the image to be drawn on the gameboard for this tile
+     * @param image this tiles image
+     */
     public void setImage(BufferedImage image){
         this.image=image;
     }
+
+    /**
+     * Returns the image of this tile
+     * @return a bufferedtimage of this tile
+     */
     public BufferedImage getImage(){
         return image;
     }
 
-    public void setSize(Dimension size){
-        this.size=size;
-    }
-    public Tile[] getNeighbors2() {
+    /**
+     * Returns an array of this tiles neighbors
+     * @return an array of tiles
+     */
+    public Tile[] getNeighbors() {
         return neighbors;
     }
+    public void setNeighbors(Tile[] neighbors) {
+        this.neighbors = neighbors;
+    }
+
+
     public void setTeleportTo(Tile tile){
         this.teleportEnd=tile;
         isTeleportStart = true;
         isTeleporter=true;
         teleportEnd.setTeleporterimage(true);
 
+    }
+    public Tile getTeleportTo(){
+        return teleportEnd;
     }
     public void resetTeleport(){
         isTeleporter=false;
@@ -83,16 +143,10 @@ public abstract class Tile implements TileRender {
     public void setTeleporterimage(boolean isTeleporter){
         this.isTeleporter=isTeleporter;
     }
-    public Tile getTeleportTo(){
-        return teleportEnd;
-    }
     public boolean isTeleporter(){
         return this.isTeleportStart;
     }
 
-    public void setNeighbors(Tile[] neighbors) {
-        this.neighbors = neighbors;
-    }
 
     public String toString(){
         return "Tile X: "+getPosition().getX()+" Y: "+getPosition().getY();
