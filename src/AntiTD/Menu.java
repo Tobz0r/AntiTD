@@ -17,6 +17,11 @@ import java.util.ArrayList;
 
 /**
  * @author dv13trm
+ * Menu class is designed to create a menu for the game
+ * Each menu item on the menu have an actionlistener
+ * Every actionlistener preformes an action depending on its task
+ * There is two menubar one for accual game interference
+ * the other one is more about information around the game.
  */
 public class Menu extends JMenu {
     //startmenu
@@ -80,21 +85,9 @@ public class Menu extends JMenu {
         //add items to menu
         newGame = this.add("Restart");
         newGame.setBackground(Color.white);
-        pauseGame = this.add("Pause");
-        pauseGame.setBackground(Color.white);
-        mute = this.add("Mute");
-        mute.setBackground(Color.white);
-        highScore = this.add("High Score");
-        highScore.setBackground(Color.white);
-        mainMenu = this.add("Main Menu");
-        mainMenu.setBackground(Color.white);
-        exitGame = this.add("Quit");
-        exitGame.setBackground(Color.white);
-        mainMenu.setBackground(Color.white);
         if(!env.isRunning()){
             newGame.setText("New Game");
         }
-        
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -110,28 +103,8 @@ public class Menu extends JMenu {
             }
 
         });
-        highScore.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                gui.highScoreTable();
-            }
-        });
-
-        mainMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                mainMusic = true;
-                gui.pauseMainSound();
-                newGame.setText("New Game");
-                gui.startScreen();
-            }
-        });
-        exitGame.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.exit(0);
-            }
-        });
+        pauseGame = this.add("Pause");
+        pauseGame.setBackground(Color.white);
         pauseGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -149,6 +122,8 @@ public class Menu extends JMenu {
                 }
             }
         });
+        mute = this.add("Mute");
+        mute.setBackground(Color.white);
         mute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -164,9 +139,6 @@ public class Menu extends JMenu {
                         }
                         gui.pauseTroopSound();
                     }
-
-
-
                     mute.setText("Unmute");
                     mutesound=false;
                 }
@@ -178,20 +150,45 @@ public class Menu extends JMenu {
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).resumeTowerSound();
                         }
-
                         gui.resumeTroopSound();
                     }
                     if(mainMusic){
-                       gui.playMusic();
+                        gui.playMusic();
                     }
-
                     mute.setText("Mute");
                     mutesound = true;
                 }
             }
         });
 
+        highScore = this.add("High Score");
+        highScore.setBackground(Color.white);
+        highScore.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                gui.highScoreTable();
+            }
+        });
 
+        mainMenu = this.add("Main Menu");
+        mainMenu.setBackground(Color.white);
+        mainMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                mainMusic = true;
+                gui.pauseMainSound();
+                newGame.setText("New Game");
+                gui.startScreen();
+            }
+        });
+        exitGame = this.add("Quit");
+        exitGame.setBackground(Color.white);
+        exitGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.exit(0);
+            }
+        });
         startMenuBar.add(this);
     }
 
@@ -215,17 +212,14 @@ public class Menu extends JMenu {
         //lägga till menyitems
         help = statmenu.add("Help");
         help.setBackground(Color.white);
-        about = statmenu.add("About");
-        about.setBackground(Color.white);
-        nameChange = statmenu.add("Change name");
-        nameChange.setBackground(Color.white);
-
         help.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 callHelpFrame();
             }
         });
+        about = statmenu.add("About");
+        about.setBackground(Color.white);
         about.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -233,6 +227,8 @@ public class Menu extends JMenu {
 
             }
         });
+        nameChange = statmenu.add("Change name");
+        nameChange.setBackground(Color.white);
         nameChange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -244,10 +240,13 @@ public class Menu extends JMenu {
                 }
             }
         });
-
         statMenuBar.add(statmenu);
     }
-
+    /**
+     * Call the helpframe that will show when you press help on menu
+     * resizes the images and add them to a table with all information
+     * about the game.
+     */
     private void callHelpFrame(){
         ArrayList<ImageIcon> icons = new ArrayList<>();
         //ogre
@@ -260,7 +259,6 @@ public class Menu extends JMenu {
         ogre= (BufferedImage) resizeImage(ogre,25,25);
         ImageIcon ogree= new ImageIcon(ogre);
         icons.add(ogree);
-
 
         //dragon
         BufferedImage dragon = null;
@@ -296,37 +294,18 @@ public class Menu extends JMenu {
         ImageIcon telee= new ImageIcon(tele);
         icons.add(telee);
 
-
         //priceTable
         String[] columns={"Units","Image"};
         Object[][] rows = {{ogre}};
-      /*  DefaultTableModel model = new DefaultTableModel(rows, columns) {
-            @Override
-            public Class<?> getColumnClass(int column) {
-                switch (column){
-                    case 0:
-                    case 1: return Integer.class;
-                    case 2: return ImageIcon.class;
-                    default: return Object.class;
-                }
-
-            }
-
-        }; */
         Object[][] data ={ {"Ogre",ogre},{"earth",earth},
         {"teleport",tele},{"dragon",dragon}
         };
-
         priceTable = new JTable();
-       // priceTable.setValueAt(ogree, 1,1);
-        JTable unitTable = new JTable();
-
         DefaultTableModel model = new DefaultTableModel(columns,0){
             @Override
             public Class<?> getColumnClass(int columnIndex) {
                 if(getRowCount() > 0){
                     return getValueAt(0,columnIndex).getClass();
-
                 }
                 return super.getColumnClass(columnIndex);
             }
@@ -346,13 +325,9 @@ public class Menu extends JMenu {
         teleText.append("Teleport \n HP:200 \n Speed = 1");
         textAreas.add(teleText);
 
-
-
-        int y1 = 20;
         for(int row = 0; row <icons.size(); row++){
             Object[] rowData = {textAreas.get(row), icons.get(row)};
             model.addRow(rowData);
-            //model.addColumn(units);
         }
 
         priceTable.setModel(model);
@@ -369,20 +344,9 @@ public class Menu extends JMenu {
                 "Cost: $450 </font></html>", 2,0);
         priceTable.setValueAt("<html><font size= 6>  Health: 10 <br> Speed: 2 <br> Teleport distance = 3 <br>" +
                 "Cost: $4000</font></html>", 3,0);
-        /*unitTable.setModel(model);
-        unitTable.setRowHeight(((ImageIcon)model.getValueAt(0,1)).getIconHeight());*/
-
-
-
-
-
-
-
-
 
         helpPanel = new JPanel();
         helpPanel.setBackground(Color.black);
-       // helpPanel.add(unitTable.getTableHeader());;
         Font font = new Font("Verdana",Font.BOLD,25);
         //textfältet
         helpText = new JTextArea(15,15);
@@ -407,24 +371,23 @@ public class Menu extends JMenu {
                 "starting money. You will " +
                 "get money if your unit reach goal", Color.white);
         JTextArea informationArea = new JTextArea();
-        /*informationArea.setText("To Play start by choosing a name then you spawn troops with your " +
-                "starting money. You will " +
-                "get money if your unit reach goal");*/
         informationArea.setBackground(Color.black);
         informationArea.setSelectedTextColor(Color.white);
         helpPanel.add(textPane, BorderLayout.SOUTH);
         helpPanel.add(helpButton, BorderLayout.NORTH);
 
         helpFrame.setSize(1000, 1000);
-        /*helpFrame.add(helpText);
-        helpScroll = new JScrollPane(helpText);
-        helpFrame.add(helpScroll, BorderLayout.CENTER);*/
-
-       // helpFrame.getContentPane().setBackground(Color.yellow);
         helpFrame.add(helpPanel, BorderLayout.SOUTH);
         helpFrame.add(priceTable, BorderLayout.CENTER);
         helpFrame.setVisible(true);
     }
+
+    /**
+     *
+     * @param tp
+     * @param msg
+     * @param c
+     */
     private void appendToPane(JTextPane tp, String msg, Color c)
     {
         StyleContext sc = StyleContext.getDefaultStyleContext();
@@ -439,6 +402,13 @@ public class Menu extends JMenu {
         tp.replaceSelection(msg);
     }
 
+    /**
+     * Takes an image and resizes it
+     * @param myImg the image you want to resize
+     * @param w width of the image
+     * @param h hight of the image
+     * @return the resized image
+     */
     private Image resizeImage(Image myImg, int w, int h){
         BufferedImage resizeImg = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = resizeImg.createGraphics();
@@ -449,8 +419,5 @@ public class Menu extends JMenu {
 
         return resizeImg;
     }
-
-
-
 }
 
