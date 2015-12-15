@@ -21,7 +21,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
- * @author dv13tes
+ * @author Tobias Estefors
  *
  */
 public class Environment extends JPanel implements Runnable,Observer {
@@ -246,7 +246,7 @@ public class Environment extends JPanel implements Runnable,Observer {
             long wait = ns - (now - lastTime);
             lastTime = now;
             wait = wait < 0 ? 0 : wait;
-            finishedLevel(wait);
+            finishedLevel();
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
@@ -288,7 +288,7 @@ public class Environment extends JPanel implements Runnable,Observer {
      */
     public void addTroop(Troop troop){
         handler.addObject(troop);
-    } 
+    }
     /**
      * Adds a tower to the handlers liost
      * @param tower the troop to be added
@@ -297,19 +297,35 @@ public class Environment extends JPanel implements Runnable,Observer {
         handler.addObject(tower);
         towers.add(tower);
     }
- /*   public void addBullets(Bullets bullets){
-        handler.addObject(bullets);
-    }*/
 
+    /**
+     * Returns a list of current alive troops
+     * @return an arraylist of troops
+     */
     public ArrayList<Troop> getTroops(){
         return handler.getAliveTroops();
     }
+
+    /**
+     * Sets the current gamestate to paused
+     */
     public  void pauseGame(){
         paused=true;
     }
+
+    /**
+     * Resumes the game
+     */
     public  void resumeGame(){
         paused=false;
     }
+
+    /**
+     * Changes the level to the next level.
+     * @param restart if the map is to be restarted
+     * @param gameOver true if game is finished, else false
+     * @param wonMap true if the map was won and should continue to the next
+     */
     private void incrementLevel(boolean restart, boolean gameOver, boolean wonMap){
         pauseGame();
         int currentMap=mapNr;
@@ -336,7 +352,6 @@ public class Environment extends JPanel implements Runnable,Observer {
                 restart=true;
             }
             else {
-                JOptionPane.showMessageDialog(null, "GOODBYE");
                 System.exit(0);
             }
         }
@@ -351,7 +366,6 @@ public class Environment extends JPanel implements Runnable,Observer {
         restartMoney=credits;
         credits= restart ? level.getStartingCredits() : restartMoney;
         setUpNeighbors();
-        //Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
@@ -362,12 +376,20 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     }
 
+    /**
+     * Restarts the game from level 0
+     * @param restart true if game is to be restarted
+     */
     public void restartLevel(boolean restart){
         handler.resetGame();
         incrementLevel(restart,false,false);
     }
 
-    private void finishedLevel(long wait){
+    /**
+     * Is called every timetick to check if current map is finished and depends on the current gamestate choses
+     * what is to be happening next
+     */
+    private void finishedLevel(){
         if(handler.getVictoryScore() >= victoryScore){
             handler.resetGame();
             if((mapNr+1)>levels.size()-1) {
@@ -410,20 +432,42 @@ public class Environment extends JPanel implements Runnable,Observer {
             incrementLevel(true, true,false);
         }
     }
+
+    /**
+     * Pause the in-game music
+     */
     public void pauseEnvSound(){
         playMusic = false;
     }
+
+    /**
+     * Resumes the in-game music
+     */
     public void resumeEnvSound(){
         playMusic = true;
     }
 
-
+    /**
+     * Returns the current score for the game.
+     * @return an integer of current score
+     */
     public int getScore() {
         return handler.getVictoryScore();
     }
+
+    /**
+     * Returns the value of the current money the player has
+     * @return an integer containing the money
+     */
     public int getMoney(){
         return credits;
     }
+
+    /**
+     * Used by the gui to buy units to the game. Does nothing if the player dont have enough credits
+     * @param amount of credits spent for the troop to be buyed
+     * @return true if the unit could be bought, else false
+     */
     public boolean buyUnit(int amount){
         if((credits-amount)>0) {
             credits -= amount;
@@ -431,6 +475,10 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
         return false;
     }
+
+    /**
+     * Initates the towers to the gameboard
+     */
     private void initTowers(){
         towers.clear();
         Tile[][] currentMap = Level.getCurrentMap();
@@ -443,9 +491,18 @@ public class Environment extends JPanel implements Runnable,Observer {
             }
         }
     }
+
+    /**
+     * Returns a list of all towers
+     * @return an arraylist of all towers
+     */
     public ArrayList getTowers(){
         return towers;
     }
+
+    /**
+     * Resets the teleports so they wont be there when the game is restarted or incremented.
+     */
     private void resetTeleport(){
         for(int i=0; i < levels.size(); i++){
             Tile[][] map=levels.get(i).getMap();
@@ -457,10 +514,18 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
     }
 
+    /**
+     * Updates the game money each timetick
+     */
     @Override
     public void update(Observable o, Object arg) {
         credits+=(int)arg;
     }
+
+    /**
+     * Pauses the music for all gamesounds
+     * @param paused true if should be paused, else false
+     */
     public void setPaused(boolean paused){
         handler.setIsPaused(paused);
     }

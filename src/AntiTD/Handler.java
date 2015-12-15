@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author Tobias Estefors, Mattias Edin
  */
 public class Handler extends Observable {
     private LinkedList<GameObject> objects;
