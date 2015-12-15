@@ -5,12 +5,16 @@ import AntiTD.tiles.GoalTile;
 import AntiTD.tiles.Tile;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Random;
 import java.util.Stack;
 
 /**
- * Created by id12men on 2015-11-27.
+ * Created by dv13trm on 2015-11-27.
  */
-public abstract class Troop implements MovableGameObject {
+public abstract class Troop implements GameObject {
+    //private static int victoryScore;
     protected int health;
     protected int score;
     protected double speed;
@@ -22,42 +26,20 @@ public abstract class Troop implements MovableGameObject {
     private boolean isMoving;
     private boolean slowed;
 
-    /**
-     * Constructor for troop object.
-     * @param pos starting position tile
-     */
+
+
+
     protected Troop(Tile pos) {
         this(null, pos);
     }
 
-    /**
-     * Constructor for troop object.
-     * @param img image to store for rendering
-     * @param pos starting position tile
-     */
     protected Troop(Image img, Tile pos) {
-        this(img, pos, 1, 1, 1);
+        this(pos, 1, 1, 1);
     }
-
-    /**
-     * Constructor for troop object.
-     * @param pos starting position tile
-     * @param health health of troop
-     * @param score score to gain when troop finishes
-     * @param speed move speed
-     */
     protected Troop(Tile pos, int health, int score, double speed) {
         this(null, pos, health, score, speed);
     }
 
-    /**
-     * Constructor for troop object.
-     * @param img image to store for rendering
-     * @param pos starting position tile
-     * @param health health of troop
-     * @param score score to gain when troop finishes
-     * @param speed move speed
-     */
     protected Troop(Image img, Tile pos, int health, int score, double speed) {
         this.img = img;
         this.health = health;
@@ -66,6 +48,9 @@ public abstract class Troop implements MovableGameObject {
         this.history = new Stack<Tile>();
         this.history.push(pos);
         slowed = false;
+
+
+
     }
 
     @Override
@@ -74,8 +59,8 @@ public abstract class Troop implements MovableGameObject {
     /**
      * ** CAUTION **
      * Should be used in implemented tick method and no where else.
-     * <br /><br />
-     * Moves the troop to next tile according to speed, when accumulated
+     *
+     * Moves the troop to next tile according to speed when accumulated
      * speed reaches the value of 100 the position will be updated.
      */
     protected void move() {
@@ -88,6 +73,9 @@ public abstract class Troop implements MovableGameObject {
 
             if (this.moveProgres < 100) {
                 this.moveProgres += speed;
+                /*if (this.moveProgres > 100) {
+                    this.moveProgres = 100;
+                }*/
             } else {
                 this.isMoving = false;
                 this.moveProgres = 0;
@@ -110,21 +98,18 @@ public abstract class Troop implements MovableGameObject {
         }
     }
 
+
     @Override
     public Tile getMoveToPosition() {
         return nextTile;
     }
 
     @Override
-    public int getMoveProgress() {
+    public int getMoveProgres() {
         Long p = Math.round(this.moveProgres);
         return p.intValue();
     }
 
-    /**
-     * Get next in path that is movable and not in move history.
-     * @return next tile
-     */
     private Tile getNextTile() {
         Tile[] neigbors;
         neigbors = history.peek().getNeighbors2();
@@ -156,21 +141,17 @@ public abstract class Troop implements MovableGameObject {
         }
     }
 
-    @Override
     public boolean hasReachedGoal() {
         return hasReacedGoal;
     }
 
-    /**
-     * Get current health of object.
-     * @return health value
-     */
     public int getHealth() {
         return this.health;
     }
 
     /**
      * Attacks this troop
+     *
      * @param damage amount of damage to take
      * @return true if this troop died else false
      */
@@ -185,9 +166,9 @@ public abstract class Troop implements MovableGameObject {
 
     /**
      * Checks troops life status
+     *
      * @return true if alive else false
      */
-    @Override
     public boolean isAlive() {
         boolean isAlive = true;
         if (health <= 0) {
@@ -212,13 +193,16 @@ public abstract class Troop implements MovableGameObject {
         return "Troop";
     }
 
-    /**
-     * Slows the movement speed to this troop whe called.
-     */
     public void slowSpeed(){
-        if (! slowed) {
+        if (! this.isSlowed()) {
             this.speed = (speed * 0.5);
             slowed = true;
+            System.out.println(speed);
         }
     }
+    public boolean isSlowed(){
+        return slowed;
+    }
+
+
 }

@@ -8,7 +8,9 @@ import java.util.LinkedList;
 import java.util.Random;
 
 /**
- * Created by dv13tes on 2015-11-30.
+ * @author Tobias Estefors
+ * A class that holds all information needed to start a level.
+ * Will be created for each level when the game starts.
  */
 public class Level {
 
@@ -18,8 +20,6 @@ public class Level {
     private static Tile[][] currentMap;
     private Tile[][] map;
     private String name;
-
-
 
     private int victoryPoints;
 
@@ -75,10 +75,5 @@ public class Level {
 
         this.victoryPoints = victoryPoints;
     }
-    public static void setCurrentMap(Tile[][] map){
-        Level.currentMap=map;
-    }
-    public static Tile[][] getCurrentMap(){
-        return Level.currentMap;
-    }
+
 }

@@ -8,7 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by dv13tes on 2015-11-30.
+ * @author Tobias Estefors
+ * This tile if used only for visual, it can neither be built not walked on
  */
 public class BasicTile extends Tile {
 

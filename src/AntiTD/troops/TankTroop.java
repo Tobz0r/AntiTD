@@ -3,6 +3,7 @@ package AntiTD.troops;
 import AntiTD.tiles.Tile;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
@@ -54,6 +55,11 @@ public class TankTroop extends Troop {
         this.move();
     }
 
+    @Override
+    public void render(Graphics g) {
+
+    }
+
     /**
      * Attacks the troop with the specified damage.
      * TankTroop has a 20% chanse to avoid the damage.
@@ -62,12 +68,16 @@ public class TankTroop extends Troop {
      */
     @Override
     public boolean attackThis(int damage) {
-        if((r.nextInt(5) + 1)==1){
-            System.out.println("Blocked attack");
+        if ( ! hasReachedGoal() ) {
+            if((r.nextInt(5) + 1)==1){
+                damage=0;
+                System.out.println("Blocked attack");
+            }
+            health = health - damage;
+            return !this.isAlive();
         } else {
-            super.attackThis(damage);
+            return false;
         }
-        return !this.isAlive();
     }
 
 

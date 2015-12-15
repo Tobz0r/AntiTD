@@ -4,7 +4,9 @@ import java.awt.event.*;
 import java.io.IOException;
 
 /**
- * Created by Tobias on 2015-12-07.
+ * @author Tobias Estefors
+ * Class used to check if the tile containing a crossroad has been clicked.
+ * If that tile has been clicked it calles the changeway method from the crossroad
  */
 public class CrossroadSwitch extends MouseAdapter {
 
@@ -14,6 +16,10 @@ public class CrossroadSwitch extends MouseAdapter {
         this.tile=tile;
     }
 
+    /**
+     * Changes the tiles path if clicked within the correct area
+     * @param e the mouseclick
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         int mx=e.getX();
@@ -30,12 +36,19 @@ public class CrossroadSwitch extends MouseAdapter {
             }
         }
     }
+
+    /**
+     * Checks if the mouseclick is within the tiles x and y-value
+     * @param mx the mouseclicks x-value
+     * @param my the mouseclicks y-value
+     * @param x  the tiles x-value
+     * @param y  the tiles y-value
+     * @param width the width of the tile
+     * @param height the height of the tile
+     * @return true if the mouseclick is within the area, else false
+     */
     private boolean mouseOver(int mx,int my,int x, int y, int width, int height){
         return (((mx > x) && (mx < x + width))&&((my > y) && (my < y + height)));
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
     }
 
 }
