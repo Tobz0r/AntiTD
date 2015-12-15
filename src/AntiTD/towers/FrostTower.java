@@ -85,11 +85,9 @@ public class FrostTower extends Tower{
                 if(playMusic){
                     sounds.music("music/lazer.wav",false);
                 }
-                //attack(target, getDamage());
                 handler.addObject(bullet);
                 cooldown=0;
             } else {
-                //System.out.println("else");
                 if (!target.isAlive()) {
                     removeTroopFromList(target);
                 }

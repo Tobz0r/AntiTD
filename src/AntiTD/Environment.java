@@ -22,6 +22,7 @@ import java.util.concurrent.Executors;
 
 /**
  * @author dv13tes
+ *
  */
 public class Environment extends JPanel implements Runnable,Observer {
 
@@ -55,11 +56,10 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     private GUI gui;
 
-
     private  Executor runner= Executors.newFixedThreadPool(4);;
 
     private static boolean gameRunning;
-    private static  boolean paused;
+    private boolean paused;
     private boolean gameOver;
 
     private Thread thread;
@@ -106,6 +106,9 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
     }
 
+    /**
+     * Iterates over all tiles and add a neighbourarray for each tile
+     */
     private void setUpNeighbors() {
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[0].length; x++) {
@@ -130,6 +133,12 @@ public class Environment extends JPanel implements Runnable,Observer {
             }
         }
     }
+
+    /**
+     * Returns a list of the highscore stored in the database
+     * @return An arraylist containing highscores
+     * @throws NoDatabaseConnectionException
+     */
     public synchronized ArrayList<DBModel> getHighScores() throws NoDatabaseConnectionException{
         if (onlineMode) {
             return db.getHighscores();
@@ -138,9 +147,17 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
     }
 
+    /**
+     * Getter for currentlevel used by environment
+     * @return an instance of current level
+     */
     Level getLevel(){
         return level;
     }
+
+    /**
+     * Starts the environment thread if its not already running
+     */
     public synchronized void start(){
         paused=false;
         gameRunning=true;
@@ -149,29 +166,48 @@ public class Environment extends JPanel implements Runnable,Observer {
             thread.start();
         }
     }
+
+    /**
+     * Stops the environment thread if its running.
+     */
     public synchronized void stop(){
         try{
-            gameRunning=false;
-            thread.join();
+            if(gameRunning) {
+                gameRunning = false;
+                thread.join();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        catch (NullPointerException e ){
-
-        }
     }
 
-    public static  boolean isPaused(){
+    /**
+     * Checks if game is paused or not
+     * @return true if game is paused, else false
+     */
+    public boolean isPaused(){
         return paused;
     }
+
+    /**
+     * Flags for the gameloop that it can run
+     */
     public void startGame(){
         gameRunning=true;
     }
+
+    /**
+     * Checks if the game is over
+     * @return true if game is over, else false
+     */
     public boolean isGameOver(){
         return gameOver;
     }
 
-
+    /**
+     * Clears and paints the gameboard with current gamestate
+     * @param g the graphics of the board
+     */
     public void paintComponent( Graphics g){
         setTileSize();
         g.clearRect(0, 0, getWidth(), getHeight());
@@ -181,8 +217,11 @@ public class Environment extends JPanel implements Runnable,Observer {
             } 
         }
         handler.render(g);
-
     }
+
+    /**
+     * Sets the tile size to fit the window's size
+     */
     private void setTileSize(){
         Tile[][] map=Level.getCurrentMap();
         for(int i=0; i < map.length;i++){
@@ -191,9 +230,14 @@ public class Environment extends JPanel implements Runnable,Observer {
             }
         }
     }
+
+    /**
+     * Updates the gamestate 60 times per second by calculating how often each update occurs
+     * and makes the thread sleep for a specified time each timetick
+     */
     public void run() {
         long lastTime = System.currentTimeMillis();
-        double amountOfTicksPerSecond = 80;
+        double amountOfTicksPerSecond = 60;
         long ns = Math.round(1000.0 / amountOfTicksPerSecond);
         double delta = 0;
         int ticks=0;
@@ -229,13 +273,26 @@ public class Environment extends JPanel implements Runnable,Observer {
             }
         }
     }
-    public static boolean isRunning(){
+
+    /**
+     * Checks if game is currenty running
+     * @return true if game is running, else false
+     */
+    public  boolean isRunning(){
         return gameRunning;
     }
 
+    /**
+     * Adds a troop to the handlers liost
+     * @param troop the troop to be added
+     */
     public void addTroop(Troop troop){
         handler.addObject(troop);
-    }
+    } 
+    /**
+     * Adds a tower to the handlers liost
+     * @param tower the troop to be added
+     */
     public void addTower(Tower tower){
         handler.addObject(tower);
         towers.add(tower);
@@ -247,10 +304,10 @@ public class Environment extends JPanel implements Runnable,Observer {
     public ArrayList<Troop> getTroops(){
         return handler.getAliveTroops();
     }
-    public static void pauseGame(){
+    public  void pauseGame(){
         paused=true;
     }
-    public static void resumeGame(){
+    public  void resumeGame(){
         paused=false;
     }
     private void incrementLevel(boolean restart, boolean gameOver, boolean wonMap){
@@ -311,12 +368,8 @@ public class Environment extends JPanel implements Runnable,Observer {
     }
 
     private void finishedLevel(long wait){
-        //System.out.println("ELIASHEJ");
-
         if(handler.getVictoryScore() >= victoryScore){
             handler.resetGame();
-            //System.out.println("ELIASHEJ");
-
             if((mapNr+1)>levels.size()-1) {
                 if(playMusic){
                     sounds.music("music/gameover.wav",false);
@@ -372,11 +425,11 @@ public class Environment extends JPanel implements Runnable,Observer {
         return credits;
     }
     public boolean buyUnit(int amount){
-        //if((credits-amount)>0) {
+        if((credits-amount)>0) {
             credits -= amount;
             return true;
-        //}
-        //return false;
+        }
+        return false;
     }
     private void initTowers(){
         towers.clear();
@@ -384,8 +437,6 @@ public class Environment extends JPanel implements Runnable,Observer {
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
-                  //  Bullets bullet = new Bullets(arrows   ,1,5,currentMap[i][j]);
-                 //   addBullets(bullet);
                     addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(),handler));
                     break;
                 }
