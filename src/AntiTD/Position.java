@@ -1,7 +1,7 @@
 package AntiTD;
 
 /**
- * Created by dv13trm on 2015-11-27.
+ * @author Tobias Estefors
  */
 public class Position {
     private int x;
@@ -47,19 +47,6 @@ public class Position {
         return y;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Position position = (Position) o;
-
-        return x == position.x && y == position.y;
-    }
 
     public String toString(){
         return "("+getX()+","+getY()+")";

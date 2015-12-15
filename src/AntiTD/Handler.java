@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author Tobias Estefors, Mattias Edin
  */
 public class Handler extends Observable {
     private LinkedList<GameObject> objects;
@@ -125,7 +125,9 @@ public class Handler extends Observable {
         return list;
     }
 
-
+    /**
+     * Gets called each timetick from environment. Updates the gamestate.
+     */
     public synchronized void tick() {
         for (int i = 0; i < objects.size(); i++) {
             try {
@@ -162,6 +164,10 @@ public class Handler extends Observable {
         addObjectsToGame();
     }
 
+    /**
+     * Draws the current gamestate on the board for each timetick
+     * @param g the boards graphics
+     */
     public synchronized void render(Graphics g) {
         for (int i = 0; i < objects.size(); i++) {
             GameObject gameObject = objects.get(i);
@@ -190,8 +196,6 @@ public class Handler extends Observable {
 
                 Long troopSizeX = new Long(Math.round(width * scale));
                 Long troopSizeY = new Long(Math.round(height * scale));
-                //int x = Math.round(position.getX()*size+(size*progress));
-                //int y = Math.round(position.getY()*size+(size*progress));
 
                 int xOffset = (new Long(Math.round((width/2)-(troopSizeY/2)))).intValue();
                 int yOffset = (new Long(Math.round((height/2)-(troopSizeX/2)))).intValue();
@@ -202,20 +206,6 @@ public class Handler extends Observable {
                 }
 
                 g.drawImage(gameObject.getImage(),position.getX().intValue()+xOffset, position.getY().intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue(),null);
-                //g.fillRect(x_current.intValue()+xOffset, y_current.intValue()+yOffset, troopSizeX.intValue(), troopSizeY.intValue());
-
-                /*
-                if(gameObject instanceof Projectile){
-                    if(x_global<=0 && y_global <= 0){
-                        ((Projectile)gameObject).damage();
-                        removeObject(gameObject);
-                    }
-                    else if(!((Projectile) gameObject).aliveTarget()){
-                        removeObject(gameObject);
-                    }
-                }
-                */
-
             }
         }
     }

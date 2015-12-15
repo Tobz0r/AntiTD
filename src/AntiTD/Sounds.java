@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by dv13trm on 2015-12-10.
+ * @author Thom Renström
  */
 public class Sounds {
 

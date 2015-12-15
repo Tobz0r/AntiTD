@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 
 /**
- * @author dv13trm
+ * @author Thom Renström
  * GUI class creates an interface for the user
  * It cooperate with every class to show the user all the maps
  * menus, and other things the user can interact with
