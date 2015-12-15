@@ -216,7 +216,6 @@ public class Environment extends JPanel implements Runnable,Observer {
                         ticks=0;
                     }
 
-                    
                 }
 
             } catch (InterruptedException e) {
@@ -314,8 +313,8 @@ public class Environment extends JPanel implements Runnable,Observer {
             incrementLevel(false);
         }
         else if(!handler.hasAliveTroops() && (credits < minimumCredits)){
-            gui.pauseMusic();
-            gui.runMusic("music/gameover.wav");
+            gui.pauseMainSound();
+            sounds.music("music/gameover.wav",false,false);
             gameRunning=false;
             mapNr=0;
             restartLevel();
