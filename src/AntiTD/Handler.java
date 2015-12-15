@@ -14,7 +14,7 @@ import java.util.*;
 public class Handler extends Observable {
     private LinkedList<GameObject> objects;
     private int tid;
-    //private int aliveCount;
+    private int aliveCount;
     private int score;
     private boolean resetFlag;
     private LinkedList<GameObject> aliveTroops;
@@ -38,12 +38,11 @@ public class Handler extends Observable {
         objectsToRemove = new LinkedList<>();
         score = 0;
         resetFlag = false;
-        //aliveCount=0;
+        aliveCount=0;
     }
 
     public  boolean hasAliveTroops() {
-        return aliveTroops.size() > 0;
-        //return aliveCount>0;
+        return aliveCount>0;
     }
 
 
@@ -78,11 +77,9 @@ public class Handler extends Observable {
      * @param object object to add.
      */
     public synchronized void addObject(GameObject object) {
-        /*
         if(object instanceof  Troop){
             aliveCount++;
         }
-        */
         objectsToAdd.add(object);
     }
 
@@ -139,14 +136,13 @@ public class Handler extends Observable {
                     score += gameObject.getCurrentScore();
                     MovableGameObject mgo = (MovableGameObject) gameObject;
                     if (!mgo.isAlive()) {
-                        //aliveCount--;
                         removeObject(gameObject);
                         if (mgo instanceof Troop) {
+                            aliveCount--;
                             if(!isPaused) {
                                 sounds.music("music/deadman.wav", false);
                             }
                         }
-
                     }
                     if(mgo.hasReachedGoal()){
                         update(mgo.getCurrentScore());

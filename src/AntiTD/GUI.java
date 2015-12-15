@@ -153,7 +153,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(env.buyUnit(175)) {
-                    Tile[][] currentMap = Level.getCurrentMap();
+                    Tile[][] currentMap = env.getLevel().getMap();
                     env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel()
                             .getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
                 }
@@ -165,7 +165,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(env.buyUnit(450)) {
-                    Tile[][] currentMap = Level.getCurrentMap();
+                    Tile[][] currentMap = env.getLevel().getMap();
                     env.addTroop(new TankTroop(tankImage, currentMap[env.getLevel()
                             .getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
 
@@ -179,7 +179,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(env.buyUnit(4000)) {
-                    Tile[][] currentMap = Level.getCurrentMap();
+                    Tile[][] currentMap = env.getLevel().getMap();
                     teleportTroop = new TeleportTroop(teleporterImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]);
                     env.addTroop(teleportTroop);
                     teleportButton.setEnabled(true);
@@ -190,7 +190,7 @@ public class GUI {
         buySpeed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile[][] currentMap = Level.getCurrentMap();
+                Tile[][] currentMap = env.getLevel().getMap();
                if(env.buyUnit(325))
                    env.addTroop(new SpeedTroop(speedImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
@@ -199,7 +199,7 @@ public class GUI {
         crossButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile[][] currentMap = Level.getCurrentMap();
+                Tile[][] currentMap = env.getLevel().getMap();
                 for(int i=0; i < currentMap.length; i++ ){
                     for(int j=0; j < currentMap[0].length; j++){
                         if( currentMap[i][j]instanceof CrossroadTile){

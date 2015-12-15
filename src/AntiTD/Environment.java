@@ -85,7 +85,6 @@ public class Environment extends JPanel implements Runnable,Observer {
         map=level.getMap();
         setUpNeighbors();
         credits= 1000000;//level.getStartingCredits();
-        Level.setCurrentMap(map);
         victoryScore=level.getVictoryPoints();
         try {
             basicTower= ImageIO.read(new File("sprites/basic.png"));
@@ -228,7 +227,7 @@ public class Environment extends JPanel implements Runnable,Observer {
      * Sets the tile size to fit the window's size
      */
     private void setTileSize(){
-        Tile[][] map=Level.getCurrentMap();
+        Tile[][] map=level.getMap();
         for(int i=0; i < map.length;i++){
             for(int j=0; j < map[i].length;j++){
                 map[i][j].setSize(new Dimension(getWidth() / map.length, getHeight() / map[i].length));
@@ -366,7 +365,6 @@ public class Environment extends JPanel implements Runnable,Observer {
         level=levels.get(mapNr);
         victoryScore=(level.getVictoryPoints()+handler.getVictoryScore());
         map=level.getMap();
-        Level.setCurrentMap(map);
         credits+=level.getStartingCredits();
         restartMoney=credits;
         credits= restart ? level.getStartingCredits() : restartMoney;
@@ -486,7 +484,7 @@ public class Environment extends JPanel implements Runnable,Observer {
      */
     private void initTowers(){
         towers.clear();
-        Tile[][] currentMap = Level.getCurrentMap();
+        Tile[][] currentMap = level.getMap();
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
