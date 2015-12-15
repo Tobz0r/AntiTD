@@ -3,10 +3,12 @@ package AntiTD;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
-
 /**
- * Created by dv13trm on 2015-12-10.
+ * @author dv13trm
+ * Sound class that is used for every sound that is made during a running session of the game
+ *
  */
+
 public class Sounds {
 
     //sound
@@ -15,7 +17,11 @@ public class Sounds {
     private boolean playing=false;
 
 
-
+    /**
+     * Takes a string of an imported music and creates a clip with sound from that string
+     * @param gameSound string of what sound that should be playing
+     * @param looping boolean that if true the sound will loop, if false it will not
+     */
     public void music(String gameSound, boolean looping)  {
 
         try {
@@ -26,19 +32,26 @@ public class Sounds {
             if(looping){
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
             }
-            //fungerar inte
-
             playing=true;
             clip.start();
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Pauses the clip on the class where this function is called
+     */
     public void pauseMusic(){
         clipTime = clip.getMicrosecondPosition();
         clip.stop();
         playing=false;
     }
+
+    /**
+     * Resumes the clip on the class where this function is called
+     * @param looping boolean that if true the sound will loop, if false it will not
+     */
     public void resumeMusic(boolean looping){
         clip.setMicrosecondPosition(clipTime);
         if(looping) {
@@ -47,10 +60,10 @@ public class Sounds {
         playing=true;
         clip.start();
     }
-
+    /**
+     * @return a boolean that check if music is playing
+     */
     public boolean isPlaying(){
         return playing;
     }
-
-
 }

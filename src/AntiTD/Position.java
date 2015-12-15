@@ -1,7 +1,8 @@
 package AntiTD;
 
 /**
- * Created by dv13trm on 2015-11-27.
+ * Position class that is used for all game objects and tiles
+ * Mostly used to check position for every unit and tile
  */
 public class Position {
     private int x;
