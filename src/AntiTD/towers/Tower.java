@@ -4,7 +4,6 @@ import AntiTD.*;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,6 +27,7 @@ public abstract class Tower implements GameObject {
     private int price;
     private Tower iniTower;
     private Tile posTile;
+    private Sounds sounds;
 
     public Tower(Image img, Tile pos, ArrayList<Troop> troops) {
         this.img = img;
@@ -70,26 +70,7 @@ public abstract class Tower implements GameObject {
     /*Ska vara i environment???*
     *
      */
-    public void buildTower() {
-        int tempMoney = getCurrentScore();
-        if (pos.isBuildable()) {
-            if (tempMoney >= 5) {
-                Tower temp = new FrostTower(img, pos, troops);
-                temp.createTower(temp, pos);
-                addTowerToList(temp);
-                tempMoney = tempMoney - temp.getPrice();
-                setMoney(tempMoney);
 
-            } else if (tempMoney >= 1) {
-               /* Tower temp = new BasicTower(img, pos, troops);
-                temp.createTower(temp, pos);
-                tempMoney = tempMoney - temp.getPrice();
-                addTowerToList(temp);
-
-                setMoney(tempMoney);*/
-            }
-        }
-    }
 
     @Override
     public Image getImage() {
@@ -143,6 +124,9 @@ public abstract class Tower implements GameObject {
         this.money = money;
     }
 
+    // testar
+    public abstract void pauseTowerSound();
+    public abstract void resumeTowerSound();
     @Override
     public int getCurrentScore() {
         return money;
@@ -247,7 +231,7 @@ public abstract class Tower implements GameObject {
             Iterator<Troop> itTroop =troops.iterator();
             while(itTroop.hasNext()){
                 Troop t = itTroop.next();
-                if(t.hasReacedGoal()){
+                if(t.hasReachedGoal()){
                     itTroop.remove();
                 }
 

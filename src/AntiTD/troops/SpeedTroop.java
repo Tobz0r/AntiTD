@@ -51,11 +51,6 @@ public class SpeedTroop extends Troop {
         this.move();
     }
 
-    @Override
-    public void render(Graphics g) {
-
-    }
-
 
 
 }

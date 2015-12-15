@@ -2,11 +2,16 @@ package AntiTD.towers;
 
 import AntiTD.Handler;
 import AntiTD.Position;
+import AntiTD.Sounds;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,10 +25,15 @@ public class FrostTower extends Tower{
     private int damage;
     private int range;
     private int price;
+    private Handler handler;
     private Troop tr;
     private Troop target;
     private Position pos;
+    private int cooldown=0;
     private int count = 0;
+    private Sounds sounds = new Sounds();
+    private boolean playMusic = true;
+    private BufferedImage projectileImg;
     private Tile posTile;
     private String type = "FrostTower";
     private boolean slowedTarget;
@@ -31,15 +41,21 @@ public class FrostTower extends Tower{
     private HashMap<Troop,Boolean> targetSlowed = new HashMap<>();
     private int targetNumb = 0;
     ImageIcon img;
-    public FrostTower(Image img, Tile pos,ArrayList<Troop> troops) {
+    public FrostTower(Image img, Tile pos,ArrayList<Troop> troops,Handler handler) {
 
         super(img, pos, troops);
         setDamage(10);
         setRange(10);
+        this.handler=handler;
         setPrice(5);
         setPosition(pos.getPosition());
         slowedTarget = false;
         this.posTile = pos;
+        try {
+            projectileImg=ImageIO.read(new File("sprites/frostProjectile.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -62,12 +78,16 @@ public class FrostTower extends Tower{
             }
         }
     }
-    public void aggroTarget(){
-        if(target != null) {
-
-            if (checkIfUnitIsClose(target) && target.isAlive() == true) {
-                //System.out.println("jao");
-                attack(target, getDamage());
+    public void aggroTarget() {
+        if (target != null) {
+            Projectile bullet=new Projectile(target,this,projectileImg);
+            if (checkIfUnitIsClose(target) && target.isAlive() ){
+                if(playMusic){
+                    sounds.music("music/lazer.wav",false);
+                }
+                //attack(target, getDamage());
+                handler.addObject(bullet);
+                cooldown=0;
             } else {
                 //System.out.println("else");
                 if (!target.isAlive()) {
@@ -87,16 +107,17 @@ public class FrostTower extends Tower{
     public void startShooting(){
         checkIfTroopReachedGoal();
         if (target != null) {
-
-            if(!target.isSlowed()) {
-                System.out.println("hola");
-                target.slowSpeed();
-            }
             this.aggroTarget();
         } else {
             //   System.out.println("Target null");
             this.initScan();
         }
+    }
+    public void pauseTowerSound(){
+        playMusic = false;
+    }
+    public void resumeTowerSound(){
+        playMusic = true;
     }
     public void attack(Troop troop, int damage){
         if(troop.isAlive()) {
@@ -144,6 +165,7 @@ public class FrostTower extends Tower{
     }
     @Override
     public void tick(){
+        cooldown++;
 
         count ++;
         if(count >= 60) {
@@ -170,22 +192,13 @@ public class FrostTower extends Tower{
     }
 
     @Override
-    public void render(Graphics g) {
-
-    }
-
-    @Override
     public Tile getTilePosition() {
         return posTile;
     }
-
+    /*
     @Override
     public Tile getMoveToPosition() {
         return this.getTilePosition();
     }
-
-    @Override
-    public int getMoveProgres() {
-        return 0;
-    }
+    */
 }

@@ -8,10 +8,11 @@ import javax.swing.border.Border;
 import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.*;
 
 import AntiTD.*;
+import AntiTD.database.DBModel;
 import AntiTD.tiles.CrossroadTile;
 import AntiTD.tiles.JunctionTile;
 import AntiTD.tiles.Level;
@@ -28,6 +29,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -55,6 +57,8 @@ public class GUI {
     private JTextArea player;
     private JButton enterName;
     private JLabel tenChars;
+    private JLabel title;
+    private JPanel titlePanel;
 
     private StartScreen startPanel;
     private JScrollPane playerScroll;
@@ -63,6 +67,7 @@ public class GUI {
     private static final int textCols = 1;
     //sound
     private Sounds sounds = new Sounds();
+    private ArrayList<Troop> troops = new ArrayList();
     //score
     private JTextField score;
     private JTextField money;
@@ -89,39 +94,55 @@ public class GUI {
             e.printStackTrace();
         }
         frame = new JFrame("AntiTD");
-         scrollPane = new JScrollPane(env);
+
+        ImageIcon img = new ImageIcon("sprites/icon.png");
+        frame.setIconImage(img.getImage());
+
+        scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         scrollPane.setBounds(0,0,env.getWidth()+32,env.getHeight()+32);
-
-        startScreen();
         //menu = new Menu(frame);
-        menu = new Menu(frame, this);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //menu = new Menu(frame, this,env);
+        menu = new Menu(frame, this, env);
         menu.startMenu();
         menu.statMenu();
-
+        startScreen();
         frame.setVisible(true);
     }
 
+
+
     public void startGame() {
-        sounds.music("music/cello.wav",true,false);
+        if(!sounds.isPlaying()) {
+            sounds.music("music/runninggame.wav", true);
+            if (menu.musicStatus()) {
+                pauseMainSound();
+            }
+        }
+
         frame.remove(startPanel);
+        frame.remove(titlePanel);
         frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(scrollPane, BorderLayout.CENTER);
         env.start();
         env.repaint();
         buildBuyPanel();
         frame.pack();
     }
+
     public void restartGame(){
         //ta bort alla torn och teleportertiles 
         //Handler.clearList();
-        env.restartLevel();
+        env.restartLevel(true);
     }
     public void pauseMainSound(){
         sounds.pauseMusic();
+    }
+    public void resumeMainSound(){
+        sounds.resumeMusic(true);
     }
 
     private void buildBuyPanel(){
@@ -143,7 +164,8 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(env.buyUnit(175)) {
                     Tile[][] currentMap = Level.getCurrentMap();
-                    env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                    env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel()
+                            .getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
                 }
                 }
         });
@@ -154,7 +176,9 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(env.buyUnit(450)) {
                     Tile[][] currentMap = Level.getCurrentMap();
-                    env.addTroop(new TankTroop(tankImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+                    env.addTroop(new TankTroop(tankImage, currentMap[env.getLevel()
+                            .getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
+
                 }
             }
         });
@@ -237,16 +261,26 @@ public class GUI {
     void changeName(String name){
         PlayerName=name;
     }
+    public String getPlayerName(){
+        return PlayerName;
+    }
 
-
+    public void playMusic(){
+        if(!menu.musicStatus()){
+            sounds.music("music/start.wav",true);
+        }
+    }
 
     public void startScreen()  {
         //check to see if panel still exists
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
-        sounds.music("music/cello.wav",true,false);
+        playMusic();
+
         tenChars = new JLabel("Max 11 character");
+        title = new JLabel("Anti TD");
+        fixTitle(title);
         env.stop();
         frame.remove(scrollPane);
         player = new JTextArea(textCols, textRows);
@@ -255,17 +289,21 @@ public class GUI {
         player.setLineWrap(true);
         playerScroll = new JScrollPane(player);
         player.setBorder(BorderFactory.createLineBorder(Color.black));
-        frame.add(tenChars);
+        titlePanel = new JPanel();
+        titlePanel.setBackground(Color.cyan);
         startPanel = new StartScreen();
         startPanel.repaint();
         startPanel.add(playerScroll, BorderLayout.CENTER);
         enterName = new JButton("Submit name");
         enterName.setBackground(Color.pink);
         startPanel.add(enterName, FlowLayout.LEFT);
+        titlePanel.add(title);
         startPanel.add(tenChars);
         checkTextField();
         frame.setSize(400, 300);
+        frame.add(titlePanel,BorderLayout.NORTH);
         frame.add(startPanel);
+
         frame.setVisible(true);
         enterName.setBackground(Color.WHITE);
         enterName.addActionListener(new ActionListener() {
@@ -273,13 +311,24 @@ public class GUI {
             public void actionPerformed(ActionEvent actionEvent) {
                 if(player.getDocument().getLength()!=0){
                     sounds.pauseMusic();
+
+                    menu.setNewGame("Restart");
                     getName();
                     startGame();
+
                 }
             }
         });
 
         
+    }
+
+    private void fixTitle(JLabel title){
+        Font lableFont = title.getFont();
+        int biggerFont = (int)(lableFont.getSize() * 50);
+        int fontSizeUse = Math.min(biggerFont, 30);
+        title.setFont(new Font(lableFont.getName(),Font.PLAIN,fontSizeUse));
+        title.setForeground(Color.white);
     }
     private class StartScreen extends JPanel{
         Image bg = new ImageIcon("sprites/full_background.png").getImage();
@@ -289,6 +338,9 @@ public class GUI {
         }
 
     }
+    /*
+     * Check if textfield
+     */
     private void checkTextField(){
 
         player.getDocument().addDocumentListener(new DocumentListener() {
@@ -306,6 +358,7 @@ public class GUI {
                         @Override
                         public void keyPressed(KeyEvent keyEvent) {
                             backSpace(keyEvent);
+
                         }
 
                         @Override
@@ -333,6 +386,7 @@ public class GUI {
 
     }
 
+
     private void backSpace(KeyEvent k){
         int i = 0;
         if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE){
@@ -350,14 +404,12 @@ public class GUI {
                 }
 
             }
-
         }
+
     }
 
     public void printScore(){
         String currentScore;
-        String currentMoney;
-        currentMoney=String.valueOf(0);
         currentScore=String.valueOf(0);
         money = new JTextField();
         money.setEditable(false);
@@ -377,8 +429,82 @@ public class GUI {
         score.setColumns(5);
     }
     public void highScoreTable(){
-        scoreTable = new JTable(10,3);
+        try {
+            JFrame scoreFrame = new JFrame();
+            JPanel topPanel = new JPanel();
 
+            Object data[][] = {{"ralle", "100000"},
+                    {"ralle2", "2000"}};
+            Object columnNames[] = {"Player", "Score"};
+            scoreTable = new JTable();
+            ArrayList<DBModel> dbHighScore = env.getHighScores();
+
+
+            for (int i = 0; i < dbHighScore.size(); i++) {
+
+                System.out.println(dbHighScore.get(i).toString());
+            }
+
+            DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+                @Override
+                public Class<?> getColumnClass(int columnIndex) {
+                    if (getRowCount() > 0) {
+                        return getValueAt(0, columnIndex).getClass();
+
+                    }
+                    return super.getColumnClass(columnIndex);
+                }
+            };
+
+            for (int row = 0; row < dbHighScore.size(); row++) {
+                Object[] rowData = {"Name: " + dbHighScore.get(row).getPlayername(), "Score: " + dbHighScore.get(row).getScore()};
+                model.addRow(rowData);
+
+
+            }
+            JTextPane textPane = new JTextPane();
+            textPane.setBackground(Color.black);
+            this.appendToPane(textPane, "Player highscore", Color.white, 34);
+            topPanel.add(textPane, BorderLayout.CENTER);
+
+            scoreTable.setModel(model);
+            scoreFrame.setSize(1000, 1000);
+            scoreFrame.add(topPanel, BorderLayout.NORTH);
+            scoreFrame.add(scoreTable, BorderLayout.CENTER);
+            scoreFrame.setVisible(true);
+
+        }catch (NoDatabaseConnectionException e){
+            JOptionPane.showMessageDialog(null,"Game running in offline mode, nothing is saved to the database.\n" +
+                    "To fix this:\n" +
+                    "Make sure you are only running one instance of the game and restart.\n");
+        }
+
+
+
+    }
+    private void appendToPane(JTextPane tp, String msg, Color c, int fontSize)
+    {
+        Font f = new Font(Font.SANS_SERIF, 3 ,5);
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
+
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Verdana");
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+        aset = sc.addAttribute(aset, StyleConstants.FontSize, fontSize);
+
+        int len = tp.getDocument().getLength();
+        tp.setCaretPosition(len);
+        tp.setCharacterAttributes(aset, false);
+        tp.replaceSelection(msg);
+    }
+    public ArrayList getTowers(){
+        return env.getTowers();
+    }
+    public void pauseTroopSound(){
+        env.setPaused(true);
+    }
+    public void resumeTroopSound(){
+        env.setPaused(false);
     }
 }
 
