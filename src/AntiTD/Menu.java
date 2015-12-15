@@ -81,7 +81,7 @@ public class Menu extends JMenu {
         highScore.setBackground(Color.white);
         exitGame.setBackground(Color.white);
         mainMenu.setBackground(Color.white);
-        if(!Environment.isRunning()){
+        if(!env.isRunning()){
             newGame.setText("New Game");
         }
         highScore.addActionListener(new ActionListener() {
@@ -93,7 +93,7 @@ public class Menu extends JMenu {
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (Environment.isRunning()) {
+                if (env.isRunning()) {
                     gui.restartGame();
                     mute.setText("Mute");
                     newGame.setText("Restart");
@@ -124,13 +124,13 @@ public class Menu extends JMenu {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(pause){
-                    Environment.pauseGame();
+                    env.pauseGame();
                     pauseGame.setText("Resume");
                     gui.pauseMainSound();
                     pause=false;
                 }
                 else{
-                    Environment.resumeGame();
+                    env.resumeGame();
                     pauseGame.setText("Pause");
                     gui.resumeMainSound();
                     pause=true;
@@ -146,7 +146,7 @@ public class Menu extends JMenu {
                     pauseMusic = true;
                     gui.pauseMainSound();
                     env.pauseEnvSound();
-                    if(Environment.isRunning()){
+                    if(env.isRunning()){
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).pauseTowerSound();
                         }
@@ -161,7 +161,7 @@ public class Menu extends JMenu {
                 else {
                     pauseMusic = false;
                     env.resumeEnvSound();
-                    if(Environment.isRunning()){
+                    if(env.isRunning()){
                         gui.resumeMainSound();
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).resumeTowerSound();
@@ -216,7 +216,7 @@ public class Menu extends JMenu {
         nameChange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(Environment.isRunning()){
+                if(env.isRunning()){
                     gui.changeName(JOptionPane.showInputDialog("Enter name"));
                 }
                 else{
