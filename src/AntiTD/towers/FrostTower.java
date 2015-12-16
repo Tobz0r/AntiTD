@@ -50,7 +50,7 @@ public class FrostTower extends Tower{
 
         super(img, pos, troops);
         setDamage(10);
-        setRange(10);
+        setRange(7);
         this.handler=handler;
         setPrice(5);
         setPosition(pos.getPosition());

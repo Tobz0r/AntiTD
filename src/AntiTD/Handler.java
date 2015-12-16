@@ -79,7 +79,6 @@ public class Handler extends Observable {
      */
     public synchronized void addObject(GameObject object) {
         if(object instanceof  Troop){
-            System.out.println(aliveCount);
             aliveCount++;
         }
         objectsToAdd.add(object);
@@ -152,6 +151,7 @@ public class Handler extends Observable {
                         if (mgo instanceof Troop) {
                             aliveCount--;
                             if(!isPaused) {
+                                System.out.println(isPaused);
                                 sounds.music("music/deadman.wav", false);
                             }
                         }
