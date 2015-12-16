@@ -105,6 +105,7 @@ public class CrossroadTile extends Tile {
         Tile[] newPath=new Tile[current.length];
         for(int i=0; i < current.length;i++){
             newPath[i]=current[i];
+
         }
         if (newPath.length <= 3){
             newPath = reverseArray(newPath);
@@ -114,6 +115,7 @@ public class CrossroadTile extends Tile {
         if (newPath[0] == null) {
             newPath[0] = newPath[1];
         }
+        System.out.println(newPath[0]);
         Position p=newPath[0].getPosition();
         if(getPosition().IsPosToEast(p)){
             setImage(ImageIO.read(new File("sprites/right.gif")));

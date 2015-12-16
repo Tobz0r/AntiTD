@@ -73,6 +73,24 @@ public class Level {
        }
         return tiles;
     }
+    public void setUpConnection(){
+        for(int i=0;i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                if (map[i][j] instanceof ConnectionTile) {
+                    int z=0;
+                    Tile[] temp=map[i][j].getNeighbors();
+                    Tile[] newNeighbours=new Tile[temp.length];
+                    for(int k=0; k < temp.length; k++){
+                        if(temp[k] instanceof PathTile){
+                            newNeighbours[z]=temp[k];
+                            z++;
+                        }
+                    }
+                    map[i][j].setNeighbors(newNeighbours);
+                }
+            }
+        }
+    }
 
     /**
      * Returns how many points needed for win this map

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapFile>
-    <mapData sizeX="9" sizeY="10" victory="30" name="Level 1" startingCredits="800">
+    <mapData sizeX="9" sizeY="10" victory="30" name="Level 1" startingCredits="1500">
         <row>
             <tile>BasicTile</tile>
             <tile>BasicTile</tile>
@@ -117,121 +117,163 @@
             <tile>BasicTile</tile>
         </row>
     </mapData>
-    <mapData sizeX="9" sizeY="10" victory="30" name="Level 2" startingCredits="800">
+    <mapData sizeX="12" sizeY="11" victory="30" name="Level 2" startingCredits="3000">
+      <row>
+          <tile>StartTile</tile>
+          <tile>PathTile</tile>
+          <tile>PathTile</tile>
+          <tile>PathTile</tile>
+          <tile>TowerTile</tile>
+          <tile>TowerTile</tile>
+          <tile>PathTile</tile>
+          <tile>PathTile</tile>
+          <tile>PathTile</tile>
+          <tile>TowerTile</tile>
+          <tile>BasicTile</tile>
+      </row>
+      <row>
+          <tile>TowerTile</tile>
+          <tile>TowerTile</tile>
+          <tile>TowerTile</tile>
+          <tile>JunctionTile</tile>
+          <tile>TowerTile</tile>
+          <tile>TowerTile</tile>
+          <tile>PathTile</tile>
+          <tile>TowerTile</tile>
+          <tile>PathTile</tile>
+          <tile>TowerTile</tile>
+          <tile>BasicTile</tile>
+      </row>
+      <row>
+          <tile>TowerTile</tile>
+          <tile>PathTile</tile>
+          <tile>PathTile</tile>
+          <tile>CrossroadTile</tile>
+          <tile>PathTile</tile>
+          <tile>PathTile</tile>
+          <tile>PathTile</tile>
+          <tile>TowerTile</tile>
+          <tile>PathTile</tile>
+          <tile>TowerTile</tile>
+          <tile>TowerTile</tile>
+      </row>
+      <row>
+          <tile>TowerTile</tile>
+          <tile>PathTile</tile>
+          <tile>BasicTile</tile>
+          <tile>BasicTile</tile>
+          <tile>TowerTile</tile>
+          <tile>TowerTile</tile>
+          <tile>TowerTile</tile>
+          <tile>TowerTile</tile>
+          <tile>PathTile</tile>
+          <tile>TowerTile</tile>
+          <tile>BasicTile</tile>
+      </row>
         <row>
+            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
             <tile>BasicTile</tile>
             <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
+            <tile>TowerTile</tile>
             <tile>BasicTile</tile>
         </row>
-
-        <row>
-            <tile>BasicTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-        </row>
         <row>
             <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
             <tile>PathTile</tile>
             <tile>PathTile</tile>
-            <tile>PathTile</tile>
-            <tile>PathTile</tile>
-            <tile>PathTile</tile>
-            <tile>PathTile</tile>
-            <tile>PathTile</tile>
-        </row>
-
-        <row>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>PathTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>PathTile</tile>
-        </row>
-
-        <row>
-            <tile>StartTile</tile>
             <tile>PathTile</tile>
             <tile>JunctionTile</tile>
+            <tile>ConnectionTile</tile>
+            <tile>JunctionTile</tile>
+            <tile>PathTile</tile>
+            <tile>PathTile</tile>
+            <tile>TowerTile</tile>
+            <tile>BasicTile</tile>
+        </row>
+        <row>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+        </row>
+        <row>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>JunctionTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+        </row>
+        <row>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
+            <tile>PathTile</tile>
             <tile>CrossroadTile</tile>
+            <tile>PathTile</tile>
+            <tile>PathTile</tile>
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
+        </row>
+        <row>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+        </row>
+        <row>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+        </row>
+        <row>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>TowerTile</tile>
+            <tile>PathTile</tile>
+            <tile>PathTile</tile>
             <tile>GoalTile</tile>
-        </row>
-
-        <row>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>PathTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>PathTile</tile>
-        </row>
-
-        <row>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
             <tile>PathTile</tile>
             <tile>PathTile</tile>
-            <tile>PathTile</tile>
-            <tile>PathTile</tile>
-            <tile>PathTile</tile>
-            <tile>PathTile</tile>
-            <tile>PathTile</tile>
-        </row>
-
-        <row>
-            <tile>BasicTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
         </row>
 
-        <row>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-            <tile>BasicTile</tile>
-        </row>
     </mapData>
 </mapFile>

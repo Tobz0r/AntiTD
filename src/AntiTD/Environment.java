@@ -4,6 +4,7 @@ import AntiTD.database.*;
 import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
+import AntiTD.towers.BasicTower;
 import AntiTD.towers.FrostTower;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
@@ -42,7 +43,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     private int restartMoney;
     private boolean playMusic = true;
 
-    private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
+
     private ArrayList<CrossroadSwitch> switches;
     private ArrayList<Level> levels;
     private ArrayList<Tower> towers = new ArrayList<>();
@@ -50,13 +51,10 @@ public class Environment extends JPanel implements Runnable,Observer {
     private Handler handler;
 
     private BufferedImage basicTower;
-    private BufferedImage basicImage;
+
 
     private BufferedImage frostTower;
-    private BufferedImage frostImage;
 
-    private BufferedImage arrows;
-    private BufferedImage arrowsImage;
     private Tile[][] map;
 
     private GUI gui;
@@ -84,13 +82,13 @@ public class Environment extends JPanel implements Runnable,Observer {
         level=levels.get(mapNr);
         map=level.getMap();
         setUpNeighbors();
-        credits= 1000000;//level.getStartingCredits();
+        credits= level.getStartingCredits();
         victoryScore=level.getVictoryPoints();
         try {
             basicTower= ImageIO.read(new File("sprites/basic.png"));
             frostTower= ImageIO.read(new File("sprites/frost.gif"));
-            arrows= ImageIO.read(new File("sprites/arrowb.gif"));
             switches=level.setUpCrossroad();
+            level.setUpConnection();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -370,6 +368,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         credits= restart ? level.getStartingCredits() : restartMoney;
         setUpNeighbors();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
+        level.setUpConnection();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
@@ -487,9 +486,15 @@ public class Environment extends JPanel implements Runnable,Observer {
         Tile[][] currentMap = level.getMap();
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
+
                 if (currentMap[i][j].isBuildable()) {
-                    addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(),handler));
-                    break;
+                    if((i+j)%3==0) {
+                        if ((j % 2) == 0) {
+                            addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(), handler));
+                        } else {
+                            addTower(new BasicTower(basicTower, currentMap[i][j], getTroops(), handler));
+                        }
+                    }
                 }
             }
         }
