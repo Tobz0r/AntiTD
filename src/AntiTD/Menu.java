@@ -223,7 +223,9 @@ public class Menu extends JMenu {
         about.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JOptionPane.showMessageDialog(null, "Game created by:\n Thom Renström \n Tobias Estefors \n Rasmus Dahlkvist \n Mattias Edin","About",1);
+                JOptionPane.showMessageDialog(null, "Game created by:\n Thom Renström \n " +
+                        "Tobias Estefors \n Rasmus Dahlkvist \n Mattias Edin\n\n Assets by:\n " +
+                        "David Gervais","About",1);
 
             }
         });

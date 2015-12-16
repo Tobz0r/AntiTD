@@ -91,7 +91,7 @@ public class CrossroadTile extends Tile {
      */
     private Tile[] shuffleArray(Tile[] tiles){
         Tile[] copy = tiles.clone();
-        while(copy[0]!=tiles[0] && copy[0]!=null)
+        while(copy[0]==tiles[0] || copy[0]==null)
             Collections.shuffle(Arrays.asList(copy));
         return copy;
     }
@@ -115,6 +115,7 @@ public class CrossroadTile extends Tile {
         if (newPath[0] == null) {
             newPath[0] = newPath[1];
         }
+
         Position p=newPath[0].getPosition();
         if(getPosition().IsPosToEast(p)){
             setImage(ImageIO.read(new File("sprites/right.gif")));
