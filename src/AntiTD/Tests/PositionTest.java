@@ -12,11 +12,15 @@ import static org.junit.Assert.*;
  */
 public class PositionTest {
 
-    Position p;
+    Position p,pnorth,psouth,peast,pwest;
 
     @Before
     public void setUp() throws Exception {
         p = new Position(1, 2);
+        pnorth = new Position(1,1);
+        psouth = new Position(1,3);
+        pwest = new Position(0,2);
+        peast = new Position(2,2);
     }
 
     @After
@@ -32,5 +36,21 @@ public class PositionTest {
     @Test
     public void testGetY() throws Exception {
         assertEquals(p.getY(), 2);
+    }
+    @Test
+    public void testIsPosToNorth() throws Exception{
+        assertTrue(p.IsPosToNorth(pnorth));
+    }
+    @Test
+    public void testIsPosToSouth() throws Exception{
+        assertTrue(p.IsPosToSouth(psouth));
+    }
+    @Test
+    public void testIsPosToWest() throws Exception{
+        assertTrue(p.IsPosToWest(pwest));
+    }
+    @Test
+    public void testIsPosToEast() throws Exception{
+        assertTrue(p.IsPosToEast(peast));
     }
 }
