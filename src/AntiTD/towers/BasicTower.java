@@ -33,6 +33,7 @@ public class BasicTower extends Tower {
     private Handler handler;
     int count;
     private Sounds sounds = new Sounds();
+    private boolean playMusic=true;
 
   /**
    * Constructor for BasicTower.
@@ -53,13 +54,13 @@ public class BasicTower extends Tower {
         int High = 5;
         result = r.nextInt(High - low) + low;
         setDamage(1);
-        setRange(5);
+        setRange(4);
         setPrice(1);
         setPosition(pos.getPosition());
         count = 0;
 
         try {
-            projectileImg=ImageIO.read(new File("sprites/fireball.gif"));
+            projectileImg=ImageIO.read( this.getClass().getResourceAsStream("/sprites/fireball.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,11 +76,12 @@ public class BasicTower extends Tower {
                 int dist = distance(troop);
                 if (dist <= getRange()) {
                     pushInRange(troop);
-                    if (dist < distance) {
+
+                    //if (dist < distance) {
                         nearUnit = troop;
                         setNearUnit(troop);
                         distance = dist;
-                    }
+                    //}
                 }
             }
             if (nearUnit != null) {
@@ -92,6 +94,9 @@ public class BasicTower extends Tower {
     if (target != null) {
       Projectile bullet=new Projectile(target,this,projectileImg);
       if (checkIfUnitIsClose(target) && target.isAlive() ){
+          if(playMusic){
+              sounds.music("music/lazer.wav",false);
+          }
         handler.addObject(bullet);
       } else {
         if (!target.isAlive()) {
@@ -103,10 +108,10 @@ public class BasicTower extends Tower {
     }
   }
     public void pauseTowerSound(){
-        sounds.pauseMusic();
+        playMusic=false;
     }
     public void resumeTowerSound(){
-        sounds.resumeMusic(true);
+        playMusic=true;
     }
     public void createTower(Tower tower, Tile pos) {
         tower.init(getTroopsList(), getTowerList(), pos);
@@ -124,9 +129,19 @@ public class BasicTower extends Tower {
         }
     }
 
-    public int distance(Troop troop) {
-        return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
-    }
+    /*public int distance(Troop troop) {
+        int x1 = this.getTilePosition().getPosition().getX();
+        int y1 = this.getTilePosition().getPosition().getY();
+
+        int x2 = troop.getTilePosition().getPosition().getX();
+        int y2 = troop.getTilePosition().getPosition().getY();
+
+        float dist = (float) Math.sqrt(
+                Math.pow(x1 - x2, 2) +
+                Math.pow(y1 - y2, 2) );
+        return Math.round(dist);
+        //return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
+    }*/
 
     public boolean checkIfUnitIsClose(Troop troop) {
         if (Math.hypot(troop.getPosition().getX() - getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()) {

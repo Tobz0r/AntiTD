@@ -76,23 +76,20 @@ public class GUI {
         this.fp=fp;
         env = new Environment(this,fp);
         try {
-            basicImage= ImageIO.read(new File("sprites/ogre.gif"));
-            speedImage = ImageIO.read(new File("sprites/redDragon.gif"));
-            tankImage = ImageIO.read(new File ("sprites/earthElemental.gif"));
-            teleporterImage = ImageIO.read(new File("sprites/Teleporter.gif"));
+            basicImage= ImageIO.read( this.getClass().getResourceAsStream("/sprites/ogre.gif"));
+            speedImage = ImageIO.read( this.getClass().getResourceAsStream("/sprites/redDragon.gif"));
+            tankImage = ImageIO.read( this.getClass().getResourceAsStream("/sprites/earthElemental.gif"));
+            teleporterImage = ImageIO.read( this.getClass().getResourceAsStream("/sprites/Teleporter.gif"));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         frame = new JFrame("AntiTD");
-
         ImageIcon img = new ImageIcon("sprites/icon.png");
         frame.setIconImage(img.getImage());
-
         scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
         scrollPane.setBounds(0,0,env.getWidth()+32,env.getHeight()+32);
         //menu = new Menu(frame);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -115,10 +112,11 @@ public class GUI {
                 pauseMainSound();
             }
         }
-
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
+        env=new Environment(this,fp);
+        menu.updateEnvironment(env);
         frame.add(env, BorderLayout.CENTER);
         env.start();
         env.repaint();
@@ -253,8 +251,6 @@ public class GUI {
             }
         });
 
-
-
         buyPanel.add(score);
         buyPanel.add(money);
         buyPanel.add(buySpeed);
@@ -263,7 +259,6 @@ public class GUI {
         buyPanel.add(buyTank);
         buyPanel.add(crossButton);
         buyPanel.add(teleportButton);
-
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
 
@@ -311,8 +306,7 @@ public class GUI {
         tenChars = new JLabel("Max 11 character");
         title = new JLabel("Anti TD");
         fixTitle(title);
-        env.stop();
-        frame.remove(scrollPane);
+        frame.remove(env);
         player = new JTextArea(textCols, textRows);
         player.setEditable(true);
         player.setWrapStyleWord(true);
@@ -365,9 +359,15 @@ public class GUI {
      * Because its overrideing paintcomponent
      */
     private class StartScreen extends JPanel{
-        Image bg = new ImageIcon("sprites/full_background.png").getImage();
+        private BufferedImage bg=null;
+
         @Override
         public void paintComponent(Graphics g){
+            try {
+                bg = ImageIO.read(getClass().getResourceAsStream("/sprites/full_background.png"));
+            } catch(java.io.IOException e1) {
+                e1.printStackTrace();
+            }
             g.drawImage(bg,0,0,getWidth(),getHeight(),this);
         }
 

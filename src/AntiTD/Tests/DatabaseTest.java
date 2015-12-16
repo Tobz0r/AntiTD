@@ -36,19 +36,24 @@ public class DatabaseTest {
     }
 
     @Test
-    public void testGetHighscoreShouldReturnTrue() throws Exception {
-        DBModel hs = db.getHighscore("LaVals");
-        assertEquals("LaVals", hs.getPlayername());
+    public void testGetHighscoreNotExistingShouldThrowException() throws Exception {
+        try {
+            DBModel hs = db.getHighscore("LaVals");
+            fail("Exception not thrown");
+        } catch (Exception e) {
+            assertEquals(DatabaseEntryDoesNotExistsException.class, e.getClass());
+        }
 
     }
 
     @Test
-    public void testGetHighscoreShouldTrowExceptionReturnNull() throws Exception {
+    public void testGetHighscoreShouldreturn10() throws Exception {
         DBModel usr = null;
         try {
-            usr = db.getHighscore("Laloa");
+            usr = db.getHighscore("Test3");
+            assertEquals(10, usr.getScore());
         } catch (DatabaseEntryDoesNotExistsException e) {
-            assertNull(usr);
+            fail("Element dos not exist");
         }
 
     }

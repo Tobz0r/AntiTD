@@ -22,7 +22,7 @@ public class JunctionTile extends Tile {
         setBuildable(false);
         setMoveable(true);
         try {
-            setImage(ImageIO.read(new File("sprites/patheses.png")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/patheses.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

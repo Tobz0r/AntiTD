@@ -22,7 +22,7 @@ public class StartTile extends Tile {
         setBuildable(false);
         setMoveable(true);
         try {
-            setImage(ImageIO.read(new File("sprites/start.png")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/start.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

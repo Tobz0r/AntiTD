@@ -14,7 +14,7 @@ import java.util.*;
 public class Handler extends Observable {
     private LinkedList<GameObject> objects;
     private int tid;
-    //private int aliveCount;
+    private int aliveCount;
     private int score;
     private boolean resetFlag;
     private LinkedList<GameObject> aliveTroops;
@@ -38,12 +38,12 @@ public class Handler extends Observable {
         objectsToRemove = new LinkedList<>();
         score = 0;
         resetFlag = false;
-        //aliveCount=0;
+        aliveCount=0;
     }
 
     public  boolean hasAliveTroops() {
-        return aliveTroops.size() > 0;
-        //return aliveCount>0;
+       // return aliveTroops.size() > 0;
+        return aliveCount>0;
     }
 
 
@@ -78,11 +78,9 @@ public class Handler extends Observable {
      * @param object object to add.
      */
     public synchronized void addObject(GameObject object) {
-        /*
         if(object instanceof  Troop){
             aliveCount++;
         }
-        */
         objectsToAdd.add(object);
     }
 
@@ -121,7 +119,10 @@ public class Handler extends Observable {
         objectsToRemove.add(object);
     }
 
-
+    /**
+     * Returns an arraylist of alive troops
+     * @return list of alive troops
+     */
     public synchronized ArrayList<Troop> getAliveTroops() {
         ArrayList<Troop> list = new ArrayList<Troop>(aliveTroops.size());
         for (GameObject go : aliveTroops) {
@@ -130,38 +131,43 @@ public class Handler extends Observable {
         return list;
     }
 
+    public synchronized boolean getIfGameIsChanging() {
+
+        return true;
+    }
+
     /**
      * Gets called each timetick from environment. Updates the gamestate.
      */
     public synchronized void tick() {
         for (GameObject gameObject : objects) {
             try {
-                gameObject.tick();
-                if (gameObject instanceof MovableGameObject) {
-                    score += gameObject.getCurrentScore();
-                    MovableGameObject mgo = (MovableGameObject) gameObject;
-                    if (!mgo.isAlive()) {
-                        //aliveCount--;
-                        removeObject(gameObject);
-                        if (mgo instanceof Troop) {
-                            if(!isPaused) {
-                                sounds.music("music/deadman.wav", false);
+                if(gameObject!=null) {
+                    gameObject.tick();
+                    if (gameObject instanceof MovableGameObject) {
+                        score += gameObject.getCurrentScore();
+                        MovableGameObject mgo = (MovableGameObject) gameObject;
+                        if (!mgo.isAlive()) {
+                            removeObject(gameObject);
+                            if (mgo instanceof Troop) {
+                                aliveCount--;
+                                if (!isPaused) {
+                                    sounds.music("music/deadman.wav", false);
+                                }
                             }
                         }
-
-                    }
-                    if(mgo.hasReachedGoal()){
-                        update(mgo.getCurrentScore());
-                        removeObject(gameObject);
+                        if (mgo.hasReachedGoal()) {
+                            update(mgo.getCurrentScore());
+                            removeObject(gameObject);
+                        }
                     }
                 }
-
             } catch (java.util.ConcurrentModificationException e) {
-                Throwable cause = e.getCause();
-                System.out.println(cause.getMessage());
+                System.out.println(e.getCause().getMessage());
             }
         }
         removeObjectsFromGame();
+
         if (resetFlag) {
             objects.clear();
             aliveTroops.clear();
@@ -170,8 +176,8 @@ public class Handler extends Observable {
                 resetFlag = false;
             }
         }
-        addObjectsToGame();
 
+        addObjectsToGame();
     }
 
     /**
@@ -259,15 +265,12 @@ public class Handler extends Observable {
     public void resetGame() {
         synchronized (lock) {
             resetFlag = true;
-            //lock.notifyAll();
-        }
+            aliveCount=0;
+            objects.clear();
+            aliveTroops.clear();
+            towers.clear();
 
-        /*
-        objects.clear();
-        aliveTroops.clear();
-        towers.clear();
-        */
-        //aliveCount=0;
+        }
     }
 
 

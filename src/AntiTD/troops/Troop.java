@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.Stack;
 
 /**
- * Created by dv13trm on 2015-11-27.
+ * @author Mattias Edin
  */
 public abstract class Troop implements MovableGameObject {
     //private static int victoryScore;
@@ -195,7 +195,6 @@ public abstract class Troop implements MovableGameObject {
         if (! this.isSlowed()) {
             this.speed = (speed * 0.5);
             slowed = true;
-            System.out.println(speed);
         }
     }
     public boolean isSlowed(){

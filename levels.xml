@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapFile>
-    <mapData sizeX="9" sizeY="10" victory="30" name="Level 1" startingCredits="1500">
+    <mapData sizeX="9" sizeY="10" victory="120" name="Level 1" startingCredits="4500">
         <row>
             <tile>BasicTile</tile>
             <tile>BasicTile</tile>
@@ -117,7 +117,7 @@
             <tile>BasicTile</tile>
         </row>
     </mapData>
-    <mapData sizeX="12" sizeY="11" victory="30" name="Level 2" startingCredits="5000">
+    <mapData sizeX="12" sizeY="11" victory="100" name="Level 2" startingCredits="10000">
       <row>
           <tile>StartTile</tile>
           <tile>PathTile</tile>
@@ -206,8 +206,8 @@
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
+            <tile>BasicTile</tile>
+            <tile>BasicTile</tile>
         </row>
         <row>
             <tile>TowerTile</tile>
@@ -219,8 +219,8 @@
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
+            <tile>BasicTile</tile>
+            <tile>BasicTile</tile>
         </row>
         <row>
             <tile>TowerTile</tile>
@@ -232,8 +232,8 @@
             <tile>PathTile</tile>
             <tile>PathTile</tile>
             <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
+            <tile>BasicTile</tile>
+            <tile>BasicTile</tile>
         </row>
         <row>
             <tile>TowerTile</tile>
@@ -245,12 +245,12 @@
             <tile>TowerTile</tile>
             <tile>PathTile</tile>
             <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
+            <tile>BasicTile</tile>
+            <tile>BasicTile</tile>
         </row>
         <row>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
+            <tile>BasicTile</tile>
+            <tile>BasicTile</tile>
             <tile>TowerTile</tile>
             <tile>PathTile</tile>
             <tile>TowerTile</tile>
@@ -258,21 +258,21 @@
             <tile>TowerTile</tile>
             <tile>PathTile</tile>
             <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
+            <tile>BasicTile</tile>
+            <tile>BasicTile</tile>
         </row>
         <row>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
+            <tile>BasicTile</tile>
+            <tile>BasicTile</tile>
+            <tile>BasicTile</tile>
             <tile>PathTile</tile>
             <tile>PathTile</tile>
             <tile>GoalTile</tile>
             <tile>PathTile</tile>
             <tile>PathTile</tile>
             <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
-            <tile>TowerTile</tile>
+            <tile>BasicTile</tile>
+            <tile>BasicTile</tile>
         </row>
     </mapData>
 </mapFile>

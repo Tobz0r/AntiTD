@@ -50,13 +50,13 @@ public class FrostTower extends Tower{
 
         super(img, pos, troops);
         setDamage(10);
-        setRange(10);
+        setRange(4);
         this.handler=handler;
         setPrice(5);
         setPosition(pos.getPosition());
         this.posTile = pos;
         try {
-            projectileImg=ImageIO.read(new File("sprites/frostProjectile.png"));
+            projectileImg=ImageIO.read( this.getClass().getResourceAsStream("/sprites/frostProjectile.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,18 +65,18 @@ public class FrostTower extends Tower{
     }
 
     public void initScan() {
-        int distance = Integer.MAX_VALUE;
+        int distance = 4;
         ArrayList<Troop> troops=getTroopsList();
         for(Troop troop : troops){
             Troop nearUnit = null;
             int dist = distance(troop);
             if(dist <= getRange()) {
                 pushInRange(troop);
-                if (dist < distance) {
+                //if (dist < distance) {
                     nearUnit = troop;
                     setNearUnit(troop);
                     distance = dist;
-                }
+                //}
             }
             if(nearUnit !=null){
                 target = nearUnit;
@@ -129,9 +129,11 @@ public class FrostTower extends Tower{
             }
         }
     }
+    /*
     public int distance(Troop troop) {
         return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
     }
+    */
     public boolean checkIfUnitIsClose(Troop troop){
         if(Math.hypot(troop.getPosition().getX() -getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()){
             return true;

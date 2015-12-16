@@ -85,8 +85,8 @@ public class Environment extends JPanel implements Runnable,Observer {
         credits= level.getStartingCredits();
         victoryScore=level.getVictoryPoints();
         try {
-            basicTower= ImageIO.read(new File("sprites/basic.png"));
-            frostTower= ImageIO.read(new File("sprites/frost.gif"));
+            basicTower= ImageIO.read( this.getClass().getResourceAsStream("/sprites/basic.png"));
+            frostTower= ImageIO.read( this.getClass().getResourceAsStream("/sprites/frost.gif"));
             switches=level.setUpCrossroad();
             level.setUpConnection();
         } catch (IOException e) {
@@ -175,7 +175,6 @@ public class Environment extends JPanel implements Runnable,Observer {
     public synchronized void stop(){
         try{
             if(gameRunning) {
-                gameRunning = false;
                 thread.join();
             }
         } catch (InterruptedException e) {
@@ -337,7 +336,6 @@ public class Environment extends JPanel implements Runnable,Observer {
             int reply;
             if(restart){
                 reply=0;
-                System.out.println("123");
             }
             else{
                 reply=JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
@@ -424,13 +422,15 @@ public class Environment extends JPanel implements Runnable,Observer {
                 }
             }
             else {
+                handler.resetGame();
                 incrementLevel(false, false,false);
             }
         }
         else if(!handler.hasAliveTroops() && (credits <= minimumCredits)){
             gui.pauseMainSound();
-            sounds.music("music/gameover.wav",false);
-            gameRunning=false;
+            if(gameRunning)
+                sounds.music("music/gameover.wav",false);
+            handler.resetGame();
             incrementLevel(true, true,false);
         }
     }
@@ -486,7 +486,6 @@ public class Environment extends JPanel implements Runnable,Observer {
         Tile[][] currentMap = level.getMap();
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
-
                 if (currentMap[i][j].isBuildable()) {
                     if((i+j)%3==0) {
                         if ((j % 2) == 0) {

@@ -29,7 +29,7 @@ public class CrossroadTile extends Tile {
         setBuildable(false);
         setMoveable(true);
         try {
-            basicTile=ImageIO.read(new File("sprites/patheses.png"));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/patheses.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,7 +91,7 @@ public class CrossroadTile extends Tile {
      */
     private Tile[] shuffleArray(Tile[] tiles){
         Tile[] copy = tiles.clone();
-        while(copy[0]!=tiles[0])
+        while(copy[0]==tiles[0] || copy[0]==null)
             Collections.shuffle(Arrays.asList(copy));
         return copy;
     }
@@ -115,18 +115,18 @@ public class CrossroadTile extends Tile {
         if (newPath[0] == null) {
             newPath[0] = newPath[1];
         }
-        System.out.println(newPath[0]);
+
         Position p=newPath[0].getPosition();
         if(getPosition().IsPosToEast(p)){
-            setImage(ImageIO.read(new File("sprites/right.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/right.gif")));
         }else if(getPosition().IsPosToNorth(p)){
-            setImage(ImageIO.read(new File("sprites/up.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/up.gif")));
         }
         else if(getPosition().IsPosToSouth(p)){
-            setImage(ImageIO.read(new File("sprites/down.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/down.gif")));
         }
         else if(getPosition().IsPosToWest(p)){
-            setImage(ImageIO.read(new File("sprites/left.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/left.gif")));
         }
         setNeighbors(newPath);
     }

@@ -4,9 +4,10 @@ import AntiTD.*;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
-import javax.swing.*;
+
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -123,7 +124,20 @@ public abstract class Tower implements GameObject {
      * @param troop the troop which the tower is checking distance to
      * @return Distance in int
      */
-    public abstract int distance(Troop troop);
+    public int distance(Troop troop) {
+        int x1 = this.getTilePosition().getPosition().getX();
+        int y1 = this.getTilePosition().getPosition().getY();
+
+        int x2 = troop.getTilePosition().getPosition().getX();
+        int y2 = troop.getTilePosition().getPosition().getY();
+
+        float dist = (float) Math.sqrt(
+                Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)
+        );
+        return Math.round(dist);
+        //return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
+    }
+    //public abstract int distance(Troop troop);
 
     /**
      * Attack unit
@@ -158,8 +172,6 @@ public abstract class Tower implements GameObject {
     public abstract int getDamage();
 
     public abstract void setPrice(int price);
-
-    public abstract int getPrice();
 
     public abstract void setRange(int range);
 
@@ -305,6 +317,7 @@ public abstract class Tower implements GameObject {
    */
     public boolean getTroopFromList() {
         if (troops != null) {
+            Collections.shuffle(troops);
             try {
                 if (!troops.isEmpty()) {
                     for (Troop troop : troops) {

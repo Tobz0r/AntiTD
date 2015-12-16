@@ -25,8 +25,8 @@ public class PathTile extends Tile {
         setMoveable(true);
         setBuildable(false);
         try {
-            setImage(ImageIO.read(new File("sprites/patheses.png")));
-            teleporter=ImageIO.read(new File("sprites/teleporter_active.gif"));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/patheses.png")));
+            teleporter= ImageIO.read(this.getClass().getResourceAsStream("/sprites/teleporter_active.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
