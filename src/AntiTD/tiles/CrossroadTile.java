@@ -91,7 +91,7 @@ public class CrossroadTile extends Tile {
      */
     private Tile[] shuffleArray(Tile[] tiles){
         Tile[] copy = tiles.clone();
-        while(copy[0]!=tiles[0])
+        while(copy[0]!=tiles[0] && copy[0]!=null)
             Collections.shuffle(Arrays.asList(copy));
         return copy;
     }

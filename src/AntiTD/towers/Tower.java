@@ -4,9 +4,10 @@ import AntiTD.*;
 import AntiTD.tiles.Tile;
 import AntiTD.troops.Troop;
 
-import javax.swing.*;
+
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -305,6 +306,7 @@ public abstract class Tower implements GameObject {
    */
     public boolean getTroopFromList() {
         if (troops != null) {
+            Collections.shuffle(troops);
             try {
                 if (!troops.isEmpty()) {
                     for (Troop troop : troops) {

@@ -65,7 +65,7 @@ public class FrostTower extends Tower{
     }
 
     public void initScan() {
-        int distance = Integer.MAX_VALUE;
+        int distance = 4;
         ArrayList<Troop> troops=getTroopsList();
         for(Troop troop : troops){
             Troop nearUnit = null;

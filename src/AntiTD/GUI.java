@@ -119,7 +119,7 @@ public class GUI {
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
-        frame.add(scrollPane, BorderLayout.CENTER);
+        frame.add(env, BorderLayout.CENTER);
         env.start();
         env.repaint();
         buildBuyPanel();

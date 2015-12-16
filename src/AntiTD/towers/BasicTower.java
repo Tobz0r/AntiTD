@@ -53,7 +53,7 @@ public class BasicTower extends Tower {
         int High = 5;
         result = r.nextInt(High - low) + low;
         setDamage(1);
-        setRange(999);
+        setRange(5);
         setPrice(1);
         setPosition(pos.getPosition());
         count = 0;
@@ -67,19 +67,20 @@ public class BasicTower extends Tower {
     }
 
     public void initScan() {
-        int distance = Integer.MAX_VALUE;
+        int distance = 10;
         ArrayList<Troop>troops=getTroopsList();
         for (Troop troop : troops) {
             Troop nearUnit = null;
             if (troop.isAlive()) {
                 int dist = distance(troop);
+                System.out.println(dist);
+
                 if (dist <= getRange()) {
                     pushInRange(troop);
-                    if (dist < distance) {
                         nearUnit = troop;
                         setNearUnit(troop);
                         distance = dist;
-                    }
+
                 }
             }
             if (nearUnit != null) {
@@ -103,10 +104,10 @@ public class BasicTower extends Tower {
     }
   }
     public void pauseTowerSound(){
-        handler.setIsPaused(true);
+        sounds.pauseMusic();
     }
     public void resumeTowerSound(){
-        handler.setIsPaused(false);;
+        sounds.resumeMusic(true);
     }
     public void createTower(Tower tower, Tile pos) {
         tower.init(getTroopsList(), getTowerList(), pos);
@@ -125,7 +126,7 @@ public class BasicTower extends Tower {
     }
 
     public int distance(Troop troop) {
-        return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
+        return (new Double(Math.hypot(troop.getTilePosition().getPosition().getX(), troop.getTilePosition().getPosition().getY()))).intValue();
     }
 
     public boolean checkIfUnitIsClose(Troop troop) {
