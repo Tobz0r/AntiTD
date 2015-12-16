@@ -18,7 +18,7 @@ public class Sounds {
     //sound
     private Clip clip = null;
     private long clipTime;
-    private boolean playing=false;
+    private boolean playing=false; 
     protected static final Object LOCK = new Object();
 
 
