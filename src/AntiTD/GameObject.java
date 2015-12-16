@@ -7,23 +7,37 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author Tobias Estefors
  */
 public interface GameObject{
-
+    /**
+     * Method to be called each timetick for every gameobject
+     */
     void tick();
-    void render(Graphics g);
 
+    /**
+     * Getter for the image of gameobjects
+     * @return this gameobjets image
+     */
     Image getImage();
 
+    /**
+     * Returns how much this gameobject is worth in score
+     * @return this gameobjects score
+     */
     int getCurrentScore();
 
-
+    /**
+     * Returns this gameobjects position
+     * @return a position of this object
+     */
     Position getPosition();
-    String type();
 
+    /**
+     * Returns this gameobjects tiles
+     * @return a tileposition of this object
+     */
     Tile getTilePosition();
-    Tile getMoveToPosition();
-    int getMoveProgres();
+
 
 }

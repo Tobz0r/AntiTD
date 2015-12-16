@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author Rasmus Dahlkvist
  */
 public abstract class Tower implements GameObject {
     private Tile pos;
@@ -255,7 +255,7 @@ public abstract class Tower implements GameObject {
             Iterator<Troop> itTroop =troops.iterator();
             while(itTroop.hasNext()){
                 Troop t = itTroop.next();
-                if(t.hasReacedGoal()){
+                if(t.hasReachedGoal()){
                     itTroop.remove();
                 }
 

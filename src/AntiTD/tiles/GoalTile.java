@@ -9,7 +9,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by dv13tes on 2015-11-30.
+ * @author Tobias Estefors
+ * Tile used as goal, can only be walkable and only 1 per map is recomended.
  */
 public class GoalTile extends Tile {
     private BufferedImage goalFort;
@@ -27,7 +28,10 @@ public class GoalTile extends Tile {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Draws the tile on the board
+     * @param g the board graphics
+     */
     @Override
     public void landOn(Graphics g) {
         g.drawImage(getImage(),(int)(getPosition().getX()*(getSize().getWidth())),

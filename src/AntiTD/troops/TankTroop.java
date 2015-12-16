@@ -7,7 +7,9 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
- * Created by dv13tes on 2015-12-04.
+ * @author Tobias Estefors
+ * Troop that can take more damage and has a 20% chanse
+ * to avoid taking damage at all
  */
 public class TankTroop extends Troop {
     static private final double SPEED = 1;
@@ -55,10 +57,6 @@ public class TankTroop extends Troop {
         this.move();
     }
 
-    @Override
-    public void render(Graphics g) {
-
-    }
 
     /**
      * Attacks the troop with the specified damage.
@@ -68,7 +66,7 @@ public class TankTroop extends Troop {
      */
     @Override
     public boolean attackThis(int damage) {
-        if ( ! hasReacedGoal() ) {
+        if ( ! hasReachedGoal() ) {
             if((r.nextInt(5) + 1)==1){
                 damage=0;
                 System.out.println("Blocked attack");
