@@ -195,7 +195,6 @@ public abstract class Troop implements MovableGameObject {
         if (! this.isSlowed()) {
             this.speed = (speed * 0.5);
             slowed = true;
-            System.out.println(speed);
         }
     }
     public boolean isSlowed(){

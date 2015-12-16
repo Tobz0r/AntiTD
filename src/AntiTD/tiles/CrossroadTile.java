@@ -115,7 +115,6 @@ public class CrossroadTile extends Tile {
         if (newPath[0] == null) {
             newPath[0] = newPath[1];
         }
-        System.out.println(newPath[0]);
         Position p=newPath[0].getPosition();
         if(getPosition().IsPosToEast(p)){
             setImage(ImageIO.read(new File("sprites/right.gif")));

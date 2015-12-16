@@ -14,7 +14,7 @@ import java.util.*;
 public class Handler extends Observable {
     private LinkedList<GameObject> objects;
     private int tid;
-    //private int aliveCount;
+    private int aliveCount;
     private int score;
     private boolean resetFlag;
     private LinkedList<GameObject> aliveTroops;
@@ -38,12 +38,12 @@ public class Handler extends Observable {
         objectsToRemove = new LinkedList<>();
         score = 0;
         resetFlag = false;
-        //aliveCount=0;
+        aliveCount=0;
     }
 
     public  boolean hasAliveTroops() {
-        return aliveTroops.size() > 0;
-        //return aliveCount>0;
+       // return aliveTroops.size() > 0;
+        return aliveCount>0;
     }
 
 
@@ -78,11 +78,10 @@ public class Handler extends Observable {
      * @param object object to add.
      */
     public synchronized void addObject(GameObject object) {
-        /*
         if(object instanceof  Troop){
+            System.out.println(aliveCount);
             aliveCount++;
         }
-        */
         objectsToAdd.add(object);
     }
 
@@ -121,7 +120,10 @@ public class Handler extends Observable {
         objectsToRemove.add(object);
     }
 
-
+    /**
+     * Returns an arraylist of alive troops
+     * @return list of alive troops
+     */
     public synchronized ArrayList<Troop> getAliveTroops() {
         ArrayList<Troop> list = new ArrayList<Troop>(aliveTroops.size());
         for (GameObject go : aliveTroops) {
@@ -141,21 +143,19 @@ public class Handler extends Observable {
                     score += gameObject.getCurrentScore();
                     MovableGameObject mgo = (MovableGameObject) gameObject;
                     if (!mgo.isAlive()) {
-                        //aliveCount--;
                         removeObject(gameObject);
                         if (mgo instanceof Troop) {
+                            aliveCount--;
                             if(!isPaused) {
                                 sounds.music("music/deadman.wav", false);
                             }
                         }
-
                     }
                     if(mgo.hasReachedGoal()){
                         update(mgo.getCurrentScore());
                         removeObject(gameObject);
                     }
                 }
-
             } catch (java.util.ConcurrentModificationException e) {
                 Throwable cause = e.getCause();
                 System.out.println(cause.getMessage());
@@ -171,7 +171,6 @@ public class Handler extends Observable {
             }
         }
         addObjectsToGame();
-
     }
 
     /**
@@ -259,15 +258,14 @@ public class Handler extends Observable {
     public void resetGame() {
         synchronized (lock) {
             resetFlag = true;
+            aliveCount=0;
             //lock.notifyAll();
         }
-
         /*
         objects.clear();
         aliveTroops.clear();
         towers.clear();
         */
-        //aliveCount=0;
     }
 
 
