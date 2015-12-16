@@ -175,7 +175,6 @@ public class Environment extends JPanel implements Runnable,Observer {
     public synchronized void stop(){
         try{
             if(gameRunning) {
-                gameRunning = false;
                 thread.join();
             }
         } catch (InterruptedException e) {
@@ -337,7 +336,6 @@ public class Environment extends JPanel implements Runnable,Observer {
             int reply;
             if(restart){
                 reply=0;
-                System.out.println("123");
             }
             else{
                 reply=JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
@@ -424,15 +422,14 @@ public class Environment extends JPanel implements Runnable,Observer {
                 }
             }
             else {
+                handler.resetGame();
                 incrementLevel(false, false,false);
             }
         }
         else if(!handler.hasAliveTroops() && (credits <= minimumCredits)){
             gui.pauseMainSound();
-            if(isRunning()){
-                sounds.music("music/gameover.wav",false);
-            }
-            gameRunning=false;
+            sounds.music("music/gameover.wav",false);
+            handler.resetGame();
             incrementLevel(true, true,false);
         }
     }

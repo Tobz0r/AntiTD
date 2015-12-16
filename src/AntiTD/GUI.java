@@ -112,13 +112,15 @@ public class GUI {
         if(!sounds.isPlaying()) {
             sounds.music("music/runninggame.wav", true);
             if (menu.musicStatus()) {
-                pauseMainSound();
+                pauseMainSound(); 
             }
         }
 
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
+        env=new Environment(this,fp);
+        menu.updateEnvironment(env);
         frame.add(env, BorderLayout.CENTER);
         env.start();
         env.repaint();
@@ -312,7 +314,7 @@ public class GUI {
         title = new JLabel("Anti TD");
         fixTitle(title);
         env.stop();
-        frame.remove(scrollPane);
+        frame.remove(env);
         player = new JTextArea(textCols, textRows);
         player.setEditable(true);
         player.setWrapStyleWord(true);
