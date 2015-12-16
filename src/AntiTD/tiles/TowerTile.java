@@ -28,7 +28,7 @@ public class TowerTile extends Tile {
     /**
      * Draws the tile on the board
      * @param g the board graphics
-     */
+     */ 
     @Override
     public void landOn(Graphics g) {
         g.drawImage(getImage(),(int)(getPosition().getX()*(getSize().getWidth())),
