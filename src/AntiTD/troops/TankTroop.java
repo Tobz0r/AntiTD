@@ -19,7 +19,7 @@ public class TankTroop extends Troop {
 
 
     /**
-     * Constructor for basic troop
+     * Constructor for tank troop
      * @param pos Starting tile position.
      */
     public TankTroop(Tile pos) {
@@ -27,7 +27,7 @@ public class TankTroop extends Troop {
     }
 
     /**
-     * Constructor for basic troop
+     * Constructor for tank troop
      * @param img Image used for rendering this object.
      * @param pos Starting tile position.
      */
@@ -36,7 +36,7 @@ public class TankTroop extends Troop {
     }
 
     /**
-     * Constructor for basic troop, used for overriding default health, score and speed values
+     * Constructor for tank troop, used for overriding default health, score and speed values
      *
      * ** CAUTION **
      * Use this constructor for test purposes only.
