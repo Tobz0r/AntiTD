@@ -2,6 +2,7 @@ package AntiTD;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,11 +32,11 @@ public class Sounds {
     public void music(String gameSound, boolean looping)  {
 
         try {
-            InputStream url = getClass().getClassLoader().getResourceAsStream(gameSound);
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
+            InputStream url = getClass().getResourceAsStream(gameSound);
+            InputStream bufferedIn = new BufferedInputStream(url);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
             DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
-
-           // clip=AudioSystem.getClip();
+            // clip=AudioSystem.getClip();
             clip = (Clip)AudioSystem.getLine(info);
             clip.open(audioInputStream);
             if(looping){

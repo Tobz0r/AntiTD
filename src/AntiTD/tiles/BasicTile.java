@@ -21,7 +21,7 @@ public class BasicTile extends Tile {
         setBuildable(false);
         setMoveable(false);
         try {
-            setImage(ImageIO.read(getClass().getResourceAsStream("/sprites/rock.png")));
+            setImage(ImageIO.read(getClass().getResource("/sprites/rock.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
