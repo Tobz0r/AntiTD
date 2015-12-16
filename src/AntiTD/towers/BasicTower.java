@@ -53,7 +53,7 @@ public class BasicTower extends Tower {
         int High = 5;
         result = r.nextInt(High - low) + low;
         setDamage(1);
-        setRange(7);
+        setRange(999);
         setPrice(1);
         setPosition(pos.getPosition());
         count = 0;
