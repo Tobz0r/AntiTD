@@ -486,7 +486,6 @@ public class Environment extends JPanel implements Runnable,Observer {
         Tile[][] currentMap = level.getMap();
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
-
                 if (currentMap[i][j].isBuildable()) {
                     if((i+j)%3==0) {
                         if ((j % 2) == 0) {
