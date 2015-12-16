@@ -53,7 +53,7 @@ public class BasicTower extends Tower {
         int High = 5;
         result = r.nextInt(High - low) + low;
         setDamage(1);
-        setRange(5);
+        setRange(7);
         setPrice(1);
         setPosition(pos.getPosition());
         count = 0;
@@ -103,10 +103,10 @@ public class BasicTower extends Tower {
     }
   }
     public void pauseTowerSound(){
-        sounds.pauseMusic();
+        handler.setIsPaused(true);
     }
     public void resumeTowerSound(){
-        sounds.resumeMusic(true);
+        handler.setIsPaused(false);;
     }
     public void createTower(Tower tower, Tile pos) {
         tower.init(getTroopsList(), getTowerList(), pos);
