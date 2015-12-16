@@ -151,7 +151,6 @@ public class Handler extends Observable {
                         if (mgo instanceof Troop) {
                             aliveCount--;
                             if(!isPaused) {
-                                System.out.println(isPaused);
                                 sounds.music("music/deadman.wav", false);
                             }
                         }
@@ -162,8 +161,7 @@ public class Handler extends Observable {
                     }
                 }
             } catch (java.util.ConcurrentModificationException e) {
-                Throwable cause = e.getCause();
-                System.out.println(cause.getMessage());
+                System.out.println(e.getCause().getMessage());
             }
         }
         removeObjectsFromGame();
