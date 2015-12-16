@@ -41,6 +41,18 @@ public class FrostTower extends Tower{
     private HashMap<Troop,Boolean> targetSlowed = new HashMap<>();
     private int targetNumb = 0;
     ImageIcon img;
+
+    /**
+            * Constructor for frostTower, tower which slow units that it hits.
+    *
+            * ** CAUTION **
+            * Use this constructor for test purposes only.
+    * @param img Image used for rendering this object.
+    * @param pos Starting tile position.
+     * @param troops Gets the troops currently alive on the map.
+     * @param handler Used to implement shoot-sounds when attacking target.
+    *
+     */
     public FrostTower(Image img, Tile pos,ArrayList<Troop> troops,Handler handler) {
 
         super(img, pos, troops);
@@ -59,6 +71,7 @@ public class FrostTower extends Tower{
 
 
     }
+
     public void initScan() {
         int distance = Integer.MAX_VALUE;
         ArrayList<Troop> troops=getTroopsList();
@@ -78,6 +91,9 @@ public class FrostTower extends Tower{
             }
         }
     }
+    /**
+     *
+     * */
     public void aggroTarget() {
         if (target != null) {
             Projectile bullet=new Projectile(target,this,projectileImg);

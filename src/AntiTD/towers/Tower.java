@@ -87,12 +87,35 @@ public abstract class Tower implements GameObject {
 
     public abstract void startShooting();
 
+    /**
+     * Attacks the troop with the specified damage.
+     * TankTroop has a 20% chanse to avoid the damage.
+     * @param damage amount of damage to take
+     * @return true if unit died, else false
+     */
     public abstract void aggroTarget();
 
+    /**
+     * Search for a unit near the tower, using
+     * the given arraylist from the environment.
+     * Check if target is in the given range of the tower
+     * set target parameter to the unit which is close
+     */
     public abstract void initScan();
 
+    /**
+     * A method which check the distance to a given unit
+     * @param troop the troop which the tower is checking distance to
+     * @return Distance in int
+     */
     public abstract int distance(Troop troop);
 
+    /**
+     * Attacks the troop with the specified damage.
+     * TankTroop has a 20% chanse to avoid the damage.
+     * @param damage amount of damage to take
+     * @return true if unit died, else false
+     */
     public abstract void attack(Troop troop, int damage);
 
     public abstract boolean checkIfUnitIsClose(Troop troop);
