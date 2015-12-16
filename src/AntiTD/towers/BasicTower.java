@@ -25,19 +25,26 @@ public class BasicTower extends Tower {
     private int range;
     private int price;
     private Position pos;
-    private Tile posTile;
     private Troop tr;
     private Troop target;
     private String type = "BasicTower";
     private int result;
     private BufferedImage projectileImg;
     private Handler handler;
-    int bullets;
     int count;
-    int cooldown;
     private Sounds sounds = new Sounds();
 
-
+  /**
+   * Constructor for BasicTower.
+   *
+   * ** CAUTION **
+   * Use this constructor for test purposes only.
+   * @param img Image used for rendering this object.
+   * @param pos Starting tile position.
+   * @param troops Gets the troops currently alive on the map.
+   * @param handler Used to implement shoot-sounds when attacking target.
+   *
+   */
     public BasicTower(Image img, Tile pos, ArrayList<Troop> troops, Handler handler) {
         super(img, pos, troops);
         Random r = new Random();
@@ -49,9 +56,8 @@ public class BasicTower extends Tower {
         setRange(5);
         setPrice(1);
         setPosition(pos.getPosition());
-        this.posTile = pos;
         count = 0;
-        cooldown=0;
+
         try {
             projectileImg=ImageIO.read(new File("sprites/fireball.gif"));
         } catch (IOException e) {
@@ -69,43 +75,33 @@ public class BasicTower extends Tower {
                 int dist = distance(troop);
                 if (dist <= getRange()) {
                     pushInRange(troop);
-
                     if (dist < distance) {
                         nearUnit = troop;
                         setNearUnit(troop);
                         distance = dist;
-                        //removeTroopFromList(troop);
                     }
                 }
             }
             if (nearUnit != null) {
                 target = nearUnit;
-                // System.out.println("target gets value");
             }
         }
     }
 
-    public void aggroTarget() {
-        if (target != null) {
-            //Projectile bullet=new Projectile(target,this);
-            if (checkIfUnitIsClose(target) && target.isAlive() && cooldown> 200) {
-                sounds.music("music/lazer.wav",false);
-                //attack(target, getDamage());
-                handler.addObject(new Projectile(target,this,projectileImg));
-                cooldown=0;
-            } else {
-                target = null;
-                //System.out.println("else");
-                /*
-                if (!target.isAlive()) {
-                    removeTroopFromList(target);
-                }
-                target = null;
-                getInRange().clear();
-                */
-            }
+  public void aggroTarget() {
+    if (target != null) {
+      Projectile bullet=new Projectile(target,this,projectileImg);
+      if (checkIfUnitIsClose(target) && target.isAlive() ){
+        handler.addObject(bullet);
+      } else {
+        if (!target.isAlive()) {
+          removeTroopFromList(target);
         }
+        target = null;
+        getInRange().clear();
+      }
     }
+  }
     public void pauseTowerSound(){
         sounds.pauseMusic();
     }
@@ -113,7 +109,6 @@ public class BasicTower extends Tower {
         sounds.resumeMusic(true);
     }
     public void createTower(Tower tower, Tile pos) {
-        //Tower temp = new BasicTower(img,pos);
         tower.init(getTroopsList(), getTowerList(), pos);
         getTowerList().add(tower);
 
@@ -141,14 +136,10 @@ public class BasicTower extends Tower {
     }
 
     public void startShooting() {
-        int bullets = 5;
 
         if (target != null) {
-            //System.out.println(target.isAlive());
-            //System.out.println(target.type());
             aggroTarget();
         } else if (target == null) {
-            //System.out.println("target null");
             initScan();
         }
 
@@ -206,7 +197,6 @@ public class BasicTower extends Tower {
 
     @Override
     public void tick() {
-        cooldown++;
         count++;
         if (count >= 60) {
             if (this.getTroopFromList()) {
@@ -214,7 +204,6 @@ public class BasicTower extends Tower {
             }
             count = 0;
         }
-
     }
 
 }
