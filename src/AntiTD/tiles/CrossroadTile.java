@@ -29,7 +29,7 @@ public class CrossroadTile extends Tile {
         setBuildable(false);
         setMoveable(true);
         try {
-            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/patheses.png")));
+            basicTile=ImageIO.read( this.getClass().getResourceAsStream("/sprites/patheses.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
