@@ -136,10 +136,8 @@ public class Menu extends JMenu {
                     mainMusic=false;
                     pauseMusic = true;
                     gui.pauseMainSound();
-
                     env.pauseEnvSound();
                     if(env.isRunning()){
-
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).pauseTowerSound();
                         }
@@ -175,7 +173,6 @@ public class Menu extends JMenu {
                 gui.highScoreTable();
             }
         });
-
         mainMenu = this.add("Main Menu");
         mainMenu.setBackground(Color.white);
         mainMenu.addActionListener(new ActionListener() {

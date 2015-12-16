@@ -85,14 +85,11 @@ public class GUI {
             e.printStackTrace();
         }
         frame = new JFrame("AntiTD");
-
         ImageIcon img = new ImageIcon("sprites/icon.png");
         frame.setIconImage(img.getImage());
-
         scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
         scrollPane.setBounds(0,0,env.getWidth()+32,env.getHeight()+32);
         //menu = new Menu(frame);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -115,7 +112,6 @@ public class GUI {
                 pauseMainSound();
             }
         }
-
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
@@ -255,8 +251,6 @@ public class GUI {
             }
         });
 
-
-
         buyPanel.add(score);
         buyPanel.add(money);
         buyPanel.add(buySpeed);
@@ -265,7 +259,6 @@ public class GUI {
         buyPanel.add(buyTank);
         buyPanel.add(crossButton);
         buyPanel.add(teleportButton);
-
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
 
