@@ -32,7 +32,7 @@ public abstract class Tile implements TileRender {
 
     /**
      * Specifies if this tile is buildable or not
-     * @param true if tile is buildable else false
+     * @param buildable true if tile is buildable else false
      */
     public void setBuildable(boolean buildable) {
         this.buildable = buildable;
