@@ -17,7 +17,7 @@ public class TeleportTroop extends Troop {
 
     private int tpLength = 3;
 
-    static private final int MAX_HEALTH = 10;
+    static private final int MAX_HEALTH = 1000;
     static private final int KILL_DEATH_SCORE = 100;
     static private final double SPEED = 2;
 
@@ -68,7 +68,7 @@ public class TeleportTroop extends Troop {
             if (tpMoves == 0) {
                 teleportStartTile = this.getTilePosition();
                 tpMoves++;
-            } else if (tpMoves > tpLength) {
+            } else if (tpMoves >= tpLength) {
                 isTeleporting = false;
                 tpMoves = 0;
                 teleportEndTile = this.getTilePosition();
@@ -84,11 +84,11 @@ public class TeleportTroop extends Troop {
     @Override
     protected void move() {
         if (isTeleporting) {
-            Tile currentPosition = this.getTilePosition();
+            //Tile currentPosition = this.getTilePosition();
             super.move();
-            if (this.getTilePosition() != currentPosition) {
-                tpMoves++;
-            }
+            //if (this.getTilePosition() != currentPosition) {
+            //    tpMoves++;
+            //}
         } else {
             super.move();
         }
