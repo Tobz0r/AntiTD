@@ -264,13 +264,11 @@ public class Handler extends Observable {
         synchronized (lock) {
             resetFlag = true;
             aliveCount=0;
-            //lock.notifyAll();
+            objects.clear();
+            aliveTroops.clear();
+            towers.clear();
+
         }
-        /*
-        objects.clear();
-        aliveTroops.clear();
-        towers.clear();
-        */
     }
 
 

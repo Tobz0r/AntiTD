@@ -62,6 +62,10 @@ public class Menu extends JMenu {
         this.frame = frame;
     }
 
+    void updateEnvironment(Environment env){
+        this.env=env;
+    }
+
     /*
      * Take a string, and sets newGame button to that string
      */
@@ -132,8 +136,11 @@ public class Menu extends JMenu {
                     mainMusic=false;
                     pauseMusic = true;
                     gui.pauseMainSound();
+                    System.out.println(env.isRunning());
+
                     env.pauseEnvSound();
                     if(env.isRunning()){
+
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).pauseTowerSound();
                         }
