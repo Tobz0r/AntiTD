@@ -82,7 +82,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         level=levels.get(mapNr);
         map=level.getMap();
         setUpNeighbors();
-        credits= 333333;//level.getStartingCredits();
+        credits= level.getStartingCredits();
         victoryScore=level.getVictoryPoints();
         try {
             basicTower= ImageIO.read(new File("sprites/basic.png"));
@@ -428,7 +428,8 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
         else if(!handler.hasAliveTroops() && (credits <= minimumCredits)){
             gui.pauseMainSound();
-            sounds.music("music/gameover.wav",false);
+            if(gameRunning)
+                sounds.music("music/gameover.wav",false);
             handler.resetGame();
             incrementLevel(true, true,false);
         }

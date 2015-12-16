@@ -136,7 +136,6 @@ public class Menu extends JMenu {
                     mainMusic=false;
                     pauseMusic = true;
                     gui.pauseMainSound();
-                    System.out.println(env.isRunning());
 
                     env.pauseEnvSound();
                     if(env.isRunning()){

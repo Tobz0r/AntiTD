@@ -112,7 +112,7 @@ public class GUI {
         if(!sounds.isPlaying()) {
             sounds.music("music/runninggame.wav", true);
             if (menu.musicStatus()) {
-                pauseMainSound(); 
+                pauseMainSound();
             }
         }
 
@@ -313,7 +313,6 @@ public class GUI {
         tenChars = new JLabel("Max 11 character");
         title = new JLabel("Anti TD");
         fixTitle(title);
-        env.stop();
         frame.remove(env);
         player = new JTextArea(textCols, textRows);
         player.setEditable(true);

@@ -142,22 +142,24 @@ public class Handler extends Observable {
     public synchronized void tick() {
         for (GameObject gameObject : objects) {
             try {
-                gameObject.tick();
-                if (gameObject instanceof MovableGameObject) {
-                    score += gameObject.getCurrentScore();
-                    MovableGameObject mgo = (MovableGameObject) gameObject;
-                    if (!mgo.isAlive()) {
-                        removeObject(gameObject);
-                        if (mgo instanceof Troop) {
-                            aliveCount--;
-                            if(!isPaused) {
-                                sounds.music("music/deadman.wav", false);
+                if(gameObject!=null) {
+                    gameObject.tick();
+                    if (gameObject instanceof MovableGameObject) {
+                        score += gameObject.getCurrentScore();
+                        MovableGameObject mgo = (MovableGameObject) gameObject;
+                        if (!mgo.isAlive()) {
+                            removeObject(gameObject);
+                            if (mgo instanceof Troop) {
+                                aliveCount--;
+                                if (!isPaused) {
+                                    sounds.music("music/deadman.wav", false);
+                                }
                             }
                         }
-                    }
-                    if(mgo.hasReachedGoal()){
-                        update(mgo.getCurrentScore());
-                        removeObject(gameObject);
+                        if (mgo.hasReachedGoal()) {
+                            update(mgo.getCurrentScore());
+                            removeObject(gameObject);
+                        }
                     }
                 }
             } catch (java.util.ConcurrentModificationException e) {
