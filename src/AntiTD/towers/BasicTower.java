@@ -33,6 +33,7 @@ public class BasicTower extends Tower {
     private Handler handler;
     int count;
     private Sounds sounds = new Sounds();
+    private boolean playMusic=true;
 
   /**
    * Constructor for BasicTower.
@@ -93,6 +94,9 @@ public class BasicTower extends Tower {
     if (target != null) {
       Projectile bullet=new Projectile(target,this,projectileImg);
       if (checkIfUnitIsClose(target) && target.isAlive() ){
+          if(playMusic){
+              sounds.music("music/lazer.wav",false);
+          }
         handler.addObject(bullet);
       } else {
         if (!target.isAlive()) {
@@ -104,10 +108,10 @@ public class BasicTower extends Tower {
     }
   }
     public void pauseTowerSound(){
-        handler.setIsPaused(true);
+        playMusic=false;
     }
     public void resumeTowerSound(){
-        handler.setIsPaused(false);;
+        playMusic=true;
     }
     public void createTower(Tower tower, Tile pos) {
         tower.init(getTroopsList(), getTowerList(), pos);
