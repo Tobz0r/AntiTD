@@ -131,6 +131,11 @@ public class Handler extends Observable {
         return list;
     }
 
+    public synchronized boolean getIfGameIsChanging() {
+
+        return true;
+    }
+
     /**
      * Gets called each timetick from environment. Updates the gamestate.
      */
@@ -160,6 +165,7 @@ public class Handler extends Observable {
             }
         }
         removeObjectsFromGame();
+
         if (resetFlag) {
             objects.clear();
             aliveTroops.clear();
@@ -168,6 +174,7 @@ public class Handler extends Observable {
                 resetFlag = false;
             }
         }
+
         addObjectsToGame();
     }
 

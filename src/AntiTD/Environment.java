@@ -82,7 +82,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         level=levels.get(mapNr);
         map=level.getMap();
         setUpNeighbors();
-        credits= 4324323;//level.getStartingCredits();
+        credits= 333333;//level.getStartingCredits();
         victoryScore=level.getVictoryPoints();
         try {
             basicTower= ImageIO.read(new File("sprites/basic.png"));
