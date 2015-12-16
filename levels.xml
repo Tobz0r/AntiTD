@@ -117,7 +117,7 @@
             <tile>BasicTile</tile>
         </row>
     </mapData>
-    <mapData sizeX="12" sizeY="11" victory="30" name="Level 2" startingCredits="3000">
+    <mapData sizeX="12" sizeY="11" victory="30" name="Level 2" startingCredits="5000">
       <row>
           <tile>StartTile</tile>
           <tile>PathTile</tile>
@@ -274,6 +274,5 @@
             <tile>TowerTile</tile>
             <tile>TowerTile</tile>
         </row>
-
     </mapData>
 </mapFile>

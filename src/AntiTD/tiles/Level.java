@@ -73,6 +73,10 @@ public class Level {
        }
         return tiles;
     }
+
+    /**
+     * Sets up connectiontile to only have 1 viable neighbour
+     */
     public void setUpConnection(){
         for(int i=0;i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {

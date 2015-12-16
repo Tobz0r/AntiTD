@@ -61,7 +61,7 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     private  Executor runner= Executors.newFixedThreadPool(4);;
 
-    private static boolean gameRunning;
+    private  boolean gameRunning;
     private boolean paused;
     private boolean gameOver;
 
