@@ -112,7 +112,7 @@ public class GUI {
         if(!sounds.isPlaying()) {
             sounds.music("music/runninggame.wav", true);
             if (menu.musicStatus()) {
-                pauseMainSound();
+                pauseMainSound(); 
             }
         }
 
