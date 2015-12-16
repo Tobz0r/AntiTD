@@ -24,11 +24,11 @@ public class TowerTile extends Tile {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } 
     /**
      * Draws the tile on the board
      * @param g the board graphics
-     */ 
+     */
     @Override
     public void landOn(Graphics g) {
         g.drawImage(getImage(),(int)(getPosition().getX()*(getSize().getWidth())),
