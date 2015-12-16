@@ -1,8 +1,12 @@
 package AntiTD;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
 /**
  * @author Thom Renström
  * Sound class that is used for every sound that is made during a running session of the game
@@ -12,9 +16,11 @@ import java.io.IOException;
 public class Sounds {
 
     //sound
-    Clip clip = null;
-    long clipTime;
+    private Clip clip = null;
+    private long clipTime;
     private boolean playing=false;
+    protected static final Object LOCK = new Object();
+
 
 
     /**
@@ -25,8 +31,11 @@ public class Sounds {
     public void music(String gameSound, boolean looping)  {
 
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(gameSound));
+            InputStream url = getClass().getClassLoader().getResourceAsStream(gameSound);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
             DataLine.Info info = new DataLine.Info(Clip.class, audioInputStream.getFormat());
+
+           // clip=AudioSystem.getClip();
             clip = (Clip)AudioSystem.getLine(info);
             clip.open(audioInputStream);
             if(looping){

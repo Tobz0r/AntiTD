@@ -29,7 +29,7 @@ public class CrossroadTile extends Tile {
         setBuildable(false);
         setMoveable(true);
         try {
-            basicTile=ImageIO.read(new File("sprites/patheses.png"));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/patheses.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -118,15 +118,15 @@ public class CrossroadTile extends Tile {
 
         Position p=newPath[0].getPosition();
         if(getPosition().IsPosToEast(p)){
-            setImage(ImageIO.read(new File("sprites/right.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/right.gif")));
         }else if(getPosition().IsPosToNorth(p)){
-            setImage(ImageIO.read(new File("sprites/up.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/up.gif")));
         }
         else if(getPosition().IsPosToSouth(p)){
-            setImage(ImageIO.read(new File("sprites/down.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/down.gif")));
         }
         else if(getPosition().IsPosToWest(p)){
-            setImage(ImageIO.read(new File("sprites/left.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/left.gif")));
         }
         setNeighbors(newPath);
     }

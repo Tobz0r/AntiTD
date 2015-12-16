@@ -76,10 +76,10 @@ public class GUI {
         this.fp=fp;
         env = new Environment(this,fp);
         try {
-            basicImage= ImageIO.read(new File("sprites/ogre.gif"));
-            speedImage = ImageIO.read(new File("sprites/redDragon.gif"));
-            tankImage = ImageIO.read(new File ("sprites/earthElemental.gif"));
-            teleporterImage = ImageIO.read(new File("sprites/Teleporter.gif"));
+            basicImage= ImageIO.read( this.getClass().getResourceAsStream("/sprites/ogre.gif"));
+            speedImage = ImageIO.read( this.getClass().getResourceAsStream("/sprites/redDragon.gif"));
+            tankImage = ImageIO.read( this.getClass().getResourceAsStream("/sprites/earthElemental.gif"));
+            teleporterImage = ImageIO.read( this.getClass().getResourceAsStream("/sprites/Teleporter.gif"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -359,9 +359,15 @@ public class GUI {
      * Because its overrideing paintcomponent
      */
     private class StartScreen extends JPanel{
-        Image bg = new ImageIcon("sprites/full_background.png").getImage();
+        private BufferedImage bg=null;
+
         @Override
         public void paintComponent(Graphics g){
+            try {
+                bg = ImageIO.read(getClass().getResourceAsStream("/sprites/full_background.png"));
+            } catch(java.io.IOException e1) {
+                e1.printStackTrace();
+            }
             g.drawImage(bg,0,0,getWidth(),getHeight(),this);
         }
 

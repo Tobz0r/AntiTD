@@ -85,8 +85,8 @@ public class Environment extends JPanel implements Runnable,Observer {
         credits= level.getStartingCredits();
         victoryScore=level.getVictoryPoints();
         try {
-            basicTower= ImageIO.read(new File("sprites/basic.png"));
-            frostTower= ImageIO.read(new File("sprites/frost.gif"));
+            basicTower= ImageIO.read( this.getClass().getResourceAsStream("/sprites/basic.png"));
+            frostTower= ImageIO.read( this.getClass().getResourceAsStream("/sprites/frost.gif"));
             switches=level.setUpCrossroad();
             level.setUpConnection();
         } catch (IOException e) {

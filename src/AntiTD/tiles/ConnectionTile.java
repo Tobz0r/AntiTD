@@ -23,7 +23,7 @@ public class ConnectionTile extends Tile {
         setMoveable(true);
         setBuildable(false);
         try {
-            setImage(ImageIO.read(new File("sprites/patheses.png")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/patheses.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

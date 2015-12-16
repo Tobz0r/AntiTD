@@ -56,7 +56,7 @@ public class FrostTower extends Tower{
         setPosition(pos.getPosition());
         this.posTile = pos;
         try {
-            projectileImg=ImageIO.read(new File("sprites/frostProjectile.png"));
+            projectileImg=ImageIO.read( this.getClass().getResourceAsStream("/sprites/frostProjectile.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

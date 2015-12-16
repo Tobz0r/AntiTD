@@ -18,6 +18,7 @@ public class AntiTDMain {
         else {
             filepath=args[0];
         }
+
         new GUI(new File(filepath));
     }
 

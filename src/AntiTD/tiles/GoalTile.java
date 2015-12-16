@@ -23,7 +23,7 @@ public class GoalTile extends Tile {
         setBuildable(false);
         setMoveable(true);
         try {
-            setImage(ImageIO.read(new File("sprites/goal.png")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/goal.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

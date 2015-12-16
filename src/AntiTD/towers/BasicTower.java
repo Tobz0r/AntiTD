@@ -60,7 +60,7 @@ public class BasicTower extends Tower {
         count = 0;
 
         try {
-            projectileImg=ImageIO.read(new File("sprites/fireball.gif"));
+            projectileImg=ImageIO.read( this.getClass().getResourceAsStream("/sprites/fireball.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }

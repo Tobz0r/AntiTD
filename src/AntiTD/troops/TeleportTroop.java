@@ -15,11 +15,11 @@ public class TeleportTroop extends Troop {
     private int tpMoves;
     private boolean isTeleporting;
 
-    private int tpLength = 3;
+    private int tpLength = 12;
 
-    static private final int MAX_HEALTH = 10;
+    static private final int MAX_HEALTH = 500;
     static private final int KILL_DEATH_SCORE = 100;
-    static private final double SPEED = 2;
+    static private final double SPEED = 10;
 
     /**
      * Constructor for teleport troop

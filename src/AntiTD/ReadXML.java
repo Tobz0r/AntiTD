@@ -14,6 +14,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +23,7 @@ import java.util.ArrayList;
  */
 public class ReadXML {
 
-    private File xmlMap;
+    private InputStream xmlMap;
 
     private int row;
     private int column;
@@ -33,7 +34,7 @@ public class ReadXML {
 
 
     public ReadXML(File xmlMap) {
-        this.xmlMap = xmlMap;
+        this.xmlMap = getClass().getResourceAsStream(xmlMap.getPath());
         levels=new ArrayList<Level>();
     }
 
