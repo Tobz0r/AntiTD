@@ -123,7 +123,20 @@ public abstract class Tower implements GameObject {
      * @param troop the troop which the tower is checking distance to
      * @return Distance in int
      */
-    public abstract int distance(Troop troop);
+    public int distance(Troop troop) {
+        int x1 = this.getTilePosition().getPosition().getX();
+        int y1 = this.getTilePosition().getPosition().getY();
+
+        int x2 = troop.getTilePosition().getPosition().getX();
+        int y2 = troop.getTilePosition().getPosition().getY();
+
+        float dist = (float) Math.sqrt(
+                Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)
+        );
+        return Math.round(dist);
+        //return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
+    }
+    //public abstract int distance(Troop troop);
 
     /**
      * Attack unit

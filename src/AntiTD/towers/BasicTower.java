@@ -53,7 +53,7 @@ public class BasicTower extends Tower {
         int High = 5;
         result = r.nextInt(High - low) + low;
         setDamage(1);
-        setRange(7);
+        setRange(4);
         setPrice(1);
         setPosition(pos.getPosition());
         count = 0;
@@ -75,11 +75,12 @@ public class BasicTower extends Tower {
                 int dist = distance(troop);
                 if (dist <= getRange()) {
                     pushInRange(troop);
-                    if (dist < distance) {
+
+                    //if (dist < distance) {
                         nearUnit = troop;
                         setNearUnit(troop);
                         distance = dist;
-                    }
+                    //}
                 }
             }
             if (nearUnit != null) {
@@ -124,9 +125,19 @@ public class BasicTower extends Tower {
         }
     }
 
-    public int distance(Troop troop) {
-        return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
-    }
+    /*public int distance(Troop troop) {
+        int x1 = this.getTilePosition().getPosition().getX();
+        int y1 = this.getTilePosition().getPosition().getY();
+
+        int x2 = troop.getTilePosition().getPosition().getX();
+        int y2 = troop.getTilePosition().getPosition().getY();
+
+        float dist = (float) Math.sqrt(
+                Math.pow(x1 - x2, 2) +
+                Math.pow(y1 - y2, 2) );
+        return Math.round(dist);
+        //return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
+    }*/
 
     public boolean checkIfUnitIsClose(Troop troop) {
         if (Math.hypot(troop.getPosition().getX() - getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()) {
