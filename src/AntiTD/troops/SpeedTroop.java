@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Created by dv13tes on 2015-12-04.
+ * @author Mattias Edin
  */
 public class SpeedTroop extends Troop {
     static private final double SPEED = 4;

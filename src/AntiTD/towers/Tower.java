@@ -173,8 +173,6 @@ public abstract class Tower implements GameObject {
 
     public abstract void setPrice(int price);
 
-    public abstract int getPrice();
-
     public abstract void setRange(int range);
 
     public abstract int getRange();

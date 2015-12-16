@@ -5,7 +5,7 @@ import AntiTD.tiles.Tile;
 import java.awt.*;
 
 /**
- * Created by dv13trm on 2015-11-27.
+ * @author Mattias Edin, Tobias Estefors
  */
 public class TeleportTroop extends Troop {
 
