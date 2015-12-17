@@ -1,5 +1,4 @@
 package AntiTD.Tests;
-import AntiTD.Animation;
 import AntiTD.Handler;
 import AntiTD.Position;
 import AntiTD.ReadXML;
@@ -10,8 +9,6 @@ import AntiTD.towers.Tower;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
-import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;

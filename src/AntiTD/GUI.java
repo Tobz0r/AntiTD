@@ -106,7 +106,7 @@ public class GUI {
         //menu = new Menu(frame);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //menu = new Menu(frame, this,env);
-        menu = new Menu(frame, this);
+        menu = new Menu(frame, this,env);
         menu.startMenu();
         menu.statMenu();
         startScreen();

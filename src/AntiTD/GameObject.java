@@ -13,7 +13,7 @@ public interface GameObject{
 
     void tick();
     void render(Graphics g);
-
+ 
     Image getImage();
 
     int getCurrentScore();
