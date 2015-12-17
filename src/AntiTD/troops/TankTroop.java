@@ -7,7 +7,9 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
- * Created by dv13tes on 2015-12-04.
+ * @author Tobias Estefors
+ * Troop that can take more damage and has a 20% chanse
+ * to avoid taking damage at all
  */
 public class TankTroop extends Troop {
     static private final double SPEED = 1;
@@ -17,7 +19,7 @@ public class TankTroop extends Troop {
 
 
     /**
-     * Constructor for basic troop
+     * Constructor for tank troop
      * @param pos Starting tile position.
      */
     public TankTroop(Tile pos) {
@@ -25,7 +27,7 @@ public class TankTroop extends Troop {
     }
 
     /**
-     * Constructor for basic troop
+     * Constructor for tank troop
      * @param img Image used for rendering this object.
      * @param pos Starting tile position.
      */
@@ -34,7 +36,7 @@ public class TankTroop extends Troop {
     }
 
     /**
-     * Constructor for basic troop, used for overriding default health, score and speed values
+     * Constructor for tank troop, used for overriding default health, score and speed values
      *
      * ** CAUTION **
      * Use this constructor for test purposes only.
@@ -55,10 +57,6 @@ public class TankTroop extends Troop {
         this.move();
     }
 
-    @Override
-    public void render(Graphics g) {
-
-    }
 
     /**
      * Attacks the troop with the specified damage.
@@ -68,17 +66,13 @@ public class TankTroop extends Troop {
      */
     @Override
     public boolean attackThis(int damage) {
-        if ( ! hasReacedGoal() ) {
-            if((r.nextInt(5) + 1)==1){
-                damage=0;
-                System.out.println("Blocked attack");
+        if ( ! hasReachedGoal() ) {
+            if((r.nextInt(5) + 1)!=1){
+                health = health - damage;
             }
-            health = health - damage;
             return !this.isAlive();
         } else {
             return false;
         }
     }
-
-
 }

@@ -2,25 +2,16 @@ package AntiTD;
 
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.*;
-
-import AntiTD.*;
 import AntiTD.database.DBModel;
 import AntiTD.tiles.CrossroadTile;
 import AntiTD.tiles.JunctionTile;
-import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
-import AntiTD.towers.BasicTower;
-import AntiTD.towers.FrostTower;
 import AntiTD.troops.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,15 +21,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+
 
 /**
- * @author dv13trm
+ * @author Thom Renström
+ * GUI class creates an interface for the user
+ * It cooperate with every class to show the user all the maps
+ * menus, and other things the user can interact with
  */
 public class GUI {
 
-    ImageIcon img = new ImageIcon("/home/id12/id12rdt/basictower.png");
     private Menu menu;
     private File fp;
     private Thread gameThread;
@@ -59,7 +51,6 @@ public class GUI {
     private JLabel tenChars;
     private JLabel title;
     private JPanel titlePanel;
-
     private StartScreen startPanel;
     private JScrollPane playerScroll;
     private JScrollPane scrollPane;
@@ -85,28 +76,25 @@ public class GUI {
         this.fp=fp;
         env = new Environment(this,fp);
         try {
-            basicImage= ImageIO.read(new File("sprites/ogre.gif"));
-            speedImage = ImageIO.read(new File("sprites/redDragon.gif"));
-            tankImage = ImageIO.read(new File ("sprites/earthElemental.gif"));
-            teleporterImage = ImageIO.read(new File("sprites/Teleporter.gif"));
+            basicImage= ImageIO.read( this.getClass().getResourceAsStream("/sprites/ogre.gif"));
+            speedImage = ImageIO.read( this.getClass().getResourceAsStream("/sprites/redDragon.gif"));
+            tankImage = ImageIO.read( this.getClass().getResourceAsStream("/sprites/earthElemental.gif"));
+            teleporterImage = ImageIO.read( this.getClass().getResourceAsStream("/sprites/Teleporter.gif"));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         frame = new JFrame("AntiTD");
-
         ImageIcon img = new ImageIcon("sprites/icon.png");
         frame.setIconImage(img.getImage());
-
         scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
         scrollPane.setBounds(0,0,env.getWidth()+32,env.getHeight()+32);
         //menu = new Menu(frame);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //menu = new Menu(frame, this,env);
-        menu = new Menu(frame, this,env);
+        menu = new Menu(frame, this, env);
         menu.startMenu();
         menu.statMenu();
         startScreen();
@@ -114,7 +102,9 @@ public class GUI {
     }
 
 
-
+    /**
+     * Removes the start menu and start the accual game
+     */
     public void startGame() {
         if(!sounds.isPlaying()) {
             sounds.music("music/runninggame.wav", true);
@@ -122,29 +112,48 @@ public class GUI {
                 pauseMainSound();
             }
         }
-
         frame.remove(startPanel);
         frame.remove(titlePanel);
         frame.setSize(800, 600);
-        frame.add(scrollPane, BorderLayout.CENTER);
+        env=new Environment(this,fp);
+        menu.updateEnvironment(env);
+        frame.add(env, BorderLayout.CENTER);
         env.start();
         env.repaint();
         buildBuyPanel();
         frame.pack();
     }
 
+    /**
+     * Restarts the current level
+     */
     public void restartGame(){
-        //ta bort alla torn och teleportertiles 
-        //Handler.clearList();
         env.restartLevel(true);
     }
+
+    /**
+     * Pauses sound used it gui
+     */
     public void pauseMainSound(){
         sounds.pauseMusic();
     }
+
+    /**
+     * Resumes sound used in gui
+     */
     public void resumeMainSound(){
         sounds.resumeMusic(true);
     }
 
+    /**
+     * Create the buy panel where the user can buy units
+     * teleportButton sets a teleporter on current tile if pressed
+     * butTeleport creates a Teleporter if pressed
+     * ogreButton creates a Small Ogre unit if pressed
+     * buyTank creates a Earth Elemental unit if pressed
+     * buySpeed creates a Speed Demon unit if pressed
+     * crossButton changes direction of the crossroad if pressed
+     */
     private void buildBuyPanel(){
         buyPanel = new JPanel();
         printScore();
@@ -163,7 +172,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(env.buyUnit(175)) {
-                    Tile[][] currentMap = Level.getCurrentMap();
+                    Tile[][] currentMap = env.getLevel().getMap();
                     env.addTroop(new BasicTroop(basicImage, currentMap[env.getLevel()
                             .getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
                 }
@@ -175,7 +184,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(env.buyUnit(450)) {
-                    Tile[][] currentMap = Level.getCurrentMap();
+                    Tile[][] currentMap = env.getLevel().getMap();
                     env.addTroop(new TankTroop(tankImage, currentMap[env.getLevel()
                             .getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
 
@@ -189,7 +198,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(env.buyUnit(4000)) {
-                    Tile[][] currentMap = Level.getCurrentMap();
+                    Tile[][] currentMap = env.getLevel().getMap();
                     teleportTroop = new TeleportTroop(teleporterImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]);
                     env.addTroop(teleportTroop);
                     teleportButton.setEnabled(true);
@@ -200,7 +209,7 @@ public class GUI {
         buySpeed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile[][] currentMap = Level.getCurrentMap();
+                Tile[][] currentMap = env.getLevel().getMap();
                if(env.buyUnit(325))
                    env.addTroop(new SpeedTroop(speedImage, currentMap[env.getLevel().getStartPosition().getX()][env.getLevel().getStartPosition().getY()]));
             }
@@ -209,7 +218,7 @@ public class GUI {
         crossButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Tile[][] currentMap = Level.getCurrentMap();
+                Tile[][] currentMap = env.getLevel().getMap();
                 for(int i=0; i < currentMap.length; i++ ){
                     for(int j=0; j < currentMap[0].length; j++){
                         if( currentMap[i][j]instanceof CrossroadTile){
@@ -242,8 +251,6 @@ public class GUI {
             }
         });
 
-
-
         buyPanel.add(score);
         buyPanel.add(money);
         buyPanel.add(buySpeed);
@@ -252,66 +259,73 @@ public class GUI {
         buyPanel.add(buyTank);
         buyPanel.add(crossButton);
         buyPanel.add(teleportButton);
-
         frame.add(buyPanel, BorderLayout.SOUTH);
     }
+
+    /**
+     * Gets the name entered in the player textarea
+     */
     public void getName(){
         PlayerName=player.getText();
     }
+
+    /**
+     * Sets playerName to name entered
+     * @param name name user wants to change to
+     */
     void changeName(String name){
         PlayerName=name;
     }
+
+    /**
+     * @return returns string with players name
+     */
     public String getPlayerName(){
         return PlayerName;
     }
-
+    /**
+     * Check if music shouldn't be paused if not
+     * music will start to play
+     */
     public void playMusic(){
         if(!menu.musicStatus()){
             sounds.music("music/start.wav",true);
         }
     }
-
+    /**
+     * Creates the main menu that will show when the game is first started
+     * It will stop the gameplay if it is up.
+     *
+     */
     public void startScreen()  {
         //check to see if panel still exists
         if(buyPanel !=null){
             frame.remove(buyPanel);
         }
         playMusic();
-
         tenChars = new JLabel("Max 11 character");
         title = new JLabel("Anti TD");
         fixTitle(title);
-        env.stop();
-        frame.remove(scrollPane);
+        frame.remove(env);
         player = new JTextArea(textCols, textRows);
         player.setEditable(true);
         player.setWrapStyleWord(true);
         player.setLineWrap(true);
-        playerScroll = new JScrollPane(player);
         player.setBorder(BorderFactory.createLineBorder(Color.black));
+        playerScroll = new JScrollPane(player);
         titlePanel = new JPanel();
         titlePanel.setBackground(Color.cyan);
         startPanel = new StartScreen();
         startPanel.repaint();
         startPanel.add(playerScroll, BorderLayout.CENTER);
-        enterName = new JButton("Submit name");
-        enterName.setBackground(Color.pink);
-        startPanel.add(enterName, FlowLayout.LEFT);
-        titlePanel.add(title);
         startPanel.add(tenChars);
-        checkTextField();
-        frame.setSize(400, 300);
-        frame.add(titlePanel,BorderLayout.NORTH);
-        frame.add(startPanel);
-
-        frame.setVisible(true);
+        enterName = new JButton("Submit name");
         enterName.setBackground(Color.WHITE);
         enterName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(player.getDocument().getLength()!=0){
                     sounds.pauseMusic();
-
                     menu.setNewGame("Restart");
                     getName();
                     startGame();
@@ -319,10 +333,19 @@ public class GUI {
                 }
             }
         });
-
-        
+        startPanel.add(enterName, FlowLayout.LEFT);
+        titlePanel.add(title);
+        checkTextField();
+        frame.setSize(400, 300);
+        frame.add(titlePanel,BorderLayout.NORTH);
+        frame.add(startPanel);
+        frame.setVisible(true);
     }
 
+    /**
+     * Changes the size and font of an JLable
+     * @param title takes a JLable that will be changed
+     */
     private void fixTitle(JLabel title){
         Font lableFont = title.getFont();
         int biggerFont = (int)(lableFont.getSize() * 50);
@@ -330,16 +353,29 @@ public class GUI {
         title.setFont(new Font(lableFont.getName(),Font.PLAIN,fontSizeUse));
         title.setForeground(Color.white);
     }
+
+    /**
+     * New inner class that will put a background on by default
+     * Because its overrideing paintcomponent
+     */
     private class StartScreen extends JPanel{
-        Image bg = new ImageIcon("sprites/full_background.png").getImage();
+        private BufferedImage bg=null;
+
         @Override
         public void paintComponent(Graphics g){
+            try {
+                bg = ImageIO.read(getClass().getResourceAsStream("/sprites/full_background.png"));
+            } catch(java.io.IOException e1) {
+                e1.printStackTrace();
+            }
             g.drawImage(bg,0,0,getWidth(),getHeight(),this);
         }
 
     }
     /*
-     * Check if textfield
+     * A text field check, that checks if key pressed
+     * is a backspace, if so it will call the backspace function
+     * and change how much you can type on the text field
      */
     private void checkTextField(){
 
@@ -386,7 +422,11 @@ public class GUI {
 
     }
 
-
+    /**
+     * Takes a keyevent and if keyevent was a backspace
+     * it will remove the last letter or number on the textfield.
+     * @param k is what keyevent that will be checked, can be keyTyped,keyPressed or keyRealeased
+     */
     private void backSpace(KeyEvent k){
         int i = 0;
         if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE){
@@ -408,6 +448,9 @@ public class GUI {
 
     }
 
+    /**
+     * Create a score and money textfield that the user can see
+     */
     public void printScore(){
         String currentScore;
         currentScore=String.valueOf(0);
@@ -420,14 +463,20 @@ public class GUI {
         score.setBackground(Color.white);
         score.setBorder(null);
         score.setText(currentScore);
-
     }
 
+    /**
+     * Updates the score for the user
+     */
     public void updateScore(){
         score.setText("Score:"+String.valueOf(env.getScore()));
         money.setText("Money"+String.valueOf(env.getMoney()));
-        score.setColumns(5);
+
     }
+
+    /**
+     * Highscore table
+     */
     public void highScoreTable(){
         try {
             JFrame scoreFrame = new JFrame();
@@ -473,15 +522,20 @@ public class GUI {
             scoreFrame.add(scoreTable, BorderLayout.CENTER);
             scoreFrame.setVisible(true);
 
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Database is busy please try again later! Check if you have another instance of the game running! ");
-
-
+        }catch (NoDatabaseConnectionException e){
+            JOptionPane.showMessageDialog(null,"Game running in offline mode, nothing is saved to the database.\n" +
+                    "To fix this:\n" +
+                    "Make sure you are only running one instance of the game and restart.\n");
         }
-
-
-
     }
+
+    /**
+     *
+     * @param tp
+     * @param msg
+     * @param c
+     * @param fontSize
+     */
     private void appendToPane(JTextPane tp, String msg, Color c, int fontSize)
     {
         Font f = new Font(Font.SANS_SERIF, 3 ,5);

@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Created by id12rdt on 2015-11-30.
+ * @author Rasmus Dahlkvist
  */
 public class FrostTower extends Tower{
     private int damage;
@@ -29,49 +29,54 @@ public class FrostTower extends Tower{
     private Troop tr;
     private Troop target;
     private Position pos;
-    private int cooldown=0;
     private int count = 0;
     private Sounds sounds = new Sounds();
     private boolean playMusic = true;
     private BufferedImage projectileImg;
     private Tile posTile;
     private String type = "FrostTower";
-    private boolean slowedTarget;
-    private LinkedList<Troop> slowedTroop = new LinkedList<Troop>();
-    private HashMap<Troop,Boolean> targetSlowed = new HashMap<>();
-    private int targetNumb = 0;
-    ImageIcon img;
+    /**
+            * Constructor for frostTower, tower which slow units that it hits.
+    *
+            * ** CAUTION **
+            * Use this constructor for test purposes only.
+    * @param img Image used for rendering this object.
+    * @param pos Starting tile position.
+     * @param troops Gets the troops currently alive on the map.
+     * @param handler Used to implement shoot-sounds when attacking target.
+    *
+     */
     public FrostTower(Image img, Tile pos,ArrayList<Troop> troops,Handler handler) {
 
         super(img, pos, troops);
         setDamage(10);
-        setRange(10);
+        setRange(4);
         this.handler=handler;
         setPrice(5);
         setPosition(pos.getPosition());
-        slowedTarget = false;
         this.posTile = pos;
         try {
-            projectileImg=ImageIO.read(new File("sprites/frostProjectile.png"));
+            projectileImg=ImageIO.read( this.getClass().getResourceAsStream("/sprites/frostProjectile.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
     }
+
     public void initScan() {
-        int distance = Integer.MAX_VALUE;
+        int distance = 4;
         ArrayList<Troop> troops=getTroopsList();
         for(Troop troop : troops){
             Troop nearUnit = null;
             int dist = distance(troop);
             if(dist <= getRange()) {
                 pushInRange(troop);
-                if (dist < distance) {
+                //if (dist < distance) {
                     nearUnit = troop;
                     setNearUnit(troop);
                     distance = dist;
-                }
+                //}
             }
             if(nearUnit !=null){
                 target = nearUnit;
@@ -85,11 +90,8 @@ public class FrostTower extends Tower{
                 if(playMusic){
                     sounds.music("music/lazer.wav",false);
                 }
-                //attack(target, getDamage());
                 handler.addObject(bullet);
-                cooldown=0;
             } else {
-                //System.out.println("else");
                 if (!target.isAlive()) {
                     removeTroopFromList(target);
                 }
@@ -99,7 +101,6 @@ public class FrostTower extends Tower{
         }
     }
     public void createTower(Tower tower, Tile pos){
-        //Tower temp = new FrostTower(img,pos);
         tower.init(getTroopsList(), getTowerList(), pos);
         getTowerList().add(tower);
 
@@ -107,13 +108,10 @@ public class FrostTower extends Tower{
     public void startShooting(){
         checkIfTroopReachedGoal();
         if (target != null) {
-
             if(!target.isSlowed()) {
-                //target.slowSpeed();
             }
             this.aggroTarget();
         } else {
-            //   System.out.println("Target null");
             this.initScan();
         }
     }
@@ -131,15 +129,21 @@ public class FrostTower extends Tower{
             }
         }
     }
+    /*
     public int distance(Troop troop) {
         return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
     }
+    */
     public boolean checkIfUnitIsClose(Troop troop){
         if(Math.hypot(troop.getPosition().getX() -getPosition().getX(), troop.getPosition().getY() - getPosition().getY()) <= getRange()){
             return true;
         }
         return false;
     }
+
+  /**
+   *Getters and setter for tower
+   * */
     public String getTowerType(){
         return type;
     }
@@ -169,15 +173,11 @@ public class FrostTower extends Tower{
     }
     @Override
     public void tick(){
-        cooldown++;
-
         count ++;
         if(count >= 60) {
             if (this.getTroopFromList()) {
                 startShooting();
-
             }
-            //System.out.println(result);
             count = 0;
         }
     }
@@ -191,27 +191,9 @@ public class FrostTower extends Tower{
     public Troop getNearUnit(){
         return tr;
     }
-    public void setValueInHashMap(String target) {
-
-    }
-
-    @Override
-    public void render(Graphics g) {
-
-    }
 
     @Override
     public Tile getTilePosition() {
         return posTile;
-    }
-
-    @Override
-    public Tile getMoveToPosition() {
-        return this.getTilePosition();
-    }
-
-    @Override
-    public int getMoveProgres() {
-        return 0;
     }
 }

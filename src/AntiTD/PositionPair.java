@@ -1,30 +1,30 @@
 package AntiTD;
 
 /**
- * Created by id12men on 2015-12-11.
+ * @author Mattias Edin
  */
 public class PositionPair {
 
-    private final Long left;
-    private final Long right;
+    private final Long x;
+    private final Long y;
 
-    public PositionPair(Long left, Long right) {
-        this.left = left;
-        this.right = right;
+    public PositionPair(Long x, Long y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public Long getX() { return left; }
-    public Long getY() { return right; }
+    public Long getX() { return x; }
+    public Long getY() { return y; }
 
     @Override
-    public int hashCode() { return left.hashCode() ^ right.hashCode(); }
+    public int hashCode() { return x.hashCode() ^ y.hashCode(); }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PositionPair)) return false;
         PositionPair pairo = (PositionPair) o;
-        return this.left.equals(pairo.getX()) &&
-                this.right.equals(pairo.getY());
+        return this.x.equals(pairo.getX()) &&
+                this.y.equals(pairo.getY());
     }
 
 }

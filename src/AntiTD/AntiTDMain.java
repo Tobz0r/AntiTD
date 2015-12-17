@@ -4,9 +4,10 @@ package AntiTD;
 import java.io.File;
 
 /**
- * Created by dv13tes on 2015-11-27.
+ * @author Tobias Estefors
+ * Mainclass for AntiTD, uses the premade levels.xml
+ * if not argument has been added and then creates a gui
  */
-
 public class AntiTDMain {
 
     public static void main(String[] args){
@@ -17,6 +18,7 @@ public class AntiTDMain {
         else {
             filepath=args[0];
         }
+
         new GUI(new File(filepath));
     }
 

@@ -5,7 +5,7 @@ import AntiTD.tiles.Tile;
 import java.awt.*;
 
 /**
- * Created by dv13trm on 2015-11-27.
+ * @author Mattias Edin, Tobias Estefors
  */
 public class TeleportTroop extends Troop {
 
@@ -15,11 +15,11 @@ public class TeleportTroop extends Troop {
     private int tpMoves;
     private boolean isTeleporting;
 
-    private int tpLength = 3;
+    private int tpLength = 12;
 
-    static private final int MAX_HEALTH = 10;
+    static private final int MAX_HEALTH = 500;
     static private final int KILL_DEATH_SCORE = 100;
-    static private final double SPEED = 2;
+    static private final double SPEED = 10;
 
     /**
      * Constructor for teleport troop
@@ -40,8 +40,8 @@ public class TeleportTroop extends Troop {
 
     /**
      * Constructor for teleport troop, used for overriding health score speed
-     *
-     * ** CAUTION **
+     * <br /><br />
+     * <b>** CAUTION **</b><br />
      * Use this constructor for test purposes only.
      * @param img Image used for rendering this object.
      * @param pos Starting tile position.
@@ -67,7 +67,8 @@ public class TeleportTroop extends Troop {
         if (isTeleporting) {
             if (tpMoves == 0) {
                 teleportStartTile = this.getTilePosition();
-            } else if (tpMoves >= tpLength) {
+                tpMoves++;
+            } else if (tpMoves > tpLength) {
                 isTeleporting = false;
                 tpMoves = 0;
                 teleportEndTile = this.getTilePosition();
@@ -77,18 +78,8 @@ public class TeleportTroop extends Troop {
                     tpMoves++;
                 }
             }
-            /*
-            else if (isAlive()){
-                //addTeleportException(currentPosition);
-            }else{
-                //Clearar listan på tiles mellan teleporten om teleportgubben dör innan den är färdig med teleporten
-                clearTeleports();
-            }
-            */
         }
-
     }
-
 
     @Override
     protected void move() {
@@ -103,18 +94,10 @@ public class TeleportTroop extends Troop {
         }
     }
 
-
-    @Override
-    public void render(Graphics g) {
-
-    }
-
+    /**
+     * Initiates teleport creation
+     */
     public void initTeleport() {
         isTeleporting = true;
-    }
-
-    @Override
-    public int getCurrentScore() {
-        return 0;
     }
 }

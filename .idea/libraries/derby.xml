@@ -1,5 +1,9 @@
 <component name="libraryTable">
   <library name="derby">
+    <ANNOTATIONS>
+      <root url="file://$PROJECT_DIR$/music" />
+      <root url="file://$PROJECT_DIR$/sprites" />
+    </ANNOTATIONS>
     <CLASSES>
       <root url="jar://$USER_HOME$/java/db-derby-10.12.1.1-bin/lib/derby.jar!/" />
       <root url="jar://$USER_HOME$/java/db-derby-10.12.1.1-bin/lib/derbyclient.jar!/" />

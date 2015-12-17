@@ -36,7 +36,7 @@ public class BasicTroopTest {
     public void testTickOnceShouldReturnMiddle() throws Exception {
         Troop t = new BasicTroop(null, start, 1, 1, 100);
         t.tick();
-        assertEquals(t.getTilePosition(), middle);
+        assertEquals(middle, t.getTilePosition());
     }
 
     @Test
@@ -44,7 +44,7 @@ public class BasicTroopTest {
         Troop t = new BasicTroop(null, start, 1, 1, 100);
         t.tick();
         t.tick();
-        assertEquals(t.getTilePosition(), end);
+        assertEquals(end, t.getTilePosition());
     }
 
     @Test
@@ -60,19 +60,19 @@ public class BasicTroopTest {
         Troop t = new BasicTroop(null, start, 1, 1, 100);
         int healthBefore = t.getHealth();
         t.attackThis(1);
-        assertEquals(t.getHealth(), healthBefore-1);
+        assertEquals( healthBefore-1, t.getHealth());
     }
 
     @Test
     public void testDeal10DamageShouldDie() throws Exception {
         Troop t = new BasicTroop(null, start, 1, 1, 100);
         t.attackThis(10);
-        assertEquals(t.isAlive(), false);
+        assertEquals(false, t.isAlive());
     }
 
     @Test
     public void testGetPositionShouldReturnStart() throws Exception {
         Troop t = new BasicTroop(null, start, 1, 1, 100);
-        assertEquals(t.getTilePosition(), start);
+        assertEquals(start, t.getTilePosition());
     }
 }

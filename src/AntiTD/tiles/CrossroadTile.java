@@ -13,7 +13,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Created by dv13tes on 2015-11-30.
+ * @author Tobias Estefors
+ * Tile wich way can be changed with a mouseclick.
  */
 public class CrossroadTile extends Tile {
 
@@ -28,13 +29,17 @@ public class CrossroadTile extends Tile {
         setBuildable(false);
         setMoveable(true);
         try {
-            basicTile=ImageIO.read(new File("sprites/patheses.png"));
+            basicTile=ImageIO.read( this.getClass().getResourceAsStream("/sprites/patheses.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         nextTiles=new ArrayList<>();
     }
 
+    /**
+     * Draws the tile on the board
+     * @param g the board graphics
+     */
     @Override
     public void landOn(Graphics g) {
         g.setColor(Color.red);
@@ -50,9 +55,13 @@ public class CrossroadTile extends Tile {
         }
     }
 
+    /**
+     * Creates an array of avalible pathways
+     * @return a array with tiles
+     */
     public Tile[] findNextWay(){
         nextTiles.clear();
-        Tile[] neighbors = getNeighbors2();
+        Tile[] neighbors = getNeighbors();
         Tile[] arrNeighbors=new Tile[neighbors.length];
         for(Tile tile: neighbors){
             if(!(tile instanceof JunctionTile )){
@@ -64,32 +73,60 @@ public class CrossroadTile extends Tile {
         }
         return arrNeighbors;
     }
+
+    /**
+     * Swaps an array positions, since the neighbors is checked from 0 to size, the ways will be swaped
+     * @param tiles and array of tiles
+     * @return a reversed array of tiles
+     */
     private Tile[] reverseArray(Tile[] tiles){
         Tile[] copy = tiles.clone();
         Collections.reverse(Arrays.asList(copy));
         return copy;
     }
+    /**
+     * Shuffles an array positions, since the neighbors is checked from 0 to size, the ways will be swaped
+     * @param tiles and array of tiles
+     * @return a reversed array of tiles
+     */
+    private Tile[] shuffleArray(Tile[] tiles){
+        Tile[] copy = tiles.clone();
+        while(copy[0]==tiles[0] || copy[0]==null)
+            Collections.shuffle(Arrays.asList(copy));
+        return copy;
+    }
+
+    /**
+     * Changes the pathway for the crossroad
+     * @throws IOException
+     */
     public void changeWay() throws IOException {
-        Tile[] current=getNeighbors2();
+        Tile[] current= getNeighbors();
         Tile[] newPath=new Tile[current.length];
         for(int i=0; i < current.length;i++){
             newPath[i]=current[i];
+
         }
-        newPath=reverseArray(newPath);
-        if(newPath[0]==null){
-            newPath[0]=newPath[1];
+        if (newPath.length <= 3){
+            newPath = reverseArray(newPath);
+        }else{
+            newPath=shuffleArray(newPath);
         }
+        if (newPath[0] == null) {
+            newPath[0] = newPath[1];
+        }
+
         Position p=newPath[0].getPosition();
         if(getPosition().IsPosToEast(p)){
-            setImage(ImageIO.read(new File("sprites/right.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/right.gif")));
         }else if(getPosition().IsPosToNorth(p)){
-            setImage(ImageIO.read(new File("sprites/up.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/up.gif")));
         }
         else if(getPosition().IsPosToSouth(p)){
-            setImage(ImageIO.read(new File("sprites/down.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/down.gif")));
         }
         else if(getPosition().IsPosToWest(p)){
-            setImage(ImageIO.read(new File("sprites/left.gif")));
+            setImage(ImageIO.read( this.getClass().getResourceAsStream("/sprites/left.gif")));
         }
         setNeighbors(newPath);
     }

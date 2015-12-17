@@ -4,6 +4,7 @@ import AntiTD.database.*;
 import AntiTD.tiles.CrossroadSwitch;
 import AntiTD.tiles.Level;
 import AntiTD.tiles.Tile;
+import AntiTD.towers.BasicTower;
 import AntiTD.towers.FrostTower;
 import AntiTD.towers.Tower;
 import AntiTD.troops.Troop;
@@ -21,7 +22,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
- * @author dv13tes
+ * @author Tobias Estefors
+ * Class that acts as an operator for the whole game. Have responsability to
+ * update the gameboard and gamestate each timetick wich is calculated by the class.
+ * Is used to increment/restart levels and checks if the game is finished.
+ * Each new level, Enviroment sets up the neighbors for each tile and places the towers on the
+ * board.
+ *
  */
 public class Environment extends JPanel implements Runnable,Observer {
 
@@ -36,7 +43,7 @@ public class Environment extends JPanel implements Runnable,Observer {
     private int restartMoney;
     private boolean playMusic = true;
 
-    private ArrayList<Tile> buildableTiles = new ArrayList<Tile>();
+
     private ArrayList<CrossroadSwitch> switches;
     private ArrayList<Level> levels;
     private ArrayList<Tower> towers = new ArrayList<>();
@@ -44,22 +51,18 @@ public class Environment extends JPanel implements Runnable,Observer {
     private Handler handler;
 
     private BufferedImage basicTower;
-    private BufferedImage basicImage;
+
 
     private BufferedImage frostTower;
-    private BufferedImage frostImage;
 
-    private BufferedImage arrows;
-    private BufferedImage arrowsImage;
     private Tile[][] map;
 
     private GUI gui;
 
-
     private  Executor runner= Executors.newFixedThreadPool(4);;
 
-    private static boolean gameRunning;
-    private static  boolean paused;
+    private  boolean gameRunning;
+    private boolean paused;
     private boolean gameOver;
 
     private Thread thread;
@@ -79,14 +82,13 @@ public class Environment extends JPanel implements Runnable,Observer {
         level=levels.get(mapNr);
         map=level.getMap();
         setUpNeighbors();
-        credits= 1000000;//level.getStartingCredits();
-        Level.setCurrentMap(map);
+        credits= level.getStartingCredits();
         victoryScore=level.getVictoryPoints();
         try {
-            basicTower= ImageIO.read(new File("sprites/basic.png"));
-            frostTower= ImageIO.read(new File("sprites/frost.gif"));
-            arrows= ImageIO.read(new File("sprites/arrowb.gif"));
+            basicTower= ImageIO.read( this.getClass().getResourceAsStream("/sprites/basic.png"));
+            frostTower= ImageIO.read( this.getClass().getResourceAsStream("/sprites/frost.gif"));
             switches=level.setUpCrossroad();
+            level.setUpConnection();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,6 +108,9 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
     }
 
+    /**
+     * Iterates over all tiles and add a neighbourarray for each tile
+     */
     private void setUpNeighbors() {
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[0].length; x++) {
@@ -130,6 +135,12 @@ public class Environment extends JPanel implements Runnable,Observer {
             }
         }
     }
+
+    /**
+     * Returns a list of the highscore stored in the database
+     * @return An arraylist containing highscores
+     * @throws NoDatabaseConnectionException
+     */
     public synchronized ArrayList<DBModel> getHighScores() throws NoDatabaseConnectionException{
         if (onlineMode) {
             return db.getHighscores();
@@ -138,9 +149,17 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
     }
 
+    /**
+     * Getter for currentlevel used by environment
+     * @return an instance of current level
+     */
     Level getLevel(){
         return level;
     }
+
+    /**
+     * Starts the environment thread if its not already running
+     */
     public synchronized void start(){
         paused=false;
         gameRunning=true;
@@ -149,29 +168,47 @@ public class Environment extends JPanel implements Runnable,Observer {
             thread.start();
         }
     }
+
+    /**
+     * Stops the environment thread if its running.
+     */
     public synchronized void stop(){
         try{
-            gameRunning=false;
-            thread.join();
+            if(gameRunning) {
+                thread.join();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        catch (NullPointerException e ){
-
-        }
     }
 
-    public static  boolean isPaused(){
+    /**
+     * Checks if game is paused or not
+     * @return true if game is paused, else false
+     */
+    public boolean isPaused(){
         return paused;
     }
+
+    /**
+     * Flags for the gameloop that it can run
+     */
     public void startGame(){
         gameRunning=true;
     }
+
+    /**
+     * Checks if the game is over
+     * @return true if game is over, else false
+     */
     public boolean isGameOver(){
         return gameOver;
     }
 
-
+    /**
+     * Clears and paints the gameboard with current gamestate
+     * @param g the graphics of the board
+     */
     public void paintComponent( Graphics g){
         setTileSize();
         g.clearRect(0, 0, getWidth(), getHeight());
@@ -181,19 +218,27 @@ public class Environment extends JPanel implements Runnable,Observer {
             }
         }
         handler.render(g);
-
     }
+
+    /**
+     * Sets the tile size to fit the window's size
+     */
     private void setTileSize(){
-        Tile[][] map=Level.getCurrentMap();
+        Tile[][] map=level.getMap();
         for(int i=0; i < map.length;i++){
             for(int j=0; j < map[i].length;j++){
                 map[i][j].setSize(new Dimension(getWidth() / map.length, getHeight() / map[i].length));
             }
         }
     }
+
+    /**
+     * Updates the gamestate 60 times per second by calculating how often each update occurs
+     * and makes the thread sleep for a specified time each timetick
+     */
     public void run() {
         long lastTime = System.currentTimeMillis();
-        double amountOfTicksPerSecond = 80;
+        double amountOfTicksPerSecond = 60;
         long ns = Math.round(1000.0 / amountOfTicksPerSecond);
         double delta = 0;
         int ticks=0;
@@ -202,7 +247,7 @@ public class Environment extends JPanel implements Runnable,Observer {
             long wait = ns - (now - lastTime);
             lastTime = now;
             wait = wait < 0 ? 0 : wait;
-            finishedLevel(wait);
+            finishedLevel();
             try {
                 thread.sleep(wait);
                 if (! isPaused()) {
@@ -229,30 +274,59 @@ public class Environment extends JPanel implements Runnable,Observer {
             }
         }
     }
-    public static boolean isRunning(){
+
+    /**
+     * Checks if game is currenty running
+     * @return true if game is running, else false
+     */
+    public  boolean isRunning(){
         return gameRunning;
     }
 
+    /**
+     * Adds a troop to the handlers liost
+     * @param troop the troop to be added
+     */
     public void addTroop(Troop troop){
         handler.addObject(troop);
     }
+    /**
+     * Adds a tower to the handlers liost
+     * @param tower the troop to be added
+     */
     public void addTower(Tower tower){
         handler.addObject(tower);
         towers.add(tower);
     }
- /*   public void addBullets(Bullets bullets){
-        handler.addObject(bullets);
-    }*/
 
+    /**
+     * Returns a list of current alive troops
+     * @return an arraylist of troops
+     */
     public ArrayList<Troop> getTroops(){
         return handler.getAliveTroops();
     }
-    public static void pauseGame(){
+
+    /**
+     * Sets the current gamestate to paused
+     */
+    public  void pauseGame(){
         paused=true;
     }
-    public static void resumeGame(){
+
+    /**
+     * Resumes the game
+     */
+    public  void resumeGame(){
         paused=false;
     }
+
+    /**
+     * Changes the level to the next level.
+     * @param restart if the map is to be restarted
+     * @param gameOver true if game is finished, else false
+     * @param wonMap true if the map was won and should continue to the next
+     */
     private void incrementLevel(boolean restart, boolean gameOver, boolean wonMap){
         pauseGame();
         int currentMap=mapNr;
@@ -262,7 +336,6 @@ public class Environment extends JPanel implements Runnable,Observer {
             int reply;
             if(restart){
                 reply=0;
-                System.out.println("123");
             }
             else{
                 reply=JOptionPane.showConfirmDialog(null, "GG! \n Would you like to play again?",
@@ -288,13 +361,12 @@ public class Environment extends JPanel implements Runnable,Observer {
         level=levels.get(mapNr);
         victoryScore=(level.getVictoryPoints()+handler.getVictoryScore());
         map=level.getMap();
-        Level.setCurrentMap(map);
         credits+=level.getStartingCredits();
         restartMoney=credits;
         credits= restart ? level.getStartingCredits() : restartMoney;
         setUpNeighbors();
-        //Troop.clearTeleports();
         ArrayList<CrossroadSwitch>switches=level.setUpCrossroad();
+        level.setUpConnection();
         for(CrossroadSwitch cSwitch:switches){
             addMouseListener(cSwitch);
         }
@@ -304,18 +376,22 @@ public class Environment extends JPanel implements Runnable,Observer {
 
     }
 
+    /**
+     * Restarts the game from level 0
+     * @param restart true if game is to be restarted
+     */
     public void restartLevel(boolean restart){
         handler.resetGame();
         incrementLevel(restart,false,false);
     }
 
-    private void finishedLevel(long wait){
-        System.out.println("ELIASHEJ");
-
+    /**
+     * Is called every timetick to check if current map is finished and depends on the current gamestate choses
+     * what is to be happening next
+     */
+    private void finishedLevel(){
         if(handler.getVictoryScore() >= victoryScore){
             handler.resetGame();
-            System.out.println("ELIASHEJ");
-
             if((mapNr+1)>levels.size()-1) {
                 if(playMusic){
                     sounds.music("music/gameover.wav",false);
@@ -346,30 +422,54 @@ public class Environment extends JPanel implements Runnable,Observer {
                 }
             }
             else {
+                handler.resetGame();
                 incrementLevel(false, false,false);
             }
         }
         else if(!handler.hasAliveTroops() && (credits <= minimumCredits)){
             gui.pauseMainSound();
-            sounds.music("music/gameover.wav",false);
-            gameRunning=false;
+            if(gameRunning)
+                sounds.music("music/gameover.wav",false);
+            handler.resetGame();
             incrementLevel(true, true,false);
         }
     }
+
+    /**
+     * Pause the in-game music
+     */
     public void pauseEnvSound(){
         playMusic = false;
     }
+
+    /**
+     * Resumes the in-game music
+     */
     public void resumeEnvSound(){
         playMusic = true;
     }
 
-
+    /**
+     * Returns the current score for the game.
+     * @return an integer of current score
+     */
     public int getScore() {
         return handler.getVictoryScore();
     }
+
+    /**
+     * Returns the value of the current money the player has
+     * @return an integer containing the money
+     */
     public int getMoney(){
         return credits;
     }
+
+    /**
+     * Used by the gui to buy units to the game. Does nothing if the player dont have enough credits
+     * @param amount of credits spent for the troop to be buyed
+     * @return true if the unit could be bought, else false
+     */
     public boolean buyUnit(int amount){
         if((credits-amount)>0) {
             credits -= amount;
@@ -377,23 +477,39 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
         return false;
     }
+
+    /**
+     * Initates the towers to the gameboard
+     */
     private void initTowers(){
         towers.clear();
-        Tile[][] currentMap = Level.getCurrentMap();
+        Tile[][] currentMap = level.getMap();
         for (int i = 0; i < currentMap.length; i++) {
             for (int j = 0; j < currentMap[i].length; j++) {
                 if (currentMap[i][j].isBuildable()) {
-                  //  Bullets bullet = new Bullets(arrows   ,1,5,currentMap[i][j]);
-                 //   addBullets(bullet);
-                    addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(),handler));
-                    break;
+                    if((i+j)%3==0) {
+                        if ((j % 2) == 0) {
+                            addTower(new FrostTower(frostTower, currentMap[i][j], getTroops(), handler));
+                        } else {
+                            addTower(new BasicTower(basicTower, currentMap[i][j], getTroops(), handler));
+                        }
+                    }
                 }
             }
         }
     }
+
+    /**
+     * Returns a list of all towers
+     * @return an arraylist of all towers
+     */
     public ArrayList getTowers(){
         return towers;
     }
+
+    /**
+     * Resets the teleports so they wont be there when the game is restarted or incremented.
+     */
     private void resetTeleport(){
         for(int i=0; i < levels.size(); i++){
             Tile[][] map=levels.get(i).getMap();
@@ -405,10 +521,18 @@ public class Environment extends JPanel implements Runnable,Observer {
         }
     }
 
+    /**
+     * Updates the game money each timetick
+     */
     @Override
     public void update(Observable o, Object arg) {
         credits+=(int)arg;
     }
+
+    /**
+     * Pauses the music for all gamesounds
+     * @param paused true if should be paused, else false
+     */
     public void setPaused(boolean paused){
         handler.setIsPaused(paused);
     }

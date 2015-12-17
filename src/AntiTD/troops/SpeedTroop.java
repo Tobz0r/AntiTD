@@ -6,10 +6,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Created by dv13tes on 2015-12-04.
+ * @author Mattias Edin
  */
 public class SpeedTroop extends Troop {
-    static private final double SPEED = 5;
+    static private final double SPEED = 4;
     static private final int MAX_HEALTH = 5;
     static private final int KILL_DEATH_SCORE = 10;
 
@@ -51,10 +51,7 @@ public class SpeedTroop extends Troop {
         this.move();
     }
 
-    @Override
-    public void render(Graphics g) {
 
-    }
 
 
 

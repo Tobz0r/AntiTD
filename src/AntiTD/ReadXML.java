@@ -1,8 +1,6 @@
 package AntiTD;
 
-/**
- * Created by dv13tes on 2015-11-30.
- */
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -16,12 +14,16 @@ import javax.xml.parsers.SAXParserFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
-
+/**
+ * @author Tobias Estefors
+ * Parses an xml-file containing all the levels and adds them to an arraylist
+ */
 public class ReadXML {
 
-    private File xmlMap;
+    private InputStream xmlMap;
 
     private int row;
     private int column;
@@ -32,16 +34,23 @@ public class ReadXML {
 
 
     public ReadXML(File xmlMap) {
-        this.xmlMap = xmlMap;
+        this.xmlMap = getClass().getResourceAsStream(xmlMap.getPath());
         levels=new ArrayList<Level>();
     }
+
+    /**
+     * Returns an arraylist containing all levels
+     * @return arraylist of levels
+     */
     public ArrayList<Level> getLevels(){
         parseXML();
         return levels;
     }
 
+    /**
+     * Parses an XML-document with SAX parser
+     */
     private void parseXML() {
-
         SAXParserFactory factory = SAXParserFactory.newInstance();
         try {
             SAXParser saxParser = factory.newSAXParser();
@@ -60,17 +69,23 @@ public class ReadXML {
 
         private boolean isTile;
 
-        //gör stuff för varje element
+        /**
+         * Checks called every time a new element is found in xML
+         * Checks the attrubyted and adds them to a new level.
+         * @param uri Never used
+         * @param localName Never used
+         * @param qName the name of the element
+         * @param attributes attributes if any in the element
+         * @throws SAXException
+         */
         @Override
         public void startElement(String uri, String localName,
                                  String qName, Attributes attributes) throws SAXException {
             if (qName.equals("row")) {
-                //count rows?
                 column = -1;
                 row++;
                 isTile = false;
             } else if (qName.equals("tile")) {
-                //count col?
                 column++;
                 isTile = true;
             } else if (qName.equals("mapData")) {
@@ -91,7 +106,12 @@ public class ReadXML {
 
             }
         }
-        //gör stuff med varje element
+
+        /**
+         *  Adds the tile from every node to a matrix
+         * @param ch, start, length compinds to the name of the node
+         * @throws SAXException
+         */
         @Override
         public void characters(char ch[], int start, int length)
                 throws SAXException {
@@ -119,7 +139,14 @@ public class ReadXML {
 
             }
         }
-        //när end-tag hittas
+
+        /**
+         * Gets called when a end tag"</>" is found
+         * Only does something with mapData and adds the level to an arraylist
+         * @param uri,qName,localName string that contain info of the node.
+         *                            is never used in this method
+         * @throws SAXException
+         */
         @Override
         public void endElement(String uri, String localName, String qName)
                 throws SAXException {

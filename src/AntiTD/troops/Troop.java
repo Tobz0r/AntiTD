@@ -5,15 +5,12 @@ import AntiTD.tiles.GoalTile;
 import AntiTD.tiles.Tile;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
 import java.util.Stack;
 
 /**
- * Created by dv13trm on 2015-11-27.
+ * @author Mattias Edin
  */
-public abstract class Troop implements GameObject {
+public abstract class Troop implements MovableGameObject {
     //private static int victoryScore;
     protected int health;
     protected int score;
@@ -22,7 +19,7 @@ public abstract class Troop implements GameObject {
     private Stack<Tile> history;
     private Tile nextTile;
     private double moveProgres;
-    private boolean hasReacedGoal;
+    private boolean hasReachedGoal;
     private boolean isMoving;
     private boolean slowed;
 
@@ -47,6 +44,7 @@ public abstract class Troop implements GameObject {
         this.speed = speed;
         this.history = new Stack<Tile>();
         this.history.push(pos);
+        this.nextTile = getNextTile();
         slowed = false;
 
 
@@ -64,7 +62,7 @@ public abstract class Troop implements GameObject {
      * speed reaches the value of 100 the position will be updated.
      */
     protected void move() {
-        if (!hasReacedGoal && isAlive()) {
+        if (!hasReachedGoal && isAlive()) {
             if (!this.isMoving) {
                 this.isMoving = true;
                 this.moveProgres = speed;
@@ -82,7 +80,7 @@ public abstract class Troop implements GameObject {
 
                 history.push(nextTile);
                 if (nextTile instanceof GoalTile) {
-                    hasReacedGoal = true;
+                    hasReachedGoal = true;
                 } else if (nextTile.isTeleporter()) {
                     Tile endTPTile = nextTile.getTeleportTo();
 
@@ -105,26 +103,26 @@ public abstract class Troop implements GameObject {
     }
 
     @Override
-    public int getMoveProgres() {
+    public int getMoveProgress() {
         Long p = Math.round(this.moveProgres);
         return p.intValue();
     }
 
     private Tile getNextTile() {
         Tile[] neigbors;
-        neigbors = history.peek().getNeighbors2();
+        neigbors = history.peek().getNeighbors();
 
-        Tile nextTile = null;
+        Tile returnTile = null;
 
         for (Tile tile : neigbors) {
             if (tile.isMoveable()) {
                 if (history.search(tile) == -1) {
-                    nextTile = tile;
+                    returnTile = tile;
                     break;
                 }
             }
         }
-        return nextTile;
+        return returnTile;
     }
 
     @Override
@@ -134,15 +132,15 @@ public abstract class Troop implements GameObject {
 
     @Override
     public int getCurrentScore() {
-        if (hasReacedGoal) {
+        if (hasReachedGoal) {
             return score;
         } else {
             return 0;
         }
     }
 
-    public boolean hasReacedGoal() {
-        return hasReacedGoal;
+    public boolean hasReachedGoal() {
+        return hasReachedGoal;
     }
 
     public int getHealth() {
@@ -156,7 +154,7 @@ public abstract class Troop implements GameObject {
      * @return true if this troop died else false
      */
     public boolean attackThis(int damage) {
-        if ( !hasReacedGoal() ) {
+        if ( !hasReachedGoal() ) {
             health = health - damage;
             return !this.isAlive();
         } else {
@@ -171,10 +169,10 @@ public abstract class Troop implements GameObject {
      */
     public boolean isAlive() {
         boolean isAlive = true;
-        if (health <= 0) {
+        if (health < 1) {
             isAlive = false;
         }
-        if (hasReacedGoal) {
+        if (hasReachedGoal) {
             isAlive = false;
         }
         return isAlive;
@@ -197,7 +195,6 @@ public abstract class Troop implements GameObject {
         if (! this.isSlowed()) {
             this.speed = (speed * 0.5);
             slowed = true;
-            System.out.println(speed);
         }
     }
     public boolean isSlowed(){

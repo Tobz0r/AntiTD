@@ -6,20 +6,22 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.*;
-import javax.swing.text.html.ObjectView;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * @author dv13trm
+ * @author Thom Renström
+ * Menu class is designed to create a menu for the game
+ * Each menu item on the menu have an actionlistener
+ * Every actionlistener preformes an action depending on its task
+ * There is two menubar one for accual game interference
+ * the other one is more about information around the game.
  */
 public class Menu extends JMenu {
     //startmenu
@@ -60,40 +62,40 @@ public class Menu extends JMenu {
         this.frame = frame;
     }
 
+    void updateEnvironment(Environment env){
+        this.env=env;
+    }
 
+    /*
+     * Take a string, and sets newGame button to that string
+     */
     public void setNewGame(String change) {
         newGame.setText(change);
     }
 
+    /**
+     * Create the start menu with menu items
+     * Each menu item have its own actionlistener
+     * newGame restart current level or start a new game
+     * pauseGame pauses the game or resumes
+     * mute mutes the game or unmute
+     * highScore shows highscorelist
+     * mainMenu takes user back to main menu
+     * exitGame quits the game
+     */
     public void startMenu(){
         frame.setJMenuBar(startMenuBar);
         startMenuBar.add(this);
-        //lägga till menyitems
+        //add items to menu
         newGame = this.add("Restart");
-        pauseGame = this.add("Pause");
-        mute = this.add("Mute");
-        highScore = this.add("High Score");
-        mainMenu = this.add("Main Menu");
-        exitGame = this.add("Quit");
         newGame.setBackground(Color.white);
-        pauseGame.setBackground(Color.white);
-        mute.setBackground(Color.white);
-        highScore.setBackground(Color.white);
-        exitGame.setBackground(Color.white);
-        mainMenu.setBackground(Color.white);
-        if(!Environment.isRunning()){
+        if(!env.isRunning()){
             newGame.setText("New Game");
         }
-        highScore.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                gui.highScoreTable();
-            }
-        });
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (Environment.isRunning()) {
+                if (env.isRunning()) {
                     gui.restartGame();
                     mute.setText("Mute");
                     newGame.setText("Restart");
@@ -105,38 +107,27 @@ public class Menu extends JMenu {
             }
 
         });
-        mainMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                mainMusic = true;
-                gui.pauseMainSound();
-                newGame.setText("New Game");
-                gui.startScreen();
-            }
-        });
-        exitGame.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.exit(0);
-            }
-        });
+        pauseGame = this.add("Pause");
+        pauseGame.setBackground(Color.white);
         pauseGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if(pause){
-                    Environment.pauseGame();
+                    env.pauseGame();
                     pauseGame.setText("Resume");
                     gui.pauseMainSound();
                     pause=false;
                 }
                 else{
-                    Environment.resumeGame();
+                    env.resumeGame();
                     pauseGame.setText("Pause");
                     gui.resumeMainSound();
                     pause=true;
                 }
             }
         });
+        mute = this.add("Mute");
+        mute.setBackground(Color.white);
         mute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -146,77 +137,107 @@ public class Menu extends JMenu {
                     pauseMusic = true;
                     gui.pauseMainSound();
                     env.pauseEnvSound();
-                    if(Environment.isRunning()){
+                    if(env.isRunning()){
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).pauseTowerSound();
                         }
                         gui.pauseTroopSound();
                     }
-
-
-
                     mute.setText("Unmute");
                     mutesound=false;
                 }
                 else {
                     pauseMusic = false;
                     env.resumeEnvSound();
-                    if(Environment.isRunning()){
+                    if(env.isRunning()){
                         gui.resumeMainSound();
                         for(int i=0; i < towerList.size(); i++){
                             towerList.get(i).resumeTowerSound();
                         }
-
                         gui.resumeTroopSound();
                     }
                     if(mainMusic){
-                       gui.playMusic();
+                        gui.playMusic();
                     }
-
                     mute.setText("Mute");
                     mutesound = true;
                 }
             }
         });
 
-
+        highScore = this.add("High Score");
+        highScore.setBackground(Color.white);
+        highScore.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                gui.highScoreTable();
+            }
+        });
+        mainMenu = this.add("Main Menu");
+        mainMenu.setBackground(Color.white);
+        mainMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                mainMusic = true;
+                gui.pauseMainSound();
+                newGame.setText("New Game");
+                gui.startScreen();
+            }
+        });
+        exitGame = this.add("Quit");
+        exitGame.setBackground(Color.white);
+        exitGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.exit(0);
+            }
+        });
         startMenuBar.add(this);
     }
+
+    /**
+     * @return true if its pause false if not
+     */
     public boolean musicStatus(){
         return pauseMusic;
     }
 
+    /**
+     * Adds a menu bar to the menu, with menuitem help, about and namechange
+     * Each menu item have its own actionlistener
+     * help shows a new frame with info about how the game
+     * about show info about who created the game
+     * nameChange let the user change its name
+     */
     public void statMenu(){
         frame.setJMenuBar(statMenuBar);
         statMenuBar.add(this);
         //lägga till menyitems
         help = statmenu.add("Help");
-        about = statmenu.add("About");
-
-
-        nameChange = statmenu.add("Change name");
-        nameChange.setBackground(Color.white);
-
         help.setBackground(Color.white);
-        about.setBackground(Color.white);
-
         help.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 callHelpFrame();
             }
         });
+        about = statmenu.add("About");
+        about.setBackground(Color.white);
         about.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JOptionPane.showMessageDialog(null, "Game created by:\n Thom Renström \n Tobias Estefors \n Rasmus Dahlkvist \n Mattias Edin","About",1);
+                JOptionPane.showMessageDialog(null, "Game created by:\n Thom Renström \n " +
+                        "Tobias Estefors \n Rasmus Dahlkvist \n Mattias Edin\n\n Assets by:\n " +
+                        "David Gervais","About",1);
 
             }
         });
+        nameChange = statmenu.add("Change name");
+        nameChange.setBackground(Color.white);
         nameChange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(Environment.isRunning()){
+                if(env.isRunning()){
                     gui.changeName(JOptionPane.showInputDialog("Enter name"));
                 }
                 else{
@@ -224,10 +245,13 @@ public class Menu extends JMenu {
                 }
             }
         });
-
         statMenuBar.add(statmenu);
     }
-
+    /**
+     * Call the helpframe that will show when you press help on menu
+     * resizes the images and add them to a table with all information
+     * about the game.
+     */
     private void callHelpFrame(){
         ArrayList<ImageIcon> icons = new ArrayList<>();
         //ogre
@@ -240,7 +264,6 @@ public class Menu extends JMenu {
         ogre= (BufferedImage) resizeImage(ogre,25,25);
         ImageIcon ogree= new ImageIcon(ogre);
         icons.add(ogree);
-
 
         //dragon
         BufferedImage dragon = null;
@@ -276,37 +299,18 @@ public class Menu extends JMenu {
         ImageIcon telee= new ImageIcon(tele);
         icons.add(telee);
 
-
         //priceTable
         String[] columns={"Units","Image"};
         Object[][] rows = {{ogre}};
-      /*  DefaultTableModel model = new DefaultTableModel(rows, columns) {
-            @Override
-            public Class<?> getColumnClass(int column) {
-                switch (column){
-                    case 0:
-                    case 1: return Integer.class;
-                    case 2: return ImageIcon.class;
-                    default: return Object.class;
-                }
-
-            }
-
-        }; */
         Object[][] data ={ {"Ogre",ogre},{"earth",earth},
         {"teleport",tele},{"dragon",dragon}
         };
-
         priceTable = new JTable();
-       // priceTable.setValueAt(ogree, 1,1);
-        JTable unitTable = new JTable();
-
         DefaultTableModel model = new DefaultTableModel(columns,0){
             @Override
             public Class<?> getColumnClass(int columnIndex) {
                 if(getRowCount() > 0){
                     return getValueAt(0,columnIndex).getClass();
-
                 }
                 return super.getColumnClass(columnIndex);
             }
@@ -326,13 +330,9 @@ public class Menu extends JMenu {
         teleText.append("Teleport \n HP:200 \n Speed = 1");
         textAreas.add(teleText);
 
-
-
-        int y1 = 20;
         for(int row = 0; row <icons.size(); row++){
             Object[] rowData = {textAreas.get(row), icons.get(row)};
             model.addRow(rowData);
-            //model.addColumn(units);
         }
 
         priceTable.setModel(model);
@@ -349,20 +349,9 @@ public class Menu extends JMenu {
                 "Cost: $450 </font></html>", 2,0);
         priceTable.setValueAt("<html><font size= 6>  Health: 10 <br> Speed: 2 <br> Teleport distance = 3 <br>" +
                 "Cost: $4000</font></html>", 3,0);
-        /*unitTable.setModel(model);
-        unitTable.setRowHeight(((ImageIcon)model.getValueAt(0,1)).getIconHeight());*/
-
-
-
-
-
-
-
-
 
         helpPanel = new JPanel();
         helpPanel.setBackground(Color.black);
-       // helpPanel.add(unitTable.getTableHeader());;
         Font font = new Font("Verdana",Font.BOLD,25);
         //textfältet
         helpText = new JTextArea(15,15);
@@ -387,24 +376,23 @@ public class Menu extends JMenu {
                 "starting money. You will " +
                 "get money if your unit reach goal", Color.white);
         JTextArea informationArea = new JTextArea();
-        /*informationArea.setText("To Play start by choosing a name then you spawn troops with your " +
-                "starting money. You will " +
-                "get money if your unit reach goal");*/
         informationArea.setBackground(Color.black);
         informationArea.setSelectedTextColor(Color.white);
         helpPanel.add(textPane, BorderLayout.SOUTH);
         helpPanel.add(helpButton, BorderLayout.NORTH);
 
         helpFrame.setSize(1000, 1000);
-        /*helpFrame.add(helpText);
-        helpScroll = new JScrollPane(helpText);
-        helpFrame.add(helpScroll, BorderLayout.CENTER);*/
-
-       // helpFrame.getContentPane().setBackground(Color.yellow);
         helpFrame.add(helpPanel, BorderLayout.SOUTH);
         helpFrame.add(priceTable, BorderLayout.CENTER);
         helpFrame.setVisible(true);
     }
+
+    /**
+     *
+     * @param tp
+     * @param msg
+     * @param c
+     */
     private void appendToPane(JTextPane tp, String msg, Color c)
     {
         StyleContext sc = StyleContext.getDefaultStyleContext();
@@ -419,6 +407,13 @@ public class Menu extends JMenu {
         tp.replaceSelection(msg);
     }
 
+    /**
+     * Takes an image and resizes it
+     * @param myImg the image you want to resize
+     * @param w width of the image
+     * @param h hight of the image
+     * @return the resized image
+     */
     private Image resizeImage(Image myImg, int w, int h){
         BufferedImage resizeImg = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = resizeImg.createGraphics();
@@ -429,8 +424,5 @@ public class Menu extends JMenu {
 
         return resizeImg;
     }
-
-
-
 }
 
