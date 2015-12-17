@@ -19,7 +19,7 @@ public class TeleportTroop extends Troop {
 
     static private final int MAX_HEALTH = 500;
     static private final int KILL_DEATH_SCORE = 100;
-    static private final double SPEED = 10;
+    static private final double SPEED = 4;
 
     /**
      * Constructor for teleport troop

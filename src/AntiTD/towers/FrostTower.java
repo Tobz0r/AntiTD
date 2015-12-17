@@ -88,7 +88,7 @@ public class FrostTower extends Tower{
             Projectile bullet=new Projectile(target,this,projectileImg);
             if (checkIfUnitIsClose(target) && target.isAlive() ){
                 if(playMusic){
-                    sounds.music("music/lazer.wav",false);
+                    sounds.music("/music/lazer.wav",false);
                 }
                 handler.addObject(bullet);
             } else {

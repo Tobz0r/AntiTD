@@ -85,7 +85,7 @@ public class GUI {
             e.printStackTrace();
         }
         frame = new JFrame("AntiTD");
-        ImageIcon img = new ImageIcon("sprites/icon.png");
+        ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("sprites/icon.png"));
         frame.setIconImage(img.getImage());
         scrollPane = new JScrollPane(env);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -107,7 +107,7 @@ public class GUI {
      */
     public void startGame() {
         if(!sounds.isPlaying()) {
-            sounds.music("music/runninggame.wav", true);
+            sounds.music("/music/runninggame.wav", true);
             if (menu.musicStatus()) {
                 pauseMainSound();
             }
@@ -289,7 +289,7 @@ public class GUI {
      */
     public void playMusic(){
         if(!menu.musicStatus()){
-            sounds.music("music/start.wav",true);
+            sounds.music("/music/start.wav",true);
         }
     }
     /**

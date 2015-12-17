@@ -429,7 +429,7 @@ public class Environment extends JPanel implements Runnable,Observer {
         else if(!handler.hasAliveTroops() && (credits <= minimumCredits)){
             gui.pauseMainSound();
             if(gameRunning)
-                sounds.music("music/gameover.wav",false);
+                sounds.music("/music/gameover.wav",false);
             handler.resetGame();
             incrementLevel(true, true,false);
         }

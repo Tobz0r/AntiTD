@@ -257,7 +257,7 @@ public class Menu extends JMenu {
         //ogre
         BufferedImage ogre = null;
         try {
-            ogre = ImageIO.read(new File("sprites/ogre.gif"));
+            ogre = ImageIO.read( this.getClass().getResourceAsStream("/sprites/ogre.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -268,7 +268,7 @@ public class Menu extends JMenu {
         //dragon
         BufferedImage dragon = null;
         try {
-            dragon = ImageIO.read(new File("sprites/redDragon.gif"));
+            dragon = ImageIO.read( this.getClass().getResourceAsStream("/sprites/redDragon.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -280,7 +280,7 @@ public class Menu extends JMenu {
         //earthElemental
         BufferedImage earth = null;
         try {
-            earth = ImageIO.read(new File("sprites/earthElemental.gif"));
+            earth = ImageIO.read( this.getClass().getResourceAsStream("/sprites/earthElemental.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -291,7 +291,7 @@ public class Menu extends JMenu {
         //teleporter
         BufferedImage tele = null;
         try {
-            tele = ImageIO.read(new File("sprites/Teleporter.gif"));
+            tele = ImageIO.read( this.getClass().getResourceAsStream("/sprites/Teleporter.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }

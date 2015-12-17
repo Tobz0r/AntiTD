@@ -152,7 +152,7 @@ public class Handler extends Observable {
                             if (mgo instanceof Troop) {
                                 aliveCount--;
                                 if (!isPaused) {
-                                    sounds.music("music/deadman.wav", false);
+                                    sounds.music("/music/deadman.wav", false);
                                 }
                             }
                         }
