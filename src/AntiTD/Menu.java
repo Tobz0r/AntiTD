@@ -314,6 +314,10 @@ public class Menu extends JMenu {
                 }
                 return super.getColumnClass(columnIndex);
             }
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
         };
         String[] units = {"Ogre", "Dragon","EarthElement","Teleport"};
         ArrayList<JTextArea> textAreas = new ArrayList<>();

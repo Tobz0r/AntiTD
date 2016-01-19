@@ -503,6 +503,10 @@ public class GUI {
                     }
                     return super.getColumnClass(columnIndex);
                 }
+                @Override
+                public boolean isCellEditable(int row, int column){
+                    return false;
+                }
             };
 
             for (int row = 0; row < dbHighScore.size(); row++) {
@@ -514,6 +518,7 @@ public class GUI {
             JTextPane textPane = new JTextPane();
             textPane.setBackground(Color.black);
             this.appendToPane(textPane, "Player highscore", Color.white, 34);
+            textPane.setEditable(false);
             topPanel.add(textPane, BorderLayout.CENTER);
 
             scoreTable.setModel(model);
