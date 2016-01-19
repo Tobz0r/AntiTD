@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.*;
 
 /**
+ * Thread who handles all game updates
  * @author Tobias Estefors, Mattias Edin
  */
 public class Handler extends Observable {
@@ -42,7 +43,6 @@ public class Handler extends Observable {
     }
 
     public  boolean hasAliveTroops() {
-       // return aliveTroops.size() > 0;
         return aliveCount>0;
     }
 

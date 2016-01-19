@@ -1,6 +1,7 @@
 package AntiTD;
 
 
+import javax.swing.*;
 import java.io.File;
 
 /**
@@ -10,16 +11,22 @@ import java.io.File;
  */
 public class AntiTDMain {
 
-    public static void main(String[] args){
-        String filepath;
-        if(args.length==0){
-            filepath="levels.xml";
-        }
-        else {
-            filepath=args[0];
-        }
+    public static void main(final String[] args){
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                String filepath;
+                if(args.length==0){
+                    filepath="levels.xml";
+                }
+                else {
+                    filepath=args[0];
+                }
 
-        new GUI(new File(filepath));
+                new GUI(new File(filepath));
+            }
+        });
+
     }
 
 }
