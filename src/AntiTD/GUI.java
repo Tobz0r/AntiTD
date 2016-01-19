@@ -33,7 +33,7 @@ public class GUI {
 
     private Menu menu;
     private File fp;
-    private Thread gameThread;
+
     private Environment env;
     private JFrame frame;
     private JPanel buyPanel;
@@ -43,7 +43,6 @@ public class GUI {
     private JButton buySpeed;
     private JButton buyTank;
     private JButton teleportButton;
-    private Thread thread;
     //startscreen
     private String PlayerName;
     private JTextArea player;

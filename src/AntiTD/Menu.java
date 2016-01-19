@@ -97,8 +97,13 @@ public class Menu extends JMenu {
             public void actionPerformed(ActionEvent actionEvent) {
                 if (env.isRunning()) {
                     gui.restartGame();
-                    mute.setText("Mute");
                     newGame.setText("Restart");
+                    if(!mutesound){
+                        gui.pauseMainSound();
+                    }
+                    else{
+                        gui.resumeMainSound();
+                    }
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"Please Enter Name");
