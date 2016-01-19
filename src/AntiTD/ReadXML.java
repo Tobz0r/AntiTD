@@ -8,13 +8,20 @@ import org.xml.sax.helpers.DefaultHandler;
 import AntiTD.tiles.*;
 
 import javax.swing.JOptionPane;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -24,6 +31,7 @@ import java.util.ArrayList;
 public class ReadXML {
 
     private InputStream xmlMap;
+    private InputStream path;
 
     private int row;
     private int column;
@@ -34,6 +42,7 @@ public class ReadXML {
 
 
     public ReadXML(File xmlMap) {
+        this.path=getClass().getResourceAsStream(xmlMap.getPath());
         this.xmlMap = getClass().getResourceAsStream(xmlMap.getPath());
         levels=new ArrayList<Level>();
     }
@@ -43,6 +52,11 @@ public class ReadXML {
      * @return arraylist of levels
      */
     public ArrayList<Level> getLevels(){
+        try {
+            validateXML();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         parseXML();
         return levels;
     }
@@ -62,6 +76,29 @@ public class ReadXML {
             JOptionPane.showMessageDialog(null, e.getMessage());
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+        /**
+     * Validates XML document against a XML schema
+     * @throws IOException
+     */
+    private void validateXML() throws IOException{
+        Source xmlFile=null;
+        InputStream stream;
+        try {
+            URL schemaFile=new URL("http://www8.cs.umu.se/~dv13tes/mapFile.xsd");
+            stream=path;
+            xmlFile = new StreamSource(stream);
+            SchemaFactory schemaFactory = SchemaFactory
+                    .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema(schemaFile);
+            Validator validator = schema.newValidator();
+            validator.validate(xmlFile);
+        } catch (SAXException e) {
+            JOptionPane.showMessageDialog(null, xmlFile.getSystemId() + " is NOT valid");
+            JOptionPane.showMessageDialog(null, "Reason: " + e.getLocalizedMessage());
+            System.exit(-1);
         }
     }
 
