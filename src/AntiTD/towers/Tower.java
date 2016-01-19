@@ -30,7 +30,15 @@ public abstract class Tower implements GameObject {
     private Tower iniTower;
     private Tile posTile;
     private Sounds sounds;
-
+  /**
+   * Constructor for Tower, tower which slow units that it hits.
+   * ** CAUTION **
+   * Use this constructor for test purposes only.
+   * @param img Image used for rendering this object.
+   * @param pos Starting tile position.
+   * @param troops Gets the troops currently alive on the map.
+   *
+   */
     public Tower(Image img, Tile pos, ArrayList<Troop> troops) {
         this.img = img;
         this.money = 0;
@@ -49,6 +57,7 @@ public abstract class Tower implements GameObject {
 
   /**
    * get units that is in range
+   * @return units inRange
    */
     public LinkedList getInRange(){
         return inRange;
@@ -56,24 +65,29 @@ public abstract class Tower implements GameObject {
 
   /**
    *Insert units in inrange list
+   * @param troop
    */
     public void pushInRange(Troop troop){
         inRange.push(troop);
     }
   /**
    * Get troops list
+   * @return the trooplist
    */
     public ArrayList getTroopsList(){
         return troops;
     }
   /**
    * Get tower list
+   * @return the tower list
    */
     public ArrayList getTowerList(){
         return towers;
     }
   /**
-   * Test method
+   * ** CAUTION **
+   * Method for test
+   * Initialize a new tower
    */
     public void init(ArrayList<Troop> troops, ArrayList<Tower> towers, Tile pos) {
         this.pos = pos;
@@ -88,6 +102,10 @@ public abstract class Tower implements GameObject {
      */
     public abstract void tick();
 
+    /**
+     * Get the tower Image
+     * @return tower image
+     * */
     @Override
     public Image getImage() {
 
@@ -137,7 +155,6 @@ public abstract class Tower implements GameObject {
         return Math.round(dist);
         //return (new Double(Math.hypot(troop.getPosition().getX(), troop.getPosition().getY()))).intValue();
     }
-    //public abstract int distance(Troop troop);
 
     /**
      * Attack unit
@@ -161,26 +178,50 @@ public abstract class Tower implements GameObject {
    */
     public abstract String getTowerType();
   /**
-   * SetDamge
+   * ** CAUTION **
+   * Method for test
+   * Creates a new tower
    */
     public abstract void createTower(Tower tower, Tile pos);
 
   /**
-   * Getter and setter for tower information, damage, price, position and range
+   * Set damage of tower.
+   * @param damage
    */
     public abstract void setDamage(int damage);
+  /**
+   * Return tower damage
+   * @return damage
+   */
     public abstract int getDamage();
 
     public abstract void setPrice(int price);
-
+  /**
+   * Set tower range.
+   * @param range
+   */
     public abstract void setRange(int range);
-
+  /**
+   * Return tower range.
+   * @return range
+   */
     public abstract int getRange();
-
+  /**
+   * Get tower position
+   * @return tower position
+   * */
   @Override
   public abstract Position getPosition();
 
+  /**
+   * Set tower position
+   * @param pos
+   * */
   public abstract void setPosition(Position pos);
+  /**
+   * Get tower tile position
+   * @return tower tile position
+   * */
   @Override
   public Tile getTilePosition() {
     return this.posTile;
@@ -198,35 +239,45 @@ public abstract class Tower implements GameObject {
         troops.remove(troop);
     }
 
+  /**
+   * ** CAUTION **
+   * Method for test
+   * @param money
+   * */
     public void setMoney(int money) {
         this.money = money;
     }
 
   /**
-   *Pause and resume tower sound
+   *Pause tower sound
    */
     public abstract void pauseTowerSound();
+  /**
+   *Resume tower sound
+   */
     public abstract void resumeTowerSound();
+  /**
+   * Return money that the tower earned
+   * @return current score in int
+   */
     @Override
-
-    /**
-     * Return money that the tower earned
-     * @return current score in int
-     */
     public int getCurrentScore() {
         return money;
     }
-
-
-
-
-
-
-    /*
+   /**
+    * ** CAUTION **
     * Method for test
+    * @return target
     * */
     public abstract Troop getTarget();
 
+  /**
+   * ** CAUTION **
+   * Method for test
+   * Gets all frostTower
+   * that's been created
+   * @return tower;
+   * */
     public Tower getFrostTower() {
         for (Tower tower : towers) {
             if (tower.getTowerType().equals("FrostTower")) {
@@ -236,17 +287,30 @@ public abstract class Tower implements GameObject {
         return null;
     }
 
+    /**
+     * ** CAUTION **
+     * Method for test
+     * Gets units that is near the tower
+     * */
     public abstract Troop getNearUnit();
 
-  /*
-   * Method for test
-   * */
+    /**
+     * ** CAUTION **
+     * Method for test
+     * Count troops that are
+     * in the list inRange
+     * */
     public int countUnitsInList() {
         return inRange.size();
     }
-  /*
-   * Method for test
-   * */
+
+    /**
+     * ** CAUTION **
+     * Method for test
+     * Count the amount of frostTowers
+     * in the tower list.
+     * @return amount of frost tower in list
+     * */
     public int countFrostTowerTypes() {
         int frostTower = 0;
         for (Tower tower : towers) {
@@ -257,8 +321,12 @@ public abstract class Tower implements GameObject {
         }
         return frostTower;
     }
-  /*
+  /**
+   * ** CAUTION **
    * Method for test
+   * Count the amount of basicTowers
+   * in the tower list.
+   * @return amount of basic tower in list
    * */
     public int countBasicTowerTypes() {
         int BasicTower = 0;
@@ -270,9 +338,12 @@ public abstract class Tower implements GameObject {
         }
         return BasicTower;
     }
-  /*
-   * Method for test
-   * */
+    /**
+     * ** CAUTION **
+     * Method for test
+     * Check if troop is alive
+     * @return true if troop is alive, else false
+     * */
     public boolean getHpFromtroop() {
         for (Troop t : troops) {
             if (checkIfUnitIsClose(t)) {
@@ -282,30 +353,40 @@ public abstract class Tower implements GameObject {
         return false;
 
     }
-  /*
+  /**
+   * ** CAUTION **
    * Method for test
+   * Check if towerlist is empty
+   * @return true if its empty, else false
    * */
   public boolean getTowers() {
     return towers.isEmpty();
   }
 
-  /*
-   * Method for test
+  /**
+   * @return size of tower list.
    * */
   public int getTowersLength() {
     return towers.size();
   }
-
-
-
+  /**
+   *Add troop to the list
+   * @param troop
+   * */
   public void addTroopToList(Troop troop) {
         troops.add(troop);
     }
-
+    /**
+     * @return size of trooplist
+     * */
     public int getTroopListSize() {
         return troops.size();
     }
 
+  /**
+   * Get specific troop from list
+   * @param i
+   * */
     public Troop getTroopFromList(int i) {
         return troops.get(i);
     }
@@ -350,7 +431,9 @@ public abstract class Tower implements GameObject {
         }
     }
 
-
+    /**
+     * @return tower type.
+     * */
     public String type() {
         return "Tower";
     }
